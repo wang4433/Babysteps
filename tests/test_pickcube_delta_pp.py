@@ -1,0 +1,69 @@
+"""Acceptance-gate test for Sub-project B (PickCube).
+
+Drives `stage0_collect.main` end-to-end with --fake-env --task PickCube-v1
+and asserts the produced report.json shows delta_pp >= 10 (the
+BABYSTEPS Stage-0 acceptance bar from Pick4Pass M-BABY-1).
+
+This is the fake-env analogue of the spec's Section 3 acceptance item
+5 ('the report.md summarizer reports delta_pp >= 10 between revised-
+retry success rate and initial-attempt success rate on PickCube').
+The fake runner is deterministic and the FAILURE_TO_FACTOR / revision
+pipeline is the same code-path the real runner uses, so this test
+proves the orchestration meets the bar; the real-sim version is the
+GPU spot-check (manual, in CLAUDE.md)."""
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(_ROOT / "scripts"))
+
+
+@pytest.fixture
+def collect_main():
+    import importlib
+    if "stage0_collect" in sys.modules:
+        del sys.modules["stage0_collect"]
+    return importlib.import_module("stage0_collect").main
+
+
+def test_pickcube_fake_env_meets_delta_pp_gate(tmp_path: Path, collect_main):
+    out_dir = tmp_path / "out"
+    rc = collect_main([
+        "--task", "PickCube-v1",
+        "--fake-env",
+        "--out_dir", str(out_dir),
+        "--n_episodes", "5",
+        "--seed_start", "0",
+    ])
+    # rc==0 means the script's own acceptance check passed; we re-assert
+    # independently below to surface the actual numbers in pytest output.
+    report = json.loads((out_dir / "report.json").read_text())
+    assert report["delta_pp"] >= 10.0, (
+        f"PickCube fake-env delta_pp = {report['delta_pp']:.1f} "
+        f"(threshold 10.0). Initial rate {report['initial_attempt_success_rate']:.2f}, "
+        f"retry rate {report['retry_success_rate']:.2f}, n_with_revision="
+        f"{report['n_with_revision']}, n_retry_success={report['n_retry_success']}."
+    )
+    assert report["passed_acceptance"] is True
+    assert rc == 0
+
+
+def test_pushcube_fake_env_meets_delta_pp_gate(tmp_path: Path, collect_main):
+    """Regression: PushCube must also pass the gate via the same CLI path."""
+    out_dir = tmp_path / "out"
+    rc = collect_main([
+        "--task", "PushCube-v1",
+        "--fake-env",
+        "--out_dir", str(out_dir),
+        "--n_episodes", "5",
+        "--seed_start", "0",
+    ])
+    report = json.loads((out_dir / "report.json").read_text())
+    assert report["delta_pp"] >= 10.0
+    assert report["passed_acceptance"] is True
+    assert rc == 0
