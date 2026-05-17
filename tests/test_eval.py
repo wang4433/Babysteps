@@ -156,9 +156,9 @@ def test_write_report_title_reflects_task_from_records(tmp_path: Path):
     metrics = compute_metrics([rec])
     write_report(metrics, tmp_path)
     md = (tmp_path / "report.md").read_text()
-    assert "PickCube" in md, f"report.md title missing 'PickCube':\n{md[:200]}"
-    assert "PushCube" not in md, (
-        f"report.md title leaked PushCube despite PickCube records:\n{md[:200]}"
+    title_line = md.splitlines()[0]
+    assert title_line == "# BABYSTEPS Stage 0 — PickCube Report", (
+        f"unexpected title line: {title_line!r}\nfull head:\n{md[:200]}"
     )
 
 
@@ -168,4 +168,7 @@ def test_write_report_title_pushcube_default(tmp_path: Path):
     metrics = compute_metrics(rec for rec in [rec])
     write_report(metrics, tmp_path)
     md = (tmp_path / "report.md").read_text()
-    assert "PushCube" in md
+    title_line = md.splitlines()[0]
+    assert title_line == "# BABYSTEPS Stage 0 — PushCube Report", (
+        f"unexpected title line: {title_line!r}"
+    )

@@ -133,7 +133,7 @@ def _markdown_report(metrics: dict) -> str:
     body = "\n".join(f"| {k} | {v} |" for k, v in rows)
     # Title comes from the task id minus the "-v1" suffix; falls back to
     # "PushCube" so old metrics dicts without a "task" key still render.
-    task_label = str(metrics.get("task", "PushCube-v1")).split("-v")[0]
+    task_label = str(metrics.get("task", "PushCube-v1")).rsplit("-v", 1)[0]
     return (
         f"# BABYSTEPS Stage 0 — {task_label} Report\n\n"
         f"Acceptance: **{pass_str}** (delta_pp >= "
