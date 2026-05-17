@@ -9,11 +9,53 @@
 
 The Stage-0 PushCube blocked-approach data-prep loop is implemented:
 
+For GPU tasks (Vulkan + NVIDIA ICD), connect a compute node and render
+both tasks' three-phase MP4s. Same script, different --task value:
+
+```bash
+# PushCube (Sub-project A — approach_blocked)
+srun --account=rpaleja --partition=a100-40gb --gres=gpu:1 --mem=115G --time=00:20:00 bash -lc '
+  cd /scratch/gilbreth/wang4433/babysteps &&
+  source /apps/external/conda/2025.09/etc/profile.d/conda.sh &&
+  conda activate handover &&
+  OUT_DIR=/scratch/gilbreth/wang4433/render_pushcube &&
+  LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH" \
+  python scripts/render_stage0_maniskill.py \
+    --task PushCube-v1 \
+    --out_dir "$OUT_DIR" \
+    --n_episodes 2 \
+    --seed_start 0 &&
+  ls -lh "$OUT_DIR/videos_maniskill"
+'
+
+# PickCube (Sub-project B — grasp_slip; closes B's acceptance gate item 4)
+srun --account=rpaleja --partition=a100-40gb --gres=gpu:1 --mem=115G --time=00:20:00 bash -lc '
+  cd /scratch/gilbreth/wang4433/babysteps &&
+  source /apps/external/conda/2025.09/etc/profile.d/conda.sh &&
+  conda activate handover &&
+  OUT_DIR=/scratch/gilbreth/wang4433/render_pickcube &&
+  LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH" \
+  python scripts/render_stage0_maniskill.py \
+    --task PickCube-v1 \
+    --out_dir "$OUT_DIR" \
+    --n_episodes 2 \
+    --seed_start 0 &&
+  ls -lh "$OUT_DIR/videos_maniskill"
+'
+```
+
+Expected output per task: 2 episodes × 3 MP4s = 6 files in
+`videos_maniskill/`, named
+`<task_prefix>_seed_NNNN__{1_demo,2_attempt_blocked,3_retry}.mp4`.
+
 - Design: `docs/superpowers/specs/2026-05-15-stage0-pushcube-blocked-design.md`
 - Plan:   `docs/superpowers/plans/2026-05-15-stage0-pushcube-blocked-plan.md`
-- Code:   `babysteps/` (pure modules) + `babysteps/envs/pushcube_runner.py` (sim adapter)
-- Scripts: `scripts/{smoke_pushcube,stage0_collect,stage0_summarize}.py`
-- Tests:  85 sim-free unit tests in `tests/`
+- Code:   `babysteps/` (pure modules) + `babysteps/envs/{pushcube,pickcube}_runner.py` (sim adapters),
+          `babysteps/envs/task_registry.py` (--task dispatch),
+          `babysteps/render/{pushcube,pickcube}.py` (per-task MP4 flows)
+- Scripts: `scripts/{smoke_pushcube,stage0_collect,stage0_summarize,render_stage0_maniskill}.py`
+          — all four scripts accept `--task {PushCube-v1,PickCube-v1}` where applicable
+- Tests:  185+ sim-free unit tests in `tests/` (PushCube + PickCube, snapshot-stable across both)
 
 Quickstart: `README.md`. The acceptance gate is `delta_pp >= 10` between
 revised-retry success rate and initial-attempt success rate, identical to
