@@ -35,14 +35,17 @@ APPROACH_DIRECTIONS: frozenset[str] = frozenset({
 OBJECT_MOTIONS: frozenset[str] = frozenset({
     "translate_+x", "translate_-x", "translate_+y", "translate_-y",
     "lift_up",   # B: PickCube — cube lifted along +z
+    "place_on",  # C: StackCube — cube placed on top of another cube
 })
 EMBODIMENT_MAPPINGS: frozenset[str] = frozenset({
     "proxy_contact_to_franka_push",
     "proxy_contact_to_franka_grasp",   # B: PickCube — parallel-jaw grasp
+    "proxy_contact_to_franka_pick_and_place",  # C: StackCube — pick + place sequence
 })
 GOAL_STATES: frozenset[str] = frozenset({
     "cube_at_target",
     "cube_lifted_at_target",           # B: PickCube — cube lifted to goal xyz
+    "cubeA_on_cubeB",                  # C: StackCube — cubeA resting atop cubeB
 })
 CONSTRAINT_REGIONS: frozenset[str] = frozenset({"none"})
 
@@ -58,6 +61,7 @@ FAILURE_PREDICATES: frozenset[str] = frozenset({
 REVISION_OPERATORS: frozenset[str] = frozenset({
     "approach_substitution",
     "contact_substitution",            # B: PickCube — rotate gripper axis
+    "goal_refinement",                 # C: StackCube — sharpen under-specified goal
 })
 
 CLAIM_BOUNDARY: str = "third_person_demo_proxy_not_human_demo"

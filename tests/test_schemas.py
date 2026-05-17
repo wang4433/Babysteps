@@ -443,3 +443,26 @@ def test_episode_record_no_failure_path():
     rt = EpisodeRecord.from_jsonl_line(line)
     assert rt.revision is None
     assert rt.retry is None
+
+
+# ---------- Sub-project C (StackCube) whitelist additions ----------- #
+
+
+def test_goal_states_contains_cubeA_on_cubeB():
+    from babysteps.schemas import GOAL_STATES
+    assert "cubeA_on_cubeB" in GOAL_STATES
+
+
+def test_object_motions_contains_place_on():
+    from babysteps.schemas import OBJECT_MOTIONS
+    assert "place_on" in OBJECT_MOTIONS
+
+
+def test_embodiment_mappings_contains_pick_and_place():
+    from babysteps.schemas import EMBODIMENT_MAPPINGS
+    assert "proxy_contact_to_franka_pick_and_place" in EMBODIMENT_MAPPINGS
+
+
+def test_revision_operators_contains_goal_refinement():
+    from babysteps.schemas import REVISION_OPERATORS
+    assert "goal_refinement" in REVISION_OPERATORS
