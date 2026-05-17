@@ -14,21 +14,9 @@ GPU spot-check (manual, in CLAUDE.md)."""
 from __future__ import annotations
 
 import json
-import sys
 from pathlib import Path
 
 import pytest
-
-_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(_ROOT / "scripts"))
-
-
-@pytest.fixture
-def collect_main():
-    import importlib
-    if "stage0_collect" in sys.modules:
-        del sys.modules["stage0_collect"]
-    return importlib.import_module("stage0_collect").main
 
 
 def test_pickcube_fake_env_meets_delta_pp_gate(tmp_path: Path, collect_main):
@@ -64,6 +52,11 @@ def test_pushcube_fake_env_meets_delta_pp_gate(tmp_path: Path, collect_main):
         "--seed_start", "0",
     ])
     report = json.loads((out_dir / "report.json").read_text())
-    assert report["delta_pp"] >= 10.0
+    assert report["delta_pp"] >= 10.0, (
+        f"PushCube fake-env delta_pp = {report['delta_pp']:.1f} "
+        f"(threshold 10.0). Initial rate {report['initial_attempt_success_rate']:.2f}, "
+        f"retry rate {report['retry_success_rate']:.2f}, n_with_revision="
+        f"{report['n_with_revision']}, n_retry_success={report['n_retry_success']}."
+    )
     assert report["passed_acceptance"] is True
     assert rc == 0

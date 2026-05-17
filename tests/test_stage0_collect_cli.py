@@ -10,24 +10,11 @@ call run_episode directly.
 """
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
 import pytest
 
-# Make scripts/ importable.
 _ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(_ROOT / "scripts"))
-
-
-@pytest.fixture
-def collect_main():
-    """Lazy-import so each test gets a fresh module if needed."""
-    import importlib
-    if "stage0_collect" in sys.modules:
-        del sys.modules["stage0_collect"]
-    mod = importlib.import_module("stage0_collect")
-    return mod.main
 
 
 @pytest.mark.parametrize("task_id,snapshot_name", [
