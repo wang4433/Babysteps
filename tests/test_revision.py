@@ -100,10 +100,10 @@ def test_revise_intent_falls_back_to_from_above_when_all_cardinals_blocked():
 # ---------- unhandled factors raise ------------------------------------ #
 
 
-@pytest.mark.parametrize("factor", ["goal_state", "object_motion", "constraint_region"])
+@pytest.mark.parametrize("factor", ["object_motion", "constraint_region"])
 def test_revise_intent_unhandled_factor_raises(factor: str):
-    """Stage-0 supports approach_direction and contact_region; everything
-    else raises NotImplementedError (sub-projects C and D will add)."""
+    """Stage-0 supports approach_direction, contact_region, and goal_state;
+    everything else raises NotImplementedError (sub-projects D+ will add)."""
     attr = Attribution(
         semantic_failure=True,
         wrong_factor=factor,
@@ -219,3 +219,111 @@ def test_revise_intent_no_semantic_failure_is_ambiguous():
     )
     with pytest.raises((ValueError, NotImplementedError, KeyError)):
         revise_intent(_intent(), attr, _scene())
+
+
+# ---------- Sub-project C: goal_refinement -------------------------- #
+
+
+def test_goal_refinement_happy_path():
+    """cube_at_target → cubeA_on_cubeB."""
+    from babysteps.failure import Attribution
+    from babysteps.revision import revise_intent
+    from babysteps.schemas import Intent, SceneState
+
+    intent = Intent(
+        goal_state="cube_at_target",
+        object_motion="translate_+x",
+        contact_region="minus_x_face",
+        approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_pick_and_place",
+    )
+    scene = SceneState(
+        cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.1, 0.0),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(),
+    )
+    attribution = Attribution(
+        semantic_failure=True,
+        wrong_factor="goal_state",
+        freeze=("object_motion", "contact_region", "approach_direction",
+                "constraint_region", "embodiment_mapping"),
+        revise=("goal_state",),
+    )
+    revised, record = revise_intent(intent, attribution, scene)
+    assert revised.goal_state == "cubeA_on_cubeB"
+    # All other factors carry over unchanged (factor-local invariant).
+    assert revised.object_motion == "translate_+x"
+    assert revised.contact_region == "minus_x_face"
+    assert revised.approach_direction == "from_above"
+    assert revised.constraint_region == "none"
+    assert revised.embodiment_mapping == "proxy_contact_to_franka_pick_and_place"
+    # Revision record shape.
+    assert record.operator == "goal_refinement"
+    assert record.factor == "goal_state"
+    assert record.old_value == "cube_at_target"
+    assert record.new_value == "cubeA_on_cubeB"
+    assert "goal_state" not in record.frozen_factors
+
+
+def test_goal_refinement_unknown_source_raises():
+    """Stage-0 supports only cube_at_target → cubeA_on_cubeB; other goal_state
+    sources must raise NotImplementedError to be honest about coverage."""
+    import pytest
+    from babysteps.failure import Attribution
+    from babysteps.revision import revise_intent
+    from babysteps.schemas import Intent, SceneState
+
+    intent = Intent(
+        goal_state="cube_lifted_at_target",   # PickCube goal — not C's source
+        object_motion="lift_up",
+        contact_region="minus_x_face",
+        approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_grasp",
+    )
+    scene = SceneState(
+        cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.1, 0.0),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(),
+    )
+    attribution = Attribution(
+        semantic_failure=True,
+        wrong_factor="goal_state",
+        freeze=("object_motion", "contact_region", "approach_direction",
+                "constraint_region", "embodiment_mapping"),
+        revise=("goal_state",),
+    )
+    with pytest.raises(NotImplementedError) as exc:
+        revise_intent(intent, attribution, scene)
+    msg = str(exc.value)
+    assert "cube_lifted_at_target" in msg
+
+
+def test_goal_refinement_preserves_frozen_factors():
+    """The Revision record must list every factor except goal_state as frozen."""
+    from babysteps.failure import Attribution
+    from babysteps.revision import revise_intent
+    from babysteps.schemas import INTENT_FIELDS, Intent, SceneState
+
+    intent = Intent(
+        goal_state="cube_at_target",
+        object_motion="translate_-y",
+        contact_region="plus_x_face",
+        approach_direction="from_plus_y",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_pick_and_place",
+    )
+    scene = SceneState(
+        cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.0, -0.1),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(),
+    )
+    attribution = Attribution(
+        semantic_failure=True, wrong_factor="goal_state",
+        freeze=tuple(f for f in INTENT_FIELDS if f != "goal_state"),
+        revise=("goal_state",),
+    )
+    _, record = revise_intent(intent, attribution, scene)
+    expected_frozen = tuple(f for f in INTENT_FIELDS if f != "goal_state")
+    assert set(record.frozen_factors) == set(expected_frozen)

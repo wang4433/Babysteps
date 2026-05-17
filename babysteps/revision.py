@@ -11,6 +11,9 @@ Stage 0 implements:
     (Sub-project A / PushCube).
   * `contact_substitution` — for wrong_factor=="contact_region"
     (Sub-project B / PickCube).
+  * `goal_refinement` — for wrong_factor=="goal_state"
+    (Sub-project C / StackCube; strict-extension: cube_at_target →
+    cubeA_on_cubeB only).
 
 Other wrong_factors raise `NotImplementedError` — honest about what is and
 isn't validated.
@@ -128,9 +131,34 @@ def revise_intent(
         )
         return revised, rev_record
 
+    if attribution.wrong_factor == "goal_state":
+        # Stage-0's goal_refinement is a strict-extension operator:
+        # cube_at_target → cubeA_on_cubeB only. Other goal_state transitions
+        # are deferred (per spec §6 of
+        # docs/superpowers/specs/2026-05-17-stage0-stackcube-c-design.md).
+        if intent.goal_state != "cube_at_target":
+            raise NotImplementedError(
+                f"goal_refinement does not handle transitions from "
+                f"goal_state {intent.goal_state!r}. (Stage-0 supports only "
+                f"the cube_at_target → cubeA_on_cubeB refinement per "
+                f"docs/superpowers/specs/2026-05-17-stage0-stackcube-c-design.md §6)"
+            )
+        old = intent.goal_state
+        new = "cubeA_on_cubeB"
+        revised = replace(intent, goal_state=new)
+        frozen = tuple(f for f in INTENT_FIELDS if f != "goal_state")
+        rev_record = Revision(
+            operator="goal_refinement",
+            factor="goal_state",
+            old_value=old,
+            new_value=new,
+            frozen_factors=frozen,
+        )
+        return revised, rev_record
+
     raise NotImplementedError(
-        f"Stage-0 reviser handles 'approach_direction' and 'contact_region'; "
-        f"got {attribution.wrong_factor!r}. (Other factors are reserved "
-        f"for later sub-projects — see "
+        f"Stage-0 reviser handles 'approach_direction', 'contact_region', "
+        f"and 'goal_state'; got {attribution.wrong_factor!r}. (Other factors "
+        f"are reserved for later sub-projects — see "
         f"docs/superpowers/specs/2026-05-17-stage0-four-scene-roadmap-design.md §6)"
     )
