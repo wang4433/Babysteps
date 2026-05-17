@@ -57,7 +57,7 @@ def main(argv=None) -> int:
     try:
         import gymnasium as gym
         import mani_skill.envs  # noqa: F401 — registers PushCube-v1 / PickCube-v1
-    except Exception as exc:
+    except ImportError as exc:
         print(
             f"ManiSkill import failed: {type(exc).__name__}: {exc}",
             file=sys.stderr,
@@ -67,42 +67,42 @@ def main(argv=None) -> int:
     entry = get_task_entry(args.task)
     render_fn = get_render_fn(args.task)
     adapter = entry.adapter_cls()
-
-    videos_dir = args.out_dir / "videos_maniskill"
-    videos_dir.mkdir(parents=True, exist_ok=True)
-
-    env = gym.make(
-        args.task,
-        obs_mode="state_dict",
-        control_mode="pd_ee_delta_pose",
-        sim_backend="cpu",
-        render_mode="rgb_array",
-    )
-
     try:
-        for i in range(args.n_episodes):
-            seed = args.seed_start + i
-            episode_id = f"{entry.episode_id_prefix}_seed_{seed:04d}"
-            print(f"[{i + 1}/{args.n_episodes}] {episode_id}", flush=True)
+        videos_dir = args.out_dir / "videos_maniskill"
+        videos_dir.mkdir(parents=True, exist_ok=True)
 
-            frames, titles = render_fn(env, adapter, seed=seed, fps=args.fps)
+        env = gym.make(
+            args.task,
+            obs_mode="state_dict",
+            control_mode="pd_ee_delta_pose",
+            sim_backend="cpu",
+            render_mode="rgb_array",
+        )
+        try:
+            for i in range(args.n_episodes):
+                seed = args.seed_start + i
+                episode_id = f"{entry.episode_id_prefix}_seed_{seed:04d}"
+                print(f"[{i + 1}/{args.n_episodes}] {episode_id}", flush=True)
 
-            for phase_name, mp4_suffix in [
-                ("demo",            "1_demo"),
-                ("attempt_blocked", "2_attempt_blocked"),
-                ("retry",           "3_retry"),
-            ]:
-                title, subtitle = titles[phase_name]
-                annotated = [
-                    annotate_frame(fr, title, subtitle)
-                    for fr in frames[phase_name]
-                ]
-                out_path = videos_dir / f"{episode_id}__{mp4_suffix}.mp4"
-                save_mp4(annotated, out_path, args.fps)
-                kb = out_path.stat().st_size // 1024
-                print(f"   wrote {out_path.name}  ({kb} KB)")
+                frames, titles = render_fn(env, adapter, seed=seed, fps=args.fps)
+
+                for phase_name, mp4_suffix in [
+                    ("demo",            "1_demo"),
+                    ("attempt_blocked", "2_attempt_blocked"),
+                    ("retry",           "3_retry"),
+                ]:
+                    title, subtitle = titles[phase_name]
+                    annotated = [
+                        annotate_frame(fr, title, subtitle)
+                        for fr in frames[phase_name]
+                    ]
+                    out_path = videos_dir / f"{episode_id}__{mp4_suffix}.mp4"
+                    save_mp4(annotated, out_path, args.fps)
+                    kb = out_path.stat().st_size // 1024
+                    print(f"   wrote {out_path.name}  ({kb} KB)")
+        finally:
+            env.close()
     finally:
-        env.close()
         adapter.close()
 
     print(f"\nDone. MP4s in {videos_dir}")
