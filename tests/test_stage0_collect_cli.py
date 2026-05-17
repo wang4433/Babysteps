@@ -68,7 +68,7 @@ def test_stage0_collect_cli_default_task_is_pushcube(tmp_path: Path, collect_mai
 
 
 def test_stage0_collect_cli_unknown_task_errors(tmp_path: Path, collect_main):
-    """`--task OpenCabinetDrawer-v1` must exit non-zero via argparse's choices= guard.
+    """`--task Bogus-v1` must exit non-zero via argparse's choices= guard.
 
     Argparse raises SystemExit(2) before get_task_entry is ever reached.
     Pinning to SystemExit (not the broader (SystemExit, KeyError) union)
@@ -78,7 +78,7 @@ def test_stage0_collect_cli_unknown_task_errors(tmp_path: Path, collect_main):
     out_dir = tmp_path / "out"
     with pytest.raises(SystemExit) as exc_info:
         collect_main([
-            "--task", "OpenCabinetDrawer-v1",
+            "--task", "Bogus-v1",
             "--fake-env",
             "--out_dir", str(out_dir),
             "--n_episodes", "1",

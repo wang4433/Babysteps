@@ -11,9 +11,9 @@ from babysteps.envs.task_registry import (
 
 
 def test_registry_contains_all_stage0_tasks():
-    """PushCube-v1 (A), PickCube-v1 (B), and StackCube-v1 (C) must be present."""
+    """PushCube-v1 (A), PickCube-v1 (B), StackCube-v1 (C), and TurnFaucet-v1 (D) must be present."""
     assert set(TASK_REGISTRY.keys()) == {
-        "PushCube-v1", "PickCube-v1", "StackCube-v1",
+        "PushCube-v1", "PickCube-v1", "StackCube-v1", "TurnFaucet-v1",
     }
 
 
@@ -35,12 +35,13 @@ def test_get_task_entry_pickcube():
 
 def test_get_task_entry_unknown_task_raises():
     with pytest.raises(KeyError) as exc:
-        get_task_entry("OpenCabinetDrawer-v1")
+        get_task_entry("Bogus-v1")
     msg = str(exc.value)
-    assert "OpenCabinetDrawer-v1" in msg
+    assert "Bogus-v1" in msg
     assert "PushCube-v1" in msg
     assert "PickCube-v1" in msg
     assert "StackCube-v1" in msg
+    assert "TurnFaucet-v1" in msg
 
 
 def test_fake_runner_factory_pushcube():
@@ -95,6 +96,23 @@ def test_get_task_entry_stackcube():
 
 def test_fake_runner_factory_stackcube():
     entry = get_task_entry("StackCube-v1")
+    runner = entry.fake_runner_factory()
+    assert hasattr(runner, "reset")
+    assert hasattr(runner, "run")
+    assert hasattr(runner, "close")
+    runner.close()
+
+
+def test_get_task_entry_turnfaucet():
+    from babysteps.envs.turnfaucet_adapter import TurnFaucetAdapter
+    entry = get_task_entry("TurnFaucet-v1")
+    assert isinstance(entry, TaskEntry)
+    assert entry.adapter_cls is TurnFaucetAdapter
+    assert entry.episode_id_prefix == "turnfaucet_wrong_contact"
+
+
+def test_fake_runner_factory_turnfaucet():
+    entry = get_task_entry("TurnFaucet-v1")
     runner = entry.fake_runner_factory()
     assert hasattr(runner, "reset")
     assert hasattr(runner, "run")
