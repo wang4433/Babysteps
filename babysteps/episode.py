@@ -66,8 +66,22 @@ def _compute_metrics(
     wrong_factor_predicted: Optional[str],
     oracle_wrong_factor: str,
     factors_changed: tuple[str, ...],
+    frozen_factors: Optional[tuple[str, ...]] = None,
 ) -> dict:
-    """Per-episode metrics for the eval/summarize step."""
+    """Per-episode metrics for the eval/summarize step.
+
+    `frozen_factors` (from Revision.frozen_factors) is the authoritative list
+    of factors that must not change.  When supplied (any revision that
+    produces a Revision record), frozen_factors_preserved is True iff no
+    factor in `frozen_factors` appears in `factors_changed`.  This handles
+    both single-factor operators (approach_substitution, contact_substitution,
+    goal_refinement) and multi-factor operators (constraint_introduction, which
+    revises TWO factors at once).
+
+    When `frozen_factors` is None (no revision was attempted), the metric falls
+    back to the legacy single-factor heuristic so existing records are
+    unaffected.
+    """
     if not initial_success and retry_success is True:
         num_attempts = 2
     elif initial_success:
@@ -83,7 +97,12 @@ def _compute_metrics(
     frozen_preserved: Optional[bool]
     if wrong_factor_predicted is None:
         frozen_preserved = None
+    elif frozen_factors is not None:
+        # Authoritative check: none of the frozen factors should have changed.
+        frozen_set = set(frozen_factors)
+        frozen_preserved = not any(f in frozen_set for f in factors_changed)
     else:
+        # Legacy single-factor fallback (used when no Revision record exists).
         frozen_preserved = (
             tuple(factors_changed) == (wrong_factor_predicted,)
             or len(factors_changed) == 0
@@ -242,6 +261,7 @@ def run_episode(
         wrong_factor_predicted=attribution.wrong_factor,
         oracle_wrong_factor=oracle_wrong_factor,
         factors_changed=factors_changed,
+        frozen_factors=revision_record.frozen_factors,
     )
 
     return EpisodeRecord(

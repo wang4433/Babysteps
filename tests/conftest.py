@@ -340,3 +340,81 @@ class FakeStackCubeEnvRunner:
 @pytest.fixture
 def fake_stack_env_runner() -> FakeStackCubeEnvRunner:
     return FakeStackCubeEnvRunner()
+
+
+class FakeTurnFaucetEnvRunner:
+    """Deterministic, sim-free env_runner for TurnFaucet unit tests.
+
+    Outcome (keyed entirely off intent.contact_region + constraint_region):
+      - contact_region == "handle_grip" AND
+        constraint_region == "faucet_base_static"
+        → success=True, faucet rotated
+      - any other combination (typically faucet_base + none)
+        → success=False, collision=True (constraint_violation proxy)
+    """
+
+    def __init__(self) -> None:
+        self._scenes_by_seed: dict[int, SceneState] = {}
+
+    def reset(self, seed: int) -> SceneState:
+        if seed not in self._scenes_by_seed:
+            rng = np.random.default_rng(seed)
+            handle_xy = (
+                float(rng.uniform(0.05, 0.12)),
+                float(rng.uniform(-0.05, 0.05)),
+            )
+            handle_z = 0.10
+            base_xy = (handle_xy[0] - 0.05, handle_xy[1])
+            # Deterministic pull axis: +y.
+            axis_xy = (0.0, 1.0)
+            self._scenes_by_seed[seed] = SceneState(
+                cube_xy=handle_xy,
+                cube_z=handle_z,
+                goal_xy=handle_xy,
+                tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+                blocked_sides=(),
+                extra={
+                    "handle_xy": handle_xy,
+                    "handle_z": handle_z,
+                    "faucet_base_xy": base_xy,
+                    "faucet_base_z": 0.0,
+                    "target_joint_axis_xy": axis_xy,
+                },
+            )
+        return self._scenes_by_seed[seed]
+
+    def run(self, intent: Intent, scene: SceneState) -> AttemptResult:
+        from babysteps.skills.turn import compile_intent_to_turn_skill
+        skill = compile_intent_to_turn_skill(intent, scene)
+        assert skill is not None
+
+        handle_xy = tuple(float(v) for v in scene.extra["handle_xy"])
+        if (intent.contact_region == "handle_grip"
+                and intent.constraint_region == "faucet_base_static"):
+            success, collision = True, False
+        else:
+            success, collision = False, True
+
+        final_xy = handle_xy  # the handle stays where it is; rotation in place
+        synthetic_traj = (handle_xy, final_xy)
+        return AttemptResult(
+            initial_obj_xy=handle_xy,
+            final_obj_xy=final_xy,
+            goal_xy=scene.goal_xy,
+            reached_contact=True,
+            object_moved=success,    # only "moves" when the joint rotated
+            planner_failed=False,
+            collision=collision,
+            grasp_slip=False,
+            rollout_log_path=None,
+            success=success,
+            trajectory_xy=synthetic_traj,
+        )
+
+    def close(self) -> None:
+        pass
+
+
+@pytest.fixture
+def fake_turnfaucet_env_runner() -> FakeTurnFaucetEnvRunner:
+    return FakeTurnFaucetEnvRunner()
