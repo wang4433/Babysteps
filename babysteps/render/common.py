@@ -13,7 +13,7 @@ import numpy as np
 # Phase-control constants — match the PD calibration of the env_runners.
 POS_SCALE: float = 0.1
 PHASE_TOL_M: float = 0.015
-MAX_CONTROL_STEPS: int = 400   # superset of both runners' caps
+MAX_CONTROL_STEPS: int = 400   # matches PickCubeEnvRunner; PushCubeEnvRunner uses 300
 
 
 def to_np(x):
@@ -92,8 +92,13 @@ def annotate_frame(
 
 
 def save_mp4(frames: Iterable[np.ndarray], out_path: Path, fps: int) -> None:
-    """Write `frames` to `out_path` as H.264 MP4."""
+    """Write `frames` to `out_path` as H.264 MP4.
+
+    `frames` is materialized to a list up front so that a partially-
+    consumed generator (easy to produce with a chained expression) does
+    not silently yield a truncated MP4 with no error."""
     import imageio.v2 as imageio
+    frames = list(frames)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     writer = imageio.get_writer(
         str(out_path), fps=fps, codec="libx264", quality=8,
