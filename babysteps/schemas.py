@@ -28,6 +28,8 @@ INTENT_FIELDS: tuple[str, ...] = (
 
 CONTACT_REGIONS: frozenset[str] = frozenset({
     "minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face",
+    "faucet_base",   # D: TurnFaucet — static body of the faucet (wrong contact)
+    "handle_grip",   # D: TurnFaucet — rotating handle (correct contact)
 })
 APPROACH_DIRECTIONS: frozenset[str] = frozenset({
     "from_minus_x", "from_plus_x", "from_minus_y", "from_plus_y", "from_above",
@@ -36,18 +38,24 @@ OBJECT_MOTIONS: frozenset[str] = frozenset({
     "translate_+x", "translate_-x", "translate_+y", "translate_-y",
     "lift_up",   # B: PickCube — cube lifted along +z
     "place_on",  # C: StackCube — cube placed on top of another cube
+    "turn",      # D: TurnFaucet — handle rotated around joint axis
 })
 EMBODIMENT_MAPPINGS: frozenset[str] = frozenset({
     "proxy_contact_to_franka_push",
     "proxy_contact_to_franka_grasp",   # B: PickCube — parallel-jaw grasp
     "proxy_contact_to_franka_pick_and_place",  # C: StackCube — pick + place sequence
+    "proxy_contact_to_franka_turn",    # D: TurnFaucet — grip + tangential pull
 })
 GOAL_STATES: frozenset[str] = frozenset({
     "cube_at_target",
     "cube_lifted_at_target",           # B: PickCube — cube lifted to goal xyz
     "cubeA_on_cubeB",                  # C: StackCube — cubeA resting atop cubeB
+    "faucet_turned",                   # D: TurnFaucet — handle rotated past target
 })
-CONSTRAINT_REGIONS: frozenset[str] = frozenset({"none"})
+CONSTRAINT_REGIONS: frozenset[str] = frozenset({
+    "none",
+    "faucet_base_static",   # D: TurnFaucet — body must not be displaced
+})
 
 FAILURE_PREDICATES: frozenset[str] = frozenset({
     "none",
@@ -57,11 +65,13 @@ FAILURE_PREDICATES: frozenset[str] = frozenset({
     "no_motion",
     "goal_not_satisfied",
     "grasp_slip",                      # B: PickCube — grip lost during lift
+    "constraint_violation",            # D: TurnFaucet — touched non-articulating link
 })
 REVISION_OPERATORS: frozenset[str] = frozenset({
     "approach_substitution",
     "contact_substitution",            # B: PickCube — rotate gripper axis
     "goal_refinement",                 # C: StackCube — sharpen under-specified goal
+    "constraint_introduction",         # D: TurnFaucet — add constraint + swap contact
 })
 
 CLAIM_BOUNDARY: str = "third_person_demo_proxy_not_human_demo"

@@ -66,10 +66,9 @@ def test_whitelists_pickcube_additions():
     assert "cube_lifted_at_target" in GOAL_STATES
     assert "grasp_slip" in FAILURE_PREDICATES
     assert "contact_substitution" in REVISION_OPERATORS
-    # CONTACT_REGIONS unchanged (Pick reuses the 4 cardinal faces).
-    assert CONTACT_REGIONS == frozenset(
-        {"minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face"}
-    )
+    # CONTACT_REGIONS contains the 4 cardinal cube faces (Pick reuses them).
+    # D (TurnFaucet) adds "faucet_base" and "handle_grip" to the same set.
+    assert {"minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face"} <= CONTACT_REGIONS
 
 
 # ---------- Intent ------------------------------------------------------- #
@@ -466,3 +465,46 @@ def test_embodiment_mappings_contains_pick_and_place():
 def test_revision_operators_contains_goal_refinement():
     from babysteps.schemas import REVISION_OPERATORS
     assert "goal_refinement" in REVISION_OPERATORS
+
+
+# ---------- Sub-project D (TurnFaucet) whitelist additions ----------- #
+
+
+def test_goal_states_contains_faucet_turned():
+    from babysteps.schemas import GOAL_STATES
+    assert "faucet_turned" in GOAL_STATES
+
+
+def test_object_motions_contains_turn():
+    from babysteps.schemas import OBJECT_MOTIONS
+    assert "turn" in OBJECT_MOTIONS
+
+
+def test_contact_regions_contains_faucet_base():
+    from babysteps.schemas import CONTACT_REGIONS
+    assert "faucet_base" in CONTACT_REGIONS
+
+
+def test_contact_regions_contains_handle_grip():
+    from babysteps.schemas import CONTACT_REGIONS
+    assert "handle_grip" in CONTACT_REGIONS
+
+
+def test_constraint_regions_contains_faucet_base_static():
+    from babysteps.schemas import CONSTRAINT_REGIONS
+    assert "faucet_base_static" in CONSTRAINT_REGIONS
+
+
+def test_failure_predicates_contains_constraint_violation():
+    from babysteps.schemas import FAILURE_PREDICATES
+    assert "constraint_violation" in FAILURE_PREDICATES
+
+
+def test_revision_operators_contains_constraint_introduction():
+    from babysteps.schemas import REVISION_OPERATORS
+    assert "constraint_introduction" in REVISION_OPERATORS
+
+
+def test_embodiment_mappings_contains_franka_turn():
+    from babysteps.schemas import EMBODIMENT_MAPPINGS
+    assert "proxy_contact_to_franka_turn" in EMBODIMENT_MAPPINGS
