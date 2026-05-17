@@ -84,3 +84,28 @@ def test_stackcube_fake_env_meets_delta_pp_gate(tmp_path: Path, collect_main):
     )
     assert report["passed_acceptance"] is True
     assert rc == 0
+
+
+def test_turnfaucet_fake_env_meets_delta_pp_gate(tmp_path: Path, collect_main):
+    """Sub-project D acceptance: TurnFaucet fake-env should achieve
+    delta_pp >= 10. With FakeTurnFaucetEnvRunner's deterministic
+    outcome (success iff handle_grip + faucet_base_static), all 5
+    seeds follow under-specified → constraint_introduction → success
+    arc, yielding delta_pp = 100.0."""
+    out_dir = tmp_path / "out"
+    rc = collect_main([
+        "--task", "TurnFaucet-v1",
+        "--fake-env",
+        "--out_dir", str(out_dir),
+        "--n_episodes", "5",
+        "--seed_start", "0",
+    ])
+    report = json.loads((out_dir / "report.json").read_text())
+    assert report["delta_pp"] >= 10.0, (
+        f"TurnFaucet fake-env delta_pp = {report['delta_pp']:.1f}. "
+        f"Initial {report['initial_attempt_success_rate']:.2f}, "
+        f"retry {report['retry_success_rate']:.2f}, n_with_revision="
+        f"{report['n_with_revision']}, n_retry_success={report['n_retry_success']}."
+    )
+    assert report["passed_acceptance"] is True
+    assert rc == 0
