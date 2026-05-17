@@ -17,7 +17,7 @@ here plus the corresponding render module entry in babysteps.render.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Callable
 
 from babysteps.envs.task_adapter import BaseTaskAdapter, EnvRunner
 
@@ -31,8 +31,11 @@ class TaskEntry:
 
 
 def _pushcube_entry() -> TaskEntry:
-    # Imports are lazy so that importing this module does not pull
-    # ManiSkill (via the adapter chain) until a task is actually selected.
+    # PushCubeAdapter is safe to import at module load — it does not pull
+    # mani_skill (that import only fires when adapter.make_env_runner()
+    # constructs the real runner, which the registry itself never does).
+    # FakeEnvRunner is genuinely lazy via the _make_fake closure below so
+    # tests/ stays off the import path until --fake-env is selected.
     from babysteps.envs.pushcube_adapter import PushCubeAdapter
 
     def _make_fake() -> EnvRunner:
@@ -51,6 +54,11 @@ def _pushcube_entry() -> TaskEntry:
 
 
 def _pickcube_entry() -> TaskEntry:
+    # PickCubeAdapter is safe to import at module load — it does not pull
+    # mani_skill (that import only fires when adapter.make_env_runner()
+    # constructs the real runner, which the registry itself never does).
+    # FakePickEnvRunner is genuinely lazy via the _make_fake closure below so
+    # tests/ stays off the import path until --fake-env is selected.
     from babysteps.envs.pickcube_adapter import PickCubeAdapter
 
     def _make_fake() -> EnvRunner:
