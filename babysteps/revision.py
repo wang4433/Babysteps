@@ -89,8 +89,8 @@ def revise_intent(
     intent: Intent, attribution: Attribution, scene: SceneState,
 ) -> tuple[Intent, Revision]:
     """Return (revised_intent, Revision record). Dispatches on
-    `attribution.wrong_factor`. Stage-0 supports approach_direction and
-    contact_region; other factors raise NotImplementedError.
+    `attribution.wrong_factor`. Stage-0 supports approach_direction,
+    contact_region, and goal_state; other factors raise NotImplementedError.
     """
     if attribution.wrong_factor is None:
         raise ValueError(
