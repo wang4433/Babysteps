@@ -259,3 +259,84 @@ def correct_intent_for_scene():
             embodiment_mapping="proxy_contact_to_franka_push",
         )
     return _build
+
+
+class FakeStackCubeEnvRunner:
+    """Deterministic, sim-free env_runner for StackCube unit tests.
+
+    Stage-0 controlled-failure mechanism: outcome is keyed entirely off
+    intent.goal_state (no blocked_sides, no slip):
+      - cubeA_on_cubeB → success=True, final_obj_xy = cubeB_xy
+      - any other       → success=False, final_obj_xy = cubeB_xy + (0.025, 0)
+                          (cubeA slid off after collision)
+    """
+
+    def __init__(self) -> None:
+        self._scenes_by_seed: dict[int, SceneState] = {}
+
+    def reset(self, seed: int) -> SceneState:
+        if seed not in self._scenes_by_seed:
+            # Deterministic synthetic scene per seed: cubeA at origin,
+            # cubeB at (r*cos(θ), r*sin(θ)) with seed-derived r and θ.
+            rng = np.random.default_rng(seed)
+            r = float(rng.uniform(0.05, 0.12))
+            theta = (seed % 4) * (np.pi / 2)
+            cubeB_xy = (float(r * np.cos(theta)), float(r * np.sin(theta)))
+            cubeB_z = 0.02
+            self._scenes_by_seed[seed] = SceneState(
+                cube_xy=(0.0, 0.0),
+                cube_z=0.02,
+                goal_xy=cubeB_xy,
+                tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+                blocked_sides=(),
+                extra={
+                    "cubeB_xy": cubeB_xy,
+                    "cubeB_z": cubeB_z,
+                    "cubeB_top_z": cubeB_z + 0.04,
+                },
+            )
+        return self._scenes_by_seed[seed]
+
+    def run(self, intent: Intent, scene: SceneState) -> AttemptResult:
+        # Compile-time sanity (should never raise for valid Intents).
+        from babysteps.skills.stack import compile_intent_to_stack_skill
+        skill = compile_intent_to_stack_skill(intent, scene)
+        assert skill is not None
+
+        cubeA_init = np.asarray(scene.cube_xy, dtype=np.float64)
+        cubeB_xy = np.asarray(scene.extra["cubeB_xy"], dtype=np.float64)
+
+        if intent.goal_state == "cubeA_on_cubeB":
+            final_xy = (float(cubeB_xy[0]), float(cubeB_xy[1]))
+            success = True
+        else:
+            # Cube slid off after collision — synthesize a small offset.
+            final_xy = (float(cubeB_xy[0]) + 0.025, float(cubeB_xy[1]))
+            success = False
+
+        synthetic_traj = tuple(
+            (float(cubeA_init[0] + (final_xy[0] - cubeA_init[0]) * t),
+             float(cubeA_init[1] + (final_xy[1] - cubeA_init[1]) * t))
+            for t in np.linspace(0.0, 1.0, 8)
+        )
+        return AttemptResult(
+            initial_obj_xy=tuple(float(v) for v in cubeA_init),     # type: ignore[arg-type]
+            final_obj_xy=final_xy,
+            goal_xy=scene.goal_xy,
+            reached_contact=True,
+            object_moved=True,
+            planner_failed=False,
+            collision=False,
+            grasp_slip=False,
+            rollout_log_path=None,
+            success=success,
+            trajectory_xy=synthetic_traj,
+        )
+
+    def close(self) -> None:
+        pass
+
+
+@pytest.fixture
+def fake_stack_env_runner() -> FakeStackCubeEnvRunner:
+    return FakeStackCubeEnvRunner()
