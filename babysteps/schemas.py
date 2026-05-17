@@ -146,22 +146,31 @@ class SceneState:
 
     Every field is privileged — must not flow into demo_to_intent. Consumed
     only by the skill compiler (waypoint geometry + blocked_sides feasibility
-    check) and by metric computation (oracle labels)."""
+    check) and by metric computation (oracle labels).
+
+    `extra` is an adapter-owned payload for forward compatibility with non-
+    push tasks (PickCube populates gripper_width etc.; StackCube populates a
+    second cube's pose). It is serialized only when non-empty so PushCube
+    records remain byte-identical to pre-A snapshots."""
 
     cube_xy: tuple[float, float]
     cube_z: float
     goal_xy: tuple[float, float]
     tcp_start_pose: tuple[float, float, float, float, float, float, float]
     blocked_sides: tuple[str, ...]
+    extra: dict = field(default_factory=dict)
 
     def to_dict(self) -> dict:
-        return {
+        d = {
             "cube_xy": list(self.cube_xy),
             "cube_z": float(self.cube_z),
             "goal_xy": list(self.goal_xy),
             "tcp_start_pose": list(self.tcp_start_pose),
             "blocked_sides": list(self.blocked_sides),
         }
+        if self.extra:
+            d["extra"] = dict(self.extra)
+        return d
 
     @classmethod
     def from_dict(cls, d: dict) -> "SceneState":
@@ -178,6 +187,7 @@ class SceneState:
             goal_xy=goal_xy,          # type: ignore[arg-type]
             tcp_start_pose=tcp,        # type: ignore[arg-type]
             blocked_sides=tuple(d["blocked_sides"]),
+            extra=dict(d.get("extra", {})),
         )
 
 

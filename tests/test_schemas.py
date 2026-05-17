@@ -184,6 +184,43 @@ def test_scene_roundtrip_tuple_blocked_sides():
     assert isinstance(rt.blocked_sides, tuple)
 
 
+def test_scene_roundtrip_with_extra():
+    s = SceneState(
+        cube_xy=(0.0, 0.0),
+        cube_z=0.02,
+        goal_xy=(0.2, 0.05),
+        tcp_start_pose=(0.0, 0.0, 0.2, 0.0, 0.0, 0.0, 1.0),
+        blocked_sides=(),
+        extra={"gripper_width": 0.08, "base_cube_xy": [0.1, 0.0]},
+    )
+    rt = SceneState.from_dict(s.to_dict())
+    assert rt.extra == {"gripper_width": 0.08, "base_cube_xy": [0.1, 0.0]}
+
+
+def test_scene_empty_extra_omitted_from_json():
+    """Empty extra must NOT appear as a key in to_dict — this is what
+    preserves byte-for-byte JSON equality for pre-A PushCube records."""
+    s = SceneState(
+        cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.2, 0.05),
+        tcp_start_pose=(0.0, 0.0, 0.2, 0.0, 0.0, 0.0, 1.0),
+        blocked_sides=(),
+    )
+    d = s.to_dict()
+    assert "extra" not in d
+    # And the default is an empty dict, round-trippable.
+    rt = SceneState.from_dict(d)
+    assert rt.extra == {}
+
+
+def test_scene_default_extra_is_empty_dict():
+    s = SceneState(
+        cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.2, 0.05),
+        tcp_start_pose=(0.0, 0.0, 0.2, 0.0, 0.0, 0.0, 1.0),
+        blocked_sides=(),
+    )
+    assert s.extra == {}
+
+
 # ---------- AttemptResult ------------------------------------------------ #
 
 
