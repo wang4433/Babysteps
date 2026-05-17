@@ -12,12 +12,14 @@ import pytest
 
 from babysteps.envs.scene import (
     OPPOSITE_APPROACH,
+    approach_to_unit,
     direction_to_face,
     face_to_approach,
     face_to_push_unit,
     goal_direction_to_motion,
 )
 from babysteps.skills.push import (
+    APPROACH_STANDOFF_M,
     CUBE_HALF_SIZE,
     PRE_CONTACT_STANDOFF,
     PUSH_TRAVEL_MAX_M,
@@ -120,7 +122,7 @@ def test_compile_unblocked_returns_pushskill():
     scene = _scene(blocked=())
     skill = compile_intent_to_push_skill(intent, scene)
     assert isinstance(skill, PushSkill)
-    assert skill.waypoints.shape == (3, 7)
+    assert skill.waypoints.shape == (4, 7)
     assert skill.contact_region == "minus_x_face"
 
 
@@ -139,27 +141,37 @@ def test_waypoints_quat_preserved():
     intent = _correct_intent()
     scene = _scene()
     wp = build_push_waypoints(scene, intent)
-    np.testing.assert_allclose(wp[:, 3:7], np.tile(scene.tcp_start_pose[3:7], (3, 1)))
+    np.testing.assert_allclose(wp[:, 3:7], np.tile(scene.tcp_start_pose[3:7], (4, 1)))
+
+
+def test_waypoints_approach_on_approach_direction_side_at_travel_height():
+    intent = _correct_intent()    # approach_direction = from_minus_x
+    scene = _scene()              # cube_xy=(0,0), tcp_z=0.25
+    wp = build_push_waypoints(scene, intent)
+    # Waypoint 0 (wide approach): on the -x side of the cube, at travel z.
+    np.testing.assert_allclose(wp[0, 0], -APPROACH_STANDOFF_M)
+    np.testing.assert_allclose(wp[0, 1], 0.0)
+    assert wp[0, 2] == pytest.approx(scene.tcp_start_pose[2])
 
 
 def test_waypoints_pre_contact_behind_cube_at_travel_height():
     intent = _correct_intent()    # push_unit = (+1, 0)
     scene = _scene()              # cube_xy=(0,0), tcp_z=0.25
     wp = build_push_waypoints(scene, intent)
-    # Waypoint 0 (pre-contact above): behind cube along -push_unit, at travel z.
+    # Waypoint 1 (pre-contact above): behind cube along -push_unit, at travel z.
     expected_xy = -1.0 * (CUBE_HALF_SIZE + PRE_CONTACT_STANDOFF)
-    np.testing.assert_allclose(wp[0, 0], expected_xy)
-    np.testing.assert_allclose(wp[0, 1], 0.0)
-    assert wp[0, 2] == pytest.approx(scene.tcp_start_pose[2])
+    np.testing.assert_allclose(wp[1, 0], expected_xy)
+    np.testing.assert_allclose(wp[1, 1], 0.0)
+    assert wp[1, 2] == pytest.approx(scene.tcp_start_pose[2])
 
 
 def test_waypoints_descend_to_push_height():
     intent = _correct_intent()
     scene = _scene()
     wp = build_push_waypoints(scene, intent)
-    # Waypoint 1 (descend): same xy as wp 0, z = cube_z.
-    np.testing.assert_allclose(wp[1, 0:2], wp[0, 0:2])
-    assert wp[1, 2] == pytest.approx(scene.cube_z)
+    # Waypoint 2 (descend): same xy as wp 1, z = cube_z.
+    np.testing.assert_allclose(wp[2, 0:2], wp[1, 0:2])
+    assert wp[2, 2] == pytest.approx(scene.cube_z)
 
 
 def test_waypoints_push_distance_scaled_and_capped():
@@ -167,16 +179,16 @@ def test_waypoints_push_distance_scaled_and_capped():
     scene = _scene()  # cube at (0,0), goal at (0.2,0) → dist 0.2
     wp = build_push_waypoints(scene, intent)
     expected_travel = min(PUSH_TRAVEL_SCALE * 0.2, PUSH_TRAVEL_MAX_M)
-    # Waypoint 2 (push end): cube_xy + push_unit * expected_travel, at push z.
-    np.testing.assert_allclose(wp[2, 0], expected_travel)
-    np.testing.assert_allclose(wp[2, 1], 0.0)
-    assert wp[2, 2] == pytest.approx(scene.cube_z)
+    # Waypoint 3 (push end): cube_xy + push_unit * expected_travel, at push z.
+    np.testing.assert_allclose(wp[3, 0], expected_travel)
+    np.testing.assert_allclose(wp[3, 1], 0.0)
+    assert wp[3, 2] == pytest.approx(scene.cube_z)
 
 
-def test_waypoints_push_uses_contact_region_not_approach_direction():
-    """Factor-local invariant: physical push direction depends only on
-    contact_region. If we change approach_direction (without changing
-    contact_region), waypoints must be byte-identical."""
+def test_waypoints_push_phase_invariant_under_approach_change():
+    """Factor-local invariant (relaxed): the physical push (descend + push-end,
+    wp[2..]) depends only on contact_region. Changing approach_direction is
+    allowed to reshape the approach (wp[0]) but must NOT touch the push."""
     scene = _scene()
     intent_a = _correct_intent()                                 # from_minus_x
     intent_b = Intent(
@@ -189,4 +201,39 @@ def test_waypoints_push_uses_contact_region_not_approach_direction():
     )
     wp_a = build_push_waypoints(scene, intent_a)
     wp_b = build_push_waypoints(scene, intent_b)
-    np.testing.assert_array_equal(wp_a, wp_b)
+    # Push waypoints (descend, push-end) are byte-identical.
+    np.testing.assert_array_equal(wp_a[2:], wp_b[2:])
+    # Pre-contact-high (wp[1]) also unchanged — it sits on the contact-region
+    # side of the cube, not the approach side.
+    np.testing.assert_array_equal(wp_a[1], wp_b[1])
+
+
+def test_waypoints_approach_reflects_approach_direction():
+    """The wide approach waypoint (wp[0]) is placed on the side named by
+    approach_direction. Opposite approaches put wp[0] on opposite sides."""
+    scene = _scene()
+    intent_minus_x = _correct_intent()         # approach=from_minus_x
+    intent_plus_x = Intent(
+        goal_state="cube_at_target",
+        object_motion="translate_+x",
+        contact_region="minus_x_face",          # SAME contact
+        approach_direction="from_plus_x",       # OPPOSITE approach
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_push",
+    )
+    wp_minus = build_push_waypoints(scene, intent_minus_x)
+    wp_plus = build_push_waypoints(scene, intent_plus_x)
+    # wp[0] x has opposite sign for opposite approaches, same magnitude.
+    assert wp_minus[0, 0] < 0.0
+    assert wp_plus[0, 0] > 0.0
+    np.testing.assert_allclose(wp_minus[0, 0], -wp_plus[0, 0])
+    # Push (wp[2..]) must still be identical — only approach changed.
+    np.testing.assert_array_equal(wp_minus[2:], wp_plus[2:])
+
+
+def test_approach_to_unit_pairs():
+    np.testing.assert_allclose(approach_to_unit("from_minus_x"), [-1.0, 0.0])
+    np.testing.assert_allclose(approach_to_unit("from_plus_x"),  [ 1.0, 0.0])
+    np.testing.assert_allclose(approach_to_unit("from_minus_y"), [ 0.0, -1.0])
+    np.testing.assert_allclose(approach_to_unit("from_plus_y"),  [ 0.0,  1.0])
+    np.testing.assert_allclose(approach_to_unit("from_above"),   [ 0.0,  0.0])

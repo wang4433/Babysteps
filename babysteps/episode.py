@@ -46,7 +46,11 @@ def generate_proxy_demo(
         demonstrator_type="proxy_oracle",
         object_trajectory=traj,
         contact_region_label=correct.contact_region,
-        final_state="cube_at_target",
+        # Task-aware: read from the oracle intent so each adapter sets its
+        # own goal_state label (PushCube: "cube_at_target"; PickCube:
+        # "cube_lifted_at_target"). PushCube's value is unchanged →
+        # snapshot byte-equality preserved.
+        final_state=correct.goal_state,
         rgbd_video_path=None,
     )
 

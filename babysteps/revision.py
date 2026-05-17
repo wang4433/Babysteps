@@ -6,22 +6,41 @@ copied byte-identical from the input. This invariant is what makes Stage 0
 "factor-local" rather than "generic retry"; the summarizer's
 `non_regression_score` audits it on every revised episode.
 
-Stage 0 implements only `approach_substitution`. Other operators raise
-`NotImplementedError` — honest about what is and isn't validated.
+Stage 0 implements:
+  * `approach_substitution` — for wrong_factor=="approach_direction"
+    (Sub-project A / PushCube).
+  * `contact_substitution` — for wrong_factor=="contact_region"
+    (Sub-project B / PickCube).
+
+Other wrong_factors raise `NotImplementedError` — honest about what is and
+isn't validated.
 """
 from __future__ import annotations
 
 from dataclasses import replace
 
-from babysteps.envs.scene import OPPOSITE_APPROACH
+from babysteps.envs.scene import OPPOSITE_APPROACH, ORTHOGONAL_FACE
 from babysteps.failure import Attribution
-from babysteps.schemas import APPROACH_DIRECTIONS, INTENT_FIELDS, Intent, Revision, SceneState
+from babysteps.schemas import (
+    APPROACH_DIRECTIONS,
+    CONTACT_REGIONS,
+    INTENT_FIELDS,
+    Intent,
+    Revision,
+    SceneState,
+)
 
 # Order in which the reviser searches for an unblocked approach. The opposite
 # of the current approach is tried first (the canonical "approach_substitution"
 # move), then the remaining cardinals, then "from_above" as a last resort.
 _CARDINAL_FALLBACK_ORDER: tuple[str, ...] = (
     "from_minus_x", "from_plus_x", "from_minus_y", "from_plus_y",
+)
+
+# Fallback order for contact_substitution if both current and its orthogonal
+# are blocked. Searches the four cardinal faces in a deterministic order.
+_FACE_FALLBACK_ORDER: tuple[str, ...] = (
+    "minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face",
 )
 
 
@@ -41,34 +60,77 @@ def _pick_unblocked_approach(current: str, blocked: tuple[str, ...]) -> str:
     return "from_above"
 
 
+def _pick_unblocked_face(current: str, blocked: tuple[str, ...]) -> str:
+    """Stage-0 contact_substitution choice: prefer the 90°-orthogonal face
+    (i.e., rotate the gripper axis), then fall back to any unblocked
+    cardinal face."""
+    blocked_set = set(blocked)
+    # First preference: 90°-rotated gripper axis.
+    if current in ORTHOGONAL_FACE:
+        cand = ORTHOGONAL_FACE[current]
+        if cand not in blocked_set and cand != current:
+            return cand
+    # Next: any other cardinal face that is not the current and not blocked.
+    for cand in _FACE_FALLBACK_ORDER:
+        if cand != current and cand not in blocked_set:
+            return cand
+    # Stage-0 has no further fallback (no "any_face" wildcard); if every
+    # cardinal is blocked, the executor scene is over-constrained.
+    raise RuntimeError(
+        f"no unblocked contact_region available: current={current!r}, "
+        f"blocked={sorted(blocked_set)!r}. Stage-0 has no further fallback."
+    )
+
+
 def revise_intent(
     intent: Intent, attribution: Attribution, scene: SceneState,
 ) -> tuple[Intent, Revision]:
-    """Return (revised_intent, Revision record). Stage 0 supports
-    `wrong_factor == "approach_direction"` only.
+    """Return (revised_intent, Revision record). Dispatches on
+    `attribution.wrong_factor`. Stage-0 supports approach_direction and
+    contact_region; other factors raise NotImplementedError.
     """
     if attribution.wrong_factor is None:
         raise ValueError(
             "revise_intent called with attribution.wrong_factor=None; "
             "the failure was not semantic — nothing to revise."
         )
-    if attribution.wrong_factor != "approach_direction":
-        raise NotImplementedError(
-            f"Stage-0 reviser only handles 'approach_direction'; "
-            f"got {attribution.wrong_factor!r}. (Other factors are reserved "
-            f"for later stages — see docs/.../2026-05-15-stage0-pushcube-blocked-design.md "
-            f"§14)"
-        )
 
-    old = intent.approach_direction
-    new = _pick_unblocked_approach(old, scene.blocked_sides)
-    revised = replace(intent, approach_direction=new)
-    frozen = tuple(f for f in INTENT_FIELDS if f != "approach_direction")
-    rev_record = Revision(
-        operator="approach_substitution",
-        factor="approach_direction",
-        old_value=old,
-        new_value=new,
-        frozen_factors=frozen,
+    if attribution.wrong_factor == "approach_direction":
+        old = intent.approach_direction
+        new = _pick_unblocked_approach(old, scene.blocked_sides)
+        revised = replace(intent, approach_direction=new)
+        frozen = tuple(f for f in INTENT_FIELDS if f != "approach_direction")
+        rev_record = Revision(
+            operator="approach_substitution",
+            factor="approach_direction",
+            old_value=old,
+            new_value=new,
+            frozen_factors=frozen,
+        )
+        return revised, rev_record
+
+    if attribution.wrong_factor == "contact_region":
+        old = intent.contact_region
+        if old not in CONTACT_REGIONS:
+            raise ValueError(
+                f"contact_substitution: current contact_region {old!r} not in "
+                f"CONTACT_REGIONS"
+            )
+        new = _pick_unblocked_face(old, scene.blocked_sides)
+        revised = replace(intent, contact_region=new)
+        frozen = tuple(f for f in INTENT_FIELDS if f != "contact_region")
+        rev_record = Revision(
+            operator="contact_substitution",
+            factor="contact_region",
+            old_value=old,
+            new_value=new,
+            frozen_factors=frozen,
+        )
+        return revised, rev_record
+
+    raise NotImplementedError(
+        f"Stage-0 reviser handles 'approach_direction' and 'contact_region'; "
+        f"got {attribution.wrong_factor!r}. (Other factors are reserved "
+        f"for later sub-projects — see "
+        f"docs/superpowers/specs/2026-05-17-stage0-four-scene-roadmap-design.md §6)"
     )
-    return revised, rev_record

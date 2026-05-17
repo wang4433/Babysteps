@@ -100,8 +100,10 @@ def test_revise_intent_falls_back_to_from_above_when_all_cardinals_blocked():
 # ---------- unhandled factors raise ------------------------------------ #
 
 
-@pytest.mark.parametrize("factor", ["contact_region", "goal_state", "object_motion"])
+@pytest.mark.parametrize("factor", ["goal_state", "object_motion", "constraint_region"])
 def test_revise_intent_unhandled_factor_raises(factor: str):
+    """Stage-0 supports approach_direction and contact_region; everything
+    else raises NotImplementedError (sub-projects C and D will add)."""
     attr = Attribution(
         semantic_failure=True,
         wrong_factor=factor,
@@ -110,6 +112,103 @@ def test_revise_intent_unhandled_factor_raises(factor: str):
     )
     with pytest.raises(NotImplementedError, match=factor):
         revise_intent(_intent(), attr, _scene())
+
+
+# ---------- contact_substitution (Sub-project B) ----------------------- #
+
+
+def _pick_intent(contact="minus_x_face") -> Intent:
+    return Intent(
+        goal_state="cube_lifted_at_target",
+        object_motion="lift_up",
+        contact_region=contact,
+        approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_grasp",
+    )
+
+
+def _attribution_contact() -> Attribution:
+    return Attribution(
+        semantic_failure=True,
+        wrong_factor="contact_region",
+        freeze=tuple(f for f in INTENT_FIELDS if f != "contact_region"),
+        revise=("contact_region", "embodiment_mapping"),
+    )
+
+
+def test_contact_substitution_returns_revised_intent_and_revision():
+    revised, rev = revise_intent(
+        _pick_intent(),
+        _attribution_contact(),
+        _scene(blocked=("minus_x_face",)),
+    )
+    assert isinstance(revised, Intent)
+    assert isinstance(rev, Revision)
+
+
+def test_contact_substitution_changes_exactly_one_factor():
+    initial = _pick_intent("minus_x_face")
+    revised, _ = revise_intent(
+        initial, _attribution_contact(),
+        _scene(blocked=("minus_x_face",)),
+    )
+    for f in INTENT_FIELDS:
+        if f == "contact_region":
+            assert getattr(revised, f) != getattr(initial, f)
+        else:
+            assert getattr(revised, f) == getattr(initial, f), (
+                f"factor {f!r} must be frozen by contact_substitution"
+            )
+
+
+def test_contact_substitution_prefers_orthogonal_face():
+    """Stage-0 contact_substitution: minus_x_face → minus_y_face (90°
+    around z rotation of the gripper)."""
+    initial = _pick_intent("minus_x_face")
+    revised, _ = revise_intent(
+        initial, _attribution_contact(),
+        _scene(blocked=("minus_x_face",)),
+    )
+    assert revised.contact_region == "minus_y_face"
+
+
+def test_contact_substitution_falls_back_when_orthogonal_blocked():
+    """If both current and orthogonal are blocked, pick any remaining
+    cardinal in fallback order."""
+    initial = _pick_intent("minus_x_face")
+    revised, _ = revise_intent(
+        initial, _attribution_contact(),
+        _scene(blocked=("minus_x_face", "minus_y_face")),
+    )
+    assert revised.contact_region in {"plus_x_face", "plus_y_face"}
+    assert revised.contact_region != "minus_x_face"
+    assert revised.contact_region != "minus_y_face"
+
+
+def test_contact_substitution_record_fields():
+    initial = _pick_intent("minus_x_face")
+    _, rev = revise_intent(
+        initial, _attribution_contact(),
+        _scene(blocked=("minus_x_face",)),
+    )
+    assert rev.operator == "contact_substitution"
+    assert rev.factor == "contact_region"
+    assert rev.old_value == "minus_x_face"
+    assert rev.new_value == "minus_y_face"
+    assert set(rev.frozen_factors) == set(
+        f for f in INTENT_FIELDS if f != "contact_region"
+    )
+
+
+def test_contact_substitution_raises_when_all_faces_blocked():
+    """No fallback exists if every cardinal face is blocked — Stage-0 is
+    honest about this."""
+    initial = _pick_intent("minus_x_face")
+    all_blocked = ("minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face")
+    with pytest.raises(RuntimeError, match="no unblocked contact_region"):
+        revise_intent(initial, _attribution_contact(),
+                      _scene(blocked=all_blocked))
 
 
 def test_revise_intent_no_semantic_failure_is_ambiguous():

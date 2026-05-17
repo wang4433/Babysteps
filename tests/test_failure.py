@@ -105,6 +105,25 @@ def test_build_failure_packet_goal_not_satisfied_when_short():
     assert fp.failure_predicate == "goal_not_satisfied"
 
 
+def test_build_failure_packet_grasp_slip_beats_contact_failure():
+    """Sub-project B: grasp_slip is more specific than the contact/motion
+    predicates that follow it in the precedence rule. The gripper DID
+    reach the cube; lift failed because grip was lost."""
+    a = _attempt(
+        reached_contact=True, object_moved=False, grasp_slip=True,
+    )
+    fp = build_failure_packet(_intent(), a, _scene())
+    assert fp.failure_predicate == "grasp_slip"
+
+
+def test_build_failure_packet_planner_failed_still_beats_grasp_slip():
+    """planner_failed is the most specific predicate — even if grasp_slip
+    is also flagged, the skill never ran."""
+    a = _attempt(planner_failed=True, grasp_slip=True)
+    fp = build_failure_packet(_intent(), a, _scene())
+    assert fp.failure_predicate == "approach_blocked"
+
+
 def test_build_failure_packet_carries_displacement():
     a = _attempt(reached_contact=True, object_moved=True, final_obj_xy=(0.1, 0.0))
     fp = build_failure_packet(_intent(), a, _scene())
@@ -133,8 +152,21 @@ def test_failure_to_factor_table_covers_every_predicate_we_emit():
     expected_predicates = {
         "approach_blocked", "direction_error", "contact_failure",
         "no_motion", "goal_not_satisfied",
+        "grasp_slip",       # Sub-project B
     }
     assert expected_predicates <= set(FAILURE_TO_FACTOR.keys())
+
+
+def test_attribute_failure_grasp_slip_implicates_contact_region():
+    """Sub-project B: grasp_slip → contact_region is wrong (the chosen
+    gripper-axis is slip-prone). embodiment_mapping is also in `revise`
+    for future operators; Stage-0's contact_substitution leaves it alone."""
+    attr = attribute_failure(_make_fp("grasp_slip"))
+    assert attr.semantic_failure is True
+    assert attr.wrong_factor == "contact_region"
+    assert "contact_region" in attr.revise
+    assert "embodiment_mapping" in attr.revise
+    assert "contact_region" not in attr.freeze
 
 
 def _make_fp(pred: str) -> FailurePacket:

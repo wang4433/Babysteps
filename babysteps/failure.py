@@ -35,6 +35,11 @@ FAILURE_TO_FACTOR: dict[str, tuple[str, tuple[str, ...]]] = {
     "contact_failure":    ("contact_region",     ("contact_region",)),
     "no_motion":          ("approach_direction", ("approach_direction", "contact_region")),
     "goal_not_satisfied": ("goal_state",         ("goal_state",)),
+    # Sub-project B (PickCube): grasp_slip → contact_region is wrong (the
+    # chosen gripper-axis is slip-prone for this cube). embodiment_mapping
+    # is also in `revise` to permit future operators that switch grasp
+    # primitives; Stage-0's contact_substitution does not touch it.
+    "grasp_slip":         ("contact_region",     ("contact_region", "embodiment_mapping")),
 }
 
 
@@ -93,6 +98,12 @@ def build_failure_packet(
         predicate = "none"
     elif attempt.planner_failed:
         predicate = "approach_blocked"
+    elif attempt.grasp_slip:
+        # Sub-project B: grasp_slip is more specific than the contact /
+        # motion / direction predicates below — it carries the strong
+        # signal that the gripper DID reach the cube but lost grip. Goes
+        # right after planner_failed in the precedence.
+        predicate = "grasp_slip"
     elif not attempt.reached_contact:
         predicate = "contact_failure"
     elif not attempt.object_moved:

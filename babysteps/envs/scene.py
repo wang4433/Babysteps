@@ -23,8 +23,10 @@ __all__ = [
     "direction_to_face",
     "face_to_approach",
     "face_to_push_unit",
+    "approach_to_unit",
     "goal_direction_to_motion",
     "OPPOSITE_APPROACH",
+    "ORTHOGONAL_FACE",
 ]
 
 
@@ -44,11 +46,34 @@ _APPROACH_BY_FACE: dict[str, str] = {
     "plus_y_face":  "from_plus_y",
 }
 
+# Mapping: approach_direction → xy unit vector pointing FROM cube TOWARD the
+# side the EE should fly to first (before descending to the contact face).
+# "from_above" maps to (0, 0): the high pre-contact waypoint sits directly
+# above the cube center rather than offset to a side.
+_APPROACH_UNIT: dict[str, np.ndarray] = {
+    "from_minus_x": np.array([-1.0, 0.0]),
+    "from_plus_x":  np.array([1.0, 0.0]),
+    "from_minus_y": np.array([0.0, -1.0]),
+    "from_plus_y":  np.array([0.0, 1.0]),
+    "from_above":   np.array([0.0, 0.0]),
+}
+
 OPPOSITE_APPROACH: dict[str, str] = {
     "from_minus_x": "from_plus_x",
     "from_plus_x":  "from_minus_x",
     "from_minus_y": "from_plus_y",
     "from_plus_y":  "from_minus_y",
+}
+
+# Sub-project B (PickCube): the orthogonal (90°-around-z-rotated) gripper
+# axis used by `contact_substitution`. minus_x_face → minus_y_face means
+# "rotate the gripper from x-aligned to y-aligned." Pairs are
+# distance-preserving (the EE only has to rotate the wrist, not move).
+ORTHOGONAL_FACE: dict[str, str] = {
+    "minus_x_face": "minus_y_face",
+    "plus_x_face":  "plus_y_face",
+    "minus_y_face": "minus_x_face",
+    "plus_y_face":  "plus_x_face",
 }
 
 
@@ -74,6 +99,14 @@ def face_to_push_unit(face: str) -> np.ndarray:
     if face not in _PUSH_UNIT_BY_FACE:
         raise ValueError(f"unknown face {face!r}")
     return _PUSH_UNIT_BY_FACE[face].copy()
+
+
+def approach_to_unit(approach: str) -> np.ndarray:
+    """Unit-vector (in cube-centred xy) pointing toward the side the EE should
+    fly to before descending. Returns (0, 0) for "from_above"."""
+    if approach not in _APPROACH_UNIT:
+        raise ValueError(f"unknown approach {approach!r}")
+    return _APPROACH_UNIT[approach].copy()
 
 
 def goal_direction_to_motion(goal_vec_xy: np.ndarray) -> str:

@@ -17,6 +17,7 @@ from babysteps.schemas import (
     CONTACT_REGIONS,
     EMBODIMENT_MAPPINGS,
     FAILURE_PREDICATES,
+    GOAL_STATES,
     INTENT_FIELDS,
     OBJECT_MOTIONS,
     REVISION_OPERATORS,
@@ -58,6 +59,19 @@ def test_whitelists_disjoint_and_present():
     assert "approach_substitution" in REVISION_OPERATORS
 
 
+def test_whitelists_pickcube_additions():
+    """B (PickCube) additions — see four-scene roadmap spec §4."""
+    assert "lift_up" in OBJECT_MOTIONS
+    assert "proxy_contact_to_franka_grasp" in EMBODIMENT_MAPPINGS
+    assert "cube_lifted_at_target" in GOAL_STATES
+    assert "grasp_slip" in FAILURE_PREDICATES
+    assert "contact_substitution" in REVISION_OPERATORS
+    # CONTACT_REGIONS unchanged (Pick reuses the 4 cardinal faces).
+    assert CONTACT_REGIONS == frozenset(
+        {"minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face"}
+    )
+
+
 # ---------- Intent ------------------------------------------------------- #
 
 
@@ -74,6 +88,22 @@ def _ok_intent() -> Intent:
 
 def test_intent_roundtrip():
     i = _ok_intent()
+    assert Intent.from_dict(i.to_dict()) == i
+
+
+def _ok_pickcube_intent() -> Intent:
+    return Intent(
+        goal_state="cube_lifted_at_target",
+        object_motion="lift_up",
+        contact_region="minus_x_face",  # x-axis-aligned gripper
+        approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_grasp",
+    )
+
+
+def test_pickcube_intent_roundtrip():
+    i = _ok_pickcube_intent()
     assert Intent.from_dict(i.to_dict()) == i
 
 
