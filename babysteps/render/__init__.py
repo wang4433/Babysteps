@@ -13,8 +13,6 @@ from __future__ import annotations
 
 from typing import Callable
 
-from babysteps.envs.task_adapter import BaseTaskAdapter
-
 
 # A render_episode_fn returns:
 #   ({phase_name → list[rgb_frame]}, {phase_name → (title, subtitle)})
