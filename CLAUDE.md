@@ -57,6 +57,23 @@ srun --account=rpaleja --partition=a100-40gb --gres=gpu:1 --mem=115G --time=00:2
     --seed_start 0 &&
   ls -lh "$OUT_DIR/videos_maniskill"
 '
+
+# TurnFaucet (Sub-project D — constraint_violation; closes D's acceptance gate item 4)
+# Requires partnet_mobility_faucet asset (one-time):
+#   python -m mani_skill.utils.download_asset partnet_mobility_faucet
+srun --account=rpaleja --partition=a100-40gb --gres=gpu:1 --mem=115G --time=00:20:00 bash -lc '
+  cd /scratch/gilbreth/wang4433/babysteps &&
+  source /apps/external/conda/2025.09/etc/profile.d/conda.sh &&
+  conda activate handover &&
+  OUT_DIR=/scratch/gilbreth/wang4433/render_turnfaucet &&
+  LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH" \
+  python scripts/render_stage0_maniskill.py \
+    --task TurnFaucet-v1 \
+    --out_dir "$OUT_DIR" \
+    --n_episodes 2 \
+    --seed_start 0 &&
+  ls -lh "$OUT_DIR/videos_maniskill"
+'
 ```
 
 Expected output per task: 2 episodes × 3 MP4s = 6 files in
@@ -65,13 +82,13 @@ Expected output per task: 2 episodes × 3 MP4s = 6 files in
 
 - Design: `docs/superpowers/specs/2026-05-15-stage0-pushcube-blocked-design.md`
 - Plan:   `docs/superpowers/plans/2026-05-15-stage0-pushcube-blocked-plan.md`
-- Code:   `babysteps/` (pure modules) + `babysteps/envs/{pushcube,pickcube,stackcube}_runner.py` (sim adapters),
+- Code:   `babysteps/` (pure modules) + `babysteps/envs/{pushcube,pickcube,stackcube,turnfaucet}_runner.py` (sim adapters),
           `babysteps/envs/task_registry.py` (--task dispatch),
-          `babysteps/render/{pushcube,pickcube,stackcube}.py` (per-task MP4 flows)
-- Scripts: `scripts/{stage0_collect,render_stage0_maniskill}.py` accept `--task {PickCube-v1,PushCube-v1,StackCube-v1}`.
+          `babysteps/render/{pushcube,pickcube,stackcube,turnfaucet}.py` (per-task MP4 flows)
+- Scripts: `scripts/{stage0_collect,render_stage0_maniskill}.py` accept `--task {PickCube-v1,PushCube-v1,StackCube-v1,TurnFaucet-v1}`.
           `scripts/stage0_summarize.py` derives the task from the input JSONL (no flag).
           `scripts/smoke_pushcube.py` remains a PushCube-only loadability check.
-- Tests:  221 sim-free unit tests in `tests/` (PushCube + PickCube + StackCube, snapshot-stable across all three)
+- Tests:  259 sim-free unit tests in `tests/` (PushCube + PickCube + StackCube + TurnFaucet, snapshot-stable across all four)
 
 Quickstart: `README.md`. The acceptance gate is `delta_pp >= 10` between
 revised-retry success rate and initial-attempt success rate, identical to
