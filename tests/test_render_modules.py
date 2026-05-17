@@ -104,3 +104,51 @@ def test_pushcube_render_titles_contain_phase_label():
     assert "phase 1/3" in titles["demo"][0]
     assert "phase 2/3" in titles["attempt_blocked"][0]
     assert "phase 3/3" in titles["retry"][0]
+
+
+# ---------- PickCube render tests -------------------------------------- #
+
+
+def test_pickcube_render_episode_emits_three_phase_frames():
+    from babysteps.render.pickcube import render_episode
+    from babysteps.envs.pickcube_adapter import PickCubeAdapter
+
+    env = _StubEnv()
+    adapter = PickCubeAdapter()
+    frames, titles = render_episode(env, adapter, seed=0, fps=4)
+
+    assert set(frames.keys()) == {"demo", "attempt_blocked", "retry"}
+    assert set(titles.keys()) == {"demo", "attempt_blocked", "retry"}
+    # All three phases must step the env (grasp_slip is execution-time).
+    assert len(frames["demo"]) >= 2
+    assert len(frames["attempt_blocked"]) >= 2
+    assert len(frames["retry"]) >= 2
+
+
+def test_pickcube_render_phase2_actually_steps_env():
+    """Unlike PushCube (held still), PickCube must step the env in phase 2
+    so the grasp_slip is visible (gripper closes, lifts, releases). Detect
+    by checking the stub env's step_count incremented across phase 2 frames."""
+    from babysteps.render.pickcube import render_episode
+    from babysteps.envs.pickcube_adapter import PickCubeAdapter
+
+    env = _StubEnv()
+    frames, _ = render_episode(env, PickCubeAdapter(), seed=0, fps=4)
+    held = frames["attempt_blocked"]
+    # In the stub env each step bumps the frame intensity, so consecutive
+    # frames differ iff env.step was called. PushCube's phase-2 frames are
+    # all identical; PickCube's must differ.
+    assert not all(np.array_equal(held[0], f) for f in held), (
+        "PickCube phase 2 should step the env to surface grasp_slip; "
+        "saw all-identical frames (PushCube-style hold)."
+    )
+
+
+def test_pickcube_render_titles_mention_contact_region():
+    from babysteps.render.pickcube import render_episode
+    from babysteps.envs.pickcube_adapter import PickCubeAdapter
+    _, titles = render_episode(_StubEnv(), PickCubeAdapter(), seed=0, fps=4)
+    # Demo subtitle should mention contact_region (which face was grasped).
+    assert "contact_region" in titles["demo"][1]
+    # Retry subtitle should mention contact_substitution.
+    assert "contact_substitution" in titles["retry"][1]
