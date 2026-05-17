@@ -72,9 +72,27 @@ def _pickcube_entry() -> TaskEntry:
     )
 
 
+def _stackcube_entry() -> TaskEntry:
+    # StackCubeAdapter is safe to import at module load — it does not
+    # pull mani_skill (deferred to make_env_runner()). FakeStackCube-
+    # EnvRunner is lazy via the _make_fake closure.
+    from babysteps.envs.stackcube_adapter import StackCubeAdapter
+
+    def _make_fake() -> EnvRunner:
+        from tests.conftest import FakeStackCubeEnvRunner
+        return FakeStackCubeEnvRunner()
+
+    return TaskEntry(
+        adapter_cls=StackCubeAdapter,
+        fake_runner_factory=_make_fake,
+        episode_id_prefix="stackcube_underspec_goal",
+    )
+
+
 TASK_REGISTRY: dict[str, TaskEntry] = {
     "PushCube-v1": _pushcube_entry(),
     "PickCube-v1": _pickcube_entry(),
+    "StackCube-v1": _stackcube_entry(),
 }
 
 

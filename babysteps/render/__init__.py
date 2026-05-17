@@ -30,11 +30,17 @@ def _pickcube_render() -> RenderEpisodeFn:
     return render_episode
 
 
+def _stackcube_render() -> RenderEpisodeFn:
+    from babysteps.render.stackcube import render_episode
+    return render_episode
+
+
 # Lazy: each entry's import happens on first access via RENDER_REGISTRY[task_id]().
 # This keeps importing babysteps.render cheap when only one task is needed.
 RENDER_REGISTRY: dict[str, Callable[[], RenderEpisodeFn]] = {
     "PushCube-v1": _pushcube_render,
     "PickCube-v1": _pickcube_render,
+    "StackCube-v1": _stackcube_render,
 }
 
 

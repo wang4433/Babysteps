@@ -10,9 +10,11 @@ from babysteps.envs.task_registry import (
 )
 
 
-def test_registry_contains_both_stage0_tasks():
-    """PushCube-v1 (sub-project A) and PickCube-v1 (sub-project B) must be present."""
-    assert set(TASK_REGISTRY.keys()) == {"PushCube-v1", "PickCube-v1"}
+def test_registry_contains_all_stage0_tasks():
+    """PushCube-v1 (A), PickCube-v1 (B), and StackCube-v1 (C) must be present."""
+    assert set(TASK_REGISTRY.keys()) == {
+        "PushCube-v1", "PickCube-v1", "StackCube-v1",
+    }
 
 
 def test_get_task_entry_pushcube():
@@ -33,11 +35,12 @@ def test_get_task_entry_pickcube():
 
 def test_get_task_entry_unknown_task_raises():
     with pytest.raises(KeyError) as exc:
-        get_task_entry("StackCube-v1")
+        get_task_entry("OpenCabinetDrawer-v1")
     msg = str(exc.value)
-    assert "StackCube-v1" in msg
+    assert "OpenCabinetDrawer-v1" in msg
     assert "PushCube-v1" in msg
     assert "PickCube-v1" in msg
+    assert "StackCube-v1" in msg
 
 
 def test_fake_runner_factory_pushcube():
@@ -80,3 +83,20 @@ def test_task_registry_matches_render_registry():
         f"TASK_REGISTRY tasks {sorted(TASK_REGISTRY.keys())} "
         f"!= RENDER_REGISTRY tasks {sorted(RENDER_REGISTRY.keys())}"
     )
+
+
+def test_get_task_entry_stackcube():
+    from babysteps.envs.stackcube_adapter import StackCubeAdapter
+    entry = get_task_entry("StackCube-v1")
+    assert isinstance(entry, TaskEntry)
+    assert entry.adapter_cls is StackCubeAdapter
+    assert entry.episode_id_prefix == "stackcube_underspec_goal"
+
+
+def test_fake_runner_factory_stackcube():
+    entry = get_task_entry("StackCube-v1")
+    runner = entry.fake_runner_factory()
+    assert hasattr(runner, "reset")
+    assert hasattr(runner, "run")
+    assert hasattr(runner, "close")
+    runner.close()
