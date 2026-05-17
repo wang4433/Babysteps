@@ -80,13 +80,21 @@ def test_stage0_collect_cli_default_task_is_pushcube(tmp_path: Path, collect_mai
 
 
 def test_stage0_collect_cli_unknown_task_errors(tmp_path: Path, collect_main):
+    """`--task StackCube-v1` must exit non-zero via argparse's choices= guard.
+
+    Argparse raises SystemExit(2) before get_task_entry is ever reached.
+    Pinning to SystemExit (not the broader (SystemExit, KeyError) union)
+    ensures the test catches a regression where someone accidentally
+    removes the `choices=` constraint — without choices, get_task_entry
+    would raise KeyError and a loose union would mask the failure."""
     out_dir = tmp_path / "out"
-    with pytest.raises((SystemExit, KeyError)) as exc:
+    with pytest.raises(SystemExit) as exc_info:
         collect_main([
             "--task", "StackCube-v1",
             "--fake-env",
             "--out_dir", str(out_dir),
             "--n_episodes", "1",
         ])
-    # argparse choices=… raises SystemExit; if we route through
-    # get_task_entry first it raises KeyError. Either is acceptable.
+    assert exc_info.value.code != 0, (
+        f"unknown --task should exit non-zero, got code={exc_info.value.code}"
+    )

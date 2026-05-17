@@ -97,10 +97,12 @@ def main(argv=None) -> int:
             records.append(rec)
             with samples_path.open("a") as f:
                 f.write(rec.to_jsonl_line() + "\n")
+            retry_val = rec.metrics['retry_success']
+            retry_str = "N/A" if retry_val is None else str(retry_val)
             print(
                 f"[{i + 1}/{args.n_episodes}] task={args.task} seed={seed} "
                 f"initial_success={rec.metrics['initial_success']} "
-                f"retry_success={rec.metrics['retry_success']} "
+                f"retry={retry_str} "
                 f"failure_type={rec.metrics['failure_type']}",
                 flush=True,
             )
