@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import numpy as np
 
+from babysteps.demo import trajectory_to_motion
 from babysteps.envs.task_adapter import BaseTaskAdapter, EnvRunner
 from babysteps.schemas import CONTACT_REGIONS, DemoEvidence, Intent, SceneState
 from babysteps.skills.stack import compile_intent_to_stack_skill
@@ -33,17 +34,6 @@ from babysteps.skills.stack import compile_intent_to_stack_skill
 # consistent contact_region across tasks.
 _DEFAULT_CONTACT_REGION: str = "minus_x_face"
 
-
-def _dominant_axis_motion(traj: tuple[tuple[float, float], ...]) -> str:
-    """Pick translate_<axis> from the (initial, final) trajectory's dominant
-    component. Matches the convention used by PushCubeAdapter."""
-    if len(traj) < 2:
-        return "translate_+x"   # degenerate; arbitrary default
-    dx = traj[-1][0] - traj[0][0]
-    dy = traj[-1][1] - traj[0][1]
-    if abs(dx) >= abs(dy):
-        return "translate_+x" if dx >= 0 else "translate_-x"
-    return "translate_+y" if dy >= 0 else "translate_-y"
 
 
 class StackCubeAdapter(BaseTaskAdapter):
@@ -82,7 +72,7 @@ class StackCubeAdapter(BaseTaskAdapter):
                 f"DemoEvidence.contact_region_label must be one of "
                 f"{sorted(CONTACT_REGIONS)}, got {contact!r}"
             )
-        motion = _dominant_axis_motion(evidence.object_trajectory)
+        motion = trajectory_to_motion(evidence.object_trajectory)
         return Intent(
             goal_state="cube_at_target",   # DELIBERATELY under-specified
             object_motion=motion,
