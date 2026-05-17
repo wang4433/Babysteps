@@ -13,6 +13,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 # Make the project root importable without `pip install -e .`.
@@ -20,40 +21,33 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
-from babysteps.demo import demo_to_intent  # noqa: E402
-from babysteps.episode import (  # noqa: E402
-    _default_blocked_sides_factory,
-    _oracle_correct_intent_for_scene,
-    generate_proxy_demo,
-)
-from babysteps.failure import attribute_failure, build_failure_packet  # noqa: E402
-from babysteps.revision import revise_intent  # noqa: E402
-from babysteps.schemas import SceneState  # noqa: E402
+from babysteps.envs.pushcube_adapter import PushCubeAdapter  # noqa: E402
+from babysteps.episode import generate_proxy_demo  # noqa: E402
 from babysteps.viz import render_episode_topdown  # noqa: E402
+
+
+_ADAPTER = PushCubeAdapter()
 
 
 def _replay_with_recording(env_runner, seed: int) -> dict:
     """Reproduce run_episode but capture per-attempt trajectories for the
     renderer. Equivalent semantically to babysteps.episode.run_episode."""
     scene_initial = env_runner.reset(seed)
-    demo_evidence = generate_proxy_demo(env_runner, scene_initial)
-    initial_intent = demo_to_intent(demo_evidence)
-    scene_executor = SceneState(
-        cube_xy=scene_initial.cube_xy,
-        cube_z=scene_initial.cube_z,
-        goal_xy=scene_initial.goal_xy,
-        tcp_start_pose=scene_initial.tcp_start_pose,
-        blocked_sides=_default_blocked_sides_factory(initial_intent),
+    demo_evidence = generate_proxy_demo(env_runner, scene_initial, _ADAPTER)
+    initial_intent = _ADAPTER.scripted_demo_to_intent(demo_evidence)
+    scene_executor = replace(
+        scene_initial,
+        blocked_sides=_ADAPTER.default_blocked_factory(initial_intent),
     )
     attempt_1 = env_runner.run(initial_intent, scene_executor)
-    fp = build_failure_packet(initial_intent, attempt_1, scene_executor)
+    fp = _ADAPTER.build_failure_packet(initial_intent, attempt_1, scene_executor)
 
     revised_intent = None
     attempt_2 = None
     if fp.failure_predicate != "none":
-        attribution = attribute_failure(fp)
+        attribution = _ADAPTER.attribute_failure(fp)
         try:
-            revised_intent, _ = revise_intent(
+            revised_intent, _ = _ADAPTER.revise_intent(
                 initial_intent, attribution, scene_executor,
             )
             attempt_2 = env_runner.run(revised_intent, scene_executor)
