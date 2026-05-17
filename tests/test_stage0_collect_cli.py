@@ -20,6 +20,7 @@ _ROOT = Path(__file__).resolve().parent.parent
 @pytest.mark.parametrize("task_id,snapshot_name", [
     ("PushCube-v1", "pushcube_samples_seeds_0_4.jsonl"),
     ("PickCube-v1", "pickcube_samples_seeds_0_4.jsonl"),
+    ("StackCube-v1", "stackcube_samples_seeds_0_4.jsonl"),
 ])
 def test_stage0_collect_cli_matches_snapshot(
     tmp_path: Path, collect_main, task_id: str, snapshot_name: str,
