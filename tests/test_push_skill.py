@@ -1,4 +1,4 @@
-"""Tests for babysteps.execution (PushSkillCompiler + waypoint geometry) and
+"""Tests for babysteps.skills.push (PushSkillCompiler + waypoint geometry) and
 babysteps.envs.scene (face/approach/motion helpers).
 
 These are pure modules — no simulator, no ManiSkill. They are what makes
@@ -17,7 +17,7 @@ from babysteps.envs.scene import (
     face_to_push_unit,
     goal_direction_to_motion,
 )
-from babysteps.execution import (
+from babysteps.skills.push import (
     CUBE_HALF_SIZE,
     PRE_CONTACT_STANDOFF,
     PUSH_TRAVEL_MAX_M,

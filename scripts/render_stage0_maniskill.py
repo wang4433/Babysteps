@@ -183,7 +183,7 @@ def main(argv=None) -> int:
 
     from babysteps.demo import demo_to_intent
     from babysteps.envs.scene import direction_to_face, face_to_approach, face_to_push_unit
-    from babysteps.execution import (
+    from babysteps.skills.push import (
         CUBE_HALF_SIZE, PRE_CONTACT_STANDOFF,
         PUSH_TRAVEL_SCALE, PUSH_TRAVEL_MAX_M,
     )
@@ -331,7 +331,7 @@ def main(argv=None) -> int:
 
 def _build_waypoints(scene, intent) -> np.ndarray:
     """Local copy of build_push_waypoints — kept inline so this script is
-    fully self-contained and doesn't drag in babysteps.execution's whitelist
+    fully self-contained and doesn't drag in babysteps.skills.push's whitelist
     of cube_z conventions."""
     from babysteps.envs.scene import face_to_push_unit
     cube_xy = np.asarray(scene.cube_xy, dtype=np.float64)

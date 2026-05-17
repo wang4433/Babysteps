@@ -13,7 +13,7 @@ import numpy as np  # noqa: E402
 import pytest  # noqa: E402
 
 from babysteps.envs.scene import direction_to_face, face_to_push_unit  # noqa: E402
-from babysteps.execution import compile_intent_to_push_skill  # noqa: E402
+from babysteps.skills.push import compile_intent_to_push_skill  # noqa: E402
 from babysteps.schemas import AttemptResult, Intent, SceneState  # noqa: E402
 
 

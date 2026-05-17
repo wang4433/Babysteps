@@ -4,7 +4,7 @@ This is the ONLY module that imports `mani_skill`. The 3-phase open-loop
 proportional EE control loop is ported from the Pick4Pass reference
 `Code/scripts/run_pushcube_loop.py::_run_one_push`, simplified to consume a
 pre-compiled `PushSkill` (the skill compiler is in
-`babysteps.execution.compile_intent_to_push_skill`).
+`babysteps.skills.push.compile_intent_to_push_skill`).
 
 Note on Gilbreth: this requires a GPU/Vulkan-capable node (e.g.
 `salloc --gres=gpu:1`). The login node fails at SAPIEN's Vulkan device init.
@@ -19,7 +19,7 @@ from typing import Optional
 
 import numpy as np
 
-from babysteps.execution import compile_intent_to_push_skill
+from babysteps.skills.push import compile_intent_to_push_skill
 from babysteps.schemas import AttemptResult, Intent, SceneState
 
 # PD-tracking / phase-control constants. Matches Pick4Pass calibration for
