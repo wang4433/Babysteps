@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "babysteps"
+version = "0.0.1"
+description = "BABYSTEPS Stage 0 data preparation for PushCube blocked-approach."
+requires-python = ">=3.10"
+dependencies = [
+    "numpy<2",
+    "gymnasium",
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+sim = ["mani_skill"]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["babysteps*"]
+exclude = ["tests*", "scripts*", "docs*", "datasets*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]

@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+*.egg-info/
+.DS_Store
+datasets/stage0_pushcube_blocked/videos/
+datasets/stage0_pushcube_blocked/videos_maniskill/
+datasets/stage0_pushcube_blocked/rollouts/
+/tmp/
