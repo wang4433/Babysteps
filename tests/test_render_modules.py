@@ -152,3 +152,106 @@ def test_pickcube_render_titles_mention_contact_region():
     assert "contact_region" in titles["demo"][1]
     # Retry subtitle should mention contact_substitution.
     assert "contact_substitution" in titles["retry"][1]
+
+
+# ---------- StackCube render tests ------------------------------------ #
+
+
+class _StubStackEnv:
+    """Stand-in for gym.make('StackCube-v1') used in stackcube render tests.
+
+    Like _StubEnv but the obs has cubeA_pose + cubeB_pose (no goal_pos).
+    The TCP integrates the action's xyz so phase transitions happen in
+    ~10 stub steps."""
+
+    def __init__(self) -> None:
+        self.tcp = np.array([0.0, 0.0, 0.25, 0.0, 0.0, 0.0], dtype=np.float64)
+        self.cubeA = np.array([0.0, 0.0], dtype=np.float64)
+        self.cubeB = np.array([0.10, 0.0], dtype=np.float64)
+        self._step_count = 0
+
+    def reset(self, seed: int = 0):
+        self.tcp = np.array([0.0, 0.0, 0.25, 0.0, 0.0, 0.0], dtype=np.float64)
+        self.cubeA = np.array([0.0, 0.0], dtype=np.float64)
+        self.cubeB = np.array([0.10, 0.0], dtype=np.float64)
+        self._step_count = 0
+        return _StubStackObs(self.tcp, self.cubeA, self.cubeB), {}
+
+    def step(self, action):
+        self.tcp[0:3] = self.tcp[0:3] + 0.02 * np.asarray(action[0:3])
+        self._step_count += 1
+        return (
+            _StubStackObs(self.tcp, self.cubeA, self.cubeB),
+            0.0, False, False,
+            {"success": False},
+        )
+
+    def render(self):
+        return (np.ones((8, 8, 3), dtype=np.uint8) * (self._step_count % 256))
+
+    def close(self):
+        pass
+
+
+from dataclasses import dataclass as _dc
+
+
+@_dc
+class _StubStackObs:
+    tcp: np.ndarray
+    cubeA: np.ndarray
+    cubeB: np.ndarray
+
+    def __getitem__(self, key: str):
+        if key == "extra":
+            tcp_raw = np.concatenate([self.tcp[0:3], np.array([1.0]),
+                                      self.tcp[3:6]])
+            cubeA_full = np.array([self.cubeA[0], self.cubeA[1], 0.02])
+            cubeB_full = np.array([self.cubeB[0], self.cubeB[1], 0.02])
+            return {
+                "tcp_pose": tcp_raw,
+                "cubeA_pose": cubeA_full,
+                "cubeB_pose": cubeB_full,
+            }
+        raise KeyError(key)
+
+
+def test_stackcube_render_episode_emits_three_phase_frames():
+    from babysteps.render.stackcube import render_episode
+    from babysteps.envs.stackcube_adapter import StackCubeAdapter
+
+    env = _StubStackEnv()
+    adapter = StackCubeAdapter()
+    frames, titles = render_episode(env, adapter, seed=0, fps=4)
+
+    assert set(frames.keys()) == {"demo", "attempt_blocked", "retry"}
+    assert set(titles.keys()) == {"demo", "attempt_blocked", "retry"}
+    assert len(frames["demo"]) >= 2
+    assert len(frames["attempt_blocked"]) >= 2
+    assert len(frames["retry"]) >= 2
+
+
+def test_stackcube_render_phase2_actually_steps_env():
+    """Like PickCube and unlike PushCube — phase 2 steps the env so the
+    failed translate-and-drop is visible. Detect by checking the stub
+    env's step_count varies the frame intensity."""
+    from babysteps.render.stackcube import render_episode
+    from babysteps.envs.stackcube_adapter import StackCubeAdapter
+
+    env = _StubStackEnv()
+    frames, _ = render_episode(env, StackCubeAdapter(), seed=0, fps=4)
+    held = frames["attempt_blocked"]
+    assert not all(np.array_equal(held[0], f) for f in held), (
+        "StackCube phase 2 should step the env to surface the failed "
+        "translate-and-drop; saw all-identical frames."
+    )
+
+
+def test_stackcube_render_titles_mention_goal_state():
+    from babysteps.render.stackcube import render_episode
+    from babysteps.envs.stackcube_adapter import StackCubeAdapter
+    _, titles = render_episode(_StubStackEnv(), StackCubeAdapter(), seed=0, fps=4)
+    # Demo subtitle should mention goal_state="cubeA_on_cubeB" (the oracle).
+    assert "cubeA_on_cubeB" in titles["demo"][1]
+    # Retry subtitle should mention goal_refinement.
+    assert "goal_refinement" in titles["retry"][1]

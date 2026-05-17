@@ -18,6 +18,7 @@ PHASE_TOL_M: float = 0.015
 # what the production pipeline would have produced.
 PUSHCUBE_MAX_CONTROL_STEPS: int = 300   # matches PushCubeEnvRunner._MAX_CONTROL_STEPS
 PICKCUBE_MAX_CONTROL_STEPS: int = 400   # matches PickCubeEnvRunner._MAX_CONTROL_STEPS
+STACKCUBE_MAX_CONTROL_STEPS: int = 400  # matches StackCubeEnvRunner._MAX_CONTROL_STEPS
 MAX_CONTROL_STEPS: int = 400   # back-compat alias for callers that don't care
 
 
