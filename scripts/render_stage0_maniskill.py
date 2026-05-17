@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import math
 import sys
+from dataclasses import replace
 from pathlib import Path
 from typing import Optional
 
@@ -181,20 +182,10 @@ def main(argv=None) -> int:
         )
         return 2
 
-    from babysteps.demo import demo_to_intent
-    from babysteps.envs.scene import direction_to_face, face_to_approach, face_to_push_unit
-    from babysteps.skills.push import (
-        CUBE_HALF_SIZE, PRE_CONTACT_STANDOFF,
-        PUSH_TRAVEL_SCALE, PUSH_TRAVEL_MAX_M,
-    )
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
     from babysteps.failure import attribute_failure, build_failure_packet
     from babysteps.revision import revise_intent
-    from babysteps.schemas import AttemptResult, DemoEvidence, Intent, SceneState
-    from babysteps.episode import (
-        _default_blocked_sides_factory,
-        _oracle_correct_intent_for_scene,
-        generate_proxy_demo,
-    )
+    from babysteps.schemas import AttemptResult, DemoEvidence, SceneState
 
     videos_dir = args.out_dir / "videos_maniskill"
     videos_dir.mkdir(parents=True, exist_ok=True)
@@ -207,6 +198,7 @@ def main(argv=None) -> int:
         render_mode="rgb_array",
     )
 
+    adapter = PushCubeAdapter()
     try:
         for i in range(args.n_episodes):
             seed = args.seed_start + i
@@ -224,7 +216,7 @@ def main(argv=None) -> int:
                 tcp_start_pose=tcp_start,    # type: ignore[arg-type]
                 blocked_sides=(),
             )
-            correct_intent = _oracle_correct_intent_for_scene(scene)
+            correct_intent = adapter.oracle_correct_intent(scene)
             print(f"   demo intent: contact_region={correct_intent.contact_region} "
                   f"approach_direction={correct_intent.approach_direction}; "
                   f"cube_xy={scene.cube_xy} goal_xy={scene.goal_xy}")
@@ -244,11 +236,10 @@ def main(argv=None) -> int:
             )
 
             # === Derive initial intent + blocked-sides ===
-            initial_intent = demo_to_intent(demo_evidence)
-            scene_exec = SceneState(
-                cube_xy=scene.cube_xy, cube_z=scene.cube_z,
-                goal_xy=scene.goal_xy, tcp_start_pose=scene.tcp_start_pose,
-                blocked_sides=_default_blocked_sides_factory(initial_intent),
+            initial_intent = adapter.scripted_demo_to_intent(demo_evidence)
+            scene_exec = replace(
+                scene,
+                blocked_sides=adapter.default_blocked_factory(initial_intent),
             )
 
             # === Phase 2: ATTEMPT 1 — planner_failed (approach blocked) ===
@@ -324,6 +315,7 @@ def main(argv=None) -> int:
                 print(f"   wrote {vp.name}  ({kb} KB)")
     finally:
         env.close()
+        adapter.close()
 
     print(f"\nDone. MP4s in {videos_dir}")
     return 0

@@ -30,14 +30,19 @@ from babysteps.eval import compute_metrics, write_report  # noqa: E402
 from babysteps.schemas import EpisodeRecord  # noqa: E402
 
 
-def _make_runner(use_fake: bool):
+def _make_adapter(use_fake: bool):
+    """Build a PushCubeAdapter wired to the right env runner."""
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter  # noqa: WPS433
     if use_fake:
-        # Tests conftest carries the deterministic fake.
         sys.path.insert(0, str(Path(__file__).parent.parent))
         from tests.conftest import FakeEnvRunner   # noqa: WPS433
-        return FakeEnvRunner()
-    from babysteps.envs.pushcube_runner import PushCubeEnvRunner  # noqa: WPS433
-    return PushCubeEnvRunner()
+        fake = FakeEnvRunner()
+
+        class _FakePushCubeAdapter(PushCubeAdapter):
+            def make_env_runner(self):
+                return fake
+        return _FakePushCubeAdapter()
+    return PushCubeAdapter()
 
 
 def main(argv=None) -> int:
@@ -63,7 +68,7 @@ def main(argv=None) -> int:
     # Truncate any prior run.
     samples_path.write_text("")
 
-    runner = _make_runner(args.fake_env)
+    adapter = _make_adapter(args.fake_env)
     records: list[EpisodeRecord] = []
     try:
         for i in range(args.n_episodes):
@@ -72,7 +77,7 @@ def main(argv=None) -> int:
             rec = run_episode(
                 episode_id=episode_id,
                 seed=seed,
-                env_runner=runner,
+                adapter=adapter,
             )
             records.append(rec)
             with samples_path.open("a") as f:
@@ -85,7 +90,7 @@ def main(argv=None) -> int:
                 flush=True,
             )
     finally:
-        runner.close()
+        adapter.close()
 
     metrics = compute_metrics(records)
     write_report(metrics, args.out_dir)
