@@ -100,10 +100,10 @@ def test_revise_intent_falls_back_to_from_above_when_all_cardinals_blocked():
 # ---------- unhandled factors raise ------------------------------------ #
 
 
-@pytest.mark.parametrize("factor", ["object_motion", "constraint_region"])
+@pytest.mark.parametrize("factor", ["object_motion"])
 def test_revise_intent_unhandled_factor_raises(factor: str):
-    """Stage-0 supports approach_direction, contact_region, and goal_state;
-    everything else raises NotImplementedError (sub-projects D+ will add)."""
+    """Stage-0 supports approach_direction, contact_region, goal_state, and
+    constraint_region; everything else raises NotImplementedError."""
     attr = Attribution(
         semantic_failure=True,
         wrong_factor=factor,
@@ -327,3 +327,141 @@ def test_goal_refinement_preserves_frozen_factors():
     _, record = revise_intent(intent, attribution, scene)
     expected_frozen = tuple(f for f in INTENT_FIELDS if f != "goal_state")
     assert set(record.frozen_factors) == set(expected_frozen)
+
+
+# ---------- Sub-project D: constraint_introduction ------------------ #
+
+
+def test_constraint_introduction_happy_path():
+    """(constraint_region=none, contact_region=faucet_base) →
+    (faucet_base_static, handle_grip). Two-factor revision."""
+    from babysteps.failure import Attribution
+    from babysteps.revision import revise_intent
+    from babysteps.schemas import Intent, SceneState
+
+    intent = Intent(
+        goal_state="faucet_turned",
+        object_motion="turn",
+        contact_region="faucet_base",
+        approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_turn",
+    )
+    scene = SceneState(
+        cube_xy=(0.1, 0.0), cube_z=0.1, goal_xy=(0.1, 0.0),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(),
+    )
+    attribution = Attribution(
+        semantic_failure=True,
+        wrong_factor="constraint_region",
+        freeze=("goal_state", "object_motion", "approach_direction",
+                "embodiment_mapping"),
+        revise=("constraint_region", "contact_region"),
+    )
+    revised, record = revise_intent(intent, attribution, scene)
+    # BOTH revised:
+    assert revised.constraint_region == "faucet_base_static"
+    assert revised.contact_region == "handle_grip"
+    # Other factors carry over unchanged:
+    assert revised.goal_state == "faucet_turned"
+    assert revised.object_motion == "turn"
+    assert revised.approach_direction == "from_above"
+    assert revised.embodiment_mapping == "proxy_contact_to_franka_turn"
+    # Revision record names constraint_region as the primary factor.
+    assert record.operator == "constraint_introduction"
+    assert record.factor == "constraint_region"
+    assert record.old_value == "none"
+    assert record.new_value == "faucet_base_static"
+    # Both revised factors must NOT appear in frozen_factors.
+    assert "constraint_region" not in record.frozen_factors
+    assert "contact_region" not in record.frozen_factors
+
+
+def test_constraint_introduction_unknown_constraint_source_raises():
+    """If constraint_region is already set, the operator must raise."""
+    import pytest
+    from babysteps.failure import Attribution
+    from babysteps.revision import revise_intent
+    from babysteps.schemas import Intent, SceneState
+
+    intent = Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="faucet_base", approach_direction="from_above",
+        constraint_region="faucet_base_static",   # already constrained
+        embodiment_mapping="proxy_contact_to_franka_turn",
+    )
+    scene = SceneState(
+        cube_xy=(0.1, 0.0), cube_z=0.1, goal_xy=(0.1, 0.0),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(),
+    )
+    attribution = Attribution(
+        semantic_failure=True, wrong_factor="constraint_region",
+        freeze=("goal_state", "object_motion", "approach_direction",
+                "embodiment_mapping"),
+        revise=("constraint_region", "contact_region"),
+    )
+    with pytest.raises(NotImplementedError) as exc:
+        revise_intent(intent, attribution, scene)
+    msg = str(exc.value)
+    assert "faucet_base_static" in msg or "constraint_region" in msg
+
+
+def test_constraint_introduction_wrong_contact_source_raises():
+    """If contact_region isn't faucet_base, the operator must raise."""
+    import pytest
+    from babysteps.failure import Attribution
+    from babysteps.revision import revise_intent
+    from babysteps.schemas import Intent, SceneState
+
+    intent = Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="handle_grip",   # already correct contact
+        approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_turn",
+    )
+    scene = SceneState(
+        cube_xy=(0.1, 0.0), cube_z=0.1, goal_xy=(0.1, 0.0),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(),
+    )
+    attribution = Attribution(
+        semantic_failure=True, wrong_factor="constraint_region",
+        freeze=("goal_state", "object_motion", "approach_direction",
+                "embodiment_mapping"),
+        revise=("constraint_region", "contact_region"),
+    )
+    with pytest.raises(NotImplementedError):
+        revise_intent(intent, attribution, scene)
+
+
+def test_constraint_introduction_frozen_factors_audit():
+    """The Revision record's frozen_factors lists exactly the 4 factors
+    NOT revised."""
+    from babysteps.failure import Attribution
+    from babysteps.revision import revise_intent
+    from babysteps.schemas import Intent, SceneState
+
+    intent = Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="faucet_base", approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_turn",
+    )
+    scene = SceneState(
+        cube_xy=(0.1, 0.0), cube_z=0.1, goal_xy=(0.1, 0.0),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(),
+    )
+    attribution = Attribution(
+        semantic_failure=True, wrong_factor="constraint_region",
+        freeze=("goal_state", "object_motion", "approach_direction",
+                "embodiment_mapping"),
+        revise=("constraint_region", "contact_region"),
+    )
+    _, record = revise_intent(intent, attribution, scene)
+    expected = {"goal_state", "object_motion", "approach_direction",
+                "embodiment_mapping"}
+    assert set(record.frozen_factors) == expected

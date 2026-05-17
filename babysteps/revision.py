@@ -14,6 +14,10 @@ Stage 0 implements:
   * `goal_refinement` — for wrong_factor=="goal_state"
     (Sub-project C / StackCube; strict-extension: cube_at_target →
     cubeA_on_cubeB only).
+  * `constraint_introduction` — for wrong_factor=="constraint_region"
+    (Sub-project D / TurnFaucet; strict-extension: (none, faucet_base) →
+    (faucet_base_static, handle_grip) only; the only Stage-0 operator
+    that revises 2 factors at once).
 
 Other wrong_factors raise `NotImplementedError` — honest about what is and
 isn't validated.
@@ -90,7 +94,8 @@ def revise_intent(
 ) -> tuple[Intent, Revision]:
     """Return (revised_intent, Revision record). Dispatches on
     `attribution.wrong_factor`. Stage-0 supports approach_direction,
-    contact_region, and goal_state; other factors raise NotImplementedError.
+    contact_region, goal_state, and constraint_region; other factors raise
+    NotImplementedError.
     """
     if attribution.wrong_factor is None:
         raise ValueError(
@@ -156,9 +161,39 @@ def revise_intent(
         )
         return revised, rev_record
 
+    if attribution.wrong_factor == "constraint_region":
+        if (intent.constraint_region != "none"
+                or intent.contact_region != "faucet_base"):
+            raise NotImplementedError(
+                f"constraint_introduction does not handle transitions "
+                f"from (constraint_region={intent.constraint_region!r}, "
+                f"contact_region={intent.contact_region!r}). (Stage-0 "
+                f"supports only the (none, faucet_base) → "
+                f"(faucet_base_static, handle_grip) refinement per "
+                f"docs/superpowers/specs/2026-05-17-stage0-turnfaucet-d-design.md §6)"
+            )
+        revised = replace(
+            intent,
+            constraint_region="faucet_base_static",
+            contact_region="handle_grip",
+        )
+        frozen = tuple(
+            f for f in INTENT_FIELDS
+            if f not in ("constraint_region", "contact_region")
+        )
+        rev_record = Revision(
+            operator="constraint_introduction",
+            factor="constraint_region",   # primary factor for audit
+            old_value="none",
+            new_value="faucet_base_static",
+            frozen_factors=frozen,
+        )
+        return revised, rev_record
+
     raise NotImplementedError(
         f"Stage-0 reviser handles 'approach_direction', 'contact_region', "
-        f"and 'goal_state'; got {attribution.wrong_factor!r}. (Other factors "
-        f"are reserved for later sub-projects — see "
+        f"'goal_state', and 'constraint_region'; got "
+        f"{attribution.wrong_factor!r}. (Other factors are reserved for "
+        f"later sub-projects — see "
         f"docs/superpowers/specs/2026-05-17-stage0-four-scene-roadmap-design.md §6)"
     )
