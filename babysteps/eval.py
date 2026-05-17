@@ -27,6 +27,11 @@ def _safe_div(a: float, b: float) -> float:
 def compute_metrics(records: Iterable[EpisodeRecord]) -> dict:
     records_list = list(records)
     n_total = len(records_list)
+    # All records in one report share a task; if mixed, the first wins
+    # and the others are silently included (the summarizer only labels
+    # the title, not the per-record diagnostics). Default keeps
+    # backward-compat with old fixtures that built records by hand.
+    task_id = records_list[0].task if records_list else "PushCube-v1"
 
     n_initial_success = sum(
         1 for r in records_list if r.metrics.get("initial_success") is True
@@ -102,6 +107,7 @@ def compute_metrics(records: Iterable[EpisodeRecord]) -> dict:
         "revision_success_rate": retry_rate,
         "passed_acceptance": bool(passed),
         "acceptance_threshold_pp": ACCEPTANCE_DELTA_PP_THRESHOLD,
+        "task": task_id,
     }
 
 
@@ -125,8 +131,11 @@ def _markdown_report(metrics: dict) -> str:
         ("passed_acceptance",                    metrics["passed_acceptance"]),
     ]
     body = "\n".join(f"| {k} | {v} |" for k, v in rows)
+    # Title comes from the task id minus the "-v1" suffix; falls back to
+    # "PushCube" so old metrics dicts without a "task" key still render.
+    task_label = str(metrics.get("task", "PushCube-v1")).split("-v")[0]
     return (
-        "# BABYSTEPS Stage 0 — PushCube Blocked-Approach Report\n\n"
+        f"# BABYSTEPS Stage 0 — {task_label} Report\n\n"
         f"Acceptance: **{pass_str}** (delta_pp >= "
         f"{metrics['acceptance_threshold_pp']})\n\n"
         "| Metric | Value |\n"

@@ -145,3 +145,27 @@ def test_write_report_creates_md_and_json(tmp_path: Path):
     md = (tmp_path / "report.md").read_text()
     assert "BABYSTEPS Stage 0" in md
     assert "PASS" in md or "passed_acceptance" in md
+
+
+def test_write_report_title_reflects_task_from_records(tmp_path: Path):
+    """The report title should say PickCube when records carry task=PickCube-v1."""
+    rec = _record(episode_id="x", initial_success=False, retry_success=True)
+    # Override the task field — _record() defaults to PushCube-v1.
+    from dataclasses import replace
+    rec = replace(rec, task="PickCube-v1")
+    metrics = compute_metrics([rec])
+    write_report(metrics, tmp_path)
+    md = (tmp_path / "report.md").read_text()
+    assert "PickCube" in md, f"report.md title missing 'PickCube':\n{md[:200]}"
+    assert "PushCube" not in md, (
+        f"report.md title leaked PushCube despite PickCube records:\n{md[:200]}"
+    )
+
+
+def test_write_report_title_pushcube_default(tmp_path: Path):
+    """Backward-compat: PushCube records still yield a PushCube title."""
+    rec = _record(episode_id="x", initial_success=False, retry_success=True)
+    metrics = compute_metrics(rec for rec in [rec])
+    write_report(metrics, tmp_path)
+    md = (tmp_path / "report.md").read_text()
+    assert "PushCube" in md
