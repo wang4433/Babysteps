@@ -255,3 +255,96 @@ def test_stackcube_render_titles_mention_goal_state():
     assert "cubeA_on_cubeB" in titles["demo"][1]
     # Retry subtitle should mention goal_refinement.
     assert "goal_refinement" in titles["retry"][1]
+
+
+# ---------- TurnFaucet render tests ---------------------------------- #
+
+
+class _StubTurnEnv:
+    """Stand-in for gym.make('TurnFaucet-v1').
+
+    Obs has tcp_pose, target_link_pos (handle xyz), and
+    target_joint_axis (3D)."""
+
+    def __init__(self) -> None:
+        self.tcp = np.array([0.0, 0.0, 0.25, 0.0, 0.0, 0.0], dtype=np.float64)
+        self.handle = np.array([0.10, 0.0, 0.10], dtype=np.float64)
+        self.axis = np.array([0.0, 1.0, 0.0], dtype=np.float64)
+        self._step_count = 0
+
+    def reset(self, seed: int = 0):
+        self.tcp = np.array([0.0, 0.0, 0.25, 0.0, 0.0, 0.0], dtype=np.float64)
+        self.handle = np.array([0.10, 0.0, 0.10], dtype=np.float64)
+        self.axis = np.array([0.0, 1.0, 0.0], dtype=np.float64)
+        self._step_count = 0
+        return _StubTurnObs(self.tcp, self.handle, self.axis), {}
+
+    def step(self, action):
+        self.tcp[0:3] = self.tcp[0:3] + 0.02 * np.asarray(action[0:3])
+        self._step_count += 1
+        return (
+            _StubTurnObs(self.tcp, self.handle, self.axis),
+            0.0, False, False,
+            {"success": False},
+        )
+
+    def render(self):
+        return (np.ones((8, 8, 3), dtype=np.uint8) * (self._step_count % 256))
+
+    def close(self):
+        pass
+
+
+@_dc
+class _StubTurnObs:
+    tcp: np.ndarray
+    handle: np.ndarray
+    axis: np.ndarray
+
+    def __getitem__(self, key: str):
+        if key == "extra":
+            tcp_raw = np.concatenate([self.tcp[0:3], np.array([1.0]),
+                                      self.tcp[3:6]])
+            return {
+                "tcp_pose": tcp_raw,
+                "target_link_pos": self.handle,
+                "target_joint_axis": self.axis,
+            }
+        raise KeyError(key)
+
+
+def test_turnfaucet_render_episode_emits_three_phase_frames():
+    from babysteps.render.turnfaucet import render_episode
+    from babysteps.envs.turnfaucet_adapter import TurnFaucetAdapter
+
+    env = _StubTurnEnv()
+    adapter = TurnFaucetAdapter()
+    frames, titles = render_episode(env, adapter, seed=0, fps=4)
+
+    assert set(frames.keys()) == {"demo", "attempt_blocked", "retry"}
+    assert set(titles.keys()) == {"demo", "attempt_blocked", "retry"}
+    assert len(frames["demo"]) >= 2
+    assert len(frames["attempt_blocked"]) >= 2
+    assert len(frames["retry"]) >= 2
+
+
+def test_turnfaucet_render_phase2_actually_steps_env():
+    from babysteps.render.turnfaucet import render_episode
+    from babysteps.envs.turnfaucet_adapter import TurnFaucetAdapter
+
+    env = _StubTurnEnv()
+    frames, _ = render_episode(env, TurnFaucetAdapter(), seed=0, fps=4)
+    held = frames["attempt_blocked"]
+    assert not all(np.array_equal(held[0], f) for f in held), (
+        "TurnFaucet phase 2 should step the env."
+    )
+
+
+def test_turnfaucet_render_titles_mention_constraint_region():
+    from babysteps.render.turnfaucet import render_episode
+    from babysteps.envs.turnfaucet_adapter import TurnFaucetAdapter
+    _, titles = render_episode(_StubTurnEnv(), TurnFaucetAdapter(), seed=0, fps=4)
+    # Demo subtitle mentions the oracle's constraint_region.
+    assert "faucet_base_static" in titles["demo"][1]
+    # Retry subtitle mentions constraint_introduction.
+    assert "constraint_introduction" in titles["retry"][1]
