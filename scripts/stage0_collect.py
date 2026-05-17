@@ -1,17 +1,22 @@
-"""Stage-0 PushCube blocked-approach data-collection CLI.
+"""Stage-0 blocked-approach data-collection CLI.
 
 Runs `run_episode` for `--n_episodes` seeded episodes and writes one
-EpisodeRecord per line to `<out_dir>/samples.jsonl`. Then computes metrics
-and writes `report.{md,json}` next to the samples.
+EpisodeRecord per line to `<out_dir>/samples.jsonl`. Then computes
+metrics and writes `report.{md,json}` next to the samples.
+
+Tasks (dispatched via babysteps.envs.task_registry):
+  --task PushCube-v1  (default) — Sub-project A, approach_blocked failure.
+  --task PickCube-v1            — Sub-project B, grasp_slip failure.
 
 Backends:
-  - default: real `PushCubeEnvRunner` (needs Vulkan-capable compute node).
-  - `--fake-env`: deterministic sim-free runner from `tests.conftest`,
-    useful for verifying the data contract on the login node.
+  --fake-env: deterministic sim-free runner from tests/conftest. Each
+              task has its own fake (FakeEnvRunner / FakePickEnvRunner)
+              wired through the registry.
+  (default):  real env_runner from the adapter (needs Vulkan).
 
 If `mani_skill` fails to import and `--fake-env` was NOT requested, this
 script aborts with the import error rather than silently falling back —
-that way the user sees the real failure mode.
+the user sees the real failure mode.
 """
 from __future__ import annotations
 
@@ -25,55 +30,65 @@ _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
+from babysteps.envs.task_adapter import BaseTaskAdapter  # noqa: E402
+from babysteps.envs.task_registry import (  # noqa: E402
+    TASK_REGISTRY,
+    get_task_entry,
+)
 from babysteps.episode import run_episode  # noqa: E402
 from babysteps.eval import compute_metrics, write_report  # noqa: E402
 from babysteps.schemas import EpisodeRecord  # noqa: E402
 
 
-def _make_adapter(use_fake: bool):
-    """Build a PushCubeAdapter wired to the right env runner."""
-    from babysteps.envs.pushcube_adapter import PushCubeAdapter  # noqa: WPS433
+def _make_adapter(task_id: str, use_fake: bool) -> BaseTaskAdapter:
+    """Build the right adapter for `task_id`, wired to fake or real runner."""
+    entry = get_task_entry(task_id)
     if use_fake:
-        sys.path.insert(0, str(Path(__file__).parent.parent))
-        from tests.conftest import FakeEnvRunner   # noqa: WPS433
-        fake = FakeEnvRunner()
+        fake = entry.fake_runner_factory()
 
-        class _FakePushCubeAdapter(PushCubeAdapter):
+        class _FakeAdapter(entry.adapter_cls):  # type: ignore[misc, valid-type]
             def make_env_runner(self):
                 return fake
-        return _FakePushCubeAdapter()
-    return PushCubeAdapter()
+
+        return _FakeAdapter()
+    return entry.adapter_cls()
 
 
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
+    p.add_argument(
+        "--task", type=str, default="PushCube-v1",
+        choices=sorted(TASK_REGISTRY.keys()),
+        help="Which Stage-0 ManiSkill task to drive. Default PushCube-v1 "
+             "for backward compatibility.",
+    )
     p.add_argument("--out_dir", type=Path, required=True)
     p.add_argument("--n_episodes", type=int, default=5)
     p.add_argument("--seed_start", type=int, default=0)
     p.add_argument(
         "--fake-env", action="store_true",
-        help="Use the deterministic sim-free FakeEnvRunner from tests/conftest. "
-             "Useful for verifying the loop and JSONL shape on the login node, "
-             "where Vulkan is unavailable.",
+        help="Use the deterministic sim-free fake env_runner from "
+             "tests/conftest. Useful for verifying the loop and JSONL "
+             "shape on a login node where Vulkan is unavailable.",
     )
     p.add_argument(
         "--rollouts-subdir", type=str, default="rollouts",
-        help="Sub-directory of out_dir to hold per-episode rollout .npz files. "
-             "Only the real PushCubeEnvRunner writes these.",
+        help="Sub-directory of out_dir to hold per-episode rollout .npz "
+             "files. Only the real env_runner writes these.",
     )
     args = p.parse_args(argv)
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
     samples_path = args.out_dir / "samples.jsonl"
-    # Truncate any prior run.
-    samples_path.write_text("")
+    samples_path.write_text("")   # truncate any prior run
 
-    adapter = _make_adapter(args.fake_env)
+    entry = get_task_entry(args.task)
+    adapter = _make_adapter(args.task, args.fake_env)
     records: list[EpisodeRecord] = []
     try:
         for i in range(args.n_episodes):
             seed = args.seed_start + i
-            episode_id = f"pushcube_blocked_approach_seed_{seed:04d}"
+            episode_id = f"{entry.episode_id_prefix}_seed_{seed:04d}"
             rec = run_episode(
                 episode_id=episode_id,
                 seed=seed,
@@ -83,7 +98,7 @@ def main(argv=None) -> int:
             with samples_path.open("a") as f:
                 f.write(rec.to_jsonl_line() + "\n")
             print(
-                f"[{i + 1}/{args.n_episodes}] seed={seed} "
+                f"[{i + 1}/{args.n_episodes}] task={args.task} seed={seed} "
                 f"initial_success={rec.metrics['initial_success']} "
                 f"retry_success={rec.metrics['retry_success']} "
                 f"failure_type={rec.metrics['failure_type']}",
