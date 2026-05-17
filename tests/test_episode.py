@@ -1,40 +1,49 @@
 """Integration test for the Stage-0 episode loop with a fake env_runner.
 
-This test exercises the full path:
-  demo proxy → demo_to_intent → skill compile (blocked) → planner_failed →
-  attribute → revise → retry succeeds.
-"""
+After Sub-project A, run_episode takes an adapter. This file uses a stub
+adapter wired around the deterministic FakeEnvRunner (conftest fixture)."""
 from __future__ import annotations
 
-import json
-
-import pytest
+import inspect
 
 from babysteps.episode import run_episode
-from babysteps.schemas import CLAIM_BOUNDARY, EpisodeRecord
+from babysteps.schemas import CLAIM_BOUNDARY, DemoEvidence, EpisodeRecord
+
+
+# Stub adapter that uses the conftest FakeEnvRunner via injection. We avoid
+# importing PushCubeAdapter here so this test stays decoupled from any one
+# concrete adapter.
+def _make_stub_adapter(fake_runner, *, blocked_factory=None):
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+
+    class _StubAdapter(PushCubeAdapter):
+        def make_env_runner(self):
+            return fake_runner
+        if blocked_factory is not None:
+            def default_blocked_factory(self, intent):
+                return blocked_factory(intent)
+    return _StubAdapter()
 
 
 def test_run_episode_blocked_then_retry_success(fake_env_runner):
+    adapter = _make_stub_adapter(fake_env_runner)
     rec = run_episode(
         episode_id="pushcube_blocked_approach_seed_0000",
         seed=0,
-        env_runner=fake_env_runner,
+        adapter=adapter,
     )
     assert isinstance(rec, EpisodeRecord)
+    assert rec.task == "PushCube-v1"
     assert rec.claim_boundary == CLAIM_BOUNDARY
     assert rec.demo["demonstrator_type"] == "proxy_oracle"
-    # Attempt 1 was blocked by the approach-direction feasibility flag.
     assert rec.execution["success"] is False
     assert rec.failure_packet["failure_predicate"] == "approach_blocked"
     assert rec.failure_packet["wrong_factor"] == "approach_direction"
-    # The revision changed exactly approach_direction.
     assert rec.revision is not None
     assert rec.revision["operator"] == "approach_substitution"
     assert rec.revision["factor"] == "approach_direction"
-    # Retry succeeded.
     assert rec.retry is not None
     assert rec.retry["success"] is True
-    # Metrics carry the diagnostic columns.
     m = rec.metrics
     assert m["initial_success"] is False
     assert m["retry_success"] is True
@@ -48,7 +57,7 @@ def test_run_episode_top_level_keys_match_goal_md(fake_env_runner):
     rec = run_episode(
         episode_id="pushcube_blocked_approach_seed_0000",
         seed=0,
-        env_runner=fake_env_runner,
+        adapter=_make_stub_adapter(fake_env_runner),
     )
     d = rec.to_dict()
     expected = {
@@ -56,7 +65,6 @@ def test_run_episode_top_level_keys_match_goal_md(fake_env_runner):
         "demo", "execution", "failure_packet", "revision", "retry", "metrics",
     }
     assert set(d.keys()) == expected
-    # Demo dict has no privileged fields.
     assert "goal_xy" not in rec.demo
     assert "blocked_sides" not in rec.demo
 
@@ -65,7 +73,7 @@ def test_run_episode_jsonl_roundtrip(fake_env_runner):
     rec = run_episode(
         episode_id="pushcube_blocked_approach_seed_0000",
         seed=0,
-        env_runner=fake_env_runner,
+        adapter=_make_stub_adapter(fake_env_runner),
     )
     line = rec.to_jsonl_line()
     rt = EpisodeRecord.from_jsonl_line(line)
@@ -73,38 +81,41 @@ def test_run_episode_jsonl_roundtrip(fake_env_runner):
     assert rt.failure_packet["failure_predicate"] == "approach_blocked"
 
 
-def test_run_episode_demo_to_intent_called_with_only_demo_evidence(monkeypatch, fake_env_runner):
-    """Privileged-firewall enforcement: demo_to_intent must be called with a
-    DemoEvidence and nothing else (no SceneState parameter)."""
-    from babysteps import episode as episode_mod
-    from babysteps.schemas import DemoEvidence
+def test_run_episode_scripted_demo_to_intent_called_with_only_demo_evidence(
+    fake_env_runner,
+):
+    """Privileged-firewall enforcement: adapter.scripted_demo_to_intent
+    must be called with a DemoEvidence and nothing else."""
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
 
     call_args = []
-    original = episode_mod.demo_to_intent
 
-    def spy(arg):
-        call_args.append(arg)
-        return original(arg)
-
-    monkeypatch.setattr(episode_mod, "demo_to_intent", spy)
+    class _SpyAdapter(PushCubeAdapter):
+        def make_env_runner(self):
+            return fake_env_runner
+        def scripted_demo_to_intent(self, evidence):
+            call_args.append(evidence)
+            return super().scripted_demo_to_intent(evidence)
 
     run_episode(
         episode_id="pushcube_blocked_approach_seed_0000",
         seed=0,
-        env_runner=fake_env_runner,
+        adapter=_SpyAdapter(),
     )
     assert len(call_args) == 1
     assert isinstance(call_args[0], DemoEvidence)
 
 
 def test_run_episode_already_succeeds_no_revision(fake_env_runner):
-    """If the initial intent already succeeds (e.g., blocked_sides_factory
-    returns empty), the record carries no revision and no retry."""
+    """If blocked_sides is empty, the initial intent succeeds and no
+    revision/retry is recorded."""
     rec = run_episode(
         episode_id="pushcube_unblocked_seed_0000",
         seed=0,
-        env_runner=fake_env_runner,
-        blocked_sides_factory=lambda intent: (),   # never blocks
+        adapter=_make_stub_adapter(
+            fake_env_runner,
+            blocked_factory=lambda intent: (),   # never blocks
+        ),
     )
     assert rec.execution["success"] is True
     assert rec.failure_packet["failure_predicate"] == "none"
@@ -115,16 +126,23 @@ def test_run_episode_already_succeeds_no_revision(fake_env_runner):
 
 
 def test_run_episode_multiple_seeds_all_succeed(fake_env_runner):
-    """The blocked-then-retry path works for several seeds (goal direction
-    rotates with seed in the fake env)."""
+    adapter = _make_stub_adapter(fake_env_runner)
     for seed in range(4):
         rec = run_episode(
             episode_id=f"pushcube_blocked_approach_seed_{seed:04d}",
             seed=seed,
-            env_runner=fake_env_runner,
+            adapter=adapter,
         )
         assert rec.execution["success"] is False
         assert rec.retry["success"] is True, (
             f"seed {seed} did not recover; revised approach was "
             f"{rec.revision['new_value']!r}"
         )
+
+
+def test_run_episode_signature_takes_adapter_keyword():
+    """Guard against accidentally restoring the old env_runner= kwarg."""
+    sig = inspect.signature(run_episode)
+    assert "adapter" in sig.parameters
+    assert "env_runner" not in sig.parameters
+    assert "blocked_sides_factory" not in sig.parameters

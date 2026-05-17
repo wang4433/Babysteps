@@ -25,9 +25,8 @@ class EnvRunner(Protocol):
     tests/conftest.py and the real ManiSkill PushCubeEnvRunner. Future tasks
     add their own runners; the adapter constructs them in make_env_runner.
 
-    Mirrors the EnvRunner Protocol currently defined in babysteps.episode;
-    Plan Task 6 will consolidate the two into this one when episode.py is
-    rewritten to depend on BaseTaskAdapter."""
+    This is the canonical EnvRunner Protocol; episode.run_episode imports
+    it from here. (It was relocated from babysteps.episode in Plan Task 6.)"""
 
     def reset(self, seed: int) -> SceneState: ...
     def run(self, intent: Intent, scene: SceneState) -> AttemptResult: ...
