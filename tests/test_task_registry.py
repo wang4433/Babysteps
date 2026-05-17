@@ -65,3 +65,18 @@ def test_registry_entries_are_taskentry_instances():
         assert isinstance(entry, TaskEntry), f"{task_id} entry is not TaskEntry"
         # adapter_cls's task_id must match the registry key.
         assert entry.adapter_cls.task_id == task_id
+
+
+def test_task_registry_matches_render_registry():
+    """Every task in TASK_REGISTRY must have a matching RENDER_REGISTRY entry.
+
+    Without this guard, adding a Sub-project C task to TASK_REGISTRY but
+    forgetting to add a babysteps/render/<task>.py module would mean
+    `render_stage0_maniskill.py --task <new>` accepts the arg via argparse
+    (it reads TASK_REGISTRY.keys()), then KeyErrors at runtime in
+    get_render_fn. This test makes that a fast pytest failure instead."""
+    from babysteps.render import RENDER_REGISTRY
+    assert set(TASK_REGISTRY.keys()) == set(RENDER_REGISTRY.keys()), (
+        f"TASK_REGISTRY tasks {sorted(TASK_REGISTRY.keys())} "
+        f"!= RENDER_REGISTRY tasks {sorted(RENDER_REGISTRY.keys())}"
+    )

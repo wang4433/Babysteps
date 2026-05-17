@@ -17,7 +17,7 @@ import numpy as np
 
 from babysteps.envs.task_adapter import BaseTaskAdapter
 from babysteps.render.common import (
-    MAX_CONTROL_STEPS,
+    PUSHCUBE_MAX_CONTROL_STEPS,
     PHASE_TOL_M,
     prop_action,
     read_obs,
@@ -37,7 +37,7 @@ def _execute_push(env, waypoints, frames: list, *, seed: int) -> dict:
     success = False
 
     frames.append(render_frame(env))
-    for _ in range(MAX_CONTROL_STEPS):
+    for _ in range(PUSHCUBE_MAX_CONTROL_STEPS):
         tcp, cube_xy, _, _ = read_obs(obs)
         target = targets[phase_idx]
         if np.linalg.norm(target - tcp[0:3]) < PHASE_TOL_M:

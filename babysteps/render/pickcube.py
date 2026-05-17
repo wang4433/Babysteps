@@ -20,7 +20,7 @@ import numpy as np
 
 from babysteps.envs.task_adapter import BaseTaskAdapter
 from babysteps.render.common import (
-    MAX_CONTROL_STEPS,
+    PICKCUBE_MAX_CONTROL_STEPS,
     PHASE_TOL_M,
     prop_action,
     read_obs,
@@ -56,7 +56,7 @@ def _execute_pick(
     phase_idx = 0
     success = False
     frames.append(render_frame(env))
-    for _ in range(MAX_CONTROL_STEPS):
+    for _ in range(PICKCUBE_MAX_CONTROL_STEPS):
         tcp, _cube_xy, _, _ = read_obs(obs)
         target = targets[phase_idx]
         if np.linalg.norm(target - tcp[0:3]) < PHASE_TOL_M:

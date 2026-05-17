@@ -13,7 +13,12 @@ import numpy as np
 # Phase-control constants — match the PD calibration of the env_runners.
 POS_SCALE: float = 0.1
 PHASE_TOL_M: float = 0.015
-MAX_CONTROL_STEPS: int = 400   # matches PickCubeEnvRunner; PushCubeEnvRunner uses 300
+# Per-task control-step caps. Render modules use the cap that matches
+# their task's real env_runner so render visuals do not run longer than
+# what the production pipeline would have produced.
+PUSHCUBE_MAX_CONTROL_STEPS: int = 300   # matches PushCubeEnvRunner._MAX_CONTROL_STEPS
+PICKCUBE_MAX_CONTROL_STEPS: int = 400   # matches PickCubeEnvRunner._MAX_CONTROL_STEPS
+MAX_CONTROL_STEPS: int = 400   # back-compat alias for callers that don't care
 
 
 def to_np(x):

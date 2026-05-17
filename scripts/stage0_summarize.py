@@ -1,4 +1,4 @@
-"""Stage-0 PushCube summarizer.
+"""Stage-0 multi-task summarizer.
 
 Reads a `samples.jsonl` of EpisodeRecords and writes `report.{md,json}` in
 `--out_dir`. The summarizer is decoupled from collection so reports can be

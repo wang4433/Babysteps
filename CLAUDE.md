@@ -53,9 +53,10 @@ Expected output per task: 2 episodes × 3 MP4s = 6 files in
 - Code:   `babysteps/` (pure modules) + `babysteps/envs/{pushcube,pickcube}_runner.py` (sim adapters),
           `babysteps/envs/task_registry.py` (--task dispatch),
           `babysteps/render/{pushcube,pickcube}.py` (per-task MP4 flows)
-- Scripts: `scripts/{smoke_pushcube,stage0_collect,stage0_summarize,render_stage0_maniskill}.py`
-          — all four scripts accept `--task {PushCube-v1,PickCube-v1}` where applicable
-- Tests:  185+ sim-free unit tests in `tests/` (PushCube + PickCube, snapshot-stable across both)
+- Scripts: `scripts/{stage0_collect,render_stage0_maniskill}.py` accept `--task {PushCube-v1,PickCube-v1}`.
+          `scripts/stage0_summarize.py` derives the task from the input JSONL (no flag).
+          `scripts/smoke_pushcube.py` remains a PushCube-only loadability check.
+- Tests:  184 sim-free unit tests in `tests/` (PushCube + PickCube, snapshot-stable across both)
 
 Quickstart: `README.md`. The acceptance gate is `delta_pp >= 10` between
 revised-retry success rate and initial-attempt success rate, identical to
