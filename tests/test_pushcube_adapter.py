@@ -201,3 +201,46 @@ def test_hooks_inherited_from_base():
     assert PushCubeAdapter.build_failure_packet is BaseTaskAdapter.build_failure_packet
     assert PushCubeAdapter.attribute_failure is BaseTaskAdapter.attribute_failure
     assert PushCubeAdapter.revise_intent is BaseTaskAdapter.revise_intent
+
+
+# ---------- Snapshot acceptance test ----------------------------------- #
+
+
+def test_pushcube_adapter_samples_jsonl_matches_pre_a_snapshot(fake_env_runner):
+    """The byte-equality regression bar for Sub-project A.
+
+    Captures the same five episodes the pre-A code produced and asserts
+    the JSONL stream is byte-for-byte identical. If this test diffs, the
+    refactor has changed observable output and Sub-project A is not done.
+    """
+    from pathlib import Path
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+    from babysteps.episode import run_episode
+
+    class _FakeAdapter(PushCubeAdapter):
+        def make_env_runner(self):
+            return fake_env_runner
+
+    adapter = _FakeAdapter()
+    actual_lines = []
+    for seed in range(5):
+        rec = run_episode(
+            episode_id=f"pushcube_blocked_approach_seed_{seed:04d}",
+            seed=seed,
+            adapter=adapter,
+        )
+        actual_lines.append(rec.to_jsonl_line())
+    actual = "\n".join(actual_lines) + "\n"
+
+    snapshot_path = (
+        Path(__file__).parent / "snapshots" / "pushcube_samples_seeds_0_4.jsonl"
+    )
+    expected = snapshot_path.read_text()
+    assert actual == expected, (
+        "PushCubeAdapter samples.jsonl drifted from the pre-A snapshot. "
+        f"Snapshot at: {snapshot_path}. "
+        "If this drift is intentional, re-capture with "
+        "`python scripts/stage0_collect.py --out_dir /tmp/baseline "
+        "--n_episodes 5 --seed_start 0 --fake-env` and copy the "
+        "samples.jsonl into the snapshots/ dir."
+    )
