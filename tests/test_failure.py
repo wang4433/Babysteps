@@ -223,3 +223,65 @@ def test_attribute_failure_returns_attribution_dataclass():
     assert isinstance(attr, Attribution)
     assert isinstance(attr.freeze, tuple)
     assert isinstance(attr.revise, tuple)
+
+
+# ---------- Sub-project D: constraint_violation -------------------- #
+
+
+def test_constraint_violation_predicate_fires_for_collision_no_motion():
+    """When attempt.collision=True AND attempt.object_moved=False (and
+    not planner_failed), the failure_predicate is 'constraint_violation'.
+    This is more specific than the no_motion predicate which would
+    otherwise fire."""
+    from babysteps.failure import build_failure_packet
+    from babysteps.schemas import AttemptResult, Intent, SceneState
+
+    intent = Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="faucet_base", approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_turn",
+    )
+    scene = SceneState(
+        cube_xy=(0.1, 0.0), cube_z=0.1, goal_xy=(0.1, 0.0),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(),
+    )
+    attempt = AttemptResult(
+        initial_obj_xy=(0.1, 0.0), final_obj_xy=(0.1, 0.0),
+        goal_xy=(0.1, 0.0),
+        reached_contact=True, object_moved=False,
+        planner_failed=False, collision=True, grasp_slip=False,
+        rollout_log_path=None, success=False,
+    )
+    fp = build_failure_packet(intent, attempt, scene)
+    assert fp.failure_predicate == "constraint_violation"
+
+
+def test_attribute_failure_constraint_violation_to_constraint_region():
+    """constraint_violation predicate maps to wrong_factor=
+    'constraint_region' with revise=(constraint_region, contact_region)
+    — the two-factor revision pair."""
+    from babysteps.failure import attribute_failure
+    from babysteps.schemas import FailurePacket, Intent
+
+    intent = Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="faucet_base", approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_turn",
+    )
+    fp = FailurePacket(
+        chosen_intent=intent,
+        execution_trace={"reached_contact": True, "object_moved": False,
+                         "collision": True, "planner_failed": False,
+                         "grasp_slip": False},
+        failure_predicate="constraint_violation",
+        object_displacement=0.0, direction_alignment=None,
+    )
+    attribution = attribute_failure(fp)
+    assert attribution.wrong_factor == "constraint_region"
+    assert "constraint_region" in attribution.revise
+    assert "contact_region" in attribution.revise
+    assert "constraint_region" not in attribution.freeze
+    assert "contact_region" not in attribution.freeze

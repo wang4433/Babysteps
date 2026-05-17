@@ -40,6 +40,11 @@ FAILURE_TO_FACTOR: dict[str, tuple[str, tuple[str, ...]]] = {
     # is also in `revise` to permit future operators that switch grasp
     # primitives; Stage-0's contact_substitution does not touch it.
     "grasp_slip":         ("contact_region",     ("contact_region", "embodiment_mapping")),
+    # Sub-project D (TurnFaucet): constraint_violation fires when the gripper
+    # contacted a non-articulating link and tried to actuate it (collision=True,
+    # object_moved=False). Revise both constraint_region and contact_region —
+    # the two-factor pair that constraint_introduction operates over.
+    "constraint_violation": ("constraint_region", ("constraint_region", "contact_region")),
 }
 
 
@@ -81,8 +86,9 @@ def build_failure_packet(
     intent: Intent, attempt: AttemptResult, scene: SceneState,
 ) -> FailurePacket:
     """Derive the structured FailurePacket. Predicate precedence: most
-    specific first (success → planner_failed → contact → motion → direction
-    → goal).
+    specific first (success → planner_failed → constraint_violation →
+    grasp_slip → contact_failure → no_motion → direction_error →
+    goal_not_satisfied).
     """
     et = {
         "reached_contact": bool(attempt.reached_contact),
@@ -98,6 +104,13 @@ def build_failure_packet(
         predicate = "none"
     elif attempt.planner_failed:
         predicate = "approach_blocked"
+    elif attempt.collision and not attempt.object_moved:
+        # Sub-project D: constraint_violation when the gripper contacted a
+        # non-articulating link and tried to actuate it. The env_runner
+        # marks this case by setting collision=True (Stage-0 proxy for
+        # "touched something that didn't move"). More specific than
+        # grasp_slip / contact_failure / no_motion.
+        predicate = "constraint_violation"
     elif attempt.grasp_slip:
         # Sub-project B: grasp_slip is more specific than the contact /
         # motion / direction predicates below — it carries the strong
