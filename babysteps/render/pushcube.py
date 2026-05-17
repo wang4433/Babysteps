@@ -22,42 +22,10 @@ from babysteps.render.common import (
     prop_action,
     read_obs,
     render_frame,
+    to_np,
 )
 from babysteps.schemas import AttemptResult, DemoEvidence, SceneState
-
-
-def _build_waypoints(scene: SceneState, intent) -> np.ndarray:
-    """4-waypoint PushCube trajectory (approach, pre-contact high, pre-contact
-    low, push-end). Identical to the inline _build_waypoints in
-    scripts/render_stage0_maniskill.py before this extraction — see
-    babysteps.skills.push for the canonical version used by the env_runner."""
-    from babysteps.envs.scene import approach_to_unit, face_to_push_unit
-    cube_xy = np.asarray(scene.cube_xy, dtype=np.float64)
-    goal_xy = np.asarray(scene.goal_xy, dtype=np.float64)
-    tcp = np.asarray(scene.tcp_start_pose, dtype=np.float64)
-    travel_z = float(tcp[2])
-    push_z = float(scene.cube_z)
-    push_unit = face_to_push_unit(intent.contact_region)
-    approach_unit = approach_to_unit(intent.approach_direction)
-    standoff = 0.02 + 0.005
-    approach_standoff = 0.10
-    pre_contact_xy = cube_xy - push_unit * standoff
-    approach_xy = cube_xy + approach_unit * approach_standoff
-    cube_to_goal = float(np.linalg.norm(goal_xy - cube_xy))
-    push_travel = min(0.6 * cube_to_goal, 0.15)
-    push_end_xy = cube_xy + push_unit * push_travel
-
-    wp = np.zeros((4, 7), dtype=np.float64)
-    wp[0, 0:2] = approach_xy
-    wp[0, 2] = travel_z
-    wp[1, 0:2] = pre_contact_xy
-    wp[1, 2] = travel_z
-    wp[2, 0:2] = pre_contact_xy
-    wp[2, 2] = push_z
-    wp[3, 0:2] = push_end_xy
-    wp[3, 2] = push_z
-    wp[:, 3:7] = tcp[3:7]
-    return wp
+from babysteps.skills.push import build_push_waypoints
 
 
 def _execute_push(env, waypoints, frames: list, *, seed: int) -> dict:
@@ -80,13 +48,10 @@ def _execute_push(env, waypoints, frames: list, *, seed: int) -> dict:
         action = prop_action(tcp, target, gripper_cmd=-1.0)
         obs, _r, term, trunc, info = env.step(action)
         frames.append(render_frame(env))
-        term_b = bool(term) if not hasattr(term, "cpu") \
-            else bool(term.cpu().numpy().item())
-        trunc_b = bool(trunc) if not hasattr(trunc, "cpu") \
-            else bool(trunc.cpu().numpy().item())
+        term_b = bool(to_np(term).item()) if hasattr(term, "cpu") else bool(term)
+        trunc_b = bool(to_np(trunc).item()) if hasattr(trunc, "cpu") else bool(trunc)
         succ = info.get("success", False) if hasattr(info, "get") else False
-        success = bool(succ) if not hasattr(succ, "cpu") \
-            else bool(succ.cpu().numpy().item())
+        success = bool(to_np(succ).item()) if hasattr(succ, "cpu") else bool(succ)
         if success or term_b or trunc_b:
             break
 
@@ -120,7 +85,7 @@ def render_episode(
         blocked_sides=(),
     )
     correct_intent = adapter.oracle_correct_intent(scene)
-    wp_demo = _build_waypoints(scene, correct_intent)
+    wp_demo = build_push_waypoints(scene, correct_intent)
     demo_frames: list = []
     out_demo = _execute_push(env, wp_demo, demo_frames, seed=seed)
 
@@ -145,6 +110,10 @@ def render_episode(
     attempt1_frames = [render_frame(env)] * (fps * 2)
 
     # === Phase 3 — RETRY with revised approach ===
+    # Synthetic AttemptResult: planner_failed means no env stepping occurred,
+    # so initial_obj_xy and final_obj_xy are both the scene's initial state.
+    # The fp/attribution/revision pipeline only uses the predicate flags to
+    # derive the wrong_factor — the cube positions are inert here.
     fp = adapter.build_failure_packet(
         initial_intent,
         AttemptResult(
@@ -160,7 +129,7 @@ def render_episode(
     revised_intent, _rev = adapter.revise_intent(
         initial_intent, attribution, scene_exec,
     )
-    wp_retry = _build_waypoints(scene_exec, revised_intent)
+    wp_retry = build_push_waypoints(scene_exec, revised_intent)
     retry_frames: list = []
     out_retry = _execute_push(env, wp_retry, retry_frames, seed=seed)
 
