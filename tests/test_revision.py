@@ -465,3 +465,68 @@ def test_constraint_introduction_frozen_factors_audit():
     expected = {"goal_state", "object_motion", "approach_direction",
                 "embodiment_mapping"}
     assert set(record.frozen_factors) == expected
+
+
+# ---------- Sub-project D: embodiment_substitution (grasp_turn → poke_turn) #
+
+
+def _grasp_intent():
+    from babysteps.schemas import Intent
+    return Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="handle_grip", approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_grasp_turn",
+    )
+
+
+def _embodiment_attribution():
+    from babysteps.failure import Attribution
+    return Attribution(
+        wrong_factor="embodiment_mapping",
+        revise=("embodiment_mapping",),
+        freeze=("goal_state", "object_motion", "contact_region",
+                "approach_direction", "constraint_region"),
+        semantic_failure=True,
+    )
+
+
+def test_revise_intent_embodiment_substitution_swaps_grasp_to_poke():
+    from babysteps.revision import revise_intent
+    intent = _grasp_intent()
+    revised, rev = revise_intent(intent, _embodiment_attribution(), scene=None)
+    assert revised.embodiment_mapping == "proxy_contact_to_franka_poke_turn"
+    # All other factors preserved.
+    assert revised.goal_state == intent.goal_state
+    assert revised.object_motion == intent.object_motion
+    assert revised.contact_region == intent.contact_region
+    assert revised.approach_direction == intent.approach_direction
+    assert revised.constraint_region == intent.constraint_region
+
+
+def test_revise_intent_embodiment_substitution_records_5_frozen_factors():
+    from babysteps.revision import revise_intent
+    _, rev = revise_intent(_grasp_intent(), _embodiment_attribution(), scene=None)
+    assert rev.operator == "embodiment_substitution"
+    assert rev.factor == "embodiment_mapping"
+    assert rev.old_value == "proxy_contact_to_franka_grasp_turn"
+    assert rev.new_value == "proxy_contact_to_franka_poke_turn"
+    assert set(rev.frozen_factors) == {
+        "goal_state", "object_motion", "contact_region",
+        "approach_direction", "constraint_region",
+    }
+    assert len(rev.frozen_factors) == 5
+
+
+def test_revise_intent_embodiment_substitution_rejects_non_grasp_turn_input():
+    """Per spec §6: only grasp_turn → poke_turn is supported."""
+    import pytest
+    from dataclasses import replace
+    from babysteps.revision import revise_intent
+    poke_already = replace(
+        _grasp_intent(),
+        embodiment_mapping="proxy_contact_to_franka_poke_turn",
+    )
+    with pytest.raises(NotImplementedError,
+                        match="embodiment_substitution handles only"):
+        revise_intent(poke_already, _embodiment_attribution(), scene=None)

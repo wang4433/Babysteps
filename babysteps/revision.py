@@ -190,6 +190,29 @@ def revise_intent(
         )
         return revised, rev_record
 
+    if attribution.wrong_factor == "embodiment_mapping":
+        # Spec §6: pure single-factor swap. Only the
+        # grasp_turn → poke_turn transition is supported in Stage-0.
+        if intent.embodiment_mapping != "proxy_contact_to_franka_grasp_turn":
+            raise NotImplementedError(
+                f"embodiment_substitution handles only "
+                f"grasp_turn → poke_turn (got {intent.embodiment_mapping!r}). "
+                f"See docs/superpowers/specs/"
+                f"2026-05-18-stage0-turnfaucet-embodiment-design.md §6"
+            )
+        revised = replace(
+            intent, embodiment_mapping="proxy_contact_to_franka_poke_turn",
+        )
+        frozen = tuple(f for f in INTENT_FIELDS if f != "embodiment_mapping")
+        rev = Revision(
+            operator="embodiment_substitution",
+            factor="embodiment_mapping",
+            old_value="proxy_contact_to_franka_grasp_turn",
+            new_value="proxy_contact_to_franka_poke_turn",
+            frozen_factors=frozen,
+        )
+        return revised, rev
+
     raise NotImplementedError(
         f"Stage-0 reviser handles 'approach_direction', 'contact_region', "
         f"'goal_state', and 'constraint_region'; got "
