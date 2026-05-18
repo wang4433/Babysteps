@@ -63,16 +63,33 @@ def test_faucet_base_waypoints_target_base_xy():
         assert skill.waypoints[i, 1] == pytest.approx(-0.02)
 
 
-def test_pull_waypoint_offset_along_joint_axis():
-    """Waypoint 3 is contact_xy + axis_xy * TURN_PULL_DISTANCE_M."""
+def test_pull_waypoint_offset_perpendicular_to_joint_axis():
+    """Waypoint 3 is contact_xy + perpendicular(axis_xy) * TURN_PULL_DISTANCE_M.
+    Pulling along axis_xy would generate no torque on the handle; the
+    perpendicular (90° CCW of axis_xy in xy) is the tangential direction
+    that induces rotation."""
     from babysteps.skills.turn import (
         TURN_PULL_DISTANCE_M, compile_intent_to_turn_skill,
     )
+    # axis along +x: perpendicular CCW = +y
     scene = _scene(handle_xy=(0.10, 0.05), axis_xy=(1.0, 0.0))
     skill = compile_intent_to_turn_skill(_intent("handle_grip"), scene)
     pull = skill.waypoints[3]
-    assert pull[0] == pytest.approx(0.10 + TURN_PULL_DISTANCE_M)
-    assert pull[1] == pytest.approx(0.05)
+    assert pull[0] == pytest.approx(0.10)
+    assert pull[1] == pytest.approx(0.05 + TURN_PULL_DISTANCE_M)
+
+
+def test_pull_waypoint_default_direction_for_vertical_axis():
+    """When axis_xy ~ 0 (vertical joint, common for faucets), the
+    perpendicular is undefined and the skill falls back to +y."""
+    from babysteps.skills.turn import (
+        TURN_PULL_DISTANCE_M, compile_intent_to_turn_skill,
+    )
+    scene = _scene(handle_xy=(0.10, 0.05), axis_xy=(0.0, 0.0))
+    skill = compile_intent_to_turn_skill(_intent("handle_grip"), scene)
+    pull = skill.waypoints[3]
+    assert pull[0] == pytest.approx(0.10)
+    assert pull[1] == pytest.approx(0.05 + TURN_PULL_DISTANCE_M)
 
 
 def test_compile_raises_on_unknown_contact_region():
@@ -96,3 +113,23 @@ def test_skill_exposes_contact_region_and_axis():
     skill = compile_intent_to_turn_skill(_intent("handle_grip"), scene)
     assert skill.contact_region == "handle_grip"
     assert skill.target_joint_axis_xy == pytest.approx((0.6, 0.8))
+
+
+def test_turn_skill_has_mode_gripper_schedule_sign_fields():
+    """TurnSkill must carry per-mode dispatch metadata so generic phase
+    loops (runner/render) can iterate without hardcoded grasp assumptions."""
+    import numpy as np
+    from babysteps.skills.turn import TurnSkill
+    wp = np.zeros((3, 7), dtype=np.float64)
+    skill = TurnSkill(
+        waypoints=wp,
+        contact_region="handle_grip",
+        target_joint_axis_xy=(0.0, 1.0),
+        mode="poke",
+        gripper_schedule=(-1.0, -1.0, -1.0),
+        sign=+1,
+    )
+    assert skill.mode == "poke"
+    assert skill.gripper_schedule == (-1.0, -1.0, -1.0)
+    assert skill.sign == +1
+    assert len(skill.gripper_schedule) == len(skill.waypoints)
