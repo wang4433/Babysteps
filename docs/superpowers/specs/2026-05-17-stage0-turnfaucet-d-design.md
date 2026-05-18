@@ -1,5 +1,12 @@
 # Stage-0 Sub-project D (TurnFaucet-v1) — Design Spec
 
+> **Superseded by** `2026-05-18-stage0-turnfaucet-embodiment-design.md`.
+> Reason: the `constraint_introduction` story violated the single-factor
+> revision invariant (changed two factors at once) and the real-sim
+> acceptance gate (§15.6: 0/5 seeds reached `info["success"]`). The
+> `embodiment_substitution` reframe is the replacement. This document
+> is kept on disk for historical context.
+
 **Sub-project D** of the Stage-0 four-scene roadmap. Replaces §7.3's
 OpenCabinetDrawer-v1 (which is `SUPPORTED_ROBOTS=["fetch"]` — incompatible
 with the project's Franka-only invariant) with `TurnFaucet-v1`, the only

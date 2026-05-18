@@ -58,9 +58,19 @@ srun --account=rpaleja --partition=a100-40gb --gres=gpu:1 --mem=115G --time=00:2
   ls -lh "$OUT_DIR/videos_maniskill"
 '
 
-# TurnFaucet (Sub-project D — constraint_violation; closes D's acceptance gate item 4)
+# TurnFaucet (Sub-project D — embodiment_substitution; per
+# 2026-05-18-stage0-turnfaucet-embodiment-design.md)
 # Requires partnet_mobility_faucet asset (one-time):
 #   python -m mani_skill.utils.download_asset partnet_mobility_faucet
+# NOTE: render_stage0_maniskill.py auto-selects sim_backend="gpu" for
+# TurnFaucet because the CPU-sim IK drifts the robot even with action=0.
+# Phase 1 (demo) uses a privileged qpos teleport — robot stays at home;
+# only the faucet joint moves. Phase 2 (grasp_turn attempt) physically
+# fails because partnet handles exceed the Panda gripper opening. Phase
+# 3 (poke_turn retry) uses closed-gripper lateral sweep with auto-sign
+# detection (see scripts/_diag_tf_poke5.py for the empirical reference).
+# Partial physical validation gate: >=1/5 retry MP4s reaches info["success"];
+# remaining seeds visibly apply lateral tangential force.
 srun --account=rpaleja --partition=a100-40gb --gres=gpu:1 --mem=115G --time=00:20:00 bash -lc '
   cd /scratch/gilbreth/wang4433/babysteps &&
   source /apps/external/conda/2025.09/etc/profile.d/conda.sh &&
