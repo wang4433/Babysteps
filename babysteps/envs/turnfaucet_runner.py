@@ -189,7 +189,63 @@ class TurnFaucetEnvRunner:
 
     def run(self, intent: Intent, scene: SceneState, *,
             rollout_log_path: Optional[Path] = None) -> AttemptResult:
-        raise NotImplementedError("run() implemented in Task 13")
+        seed = self._last_seed
+        if seed is None:
+            raise RuntimeError("TurnFaucetEnvRunner.run called before reset()")
+        contact_xy = np.asarray(scene.extra["handle_xy"], dtype=np.float64)
+        needed_delta = _read_needed_delta(self._env)
+
+        if intent.embodiment_mapping in (
+            "proxy_contact_to_franka_grasp_turn",
+            "proxy_contact_to_franka_turn",   # deprecated; same single-trial behavior
+        ):
+            skill = compile_intent_to_turn_skill(intent, scene)
+            outcome = _execute_skill(
+                self._env, skill, seed=seed, needed_delta=needed_delta,
+                contact_xy=contact_xy, max_steps=_MAX_CONTROL_STEPS,
+            )
+            return self._outcome_to_attempt_result(outcome, scene, rollout_log_path)
+
+        if intent.embodiment_mapping != "proxy_contact_to_franka_poke_turn":
+            raise ValueError(
+                f"TurnFaucetEnvRunner.run: unsupported embodiment_mapping "
+                f"{intent.embodiment_mapping!r}"
+            )
+
+        # Poke: auto-sign two-trial. Each trial does its own env.reset(seed) so
+        # the sign retry is a true counterfactual (identical faucet config).
+        # Probe with sign=+1 is a truncated preview to decide direction.
+        # If probe makes >= _POKE_PROBE_MIN_PROGRESS, rerun a full trial with
+        # sign=+1 from fresh reset (captured trajectory reflects a complete
+        # attempt). If probe falls short, run sign=-1 at full budget and pick
+        # the better of the two by progress.
+        skill_pos = compile_intent_to_turn_skill(intent, scene, sign=+1)
+        probe = _execute_skill(
+            self._env, skill_pos, seed=seed, needed_delta=needed_delta,
+            contact_xy=contact_xy, max_steps=_POKE_PROBE_STEPS,
+        )
+        if probe.success:
+            return self._outcome_to_attempt_result(probe, scene, rollout_log_path)
+        if probe.qpos_extremum_signed_progress >= _POKE_PROBE_MIN_PROGRESS:
+            full_pos = _execute_skill(
+                self._env, skill_pos, seed=seed, needed_delta=needed_delta,
+                contact_xy=contact_xy, max_steps=_MAX_CONTROL_STEPS,
+            )
+            return self._outcome_to_attempt_result(full_pos, scene, rollout_log_path)
+        skill_neg = compile_intent_to_turn_skill(intent, scene, sign=-1)
+        full_neg = _execute_skill(
+            self._env, skill_neg, seed=seed, needed_delta=needed_delta,
+            contact_xy=contact_xy, max_steps=_MAX_CONTROL_STEPS,
+        )
+        if (full_neg.success
+                or full_neg.qpos_extremum_signed_progress
+                    > probe.qpos_extremum_signed_progress):
+            return self._outcome_to_attempt_result(full_neg, scene, rollout_log_path)
+        full_pos = _execute_skill(
+            self._env, skill_pos, seed=seed, needed_delta=needed_delta,
+            contact_xy=contact_xy, max_steps=_MAX_CONTROL_STEPS,
+        )
+        return self._outcome_to_attempt_result(full_pos, scene, rollout_log_path)
 
     def _outcome_to_attempt_result(
         self, outcome: _TrialOutcome, scene: SceneState,
