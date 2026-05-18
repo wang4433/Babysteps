@@ -25,14 +25,14 @@ def _scene(handle_xy=(0.10, 0.0), base_xy=(0.05, 0.0), handle_z=0.10,
     )
 
 
-def _intent(contact_region="handle_grip", constraint_region="faucet_base_static"):
+def _intent(contact_region="handle_grip", constraint_region="none"):
     return Intent(
         goal_state="faucet_turned",
         object_motion="turn",
         contact_region=contact_region,
         approach_direction="from_above",
         constraint_region=constraint_region,
-        embodiment_mapping="proxy_contact_to_franka_turn",
+        embodiment_mapping="proxy_contact_to_franka_grasp_turn",
     )
 
 
@@ -52,15 +52,6 @@ def test_handle_grip_waypoints_target_handle_xy():
         assert skill.waypoints[i, 0] == pytest.approx(0.12)
         assert skill.waypoints[i, 1] == pytest.approx(0.04)
 
-
-def test_faucet_base_waypoints_target_base_xy():
-    from babysteps.skills.turn import compile_intent_to_turn_skill
-    scene = _scene(base_xy=(0.06, -0.02))
-    skill = compile_intent_to_turn_skill(_intent("faucet_base"), scene)
-    assert skill.waypoints.shape == (4, 7)
-    for i in range(3):
-        assert skill.waypoints[i, 0] == pytest.approx(0.06)
-        assert skill.waypoints[i, 1] == pytest.approx(-0.02)
 
 
 def test_pull_waypoint_offset_perpendicular_to_joint_axis():
@@ -133,3 +124,64 @@ def test_turn_skill_has_mode_gripper_schedule_sign_fields():
     assert skill.gripper_schedule == (-1.0, -1.0, -1.0)
     assert skill.sign == +1
     assert len(skill.gripper_schedule) == len(skill.waypoints)
+
+
+def _make_grasp_intent():
+    from babysteps.schemas import Intent
+    return Intent(
+        goal_state="faucet_turned",
+        object_motion="turn",
+        contact_region="handle_grip",
+        approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_grasp_turn",
+    )
+
+
+def _make_scene():
+    from babysteps.schemas import SceneState
+    return SceneState(
+        cube_xy=(0.05, 0.02), cube_z=0.10, goal_xy=(0.05, 0.02),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(),
+        extra={"handle_xy": (0.05, 0.02), "handle_z": 0.10,
+               "target_joint_axis_xy": (0.0, 1.0)},
+    )
+
+
+def test_compile_grasp_turn_returns_grasp_mode_4_waypoints():
+    from babysteps.skills.turn import compile_intent_to_turn_skill
+    skill = compile_intent_to_turn_skill(_make_grasp_intent(), _make_scene())
+    assert skill.mode == "grasp"
+    assert len(skill.waypoints) == 4
+    assert skill.gripper_schedule == (1.0, 1.0, -1.0, -1.0)
+    assert skill.contact_region == "handle_grip"
+
+
+def test_compile_deprecated_turn_token_falls_back_to_grasp():
+    """Per spec §7: deprecated 'proxy_contact_to_franka_turn' compiles to
+    the grasp variant for backward-compat with old diag scripts."""
+    from babysteps.schemas import Intent
+    from babysteps.skills.turn import compile_intent_to_turn_skill
+    intent = Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="handle_grip", approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_turn",
+    )
+    skill = compile_intent_to_turn_skill(intent, _make_scene())
+    assert skill.mode == "grasp"
+
+
+def test_compile_unknown_embodiment_raises():
+    from babysteps.schemas import Intent
+    from babysteps.skills.turn import compile_intent_to_turn_skill
+    intent = Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="handle_grip", approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_push",  # wrong embodiment for turn task
+    )
+    import pytest
+    with pytest.raises(ValueError, match="unsupported embodiment_mapping"):
+        compile_intent_to_turn_skill(intent, _make_scene())
