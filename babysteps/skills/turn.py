@@ -32,6 +32,12 @@ TURN_PULL_DISTANCE_M: float = 0.05
 # for the panda_wristcam.
 GRIP_OFFSET_M: float = 0.02
 
+# --- Poke-mode constants (verified empirically by scripts/_diag_tf_poke5.py)
+_POKE_LATERAL_OFFSET_M: float = 0.07
+_POKE_SWEEP_DISTANCE_M: float = 0.22
+_POKE_HEIGHT_ABOVE_M: float = 0.04
+_POKE_HIGH_CLEARANCE_M: float = 0.12
+
 
 @dataclass(frozen=True)
 class TurnSkill:
@@ -187,4 +193,47 @@ def _compile_grasp_compat(intent: Intent, scene: SceneState) -> TurnSkill:
 
 
 def _compile_poke(intent: Intent, scene: SceneState, sign: int) -> TurnSkill:
-    raise NotImplementedError("_compile_poke implemented in Task 4")
+    """Poke-mode TurnSkill (3 waypoints, closed-gripper throughout).
+
+    Closed-gripper lateral brute-force sweep. Per spec §7: the tangent
+    direction is a HEURISTIC SEED — the actual winning direction is
+    decided at runtime by TurnFaucetEnvRunner's auto-sign retry. The
+    cross-product-based tangent is correct geometrically, but partnet
+    faucets' qpos sign convention is inconsistent across models.
+    """
+    if intent.contact_region != "handle_grip":
+        raise ValueError(
+            f"poke_turn requires contact_region='handle_grip', "
+            f"got {intent.contact_region!r}"
+        )
+    handle_xy = np.asarray(scene.extra["handle_xy"], dtype=np.float64)
+    axis_xy = np.asarray(scene.extra["target_joint_axis_xy"], dtype=np.float64)
+    handle_z = float(scene.extra["handle_z"])
+    tcp = np.asarray(scene.tcp_start_pose, dtype=np.float64)
+    travel_z = float(tcp[2])
+
+    axis_norm = float(np.linalg.norm(axis_xy))
+    if axis_norm < 1e-3:
+        tangent = np.array([0.0, 1.0])
+    else:
+        tangent = np.array([-axis_xy[1], axis_xy[0]]) / axis_norm
+    sweep_dir = tangent * sign
+
+    contact_z = handle_z + _POKE_HEIGHT_ABOVE_M
+    approach_z = max(travel_z, handle_z + _POKE_HIGH_CLEARANCE_M) + 0.02
+    pre_xy = handle_xy - sweep_dir * _POKE_LATERAL_OFFSET_M
+    post_xy = handle_xy + sweep_dir * _POKE_SWEEP_DISTANCE_M
+
+    wp = np.zeros((3, 7), dtype=np.float64)
+    wp[0, 0:3] = [pre_xy[0],  pre_xy[1],  approach_z]
+    wp[1, 0:3] = [pre_xy[0],  pre_xy[1],  contact_z]
+    wp[2, 0:3] = [post_xy[0], post_xy[1], contact_z]
+    wp[:, 3:7] = tcp[3:7]
+    return TurnSkill(
+        waypoints=wp,
+        contact_region="handle_grip",
+        target_joint_axis_xy=(float(axis_xy[0]), float(axis_xy[1])),
+        mode="poke",
+        gripper_schedule=(-1.0, -1.0, -1.0),
+        sign=sign,
+    )

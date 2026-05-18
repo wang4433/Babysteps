@@ -185,3 +185,63 @@ def test_compile_unknown_embodiment_raises():
     import pytest
     with pytest.raises(ValueError, match="unsupported embodiment_mapping"):
         compile_intent_to_turn_skill(intent, _make_scene())
+
+
+def _make_poke_intent():
+    from babysteps.schemas import Intent
+    return Intent(
+        goal_state="faucet_turned",
+        object_motion="turn",
+        contact_region="handle_grip",
+        approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_poke_turn",
+    )
+
+
+def test_compile_poke_returns_poke_mode_3_waypoints():
+    from babysteps.skills.turn import compile_intent_to_turn_skill
+    skill = compile_intent_to_turn_skill(_make_poke_intent(), _make_scene())
+    assert skill.mode == "poke"
+    assert len(skill.waypoints) == 3
+    assert skill.gripper_schedule == (-1.0, -1.0, -1.0)
+    assert skill.contact_region == "handle_grip"
+    assert skill.sign == +1
+
+
+def test_compile_poke_sign_negative_flips_sweep_direction():
+    import numpy as np
+    from babysteps.skills.turn import compile_intent_to_turn_skill
+    skill_pos = compile_intent_to_turn_skill(_make_poke_intent(), _make_scene(), sign=+1)
+    skill_neg = compile_intent_to_turn_skill(_make_poke_intent(), _make_scene(), sign=-1)
+    # pre_xy and post_xy should mirror through handle_xy.
+    handle_xy = np.array(_make_scene().extra["handle_xy"])
+    pre_pos  = skill_pos.waypoints[1, 0:2]
+    pre_neg  = skill_neg.waypoints[1, 0:2]
+    post_pos = skill_pos.waypoints[2, 0:2]
+    post_neg = skill_neg.waypoints[2, 0:2]
+    # pre points are on opposite sides of handle_xy.
+    np.testing.assert_allclose(pre_pos - handle_xy, -(pre_neg - handle_xy), atol=1e-9)
+    np.testing.assert_allclose(post_pos - handle_xy, -(post_neg - handle_xy), atol=1e-9)
+
+
+def test_compile_poke_requires_handle_grip_contact_region():
+    from babysteps.schemas import Intent
+    from babysteps.skills.turn import compile_intent_to_turn_skill
+    intent = Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="faucet_base",  # deprecated D token, still in whitelist
+        approach_direction="from_above", constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_poke_turn",
+    )
+    import pytest
+    with pytest.raises(ValueError, match="poke_turn requires contact_region='handle_grip'"):
+        compile_intent_to_turn_skill(intent, _make_scene())
+
+
+def test_compile_poke_z_above_handle_for_finger_dangle():
+    from babysteps.skills.turn import compile_intent_to_turn_skill
+    skill = compile_intent_to_turn_skill(_make_poke_intent(), _make_scene())
+    # contact_z (waypoint 1 and 2) is handle_z + _POKE_HEIGHT_ABOVE_M.
+    assert skill.waypoints[1, 2] == 0.10 + 0.04
+    assert skill.waypoints[2, 2] == 0.10 + 0.04
