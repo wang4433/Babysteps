@@ -1,18 +1,13 @@
-"""Real ManiSkill TurnFaucet-v1 env_runner.
+"""Real ManiSkill TurnFaucet-v1 env_runner — embodiment_substitution version.
 
-Mirrors babysteps/envs/stackcube_runner.py with these differences:
-- Reads target_link_pos (handle xyz) and target_joint_axis (3D axis)
-  from obs.extra. Faucet base xy approximated as (handle_xy - (0.05, 0))
-  for Stage-0; the real body root has variable per-model geometry.
-- 4-phase trajectory (approach, descend, grip, pull). Gripper schedule
-  always [OPEN, OPEN, CLOSED, CLOSED].
-- Reports collision=True (Stage-0 proxy for constraint_violation)
-  when contact_region=faucet_base AND not info["success"]. Otherwise
-  collision=False.
+Generic phase loop driven by len(skill.waypoints) + skill.gripper_schedule.
+No hardcoded 4-phase grasp assumptions. run() dispatches single-trial
+(grasp_turn) vs two-trial auto-sign (poke_turn) per spec §8.
 
 Requires partnet_mobility_faucet asset download (see CLAUDE.md)."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
@@ -24,14 +19,24 @@ from babysteps.skills.turn import compile_intent_to_turn_skill
 
 _POS_SCALE: float = 0.1
 _PHASE_TOL_M: float = 0.015
+_GRASP_PHASE_TOL_M: float = 0.025
+_GRIP_MIN_STEPS: int = 15
 _MAX_CONTROL_STEPS: int = 400
-_GRIPPER_OPEN: float = 1.0
-_GRIPPER_CLOSED: float = -1.0
+_POKE_PROBE_STEPS: int = 80
+_POKE_PROBE_MIN_PROGRESS: float = 0.4   # fraction of needed_delta required by probe
 
 
 def _to_np(x):
     arr = x.cpu().numpy() if hasattr(x, "cpu") else np.asarray(x)
     return arr[0] if arr.ndim == 2 else arr
+
+
+def _safe_bool(x) -> bool:
+    """Safe bool from a (possibly batched torch) tensor."""
+    if hasattr(x, "cpu"):
+        x = x.cpu().numpy()
+    arr = np.asarray(x)
+    return bool(arr.item() if arr.ndim > 0 else arr)
 
 
 def _raw_to_xyzw(raw_pose) -> np.ndarray:
@@ -40,11 +45,23 @@ def _raw_to_xyzw(raw_pose) -> np.ndarray:
 
 
 def _read_obs(obs):
-    """(tcp_xyzw, handle_xyz, joint_axis_xyz) from TurnFaucet obs."""
+    """(tcp_xyzw, handle_xyz, joint_axis_xyz)."""
     tcp = _raw_to_xyzw(_to_np(obs["extra"]["tcp_pose"]))
     handle_xyz = _to_np(obs["extra"]["target_link_pos"]).astype(np.float64)
     axis_xyz = _to_np(obs["extra"]["target_joint_axis"]).astype(np.float64)
     return tcp, handle_xyz, axis_xyz
+
+
+def _read_faucet_qpos(env) -> float:
+    """env.unwrapped.target_switch_link.joint.qpos as a python float."""
+    return float(_to_np(env.unwrapped.target_switch_link.joint.qpos).item())
+
+
+def _read_needed_delta(env) -> float:
+    """target_angle - current qpos, both via env.unwrapped."""
+    env_u = env.unwrapped
+    target_angle = float(_to_np(env_u.target_angle).item())
+    return target_angle - _read_faucet_qpos(env)
 
 
 def _prop_action(tcp_xyzw, target_xyz, gripper_cmd):
@@ -55,29 +72,107 @@ def _prop_action(tcp_xyzw, target_xyz, gripper_cmd):
     return action
 
 
+@dataclass(frozen=True)
+class _TrialOutcome:
+    success: bool
+    reached_contact: bool
+    object_moved: bool
+    qpos_extremum_signed_progress: float
+    initial_obj_xy: tuple[float, float]
+    final_obj_xy: tuple[float, float]
+    trajectory_xy: tuple[tuple[float, float], ...]
+
+
+def _execute_skill(env, skill, *, seed, needed_delta, contact_xy, max_steps):
+    """One full execution. Generic over len(skill.waypoints) and
+    skill.gripper_schedule. Grasp-mode dwell at phase index 2 requires
+    _GRIP_MIN_STEPS before advancing; poke mode has no dwell.
+
+    Per spec §8.2: object_moved is derived from qpos delta (NOT handle xy
+    delta) because target_link_pos sweeps the arc as the joint rotates
+    but qpos is the direct signal of articulation motion.
+    """
+    obs, _ = env.reset(seed=int(seed))
+    n_phases = len(skill.waypoints)
+    assert len(skill.gripper_schedule) == n_phases, \
+        "gripper_schedule length must match waypoints length"
+    targets = [np.asarray(wp[0:3], dtype=np.float64) for wp in skill.waypoints]
+    grip_phase = 2 if skill.mode == "grasp" and n_phases >= 3 else -1
+    phase_tol = tuple(
+        _GRASP_PHASE_TOL_M if i == grip_phase else _PHASE_TOL_M
+        for i in range(n_phases)
+    )
+
+    tcp0, handle_xyz0, _ = _read_obs(obs)
+    initial_xy = (float(handle_xyz0[0]), float(handle_xyz0[1]))
+    initial_qpos = _read_faucet_qpos(env)
+
+    trajectory: list[tuple[float, float]] = []
+    phase_idx, steps_in_phase = 0, 0
+    reached_contact, success = False, False
+    qpos_extremum = initial_qpos
+
+    for _ in range(max_steps):
+        tcp, handle_xyz, _ = _read_obs(obs)
+        trajectory.append((float(handle_xyz[0]), float(handle_xyz[1])))
+        target = targets[phase_idx]
+        reached = np.linalg.norm(target - tcp[0:3]) < phase_tol[phase_idx]
+        advance = reached and (
+            phase_idx != grip_phase or steps_in_phase >= _GRIP_MIN_STEPS
+        )
+        if advance:
+            phase_idx += 1
+            steps_in_phase = 0
+            if phase_idx >= n_phases:
+                break
+            target = targets[phase_idx]
+        else:
+            steps_in_phase += 1
+        if phase_idx >= 1 and np.linalg.norm(tcp[0:2] - contact_xy) < 0.04:
+            reached_contact = True
+        action = _prop_action(tcp, target, skill.gripper_schedule[phase_idx])
+        obs, _r, terminated, truncated, info = env.step(action)
+        qpos = _read_faucet_qpos(env)
+        if needed_delta > 0:
+            qpos_extremum = max(qpos_extremum, qpos)
+        else:
+            qpos_extremum = min(qpos_extremum, qpos)
+        success = _safe_bool(info.get("success", False))
+        if success or _safe_bool(terminated) or _safe_bool(truncated):
+            break
+
+    final_xy = trajectory[-1] if trajectory else initial_xy
+    progress = (qpos_extremum - initial_qpos) / max(abs(needed_delta), 1e-6)
+    object_moved = abs(qpos_extremum - initial_qpos) > 0.05  # rad
+
+    return _TrialOutcome(
+        success=success, reached_contact=reached_contact, object_moved=object_moved,
+        qpos_extremum_signed_progress=progress,
+        initial_obj_xy=initial_xy, final_obj_xy=final_xy,
+        trajectory_xy=tuple(trajectory),
+    )
+
+
 class TurnFaucetEnvRunner:
-    """Real ManiSkill TurnFaucet-v1 runner."""
+    """Real ManiSkill TurnFaucet-v1 runner. See run() for dispatch logic."""
 
     def __init__(self) -> None:
         import gymnasium as gym
-        import mani_skill.envs  # noqa: F401 — registers TurnFaucet-v1
-
+        import mani_skill.envs  # noqa: F401
         self._env = gym.make(
             "TurnFaucet-v1",
             obs_mode="state_dict",
             control_mode="pd_ee_delta_pose",
-            sim_backend="cpu",
+            sim_backend="gpu",   # CPU IK is broken for this env
         )
         self._last_seed: Optional[int] = None
 
     def reset(self, seed: int) -> SceneState:
         self._last_seed = int(seed)
-        obs, _info = self._env.reset(seed=int(seed))
+        obs, _ = self._env.reset(seed=int(seed))
         tcp, handle_xyz, axis_xyz = _read_obs(obs)
         handle_xy = (float(handle_xyz[0]), float(handle_xyz[1]))
         handle_z = float(handle_xyz[2])
-        base_xy = (handle_xy[0] - 0.05, handle_xy[1])  # Stage-0 approximation
-        base_z = 0.0
         axis_xy = (float(axis_xyz[0]), float(axis_xyz[1]))
         return SceneState(
             cube_xy=handle_xy,
@@ -88,96 +183,39 @@ class TurnFaucetEnvRunner:
             extra={
                 "handle_xy": handle_xy,
                 "handle_z": handle_z,
-                "faucet_base_xy": base_xy,
-                "faucet_base_z": base_z,
                 "target_joint_axis_xy": axis_xy,
             },
         )
 
-    def run(
-        self,
-        intent: Intent,
-        scene: SceneState,
-        *,
-        rollout_log_path: Optional[Path] = None,
+    def run(self, intent: Intent, scene: SceneState, *,
+            rollout_log_path: Optional[Path] = None) -> AttemptResult:
+        raise NotImplementedError("run() implemented in Task 13")
+
+    def _outcome_to_attempt_result(
+        self, outcome: _TrialOutcome, scene: SceneState,
+        rollout_log_path: Optional[Path],
     ) -> AttemptResult:
-        skill = compile_intent_to_turn_skill(intent, scene)
-        if self._last_seed is None:
-            raise RuntimeError("TurnFaucetEnvRunner.run called before reset()")
-        obs, _info = self._env.reset(seed=int(self._last_seed))
-        tcp0, handle_xyz0, _axis0 = _read_obs(obs)
-        initial_obj_xy = (float(handle_xyz0[0]), float(handle_xyz0[1]))
-
-        targets = [np.asarray(wp[0:3], dtype=np.float64) for wp in skill.waypoints]
-        phase_gripper = (_GRIPPER_OPEN, _GRIPPER_OPEN, _GRIPPER_CLOSED, _GRIPPER_CLOSED)
-
-        trajectory: list[tuple[float, float]] = []
-        phase_idx = 0
-        reached_contact = False
-        success = False
-        for _step in range(_MAX_CONTROL_STEPS):
-            tcp, handle_xyz, _axis = _read_obs(obs)
-            trajectory.append((float(handle_xyz[0]), float(handle_xyz[1])))
-            target = targets[phase_idx]
-            if np.linalg.norm(target - tcp[0:3]) < _PHASE_TOL_M:
-                phase_idx += 1
-                if phase_idx >= len(targets):
-                    break
-                target = targets[phase_idx]
-            # Contact heuristic: TCP near the chosen contact point.
-            if phase_idx >= 1:
-                cxy = (np.asarray(scene.extra["handle_xy"], dtype=np.float64)
-                       if intent.contact_region == "handle_grip"
-                       else np.asarray(scene.extra["faucet_base_xy"], dtype=np.float64))
-                dxy = float(np.linalg.norm(tcp[0:2] - cxy))
-                if dxy < 0.04:
-                    reached_contact = True
-            action = _prop_action(tcp, target, phase_gripper[phase_idx])
-            obs, _r, terminated, truncated, info = self._env.step(action)
-            term = bool(_to_np(terminated).item()) if hasattr(terminated, "cpu") else bool(terminated)
-            trunc = bool(_to_np(truncated).item()) if hasattr(truncated, "cpu") else bool(truncated)
-            succ_field = info.get("success", False) if hasattr(info, "get") else False
-            success = bool(_to_np(succ_field).item()) if hasattr(succ_field, "cpu") else bool(succ_field)
-            if success or term or trunc:
-                break
-
-        _tcp_f, handle_xyz_f, _axis_f = _read_obs(obs)
-        final_obj_xy = (float(handle_xyz_f[0]), float(handle_xyz_f[1]))
-        trajectory.append(final_obj_xy)
-
-        object_moved = (
-            float(np.linalg.norm(np.asarray(final_obj_xy) - np.asarray(initial_obj_xy)))
-            > 0.005
-        )
-
-        # Stage-0 constraint_violation proxy:
-        # if contact_region was faucet_base AND faucet didn't rotate,
-        # mark collision=True so build_failure_packet emits the
-        # constraint_violation predicate.
-        collision = (intent.contact_region == "faucet_base" and not success)
-
         if rollout_log_path is not None:
             rollout_log_path.parent.mkdir(parents=True, exist_ok=True)
             np.savez(
                 rollout_log_path,
-                trajectory_xy=np.asarray(trajectory, dtype=np.float64),
-                initial_obj_xy=np.asarray(initial_obj_xy, dtype=np.float64),
-                final_obj_xy=np.asarray(final_obj_xy, dtype=np.float64),
+                trajectory_xy=np.asarray(outcome.trajectory_xy, dtype=np.float64),
+                initial_obj_xy=np.asarray(outcome.initial_obj_xy, dtype=np.float64),
+                final_obj_xy=np.asarray(outcome.final_obj_xy, dtype=np.float64),
                 goal_xy=np.asarray(scene.goal_xy, dtype=np.float64),
             )
-
         return AttemptResult(
-            initial_obj_xy=initial_obj_xy,
-            final_obj_xy=final_obj_xy,
+            initial_obj_xy=outcome.initial_obj_xy,
+            final_obj_xy=outcome.final_obj_xy,
             goal_xy=scene.goal_xy,
-            reached_contact=bool(reached_contact),
-            object_moved=bool(object_moved),
+            reached_contact=outcome.reached_contact,
+            object_moved=outcome.object_moved,
             planner_failed=False,
-            collision=bool(collision),
+            collision=False,
             grasp_slip=False,
             rollout_log_path=str(rollout_log_path) if rollout_log_path else None,
-            success=bool(success),
-            trajectory_xy=tuple(trajectory),
+            success=outcome.success,
+            trajectory_xy=outcome.trajectory_xy,
         )
 
     def close(self) -> None:
