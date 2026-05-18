@@ -383,32 +383,35 @@ class FakeTurnFaucetEnvRunner:
             )
         return self._scenes_by_seed[seed]
 
-    def run(self, intent: Intent, scene: SceneState) -> AttemptResult:
+    def run(self, intent: Intent, scene: SceneState, *, rollout_log_path=None) -> AttemptResult:
+        """Spec §11 outcome rule:
+          poke_turn  → success=True,  object_moved=True,  reached_contact=True
+          grasp_turn → success=False, object_moved=False, reached_contact=True
+          (failure_packet derives grasp_infeasible from these flags + intent)
+        """
         from babysteps.skills.turn import compile_intent_to_turn_skill
         skill = compile_intent_to_turn_skill(intent, scene)
         assert skill is not None
 
         handle_xy = tuple(float(v) for v in scene.extra["handle_xy"])
-        if (intent.contact_region == "handle_grip"
-                and intent.constraint_region == "faucet_base_static"):
-            success, collision = True, False
+        if intent.embodiment_mapping == "proxy_contact_to_franka_poke_turn":
+            success, moved = True, True
         else:
-            success, collision = False, True
+            # grasp_turn (and deprecated proxy_contact_to_franka_turn)
+            success, moved = False, False
 
-        final_xy = handle_xy  # the handle stays where it is; rotation in place
-        synthetic_traj = (handle_xy, final_xy)
         return AttemptResult(
             initial_obj_xy=handle_xy,
-            final_obj_xy=final_xy,
+            final_obj_xy=handle_xy,
             goal_xy=scene.goal_xy,
             reached_contact=True,
-            object_moved=success,    # only "moves" when the joint rotated
+            object_moved=moved,
             planner_failed=False,
-            collision=collision,
+            collision=False,
             grasp_slip=False,
             rollout_log_path=None,
             success=success,
-            trajectory_xy=synthetic_traj,
+            trajectory_xy=(handle_xy,),
         )
 
     def close(self) -> None:

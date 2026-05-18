@@ -290,3 +290,35 @@ def test_oracle_wrong_factor_embodiment_mapping_for_grasp_turn():
         embodiment_mapping="proxy_contact_to_franka_poke_turn",
     )
     assert adapter.oracle_wrong_factor(poke) == "none"
+
+
+def test_fake_runner_poke_turn_returns_success_true(fake_turnfaucet_env_runner):
+    from babysteps.schemas import Intent
+    scene = fake_turnfaucet_env_runner.reset(seed=0)
+    poke = Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="handle_grip", approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_poke_turn",
+    )
+    result = fake_turnfaucet_env_runner.run(poke, scene)
+    assert result.success is True
+    assert result.object_moved is True
+    assert result.reached_contact is True
+
+
+def test_fake_runner_grasp_turn_returns_grasp_infeasible_signature(fake_turnfaucet_env_runner):
+    from babysteps.schemas import Intent
+    scene = fake_turnfaucet_env_runner.reset(seed=0)
+    grasp = Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="handle_grip", approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_grasp_turn",
+    )
+    result = fake_turnfaucet_env_runner.run(grasp, scene)
+    assert result.success is False
+    assert result.object_moved is False
+    assert result.reached_contact is True
+    assert result.collision is False  # spec §8.4: collision never set in new D
+    assert result.grasp_slip is False  # PickCube-specific; never set by TF
