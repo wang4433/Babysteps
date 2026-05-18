@@ -2,24 +2,26 @@
 
 Pulls every TurnFaucet-specific decision behind one class:
   * make_env_runner       → TurnFaucetEnvRunner (Task 6)
-  * oracle_correct_intent → handle_grip / faucet_base_static / turn
+  * oracle_correct_intent → handle_grip / none / poke_turn
+                            (the mechanically feasible mapping)
   * default_blocked_factory → () — no physical blocking; the Stage-0
-                              controlled failure is the under-specified
-                              (contact_region, constraint_region) pair
-                              in scripted_demo_to_intent
-  * oracle_wrong_factor   → "constraint_region" if intent.contact_region
-                            == "faucet_base", else "none"
-  * scripted_demo_to_intent → DELIBERATELY returns (contact_region=
-                              "faucet_base", constraint_region="none").
-                              The 2D summarizer can't distinguish the
-                              handle from the body.
+                              controlled failure is the infeasible
+                              embodiment_mapping in scripted_demo_to_intent
+  * oracle_wrong_factor   → "embodiment_mapping" if
+                            intent.embodiment_mapping ==
+                            "proxy_contact_to_franka_grasp_turn",
+                            else "none"
+  * scripted_demo_to_intent → DELIBERATELY returns
+                              embodiment_mapping="proxy_contact_to_franka_grasp_turn".
+                              The 2D summarizer observes "hand-like interaction"
+                              and encodes grasp; it cannot know that the Franka
+                              cannot mechanically envelop the faucet handle.
   * compile_skill         → wraps skills.turn.compile_intent_to_turn_skill
 
 Hook defaults (build_failure_packet / attribute_failure / revise_intent)
-are inherited unchanged from BaseTaskAdapter — the new
-constraint_violation predicate (Task 2) and constraint_introduction
-operator (Task 3) live in failure.py / revision.py and dispatch
-automatically."""
+are inherited unchanged from BaseTaskAdapter — the grasp_infeasible predicate
+(Task 5-6) and embodiment_substitution operator (Task 7) live in failure.py /
+revision.py and dispatch automatically."""
 from __future__ import annotations
 
 from babysteps.envs.task_adapter import BaseTaskAdapter, EnvRunner
@@ -40,30 +42,33 @@ class TurnFaucetAdapter(BaseTaskAdapter):
             object_motion="turn",
             contact_region="handle_grip",
             approach_direction="from_above",
-            constraint_region="faucet_base_static",
-            embodiment_mapping="proxy_contact_to_franka_turn",
+            constraint_region="none",
+            embodiment_mapping="proxy_contact_to_franka_poke_turn",
         )
 
     def default_blocked_factory(self, intent: Intent) -> tuple[str, ...]:
         return ()
 
     def oracle_wrong_factor(
-        self, initial_intent: Intent, scene_executor: SceneState,
+        self,
+        initial_intent: Intent,
+        scene_executor: SceneState | None = None,
     ) -> str:
-        if initial_intent.contact_region == "faucet_base":
-            return "constraint_region"
+        if initial_intent.embodiment_mapping == "proxy_contact_to_franka_grasp_turn":
+            return "embodiment_mapping"
         return "none"
 
     def scripted_demo_to_intent(self, evidence: DemoEvidence) -> Intent:
-        # Deliberately ignores evidence.contact_region_label —
-        # the 2D summarizer can't distinguish the handle from the body.
+        # Stage-0 information loss: the demo's hand-like interaction
+        # symbolically reads as grasping; the 2D summarizer cannot know that
+        # the Franka cannot mechanically execute it.
         return Intent(
             goal_state="faucet_turned",
             object_motion="turn",
-            contact_region="faucet_base",      # DELIBERATELY under-specified
+            contact_region="handle_grip",
             approach_direction="from_above",
-            constraint_region="none",           # DELIBERATELY missing
-            embodiment_mapping="proxy_contact_to_franka_turn",
+            constraint_region="none",
+            embodiment_mapping="proxy_contact_to_franka_grasp_turn",  # DELIBERATELY infeasible
         )
 
     def compile_skill(self, intent: Intent, scene: SceneState):
