@@ -92,8 +92,8 @@ def build_failure_packet(
 ) -> FailurePacket:
     """Derive the structured FailurePacket. Predicate precedence: most
     specific first (success → planner_failed → constraint_violation →
-    grasp_slip → contact_failure → no_motion → direction_error →
-    goal_not_satisfied).
+    grasp_infeasible → grasp_slip → contact_failure → no_motion →
+    direction_error → goal_not_satisfied).
     """
     et = {
         "reached_contact": bool(attempt.reached_contact),
@@ -116,6 +116,16 @@ def build_failure_packet(
         # "touched something that didn't move"). More specific than
         # grasp_slip / contact_failure / no_motion.
         predicate = "constraint_violation"
+    elif (
+        intent.embodiment_mapping == "proxy_contact_to_franka_grasp_turn"
+        and attempt.reached_contact
+        and not attempt.object_moved
+        and not attempt.success
+    ):
+        # Spec §5: context-derived predicate (no new AttemptResult field).
+        # Grasp-mode embodiment reached the handle but the gripper jaws
+        # could not envelop it (handle thickness > Panda gripper opening).
+        predicate = "grasp_infeasible"
     elif attempt.grasp_slip:
         # Sub-project B: grasp_slip is more specific than the contact /
         # motion / direction predicates below — it carries the strong

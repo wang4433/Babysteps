@@ -292,3 +292,81 @@ def test_grasp_infeasible_maps_to_embodiment_mapping():
     assert FAILURE_TO_FACTOR["grasp_infeasible"] == (
         "embodiment_mapping", ("embodiment_mapping",)
     )
+
+
+# ---------- Sub-project D: grasp_infeasible derivation -------------- #
+
+
+def _make_grasp_turn_intent():
+    from babysteps.schemas import Intent
+    return Intent(
+        goal_state="faucet_turned", object_motion="turn",
+        contact_region="handle_grip", approach_direction="from_above",
+        constraint_region="none",
+        embodiment_mapping="proxy_contact_to_franka_grasp_turn",
+    )
+
+
+def _make_grasp_failed_attempt():
+    from babysteps.schemas import AttemptResult
+    return AttemptResult(
+        initial_obj_xy=(0.05, 0.02), final_obj_xy=(0.05, 0.02),
+        goal_xy=(0.05, 0.02),
+        reached_contact=True, object_moved=False,
+        planner_failed=False, collision=False, grasp_slip=False,
+        rollout_log_path=None, success=False, trajectory_xy=(),
+    )
+
+
+def _make_scene_extra_with_handle():
+    from babysteps.schemas import SceneState
+    return SceneState(
+        cube_xy=(0.05, 0.02), cube_z=0.10, goal_xy=(0.05, 0.02),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(),
+        extra={"handle_xy": (0.05, 0.02), "handle_z": 0.10,
+               "target_joint_axis_xy": (0.0, 1.0)},
+    )
+
+
+def test_build_failure_packet_grasp_infeasible_when_grasp_turn_no_motion():
+    from babysteps.failure import build_failure_packet
+    fp = build_failure_packet(
+        _make_grasp_turn_intent(),
+        _make_grasp_failed_attempt(),
+        _make_scene_extra_with_handle(),
+    )
+    assert fp.failure_predicate == "grasp_infeasible"
+
+
+def test_build_failure_packet_not_grasp_infeasible_when_embodiment_is_poke_turn():
+    """The derivation must check intent.embodiment_mapping, not just the
+    AttemptResult flags. A poke_turn intent that reached_contact but
+    didn't move the object is a different failure mode (e.g., no_motion)."""
+    from babysteps.failure import build_failure_packet
+    from dataclasses import replace
+    poke_intent = replace(
+        _make_grasp_turn_intent(),
+        embodiment_mapping="proxy_contact_to_franka_poke_turn",
+    )
+    fp = build_failure_packet(
+        poke_intent,
+        _make_grasp_failed_attempt(),
+        _make_scene_extra_with_handle(),
+    )
+    assert fp.failure_predicate != "grasp_infeasible"
+
+
+def test_grasp_infeasible_precedence_above_grasp_slip():
+    """Per spec §5: grasp_infeasible slots between planner_failed and
+    grasp_slip in the precedence chain. A failed grasp_turn attempt
+    where reached_contact=True + grasp_slip=False + object_moved=False
+    should resolve to grasp_infeasible, not no_motion."""
+    from babysteps.failure import build_failure_packet
+    fp = build_failure_packet(
+        _make_grasp_turn_intent(),
+        _make_grasp_failed_attempt(),
+        _make_scene_extra_with_handle(),
+    )
+    assert fp.failure_predicate == "grasp_infeasible"
+    assert fp.failure_predicate != "no_motion"
