@@ -58,14 +58,26 @@ def _read_faucet_qpos(env_u) -> float:
 
 def _set_faucet_qpos(env_u, switch_link, new_qpos: float) -> None:
     """Direct write to the rotating joint's qpos (privileged, no physics).
-    The exact API depends on SAPIEN's articulation interface; use whichever
-    of these is supported in the current ManiSkill version:
-      switch_link.joint.qpos = torch.tensor([[new_qpos]])   # SAPIEN 3.x
+
+    ManiSkill's ArticulationJoint.qpos setter (CPU path) requires
+    joint.articulation to be non-None, but for a Link.merge()-ed
+    switch_link articulation is None.  We bypass it by writing the
+    underlying physx articulation qpos array directly.
+
+    For stub/fake joints (in sim-free tests) that expose a plain qpos
+    setter we fall back to direct assignment.
     """
-    import torch
-    switch_link.joint.qpos = torch.tensor(
-        [[new_qpos]], dtype=torch.float32, device=switch_link.joint.qpos.device,
-    )
+    joint = switch_link.joint
+    if hasattr(joint, "_physx_articulations") and joint._physx_articulations:
+        # Real ManiSkill CPU/GPU joint — write via physx articulation array.
+        pa = joint._physx_articulations[0]
+        q = pa.qpos.copy()
+        idx = int(joint.active_index)
+        q[idx] = float(new_qpos)
+        pa.qpos = q
+    else:
+        # Stub joint (sim-free tests): simple setter assignment.
+        joint.qpos = np.array([[new_qpos]], dtype=np.float64)
 
 
 def _execute_skill_for_render(env, skill, *, seed, frames, contact_xy, max_steps):
