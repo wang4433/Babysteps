@@ -285,3 +285,10 @@ def test_attribute_failure_constraint_violation_to_constraint_region():
     assert "contact_region" in attribution.revise
     assert "constraint_region" not in attribution.freeze
     assert "contact_region" not in attribution.freeze
+
+
+def test_grasp_infeasible_maps_to_embodiment_mapping():
+    from babysteps.failure import FAILURE_TO_FACTOR
+    assert FAILURE_TO_FACTOR["grasp_infeasible"] == (
+        "embodiment_mapping", ("embodiment_mapping",)
+    )

@@ -45,6 +45,11 @@ FAILURE_TO_FACTOR: dict[str, tuple[str, tuple[str, ...]]] = {
     # object_moved=False). Revise both constraint_region and contact_region —
     # the two-factor pair that constraint_introduction operates over.
     "constraint_violation": ("constraint_region", ("constraint_region", "contact_region")),
+    # Sub-project D (TurnFaucet): grasp_infeasible fires when the gripper
+    # geometry cannot physically close around the handle (handle thickness
+    # exceeds the maximum gripper opening). The wrong factor is embodiment_mapping
+    # — the skill assumed a grasp primitive that cannot execute here.
+    "grasp_infeasible": ("embodiment_mapping", ("embodiment_mapping",)),   # D NEW
 }
 
 
