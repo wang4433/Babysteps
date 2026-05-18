@@ -508,3 +508,40 @@ def test_revision_operators_contains_constraint_introduction():
 def test_embodiment_mappings_contains_franka_turn():
     from babysteps.schemas import EMBODIMENT_MAPPINGS
     assert "proxy_contact_to_franka_turn" in EMBODIMENT_MAPPINGS
+
+
+# ---------- Sub-project D reframe (embodiment_substitution) tokens ------- #
+
+
+def test_embodiment_grasp_turn_token():
+    from babysteps.schemas import EMBODIMENT_MAPPINGS
+    assert "proxy_contact_to_franka_grasp_turn" in EMBODIMENT_MAPPINGS
+
+
+def test_embodiment_poke_turn_token():
+    from babysteps.schemas import EMBODIMENT_MAPPINGS
+    assert "proxy_contact_to_franka_poke_turn" in EMBODIMENT_MAPPINGS
+
+
+def test_grasp_infeasible_predicate_token():
+    from babysteps.schemas import FAILURE_PREDICATES
+    assert "grasp_infeasible" in FAILURE_PREDICATES
+
+
+def test_embodiment_substitution_operator_token():
+    from babysteps.schemas import REVISION_OPERATORS
+    assert "embodiment_substitution" in REVISION_OPERATORS
+
+
+def test_old_d_tokens_remain_deprecated_but_present():
+    """Per spec §4: additive only. Deprecated tokens stay in whitelists
+    until a separate cleanup commit proves no references remain."""
+    from babysteps.schemas import (
+        EMBODIMENT_MAPPINGS, CONTACT_REGIONS, CONSTRAINT_REGIONS,
+        FAILURE_PREDICATES, REVISION_OPERATORS,
+    )
+    assert "proxy_contact_to_franka_turn" in EMBODIMENT_MAPPINGS
+    assert "faucet_base" in CONTACT_REGIONS
+    assert "faucet_base_static" in CONSTRAINT_REGIONS
+    assert "constraint_violation" in FAILURE_PREDICATES
+    assert "constraint_introduction" in REVISION_OPERATORS

@@ -44,7 +44,9 @@ EMBODIMENT_MAPPINGS: frozenset[str] = frozenset({
     "proxy_contact_to_franka_push",
     "proxy_contact_to_franka_grasp",   # B: PickCube — parallel-jaw grasp
     "proxy_contact_to_franka_pick_and_place",  # C: StackCube — pick + place sequence
-    "proxy_contact_to_franka_turn",    # D: TurnFaucet — grip + tangential pull
+    "proxy_contact_to_franka_turn",    # D: deprecated, kept in whitelist
+    "proxy_contact_to_franka_grasp_turn",      # D: NEW — initial intent
+    "proxy_contact_to_franka_poke_turn",       # D: NEW — revised intent
 })
 GOAL_STATES: frozenset[str] = frozenset({
     "cube_at_target",
@@ -65,13 +67,15 @@ FAILURE_PREDICATES: frozenset[str] = frozenset({
     "no_motion",
     "goal_not_satisfied",
     "grasp_slip",                      # B: PickCube — grip lost during lift
-    "constraint_violation",            # D: TurnFaucet — touched non-articulating link
+    "constraint_violation",            # D: deprecated, kept in whitelist
+    "grasp_infeasible",                # D: NEW — handle too thick to close jaw
 })
 REVISION_OPERATORS: frozenset[str] = frozenset({
     "approach_substitution",
     "contact_substitution",            # B: PickCube — rotate gripper axis
     "goal_refinement",                 # C: StackCube — sharpen under-specified goal
-    "constraint_introduction",         # D: TurnFaucet — add constraint + swap contact
+    "constraint_introduction",         # D: deprecated, kept in whitelist
+    "embodiment_substitution",         # D: NEW — swap grasp_turn → poke_turn
 })
 
 CLAIM_BOUNDARY: str = "third_person_demo_proxy_not_human_demo"
