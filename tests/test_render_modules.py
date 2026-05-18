@@ -260,23 +260,74 @@ def test_stackcube_render_titles_mention_goal_state():
 # ---------- TurnFaucet render tests ---------------------------------- #
 
 
+class _StubJoint:
+    """Minimal stub for SAPIEN's articulation joint, supporting qpos read/write."""
+
+    def __init__(self, initial_qpos: float = 0.0) -> None:
+        # Store as a 2-D numpy array so to_np(joint.qpos) returns a scalar
+        # after the arr.ndim==2 branch (arr[0] → 1-D, then .item() works).
+        self._qpos = np.array([[initial_qpos]], dtype=np.float64)
+
+    @property
+    def qpos(self):
+        return self._qpos
+
+    @qpos.setter
+    def qpos(self, value):
+        # Accept torch tensors (as written by _set_faucet_qpos) or numpy arrays.
+        if hasattr(value, "cpu"):
+            value = value.cpu().numpy()
+        self._qpos = np.asarray(value, dtype=np.float64)
+        if self._qpos.ndim == 1:
+            self._qpos = self._qpos[np.newaxis, :]
+
+    @property
+    def device(self):
+        return "cpu"
+
+
+class _StubSwitchLink:
+    """Stub for env.unwrapped.target_switch_link."""
+
+    def __init__(self, initial_qpos: float = 0.0) -> None:
+        self.joint = _StubJoint(initial_qpos)
+
+
+class _StubTurnEnvUnwrapped:
+    """Stub for env.unwrapped — carries target_switch_link and target_angle."""
+
+    def __init__(self, switch_link: _StubSwitchLink, target_angle: float) -> None:
+        self.target_switch_link = switch_link
+        self.target_angle = np.array(target_angle, dtype=np.float64)
+
+
 class _StubTurnEnv:
     """Stand-in for gym.make('TurnFaucet-v1').
 
     Obs has tcp_pose, target_link_pos (handle xyz), and
-    target_joint_axis (3D)."""
+    target_joint_axis (3D). Also exposes env.unwrapped with
+    target_switch_link.joint.qpos and target_angle for the
+    privileged-demo phase in the new render_episode."""
 
     def __init__(self) -> None:
         self.tcp = np.array([0.0, 0.0, 0.25, 0.0, 0.0, 0.0], dtype=np.float64)
         self.handle = np.array([0.10, 0.0, 0.10], dtype=np.float64)
         self.axis = np.array([0.0, 1.0, 0.0], dtype=np.float64)
         self._step_count = 0
+        # Privileged state for demo-phase: handle rotates from 0 to π/4.
+        self._switch_link = _StubSwitchLink(initial_qpos=0.0)
+        self.unwrapped = _StubTurnEnvUnwrapped(
+            switch_link=self._switch_link,
+            target_angle=np.pi / 4,
+        )
 
     def reset(self, seed: int = 0):
         self.tcp = np.array([0.0, 0.0, 0.25, 0.0, 0.0, 0.0], dtype=np.float64)
         self.handle = np.array([0.10, 0.0, 0.10], dtype=np.float64)
         self.axis = np.array([0.0, 1.0, 0.0], dtype=np.float64)
         self._step_count = 0
+        # Reset qpos to initial each time (demo teleport is discarded on reset).
+        self._switch_link.joint.qpos = np.array([[0.0]])
         return _StubTurnObs(self.tcp, self.handle, self.axis), {}
 
     def step(self, action):
@@ -329,6 +380,10 @@ def test_turnfaucet_render_episode_emits_three_phase_frames():
 
 
 def test_turnfaucet_render_phase2_actually_steps_env():
+    """Phase 2 = grasp_turn attempt that steps the env (jaws can't close on
+    the thick handle, but the control loop still steps). Detect by checking
+    that consecutive attempt_blocked frames differ (stub env bumps intensity
+    each step, so identical frames => env was not stepped)."""
     from babysteps.render.turnfaucet import render_episode
     from babysteps.envs.turnfaucet_adapter import TurnFaucetAdapter
 
@@ -336,15 +391,21 @@ def test_turnfaucet_render_phase2_actually_steps_env():
     frames, _ = render_episode(env, TurnFaucetAdapter(), seed=0, fps=4)
     held = frames["attempt_blocked"]
     assert not all(np.array_equal(held[0], f) for f in held), (
-        "TurnFaucet phase 2 should step the env."
+        "TurnFaucet phase 2 (grasp_turn attempt) should step the env; "
+        "saw all-identical frames."
     )
 
 
-def test_turnfaucet_render_titles_mention_constraint_region():
+def test_turnfaucet_render_titles_mention_embodiment_substitution_and_grasp_infeasible():
+    """Phase 2 title must mention 'grasp_infeasible'; phase 3 title must
+    mention 'embodiment_substitution' (new D-embodiment contract per spec §10)."""
     from babysteps.render.turnfaucet import render_episode
     from babysteps.envs.turnfaucet_adapter import TurnFaucetAdapter
     _, titles = render_episode(_StubTurnEnv(), TurnFaucetAdapter(), seed=0, fps=4)
-    # Demo subtitle mentions the oracle's constraint_region.
-    assert "faucet_base_static" in titles["demo"][1]
-    # Retry subtitle mentions constraint_introduction.
-    assert "constraint_introduction" in titles["retry"][1]
+    # Phase 2: grasp_infeasible is the named failure predicate.
+    assert "grasp_infeasible" in titles["attempt_blocked"][0]
+    # Phase 3: embodiment_substitution is the revision operator.
+    assert "embodiment_substitution" in titles["retry"][1]
+    # The embodiment tokens (grasp_turn → poke_turn) must appear in phase 3.
+    assert "grasp_turn" in titles["retry"][1]
+    assert "poke_turn" in titles["retry"][1]
