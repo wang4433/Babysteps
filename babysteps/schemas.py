@@ -110,6 +110,7 @@ class Intent:
     approach_direction: str
     constraint_region: str
     embodiment_mapping: str
+    direction_grounding: str = "world_frame"
 
     def __post_init__(self) -> None:
         _validate(self.goal_state, GOAL_STATES, "goal_state")
@@ -118,13 +119,22 @@ class Intent:
         _validate(self.approach_direction, APPROACH_DIRECTIONS, "approach_direction")
         _validate(self.constraint_region, CONSTRAINT_REGIONS, "constraint_region")
         _validate(self.embodiment_mapping, EMBODIMENT_MAPPINGS, "embodiment_mapping")
+        _validate(self.direction_grounding, DIRECTION_GROUNDINGS, "direction_grounding")
 
     def to_dict(self) -> dict:
-        return {f: getattr(self, f) for f in INTENT_FIELDS}
+        d = {f: getattr(self, f) for f in INTENT_FIELDS}
+        # Omit when default so the six-factor tasks serialize byte-identically
+        # to their locked snapshots (additive-schema discipline).
+        if self.direction_grounding != "world_frame":
+            d["direction_grounding"] = self.direction_grounding
+        return d
 
     @classmethod
     def from_dict(cls, d: dict) -> "Intent":
-        return cls(**{f: d[f] for f in INTENT_FIELDS})
+        kwargs = {f: d[f] for f in INTENT_FIELDS}
+        if "direction_grounding" in d:
+            kwargs["direction_grounding"] = d["direction_grounding"]
+        return cls(**kwargs)
 
 
 # ---------- DemoEvidence ------------------------------------------------- #
