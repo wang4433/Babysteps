@@ -49,3 +49,40 @@ def test_intent_direction_grounding_validated():
             embodiment_mapping="proxy_contact_to_franka_push",
             direction_grounding="banana",
         )
+
+
+from babysteps.envs import scene as scenemod
+
+
+def test_rotate_motion_token_cardinal():
+    # 180° flips signs; 90° CCW maps +x->+y, +y->-x.
+    assert scenemod.rotate_motion_token("translate_+x", 180) == "translate_-x"
+    assert scenemod.rotate_motion_token("translate_+y", 180) == "translate_-y"
+    assert scenemod.rotate_motion_token("translate_+x", 90) == "translate_+y"
+    assert scenemod.rotate_motion_token("translate_+y", 90) == "translate_-x"
+    assert scenemod.rotate_motion_token("translate_+x", 0) == "translate_+x"
+
+
+def test_resolve_grounded_motion():
+    # actor_frame ignores yaw (identity = the bug).
+    assert scenemod.resolve_grounded_motion("translate_-x", "actor_frame", 180) == "translate_-x"
+    # observer_frame applies the yaw (the fix): -x observed under 180° -> +x world.
+    assert scenemod.resolve_grounded_motion("translate_-x", "observer_frame", 180) == "translate_+x"
+    with pytest.raises(NotImplementedError):
+        scenemod.resolve_grounded_motion("translate_+x", "object_frame", 90)
+
+
+def test_world_resolved_intent_recovers_world_face():
+    from babysteps.schemas import Intent
+    # Observer saw -x (the demo, viewed under 180°). actor_frame keeps it wrong;
+    # observer_frame recovers world +x and its contact face minus_x_face.
+    observed = Intent(
+        goal_state="cube_at_target", object_motion="translate_-x",
+        contact_region="plus_x_face", approach_direction="from_plus_x",
+        constraint_region="none", embodiment_mapping="proxy_contact_to_franka_push",
+        direction_grounding="observer_frame",
+    )
+    world = scenemod.world_resolved_intent(observed, 180)
+    assert world.object_motion == "translate_+x"
+    assert world.contact_region == "minus_x_face"
+    assert world.approach_direction == "from_minus_x"

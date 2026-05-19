@@ -14,9 +14,11 @@ The face/approach vocabulary:
 """
 from __future__ import annotations
 
+from dataclasses import replace
+
 import numpy as np
 
-from babysteps.schemas import SceneState  # re-export
+from babysteps.schemas import Intent, SceneState  # re-export
 
 __all__ = [
     "SceneState",
@@ -27,6 +29,11 @@ __all__ = [
     "goal_direction_to_motion",
     "OPPOSITE_APPROACH",
     "ORTHOGONAL_FACE",
+    "motion_to_unit",
+    "rotate_xy",
+    "rotate_motion_token",
+    "resolve_grounded_motion",
+    "world_resolved_intent",
 ]
 
 
@@ -116,3 +123,83 @@ def goal_direction_to_motion(goal_vec_xy: np.ndarray) -> str:
     if abs(v[0]) >= abs(v[1]):
         return "translate_+x" if v[0] >= 0 else "translate_-x"
     return "translate_+y" if v[1] >= 0 else "translate_-y"
+
+
+# ---------- cross-view grounding (Sub-project E) ----------------------- #
+
+_MOTION_UNIT: dict[str, np.ndarray] = {
+    "translate_+x": np.array([1.0, 0.0]),
+    "translate_-x": np.array([-1.0, 0.0]),
+    "translate_+y": np.array([0.0, 1.0]),
+    "translate_-y": np.array([0.0, -1.0]),
+}
+
+
+def motion_to_unit(token: str) -> np.ndarray:
+    """xy unit vector for a cardinal OBJECT_MOTIONS token."""
+    if token not in _MOTION_UNIT:
+        raise ValueError(f"motion_to_unit: {token!r} is not a cardinal translate token")
+    return _MOTION_UNIT[token].copy()
+
+
+def rotate_xy(p: tuple[float, float], yaw_deg: int) -> tuple[float, float]:
+    """Rotate an xy point CCW by a multiple of 90°. Raises on other angles."""
+    yaw = int(yaw_deg) % 360
+    x, y = float(p[0]), float(p[1])
+    if yaw == 0:
+        return (x, y)
+    if yaw == 90:
+        return (-y, x)
+    if yaw == 180:
+        return (-x, -y)
+    if yaw == 270:
+        return (y, -x)
+    raise ValueError(f"rotate_xy supports only multiples of 90°, got {yaw_deg}")
+
+
+def rotate_motion_token(token: str, yaw_deg: int) -> str:
+    """Rotate a cardinal motion token CCW by a multiple of 90°."""
+    u = motion_to_unit(token)
+    rx, ry = rotate_xy((float(u[0]), float(u[1])), yaw_deg)
+    return goal_direction_to_motion(np.array([rx, ry], dtype=np.float64))
+
+
+def resolve_grounded_motion(
+    observed_motion: str, grounding: str, observer_yaw_deg: int,
+) -> str:
+    """Map an observer-relative cardinal motion to the world frame.
+
+    actor_frame    → apply 0° (identity; the egocentric bug)
+    observer_frame → apply observer_yaw_deg (the fix)
+    object/world   → reserved (later cut) → NotImplementedError
+    """
+    if grounding == "actor_frame":
+        applied = 0
+    elif grounding == "observer_frame":
+        applied = int(observer_yaw_deg)
+    else:
+        raise NotImplementedError(
+            f"resolve_grounded_motion supports actor_frame/observer_frame in "
+            f"Stage-0; got {grounding!r}"
+        )
+    return rotate_motion_token(observed_motion, applied)
+
+
+def world_resolved_intent(intent: "Intent", observer_yaw_deg: int) -> "Intent":
+    """Resolve an observer-relative intent into a plain world-frame push intent.
+
+    Only `direction_grounding` controls the resolution; the resulting world
+    object_motion / contact_region / approach_direction are derived from it.
+    The returned intent's `direction_grounding` is set to world_frame (inert)."""
+    world_motion = resolve_grounded_motion(
+        intent.object_motion, intent.direction_grounding, observer_yaw_deg,
+    )
+    world_face = direction_to_face(motion_to_unit(world_motion))
+    world_approach = face_to_approach(world_face)
+    return replace(
+        intent,
+        object_motion=world_motion,
+        contact_region=world_face,
+        approach_direction=world_approach,
+        direction_grounding="world_frame",
+    )
