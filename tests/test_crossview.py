@@ -161,3 +161,74 @@ def test_base_observe_demo_is_identity():
     out_traj, out_contact = adapter.observe_demo(traj, correct, scene)
     assert out_traj == traj
     assert out_contact == "minus_x_face"
+
+
+def test_crossview_adapter_methods():
+    from babysteps.envs.crossview_adapter import CrossViewPushAdapter, observer_yaw_for_seed
+    from babysteps.schemas import DemoEvidence
+
+    adapter = CrossViewPushAdapter()
+    assert adapter.task_id == "PushCube-v1"
+
+    # scripted_demo_to_intent always grounds in actor_frame (the bug).
+    evidence = DemoEvidence(
+        camera="third_person", demonstrator_type="proxy_oracle",
+        object_trajectory=((0.0, 0.0), (-0.1, 0.0)),     # observer saw -x
+        contact_region_label="plus_x_face", final_state="cube_at_target",
+        rgbd_video_path=None,
+    )
+    intent = adapter.scripted_demo_to_intent(evidence)
+    assert intent.direction_grounding == "actor_frame"
+    assert intent.object_motion == "translate_-x"
+
+    # oracle_wrong_factor: direction_grounding iff rotated + actor_frame.
+    rotated = SceneState(
+        cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.1, 0.0),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(), extra={"observer_yaw_deg": 180},
+    )
+    assert adapter.oracle_wrong_factor(intent, rotated) == "direction_grounding"
+    unrotated = SceneState(
+        cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.1, 0.0),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(), extra={"observer_yaw_deg": 0},
+    )
+    assert adapter.oracle_wrong_factor(intent, unrotated) == "none"
+
+    # default_blocked_factory is empty (failure is the frame bug, not a block).
+    assert adapter.default_blocked_factory(intent) == ()
+
+    # observe_demo rotates the demo into observer frame (-yaw).
+    observed_traj, contact = adapter.observe_demo(
+        ((0.0, 0.0), (0.1, 0.0)), _cv_world_oracle(), rotated,
+    )
+    # world +x viewed under 180° appears as -x.
+    assert observed_traj[-1][0] < 0
+    assert contact == "plus_x_face"
+
+    # observer schedule is deterministic and never 0 (so failures always fire).
+    assert observer_yaw_for_seed(0) in (90, 180, 270)
+
+
+def test_crossview_attribute_failure_maps_to_grounding():
+    from babysteps.envs.crossview_adapter import CrossViewPushAdapter
+    from babysteps.schemas import FailurePacket
+    adapter = CrossViewPushAdapter()
+    intent = _cv_initial_intent()
+    for predicate in ("direction_error", "goal_not_satisfied"):
+        fp = FailurePacket(
+            chosen_intent=intent, execution_trace={}, failure_predicate=predicate,
+            object_displacement=0.1, direction_alignment=-1.0,
+        )
+        attr = adapter.attribute_failure(fp)
+        assert attr.wrong_factor == "direction_grounding"
+        assert attr.revise == ("direction_grounding",)
+
+
+def _cv_world_oracle() -> Intent:
+    return Intent(
+        goal_state="cube_at_target", object_motion="translate_+x",
+        contact_region="minus_x_face", approach_direction="from_minus_x",
+        constraint_region="none", embodiment_mapping="proxy_contact_to_franka_push",
+        direction_grounding="actor_frame",
+    )
