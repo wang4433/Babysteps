@@ -135,3 +135,29 @@ def test_grounding_substitution_rejects_non_actor_frame():
     )
     with pytest.raises(NotImplementedError):
         revise_intent(intent, attribution, _dummy_scene())
+
+
+from babysteps.episode import _diff_intents
+
+
+def test_diff_intents_detects_grounding_change():
+    a = _cv_initial_intent()                                  # actor_frame
+    b = Intent.from_dict({**a.to_dict(), "direction_grounding": "observer_frame"})
+    assert _diff_intents(a, b) == ("direction_grounding",)
+    # And no false positive when nothing changes.
+    assert _diff_intents(a, a) == ()
+
+
+def test_base_observe_demo_is_identity():
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+    adapter = PushCubeAdapter()
+    traj = ((0.0, 0.0), (0.1, 0.0))
+    correct = Intent(
+        goal_state="cube_at_target", object_motion="translate_+x",
+        contact_region="minus_x_face", approach_direction="from_minus_x",
+        constraint_region="none", embodiment_mapping="proxy_contact_to_franka_push",
+    )
+    scene = _dummy_scene()
+    out_traj, out_contact = adapter.observe_demo(traj, correct, scene)
+    assert out_traj == traj
+    assert out_contact == "minus_x_face"

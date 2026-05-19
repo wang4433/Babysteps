@@ -41,11 +41,12 @@ def generate_proxy_demo(
     traj = demo_attempt.trajectory_xy
     if not traj:
         traj = (demo_attempt.initial_obj_xy, demo_attempt.final_obj_xy)
+    observed_traj, contact_label = adapter.observe_demo(traj, correct, scene)
     return DemoEvidence(
         camera="third_person",
         demonstrator_type="proxy_oracle",
-        object_trajectory=traj,
-        contact_region_label=correct.contact_region,
+        object_trajectory=observed_traj,
+        contact_region_label=contact_label,
         # Task-aware: read from the oracle intent so each adapter sets its
         # own goal_state label (PushCube: "cube_at_target"; PickCube:
         # "cube_lifted_at_target"). PushCube's value is unchanged →
@@ -121,8 +122,11 @@ def _compute_metrics(
     }
 
 
+_DIFF_FIELDS: tuple[str, ...] = INTENT_FIELDS + ("direction_grounding",)
+
+
 def _diff_intents(a: Intent, b: Intent) -> tuple[str, ...]:
-    return tuple(f for f in INTENT_FIELDS if getattr(a, f) != getattr(b, f))
+    return tuple(f for f in _DIFF_FIELDS if getattr(a, f) != getattr(b, f))
 
 
 # ---------- the loop --------------------------------------------------- #

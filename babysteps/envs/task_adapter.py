@@ -137,3 +137,12 @@ class BaseTaskAdapter(ABC):
         introduces a new REVISION_OPERATORS entry."""
         from babysteps import revision as revision_mod
         return revision_mod.revise_intent(intent, attribution, scene)
+
+    def observe_demo(
+        self, object_trajectory, correct_intent, scene,
+    ):
+        """How the demo is *observed* before intent extraction. Default is
+        identity: the proxy demo is observed in the same frame it was executed.
+        Returns (object_trajectory, contact_region_label). Override for tasks
+        whose demo view differs from the execution view (cross-view)."""
+        return object_trajectory, correct_intent.contact_region
