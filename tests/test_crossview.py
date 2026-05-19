@@ -86,3 +86,52 @@ def test_world_resolved_intent_recovers_world_face():
     assert world.object_motion == "translate_+x"
     assert world.contact_region == "minus_x_face"
     assert world.approach_direction == "from_minus_x"
+
+
+from babysteps.failure import Attribution
+from babysteps.revision import revise_intent
+from babysteps.schemas import INTENT_FIELDS, Intent, SceneState
+
+
+def _cv_initial_intent() -> Intent:
+    return Intent(
+        goal_state="cube_at_target", object_motion="translate_-x",
+        contact_region="plus_x_face", approach_direction="from_plus_x",
+        constraint_region="none", embodiment_mapping="proxy_contact_to_franka_push",
+        direction_grounding="actor_frame",
+    )
+
+
+def _dummy_scene() -> SceneState:
+    return SceneState(
+        cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.1, 0.0),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(), extra={"observer_yaw_deg": 180},
+    )
+
+
+def test_grounding_substitution_flips_only_grounding():
+    intent = _cv_initial_intent()
+    attribution = Attribution(
+        semantic_failure=True, wrong_factor="direction_grounding",
+        freeze=INTENT_FIELDS, revise=("direction_grounding",),
+    )
+    revised, rev = revise_intent(intent, attribution, _dummy_scene())
+    assert revised.direction_grounding == "observer_frame"
+    # Every six-tuple factor is unchanged.
+    for f in INTENT_FIELDS:
+        assert getattr(revised, f) == getattr(intent, f)
+    assert rev.operator == "grounding_substitution"
+    assert rev.factor == "direction_grounding"
+    assert rev.old_value == "actor_frame" and rev.new_value == "observer_frame"
+
+
+def test_grounding_substitution_rejects_non_actor_frame():
+    intent = _cv_initial_intent()
+    intent = Intent.from_dict({**intent.to_dict(), "direction_grounding": "observer_frame"})
+    attribution = Attribution(
+        semantic_failure=True, wrong_factor="direction_grounding",
+        freeze=INTENT_FIELDS, revise=("direction_grounding",),
+    )
+    with pytest.raises(NotImplementedError):
+        revise_intent(intent, attribution, _dummy_scene())

@@ -213,6 +213,27 @@ def revise_intent(
         )
         return revised, rev
 
+    if attribution.wrong_factor == "direction_grounding":
+        # Sub-project E: pure single-factor swap. Only actor_frame →
+        # observer_frame is supported in Stage-0.
+        if intent.direction_grounding != "actor_frame":
+            raise NotImplementedError(
+                f"grounding_substitution handles only actor_frame → "
+                f"observer_frame (got {intent.direction_grounding!r}). See "
+                f"docs/superpowers/specs/2026-05-19-stage0-crossview-grounding-design.md §6"
+            )
+        revised = replace(intent, direction_grounding="observer_frame")
+        # INTENT_FIELDS is the six-tuple; direction_grounding (the revised
+        # factor) is excluded from it, so every frozen factor is preserved.
+        rev = Revision(
+            operator="grounding_substitution",
+            factor="direction_grounding",
+            old_value="actor_frame",
+            new_value="observer_frame",
+            frozen_factors=INTENT_FIELDS,
+        )
+        return revised, rev
+
     raise NotImplementedError(
         f"Stage-0 reviser handles 'approach_direction', 'contact_region', "
         f"'goal_state', and 'constraint_region'; got "
