@@ -58,6 +58,12 @@ CONSTRAINT_REGIONS: frozenset[str] = frozenset({
     "none",
     "faucet_base_static",   # D: TurnFaucet — body must not be displaced
 })
+DIRECTION_GROUNDINGS: frozenset[str] = frozenset({
+    "actor_frame",       # E: cross-view — egocentric (identity) grounding; the bug
+    "observer_frame",    # E: cross-view — account for the observer camera yaw; the fix
+    "object_frame",      # E: reserved (later cut)
+    "world_frame",       # E: default for non-cross-view tasks; inert
+})
 
 FAILURE_PREDICATES: frozenset[str] = frozenset({
     "none",
@@ -76,6 +82,7 @@ REVISION_OPERATORS: frozenset[str] = frozenset({
     "goal_refinement",                 # C: StackCube — sharpen under-specified goal
     "constraint_introduction",         # D: deprecated, kept in whitelist
     "embodiment_substitution",         # D: NEW — swap grasp_turn → poke_turn
+    "grounding_substitution",          # E: cross-view — swap actor_frame → observer_frame
 })
 
 CLAIM_BOUNDARY: str = "third_person_demo_proxy_not_human_demo"
