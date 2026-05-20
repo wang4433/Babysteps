@@ -110,8 +110,12 @@ def render_episode(env, adapter, seed: int, fps: int) -> tuple[dict, dict]:
     retry_frames: list = []
     out_r = _execute_push(env, wp_r, retry_frames, seed=seed)
 
+    # NOTE: all phases render from PushCube's default (world) camera. The
+    # observer yaw is applied to the grounding math (observe_demo / resolution),
+    # not to a physically rotated SAPIEN camera — so the banner says "world
+    # camera" with the observer yaw as metadata, not "observer view".
     demo_title = (
-        f"{short_id}  phase 1/3: demo (observer view, yaw={yaw}deg)",
+        f"{short_id}  phase 1/3: demo (world camera, observer yaw={yaw}deg)",
         f"object moved to target; observed contact_region={contact_label}",
     )
     a1_title = (

@@ -68,7 +68,12 @@ class CrossViewPushAdapter(BaseTaskAdapter):
             direction_grounding="actor_frame",
         )
 
-    def observe_demo(self, object_trajectory, correct_intent, scene):
+    def observe_demo(
+        self,
+        object_trajectory: tuple[tuple[float, float], ...],
+        correct_intent: Intent,
+        scene: SceneState,
+    ) -> tuple[tuple[tuple[float, float], ...], str]:
         """Rotate the world demo trajectory into the observer frame (-yaw)."""
         yaw = int(scene.extra["observer_yaw_deg"])
         origin = object_trajectory[0]

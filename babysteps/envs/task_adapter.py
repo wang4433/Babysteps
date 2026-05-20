@@ -146,8 +146,11 @@ class BaseTaskAdapter(ABC):
         return revision_mod.revise_intent(intent, attribution, scene)
 
     def observe_demo(
-        self, object_trajectory, correct_intent, scene,
-    ):
+        self,
+        object_trajectory: tuple[tuple[float, float], ...],
+        correct_intent: Intent,
+        scene: SceneState,
+    ) -> tuple[tuple[tuple[float, float], ...], str]:
         """How the demo is *observed* before intent extraction. Default is
         identity: the proxy demo is observed in the same frame it was executed.
         Returns (object_trajectory, contact_region_label). Override for tasks

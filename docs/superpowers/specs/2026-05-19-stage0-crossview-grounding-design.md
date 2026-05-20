@@ -199,18 +199,30 @@ the intent-inference path. The yaw is consumed only by `compile_skill`
 
 `babysteps/render/crossview.py` (new), modeled on `render/pushcube.py`:
 
-- **Phase 1 — demo (observer view):** render Robot A's successful push from
-  an **observer camera** placed at yaw `θ_obs` about the world z-axis around
-  the table center, at the same radius/height as the default render camera.
-  Caption describes object motion from the observer's vantage (per memory
-  `feedback_demo_caption_no_motor_program`: object-evidence language, no
-  Franka motor program).
-- **Phase 2 — attempt (actor view):** render Robot B's first attempt from the
-  default robot/actor camera; cube visibly moves the **wrong** way.
-- **Phase 3 — retry (actor view):** render B's corrected attempt; cube reaches
-  the goal.
-- View configs = the set of `θ_obs` rotations. Naming:
-  `crossview_grounding_seed_NNNN__yawDDD__{1_demo,2_attempt,3_retry}.mp4`.
+- **Phase 1 — demo:** render Robot A's successful (world-correct) push. The
+  caption describes the object motion and notes the observer yaw `θ_obs` as
+  metadata (per memory `feedback_demo_caption_no_motor_program`: object-evidence
+  language, no Franka motor program).
+- **Phase 2 — attempt:** render Robot B's first attempt (the `actor_frame`
+  grounding); cube visibly moves the **wrong** way (a real failing push, not a
+  held-still planner failure).
+- **Phase 3 — retry:** render B's corrected (`observer_frame`) attempt; cube
+  reaches the goal.
+- View configs = the set of `θ_obs` rotations.
+
+> **Implemented first-cut deviation (decided during execution, 2026-05-19):**
+> All three phases render from PushCube's **default (world) camera**; the
+> observer yaw is applied to the *grounding math* (`observe_demo` −yaw /
+> `world_resolved_intent` +yaw), **not** to a physically rotated SAPIEN camera.
+> The Phase-1 banner therefore reads "world camera, observer yaw=θ°", not
+> "observer view". The cross-view-ness is carried by the data record
+> (`observer_yaw_deg` + the `actor_frame → observer_frame` revision), which is
+> the claim-bearing artifact; a literal rotated observer camera is a deferred
+> visual enhancement. MP4 naming follows the shared harness's fixed phase keys:
+> `crossview_grounding_seed_NNNN__{1_demo,2_attempt_blocked,3_retry}.mp4`
+> (the `2_attempt_blocked` key is the harness's generic phase-2 label; nothing
+> is "blocked" here — the failure is the frame mis-grounding, stated in the
+> caption).
 
 ---
 
