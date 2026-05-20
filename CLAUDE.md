@@ -117,8 +117,14 @@ srun --account=rpaleja --partition=a100-40gb --gres=gpu:1 --mem=115G --time=00:2
 #     --samples /scratch/gilbreth/wang4433/data_crossview/samples.jsonl \
 #     --out_dir /scratch/gilbreth/wang4433/data_crossview
 # Gate (report.json): delta_pp>=10, passed_acceptance=true,
-#   intent_factor_attribution_accuracy=1.0, frozen_factor_preservation_rate=1.0,
-#   unnecessary_factor_change_rate=0.0.  [observed numbers: TODO after first GPU run]
+#   frozen_factor_preservation_rate=1.0, unnecessary_factor_change_rate=0.0.
+# OBSERVED (job 10737370, 2026-05-20, real PushCube-v1 physics, 24 seeds):
+#   passed_acceptance=true, delta_pp=95.8, initial=0/24, retry=23/24,
+#   preservation=1.0, unnecessary=0.0, attribution=23/24. The 1 miss is
+#   real-sim noise: seed_0019's push missed contact → predicate=contact_failure
+#   (not a grounding error) → correctly delegated to contact_region, not
+#   direction_grounding. All 23 grounding-style failures attributed+fixed.
+#   Render: 9 MP4s; 2_attempt_blocked clips are larger (wrong-way push visible).
 ```
 
 Expected output per task: 2 episodes × 3 MP4s = 6 files in
