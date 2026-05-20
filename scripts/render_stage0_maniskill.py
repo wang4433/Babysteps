@@ -72,7 +72,7 @@ def main(argv=None) -> int:
         videos_dir.mkdir(parents=True, exist_ok=True)
 
         env = gym.make(
-            args.task,
+            adapter.gym_env_id,
             obs_mode="state_dict",
             control_mode="pd_ee_delta_pose",
             sim_backend="cpu",

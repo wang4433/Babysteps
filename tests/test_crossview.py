@@ -308,3 +308,9 @@ def test_crossview_snapshot_byte_stable():
     lines = [r.to_jsonl_line() for r in _run_crossview_episodes()]
     expected = _SNAPSHOT.read_text().splitlines()
     assert lines == expected
+
+
+def test_crossview_render_is_registered():
+    from babysteps.render import get_render_fn
+    fn = get_render_fn("CrossViewPush-v1")
+    assert callable(fn)
