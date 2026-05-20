@@ -84,11 +84,47 @@ srun --account=rpaleja --partition=a100-40gb --gres=gpu:1 --mem=115G --time=00:2
     --seed_start 0 &&
   ls -lh "$OUT_DIR/videos_maniskill"
 '
+
+# CrossViewPush (Sub-project E — direction_grounding revision; per
+# 2026-05-19-stage0-crossview-grounding-design.md)
+# Robot B observes a push demo under a rotated observer view (yaw 90/180/270),
+# mis-grounds the direction (direction_grounding=actor_frame, the egocentric
+# bug), pushes the WRONG way, and BABYSTEPS revises ONLY direction_grounding
+# (grounding_substitution → observer_frame) and retries. Registry key
+# CrossViewPush-v1 runs on the real PushCube-v1 gym env (adapter.gym_env_id).
+# Phase 2 executes a real failing push (not held-still). All phases render
+# from the world camera; the observer yaw lives in the grounding math.
+# Partial physical validation gate: for >=2 seeds the 3_retry MP4 reaches
+# info["success"] and 2_attempt_blocked visibly pushes the wrong way.
+srun --account=rpaleja --partition=a100-40gb --gres=gpu:1 --mem=115G --time=00:20:00 bash -lc '
+  cd /scratch/gilbreth/wang4433/babysteps &&
+  source /apps/external/conda/2025.09/etc/profile.d/conda.sh &&
+  conda activate handover &&
+  OUT_DIR=/scratch/gilbreth/wang4433/render_crossview &&
+  LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH" \
+  python scripts/render_stage0_maniskill.py \
+    --task CrossViewPush-v1 \
+    --out_dir "$OUT_DIR" \
+    --n_episodes 3 \
+    --seed_start 0 &&
+  ls -lh "$OUT_DIR/videos_maniskill"
+'
+
+# CrossViewPush data cut (real sim, ~24 seeds) + summarize:
+#   python scripts/stage0_collect.py --task CrossViewPush-v1 \
+#     --n_episodes 24 --seed_start 0 --out_dir /scratch/gilbreth/wang4433/data_crossview
+#   python scripts/stage0_summarize.py \
+#     --samples /scratch/gilbreth/wang4433/data_crossview/samples.jsonl \
+#     --out_dir /scratch/gilbreth/wang4433/data_crossview
+# Gate (report.json): delta_pp>=10, passed_acceptance=true,
+#   intent_factor_attribution_accuracy=1.0, frozen_factor_preservation_rate=1.0,
+#   unnecessary_factor_change_rate=0.0.  [observed numbers: TODO after first GPU run]
 ```
 
 Expected output per task: 2 episodes × 3 MP4s = 6 files in
 `videos_maniskill/`, named
 `<task_prefix>_seed_NNNN__{1_demo,2_attempt_blocked,3_retry}.mp4`.
+(CrossViewPush above uses 3 episodes → 9 files, prefix `crossview_grounding`.)
 
 - Design: `docs/superpowers/specs/2026-05-15-stage0-pushcube-blocked-design.md`
 - Plan:   `docs/superpowers/plans/2026-05-15-stage0-pushcube-blocked-plan.md`
