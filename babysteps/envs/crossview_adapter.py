@@ -42,7 +42,11 @@ def observer_yaw_for_seed(seed: int) -> int:
 
 
 class CrossViewPushAdapter(BaseTaskAdapter):
-    task_id = "PushCube-v1"   # underlying gym env; registry key is CrossViewPush-v1
+    task_id = "CrossViewPush-v1"   # logical task; gym env is PushCube-v1 (see gym_env_id)
+
+    @property
+    def gym_env_id(self) -> str:
+        return "PushCube-v1"
 
     def make_env_runner(self) -> EnvRunner:
         from babysteps.envs.crossview_runner import CrossViewPushEnvRunner

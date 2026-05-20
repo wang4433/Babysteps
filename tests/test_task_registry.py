@@ -14,6 +14,7 @@ def test_registry_contains_all_stage0_tasks():
     """PushCube-v1 (A), PickCube-v1 (B), StackCube-v1 (C), and TurnFaucet-v1 (D) must be present."""
     assert set(TASK_REGISTRY.keys()) == {
         "PushCube-v1", "PickCube-v1", "StackCube-v1", "TurnFaucet-v1",
+        "CrossViewPush-v1",
     }
 
 

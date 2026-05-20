@@ -11,6 +11,7 @@ if str(_ROOT) not in sys.path:
 
 import numpy as np  # noqa: E402
 import pytest  # noqa: E402
+from dataclasses import replace  # noqa: E402
 
 from babysteps.envs.scene import direction_to_face, face_to_push_unit  # noqa: E402
 from babysteps.skills.pick import compile_intent_to_pick_skill  # noqa: E402
@@ -421,3 +422,32 @@ class FakeTurnFaucetEnvRunner:
 @pytest.fixture
 def fake_turnfaucet_env_runner() -> FakeTurnFaucetEnvRunner:
     return FakeTurnFaucetEnvRunner()
+
+
+class FakeCrossViewEnvRunner(FakeEnvRunner):
+    """Deterministic, sim-free cross-view runner.
+
+    reset injects the per-seed observer yaw. run resolves the stored intent to
+    world frame (via direction_grounding) then reuses FakeEnvRunner physics:
+    actor_frame (identity) pushes along the observer-relative — i.e. wrong —
+    direction; observer_frame recovers the world push and reaches the goal.
+    """
+
+    OBSERVER_YAWS: tuple[int, ...] = (90, 180, 270)
+
+    def reset(self, seed: int) -> SceneState:
+        base = super().reset(seed)
+        yaw = self.OBSERVER_YAWS[int(seed) % len(self.OBSERVER_YAWS)]
+        scene = replace(base, extra={**base.extra, "observer_yaw_deg": yaw})
+        self._scenes_by_seed[seed] = scene
+        return scene
+
+    def run(self, intent: Intent, scene: SceneState) -> AttemptResult:
+        from babysteps.envs.scene import world_resolved_intent
+        yaw = int(scene.extra["observer_yaw_deg"])
+        return super().run(world_resolved_intent(intent, yaw), scene)
+
+
+@pytest.fixture
+def fake_crossview_env_runner() -> "FakeCrossViewEnvRunner":
+    return FakeCrossViewEnvRunner()

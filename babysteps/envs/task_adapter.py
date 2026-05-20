@@ -49,6 +49,13 @@ class BaseTaskAdapter(ABC):
 
     task_id: str  # subclasses set, e.g. "PushCube-v1"
 
+    @property
+    def gym_env_id(self) -> str:
+        """Underlying ManiSkill gym env id for gym.make(). Defaults to task_id;
+        override when the logical task (registry key) differs from the gym env
+        (e.g. CrossViewPush is a logical task running on the PushCube-v1 env)."""
+        return self.task_id
+
     def __init_subclass__(cls, **kw: object) -> None:
         super().__init_subclass__(**kw)
         if not isinstance(getattr(cls, "task_id", None), str):

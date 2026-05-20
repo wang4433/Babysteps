@@ -103,11 +103,26 @@ def _turnfaucet_entry() -> TaskEntry:
     )
 
 
+def _crossview_entry() -> TaskEntry:
+    from babysteps.envs.crossview_adapter import CrossViewPushAdapter
+
+    def _make_fake() -> EnvRunner:
+        from tests.conftest import FakeCrossViewEnvRunner
+        return FakeCrossViewEnvRunner()
+
+    return TaskEntry(
+        adapter_cls=CrossViewPushAdapter,
+        fake_runner_factory=_make_fake,
+        episode_id_prefix="crossview_grounding",
+    )
+
+
 TASK_REGISTRY: dict[str, TaskEntry] = {
     "PushCube-v1": _pushcube_entry(),
     "PickCube-v1": _pickcube_entry(),
     "StackCube-v1": _stackcube_entry(),
     "TurnFaucet-v1": _turnfaucet_entry(),
+    "CrossViewPush-v1": _crossview_entry(),
 }
 
 

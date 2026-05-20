@@ -168,7 +168,8 @@ def test_crossview_adapter_methods():
     from babysteps.schemas import DemoEvidence
 
     adapter = CrossViewPushAdapter()
-    assert adapter.task_id == "PushCube-v1"
+    assert adapter.task_id == "CrossViewPush-v1"
+    assert adapter.gym_env_id == "PushCube-v1"
 
     # scripted_demo_to_intent always grounds in actor_frame (the bug).
     evidence = DemoEvidence(
@@ -232,3 +233,36 @@ def _cv_world_oracle() -> Intent:
         constraint_region="none", embodiment_mapping="proxy_contact_to_franka_push",
         direction_grounding="actor_frame",
     )
+
+
+def test_crossview_registry_entry():
+    from babysteps.envs.task_registry import get_task_entry
+    from babysteps.envs.crossview_adapter import CrossViewPushAdapter
+    entry = get_task_entry("CrossViewPush-v1")
+    assert entry.adapter_cls is CrossViewPushAdapter
+    assert entry.episode_id_prefix == "crossview_grounding"
+    runner = entry.fake_runner_factory()
+    assert runner.__class__.__name__ == "FakeCrossViewEnvRunner"
+
+
+def test_fake_crossview_runner_failure_then_success():
+    from tests.conftest import FakeCrossViewEnvRunner
+    from babysteps.envs.crossview_adapter import CrossViewPushAdapter
+    runner = FakeCrossViewEnvRunner()
+    adapter = CrossViewPushAdapter()
+    scene = runner.reset(0)
+    assert scene.extra["observer_yaw_deg"] in (90, 180, 270)
+
+    # The actor_frame initial intent pushes the wrong way.
+    from babysteps.episode import generate_proxy_demo
+    demo = generate_proxy_demo(runner, scene, adapter)
+    initial = adapter.scripted_demo_to_intent(demo)
+    assert initial.direction_grounding == "actor_frame"
+    a1 = runner.run(initial, scene)
+    assert a1.success is False and a1.object_moved is True
+
+    # observer_frame recovers the correct push.
+    from babysteps.schemas import Intent
+    revised = Intent.from_dict({**initial.to_dict(), "direction_grounding": "observer_frame"})
+    a2 = runner.run(revised, scene)
+    assert a2.success is True

@@ -40,6 +40,11 @@ def _turnfaucet_render() -> RenderEpisodeFn:
     return render_episode
 
 
+def _crossview_render() -> RenderEpisodeFn:
+    from babysteps.render.crossview import render_episode
+    return render_episode
+
+
 # Lazy: each entry's import happens on first access via RENDER_REGISTRY[task_id]().
 # This keeps importing babysteps.render cheap when only one task is needed.
 RENDER_REGISTRY: dict[str, Callable[[], RenderEpisodeFn]] = {
@@ -47,6 +52,7 @@ RENDER_REGISTRY: dict[str, Callable[[], RenderEpisodeFn]] = {
     "PickCube-v1": _pickcube_render,
     "StackCube-v1": _stackcube_render,
     "TurnFaucet-v1": _turnfaucet_render,
+    "CrossViewPush-v1": _crossview_render,
 }
 
 
