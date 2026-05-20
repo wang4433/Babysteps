@@ -266,3 +266,45 @@ def test_fake_crossview_runner_failure_then_success():
     revised = Intent.from_dict({**initial.to_dict(), "direction_grounding": "observer_frame"})
     a2 = runner.run(revised, scene)
     assert a2.success is True
+
+
+import pathlib
+
+_SNAPSHOT = pathlib.Path(__file__).parent / "snapshots" / "crossview_samples_seeds_0_4.jsonl"
+
+
+def _run_crossview_episodes(n=5):
+    from babysteps.episode import run_episode
+    from babysteps.envs.crossview_adapter import CrossViewPushAdapter
+    from tests.conftest import FakeCrossViewEnvRunner
+    adapter = CrossViewPushAdapter()
+    adapter._env_runner = FakeCrossViewEnvRunner()   # inject fake (skip make_env_runner)
+    records = [
+        run_episode(
+            episode_id=f"crossview_grounding_seed_{s:04d}", seed=s, adapter=adapter,
+        )
+        for s in range(n)
+    ]
+    adapter.close()
+    return records
+
+
+def test_crossview_loop_revises_only_grounding_and_recovers():
+    for r in _run_crossview_episodes():
+        m = r.metrics
+        # Failure attributed to and corrected via direction_grounding.
+        assert r.failure_packet["wrong_factor"] == "direction_grounding"
+        assert m["oracle_wrong_factor"] == "direction_grounding"
+        assert m["factor_attribution_correct"] is True
+        # Single-factor invariant: exactly direction_grounding changed.
+        assert tuple(m["factors_changed"]) == ("direction_grounding",)
+        assert m["frozen_factors_preserved"] is True
+        # Recovery: initial fails, retry succeeds.
+        assert m["initial_success"] is False
+        assert m["retry_success"] is True
+
+
+def test_crossview_snapshot_byte_stable():
+    lines = [r.to_jsonl_line() for r in _run_crossview_episodes()]
+    expected = _SNAPSHOT.read_text().splitlines()
+    assert lines == expected
