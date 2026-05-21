@@ -56,7 +56,12 @@ class FakeEnvRunner:
             )
         return self._scenes_by_seed[seed]
 
-    def run(self, intent: Intent, scene: SceneState) -> AttemptResult:
+    def run(
+        self, intent: Intent, scene: SceneState, *, rollout_seed: int | None = None
+    ) -> AttemptResult:
+        # Deterministic fake: rollout_seed is accepted for contract parity and
+        # intentionally ignored (no per-rollout stochasticity).
+        _ = rollout_seed
         skill = compile_intent_to_push_skill(intent, scene)
         if skill is None:
             return AttemptResult(
@@ -158,7 +163,12 @@ class FakePickEnvRunner:
             )
         return self._scenes_by_seed[seed]
 
-    def run(self, intent: Intent, scene: SceneState) -> AttemptResult:
+    def run(
+        self, intent: Intent, scene: SceneState, *, rollout_seed: int | None = None
+    ) -> AttemptResult:
+        # Deterministic fake: rollout_seed is accepted for contract parity and
+        # intentionally ignored (no per-rollout stochasticity).
+        _ = rollout_seed
         # Compile-time check: should never return None for PickSkill, but
         # be defensive so a future regression here doesn't silently pass.
         skill = compile_intent_to_pick_skill(intent, scene)
@@ -298,7 +308,12 @@ class FakeStackCubeEnvRunner:
             )
         return self._scenes_by_seed[seed]
 
-    def run(self, intent: Intent, scene: SceneState) -> AttemptResult:
+    def run(
+        self, intent: Intent, scene: SceneState, *, rollout_seed: int | None = None
+    ) -> AttemptResult:
+        # Deterministic fake: rollout_seed is accepted for contract parity and
+        # intentionally ignored (no per-rollout stochasticity).
+        _ = rollout_seed
         # Compile-time sanity (should never raise for valid Intents).
         from babysteps.skills.stack import compile_intent_to_stack_skill
         skill = compile_intent_to_stack_skill(intent, scene)
@@ -384,12 +399,18 @@ class FakeTurnFaucetEnvRunner:
             )
         return self._scenes_by_seed[seed]
 
-    def run(self, intent: Intent, scene: SceneState, *, rollout_log_path=None) -> AttemptResult:
+    def run(
+        self, intent: Intent, scene: SceneState, *, rollout_seed: int | None = None,
+        rollout_log_path=None
+    ) -> AttemptResult:
         """Spec §11 outcome rule:
           poke_turn  → success=True,  object_moved=True,  reached_contact=True
           grasp_turn → success=False, object_moved=False, reached_contact=True
           (failure_packet derives grasp_infeasible from these flags + intent)
         """
+        # Deterministic fake: rollout_seed is accepted for contract parity and
+        # intentionally ignored (no per-rollout stochasticity).
+        _ = rollout_seed
         from babysteps.skills.turn import compile_intent_to_turn_skill
         skill = compile_intent_to_turn_skill(intent, scene)
         assert skill is not None
@@ -442,7 +463,12 @@ class FakeCrossViewEnvRunner(FakeEnvRunner):
         self._scenes_by_seed[seed] = scene
         return scene
 
-    def run(self, intent: Intent, scene: SceneState) -> AttemptResult:
+    def run(
+        self, intent: Intent, scene: SceneState, *, rollout_seed: int | None = None
+    ) -> AttemptResult:
+        # Deterministic fake: rollout_seed is accepted for contract parity and
+        # intentionally ignored (no per-rollout stochasticity).
+        _ = rollout_seed
         from babysteps.envs.scene import world_resolved_intent
         yaw = int(scene.extra["observer_yaw_deg"])
         return super().run(world_resolved_intent(intent, yaw), scene)

@@ -160,3 +160,16 @@ def test_run_episode_one_shot_policy_has_no_retry(fake_env_runner):
 def test_run_episode_default_policy_is_selective(fake_env_runner):
     params = inspect.signature(run_episode).parameters
     assert "policy" in params
+
+
+def test_env_runner_run_accepts_rollout_seed(fake_env_runner):
+    # The fake runner must accept the optional kwarg (deterministic: ignored).
+    from babysteps.schemas import Intent, SceneState
+    scene = fake_env_runner.reset(0)
+    intent = Intent(
+        goal_state="cube_at_target", object_motion="translate_+x",
+        contact_region="plus_x_face", approach_direction="from_minus_x",
+        constraint_region="none", embodiment_mapping="proxy_contact_to_franka_push")
+    r1 = fake_env_runner.run(intent, scene, rollout_seed=1)
+    r2 = fake_env_runner.run(intent, scene, rollout_seed=2)
+    assert r1.success == r2.success  # deterministic fake env

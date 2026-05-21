@@ -317,7 +317,10 @@ def run_episode(
         )
 
     revised_intent, revision_record = proposal
-    attempt_2 = env_runner.run(revised_intent, scene_executor)
+    attempt_2 = env_runner.run(
+        revised_intent, scene_executor,
+        rollout_seed=_stable_hash(seed, "attempt_2"),
+    )
     factors_changed = _diff_intents(initial_intent, revised_intent)
 
     fp_dict = {
