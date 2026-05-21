@@ -75,3 +75,13 @@ class PushCubeAdapter(BaseTaskAdapter):
 
     def compile_skill(self, intent: Intent, scene: SceneState):
         return compile_intent_to_push_skill(intent, scene)
+
+    def task_valid_tokens(self) -> dict[str, tuple[str, ...]]:
+        return {
+            "approach_direction": (
+                "from_minus_x", "from_plus_x", "from_minus_y", "from_plus_y",
+            ),
+            "contact_region": (
+                "minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face",
+            ),
+        }

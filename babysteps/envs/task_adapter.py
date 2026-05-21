@@ -156,3 +156,12 @@ class BaseTaskAdapter(ABC):
         Returns (object_trajectory, contact_region_label). Override for tasks
         whose demo view differs from the execution view (cross-view)."""
         return object_trajectory, correct_intent.contact_region
+
+    def task_valid_tokens(self) -> dict[str, tuple[str, ...]]:
+        """Per-factor task-valid alternative tokens for baseline resampling.
+
+        Keys are the *task-editable* factors (those with >1 plausible token
+        for this task). Values are the plausible tokens. Default: no editable
+        factors. The three main-table adapters override. Used only by the M3
+        baseline policies; the selective loop never calls this."""
+        return {}

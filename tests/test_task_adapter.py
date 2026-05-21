@@ -223,3 +223,18 @@ def test_subclass_without_task_id_raises_at_definition():
             def oracle_wrong_factor(self, initial_intent, scene_executor): return "none"
             def scripted_demo_to_intent(self, evidence): return _ok_intent()
             def compile_skill(self, intent, scene): return None
+
+
+def test_base_task_valid_tokens_defaults_empty():
+    from babysteps.envs.task_adapter import BaseTaskAdapter
+
+    class _Stub(BaseTaskAdapter):
+        task_id = "PushCube-v1"
+        def make_env_runner(self): raise NotImplementedError
+        def oracle_correct_intent(self, scene): raise NotImplementedError
+        def default_blocked_factory(self, intent): return ()
+        def oracle_wrong_factor(self, i, s): return "none"
+        def scripted_demo_to_intent(self, e): raise NotImplementedError
+        def compile_skill(self, i, s): return None
+
+    assert _Stub().task_valid_tokens() == {}

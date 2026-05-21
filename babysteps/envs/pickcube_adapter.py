@@ -86,3 +86,11 @@ class PickCubeAdapter(BaseTaskAdapter):
 
     def compile_skill(self, intent: Intent, scene: SceneState):
         return compile_intent_to_pick_skill(intent, scene)
+
+    def task_valid_tokens(self) -> dict[str, tuple[str, ...]]:
+        # PickCube's controlled fault is a slip-prone contact face.
+        return {
+            "contact_region": (
+                "minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face",
+            ),
+        }

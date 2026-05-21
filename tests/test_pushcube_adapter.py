@@ -206,6 +206,19 @@ def test_hooks_inherited_from_base():
 # ---------- Snapshot acceptance test ----------------------------------- #
 
 
+def test_pushcube_task_valid_tokens():
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+    toks = PushCubeAdapter().task_valid_tokens()
+    # PushCube edits approach_direction and contact_region only.
+    assert set(toks) == {"approach_direction", "contact_region"}
+    assert set(toks["contact_region"]) == {
+        "minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face",
+    }
+    assert set(toks["approach_direction"]) == {
+        "from_minus_x", "from_plus_x", "from_minus_y", "from_plus_y",
+    }
+
+
 def test_pushcube_adapter_samples_jsonl_matches_pre_a_snapshot(fake_env_runner):
     """The byte-equality regression bar for Sub-project A.
 
