@@ -53,14 +53,18 @@ def test_cube_at_target_has_four_waypoints():
 
 def test_cubeA_on_cubeB_final_waypoint_is_above_cubeB_top():
     """The place_on waypoint puts the TCP at cubeB_top_z + CUBE_HALF_SIZE +
-    PLACE_CLEARANCE_M so cubeA settles on top after gripper release."""
+    GRASP_TCP_OFFSET_M + PLACE_CLEARANCE_M so the grasped cubeA's underside
+    rests just above cubeB's top before release (the grasp offset keeps the
+    closed descent from driving cubeA into cubeB)."""
     from babysteps.skills.stack import (
-        CUBE_HALF_SIZE, PLACE_CLEARANCE_M, compile_intent_to_stack_skill,
+        CUBE_HALF_SIZE, GRASP_TCP_OFFSET_M, PLACE_CLEARANCE_M,
+        compile_intent_to_stack_skill,
     )
     scene = _scene(cubeB_xy=(0.12, 0.05), cubeB_z=0.02)
     skill = compile_intent_to_stack_skill(_intent("cubeA_on_cubeB"), scene)
     final = skill.waypoints[-1]
-    expected_z = scene.extra["cubeB_top_z"] + CUBE_HALF_SIZE + PLACE_CLEARANCE_M
+    expected_z = (scene.extra["cubeB_top_z"] + CUBE_HALF_SIZE
+                  + GRASP_TCP_OFFSET_M + PLACE_CLEARANCE_M)
     assert final[0] == pytest.approx(0.12)
     assert final[1] == pytest.approx(0.05)
     assert final[2] == pytest.approx(expected_z)
