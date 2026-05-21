@@ -39,9 +39,18 @@ CUBE_HALF_SIZE: float = 0.02
 # PD controller a soft landing before grasp_close.
 DESCEND_CLEARANCE_M: float = 0.02
 
-# Vertical gap above cubeB's top at the place_on waypoint. Small enough
-# that cubeA settles onto cubeB without overshooting.
-PLACE_CLEARANCE_M: float = 0.005
+# Vertical offset at the place_on waypoint, relative to cubeA's resting height
+# on cubeB. NEGATIVE = a slight downward press: during the release dwell the
+# controller keeps driving toward this target, so seating cubeA a few mm into
+# the rest pose (cubeB resists) removes the post-release drop that otherwise
+# let cubeA slide off the stack.
+PLACE_CLEARANCE_M: float = -0.004
+
+# Vertical offset between the TCP frame and the grasped cube's centre for a
+# top-down grasp (TCP sits ~16 mm above the cube centre while gripping —
+# measured from real StackCube-v1 rollouts). The place waypoint must add this
+# so the descent rests cubeA *on* cubeB instead of driving it into cubeB.
+GRASP_TCP_OFFSET_M: float = 0.016
 
 
 @dataclass(frozen=True)
@@ -108,7 +117,9 @@ def _build_place_on_waypoints(scene: SceneState) -> np.ndarray:
     wp[3, 0:2] = cubeB_xy
     wp[3, 2] = travel_z
     wp[4, 0:2] = cubeB_xy
-    wp[4, 2] = cubeB_top_z + CUBE_HALF_SIZE + PLACE_CLEARANCE_M
+    # TCP target so the grasped cubeA's underside ends just above cubeB's top:
+    # cube-centre rest height (cubeB_top + half) + grasp offset + release gap.
+    wp[4, 2] = cubeB_top_z + CUBE_HALF_SIZE + GRASP_TCP_OFFSET_M + PLACE_CLEARANCE_M
     wp[:, 3:7] = tcp[3:7]
     return wp
 

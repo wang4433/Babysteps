@@ -38,6 +38,18 @@ _POS_SCALE: float = 0.1
 _PHASE_TOL_M: float = 0.015
 _MAX_CONTROL_STEPS: int = 400         # matches PickCubeEnvRunner
 
+# StackCube-v1's default TimeLimit truncates at 50 steps — far short of the
+# multi-phase open-loop pick-and-place (which needs ~70 with the grasp/settle
+# dwells below). Override it at gym.make so the trajectory can finish.
+_MAX_EPISODE_STEPS: int = 200
+
+# Dwell lengths: hold the waypoint while the gripper finishes closing on the
+# grasp / while cubeA settles and the arm goes static after release. Both are
+# required for StackCube-v1's success check (cubeA on cubeB, not grasped,
+# static) — a real grasp+place, not widened tolerances.
+_GRASP_DWELL_STEPS: int = 15
+_SETTLE_DWELL_STEPS: int = 25
+
 _GRIPPER_OPEN: float = 1.0
 _GRIPPER_CLOSED: float = -1.0
 
@@ -104,6 +116,7 @@ class StackCubeEnvRunner:
             obs_mode="state_dict",
             control_mode="pd_ee_delta_pose",
             sim_backend="cpu",
+            max_episode_steps=_MAX_EPISODE_STEPS,
         )
         self._last_seed: Optional[int] = None
 
@@ -154,17 +167,26 @@ class StackCubeEnvRunner:
         ]
 
         n_phases = len(targets)
+        # Per phase: gripper command WHILE approaching the waypoint, gripper
+        # command DURING the post-arrival dwell, and dwell length (steps).
         if n_phases == 4:
-            # cube_at_target: [approach, descend, grasp, translate-release]
-            phase_gripper = (
-                _GRIPPER_OPEN, _GRIPPER_OPEN, _GRIPPER_CLOSED, _GRIPPER_OPEN,
-            )
+            # cube_at_target (under-specified demo): translate + low release.
+            # Deliberately the scattering failure — no dwell, unchanged.
+            approach_grip = (_GRIPPER_OPEN, _GRIPPER_OPEN, _GRIPPER_CLOSED, _GRIPPER_OPEN)
+            dwell_grip = approach_grip
+            dwell_len = (0, 0, 0, 0)
         elif n_phases == 5:
-            # cubeA_on_cubeB: [approach, descend, grasp, lift, place_on]
-            phase_gripper = (
+            # cubeA_on_cubeB: approach, descend(open), grasp(close+dwell),
+            # lift-over-B(closed), place(descend closed → release+settle).
+            approach_grip = (
+                _GRIPPER_OPEN, _GRIPPER_OPEN, _GRIPPER_OPEN,
+                _GRIPPER_CLOSED, _GRIPPER_CLOSED,
+            )
+            dwell_grip = (
                 _GRIPPER_OPEN, _GRIPPER_OPEN, _GRIPPER_CLOSED,
                 _GRIPPER_CLOSED, _GRIPPER_OPEN,
             )
+            dwell_len = (0, 0, _GRASP_DWELL_STEPS, 0, _SETTLE_DWELL_STEPS)
         else:
             raise RuntimeError(
                 f"StackCubeEnvRunner: unexpected waypoint count {n_phases}; "
@@ -173,6 +195,8 @@ class StackCubeEnvRunner:
 
         trajectory: list[tuple[float, float]] = []
         phase_idx = 0
+        dwelling = False
+        dwell_remaining = 0
         reached_contact = False
         success = False
 
@@ -180,22 +204,35 @@ class StackCubeEnvRunner:
             tcp, cubeA_xy, _cubeA_z, _cubeB_xy, _cubeB_z = _read_obs(obs)
             trajectory.append((float(cubeA_xy[0]), float(cubeA_xy[1])))
             target = targets[phase_idx]
-            if np.linalg.norm(target - tcp[0:3]) < _PHASE_TOL_M:
-                phase_idx += 1
-                if phase_idx >= n_phases:
-                    break
-                target = targets[phase_idx]
+            # Advance phase (or begin its dwell) once the waypoint is reached.
+            if not dwelling and np.linalg.norm(target - tcp[0:3]) < _PHASE_TOL_M:
+                if dwell_len[phase_idx] > 0:
+                    dwelling = True
+                    dwell_remaining = dwell_len[phase_idx]
+                else:
+                    phase_idx += 1
+                    if phase_idx >= n_phases:
+                        break
+                    target = targets[phase_idx]
             # Contact heuristic: TCP near cubeA, post-approach.
             if phase_idx >= 1:
                 reached_contact = reached_contact or _gripper_at_cubeA(
                     tcp, cubeA_xy, skill.cubeA_z,
                 )
-            action = _prop_action(tcp, target, phase_gripper[phase_idx])
+            grip = dwell_grip[phase_idx] if dwelling else approach_grip[phase_idx]
+            action = _prop_action(tcp, target, grip)
             obs, _r, terminated, truncated, info = self._env.step(action)
             term = bool(_to_np(terminated).item()) if hasattr(terminated, "cpu") else bool(terminated)
             trunc = bool(_to_np(truncated).item()) if hasattr(truncated, "cpu") else bool(truncated)
             succ_field = info.get("success", False) if hasattr(info, "get") else False
             success = bool(_to_np(succ_field).item()) if hasattr(succ_field, "cpu") else bool(succ_field)
+            if dwelling:
+                dwell_remaining -= 1
+                if dwell_remaining <= 0:
+                    dwelling = False
+                    phase_idx += 1
+                    if phase_idx >= n_phases:
+                        break
             if success or term or trunc:
                 break
 
