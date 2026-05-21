@@ -20,16 +20,11 @@ Each seed has three files: `__1_demo.mp4`, `__2_attempt_blocked.mp4`,
 
 ## Collected GPU-job renders
 
-Bulk renders pulled in from the GPU jobs also live here (one folder per job,
-not per task). These mirror the out-of-repo job output dirs:
-
-```text
-renders/
-  render_post_a_geomfix/   PushCube, post Sub-project A geometry fix (manual run)
-  render_crossview/        CrossViewPush, crossview_gpu.sbatch step 1
-  data_crossview/          CrossViewPush acceptance-gate data (report + samples, not video)
-  render_baseline_verify/  M3 baseline verify: 3 tasks + PushCube selective-vs-full_replan contrast
-```
+Bulk per-job render dumps (e.g. `render_crossview/`, `render_baseline_verify/`,
+`render_post_a_geomfix/`, `data_crossview/`) may also be collected here when a
+GPU job writes them. They are **not kept** — regenerate on demand from the
+sbatch that produced them (see `slurm/` + `RUNBOOK.md`). Only the curated
+per-task clips above are retained locally.
 
 ## What the three clips should show
 
