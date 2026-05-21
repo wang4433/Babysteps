@@ -83,6 +83,11 @@ REVISION_OPERATORS: frozenset[str] = frozenset({
     "constraint_introduction",         # D: deprecated, kept in whitelist
     "embodiment_substitution",         # D: NEW — swap grasp_turn → poke_turn
     "grounding_substitution",          # E: cross-view — swap actor_frame → observer_frame
+    # M3 baselines — procedural retry policies (not single-factor operators):
+    "same_intent_retry",
+    "random_factor_revision",
+    "text_feedback_replan",
+    "full_replan_analogue",
 })
 
 CLAIM_BOUNDARY: str = "third_person_demo_proxy_not_human_demo"

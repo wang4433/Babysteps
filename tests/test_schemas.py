@@ -545,3 +545,14 @@ def test_old_d_tokens_remain_deprecated_but_present():
     assert "faucet_base_static" in CONSTRAINT_REGIONS
     assert "constraint_violation" in FAILURE_PREDICATES
     assert "constraint_introduction" in REVISION_OPERATORS
+
+
+def test_baseline_revision_operators_whitelisted():
+    from babysteps.schemas import REVISION_OPERATORS
+    for op in (
+        "same_intent_retry",
+        "random_factor_revision",
+        "text_feedback_replan",
+        "full_replan_analogue",
+    ):
+        assert op in REVISION_OPERATORS
