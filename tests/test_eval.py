@@ -172,3 +172,55 @@ def test_write_report_title_pushcube_default(tmp_path: Path):
     assert title_line == "# BABYSTEPS Stage 0 — PushCube Report", (
         f"unexpected title line: {title_line!r}"
     )
+
+
+def _baseline_record(*, correct_fixed, harmful, n_should, n_preserved,
+                     initial_success=False, retry_success=True, revised=True):
+    from babysteps.schemas import EpisodeRecord
+    metrics = {
+        "initial_success": initial_success,
+        "retry_success": retry_success,
+        "num_attempts_to_success": 2 if retry_success else 2,
+        "wrong_factor_predicted": "contact_region",
+        "oracle_wrong_factor": "contact_region",
+        "factor_attribution_correct": True,
+        "factors_changed": ["contact_region"],
+        "frozen_factors_preserved": True,
+        "correct_factor_fixed": correct_fixed,
+        "harmful_revision": harmful,
+        "n_should_preserve": n_should,
+        "n_preserved": n_preserved,
+    }
+    return EpisodeRecord(
+        episode_id="x", stage="stage_0", task="PushCube-v1",
+        claim_boundary="third_person_demo_proxy_not_human_demo",
+        demo={}, execution={}, failure_packet={},
+        revision={} if revised else None,
+        retry={"success": retry_success} if revised else None,
+        metrics=metrics)
+
+
+def test_compute_metrics_baseline_columns():
+    recs = [
+        _baseline_record(correct_fixed=True, harmful=False, n_should=1, n_preserved=1),
+        _baseline_record(correct_fixed=True, harmful=True, n_should=2, n_preserved=0),
+    ]
+    m = compute_metrics(recs)
+    assert m["correct_factor_fixed_rate"] == 1.0
+    assert m["harmful_revision_rate"] == 0.5
+    # preserved/should = (1 + 0) / (1 + 2)
+    assert abs(m["frozen_preservation_rate_gt"] - (1 / 3)) < 1e-9
+
+
+def test_compute_metrics_baseline_columns_absent_when_no_keys():
+    # Records without baseline keys → rates default to 0.0, evaluated count 0.
+    from babysteps.schemas import EpisodeRecord
+    rec = EpisodeRecord(
+        episode_id="x", stage="stage_0", task="PushCube-v1",
+        claim_boundary="third_person_demo_proxy_not_human_demo",
+        demo={}, execution={}, failure_packet={}, revision={}, retry={},
+        metrics={"initial_success": False, "retry_success": True,
+                 "factors_changed": ["contact_region"]})
+    m = compute_metrics([rec])
+    assert m["n_baseline_evaluated"] == 0
+    assert m["correct_factor_fixed_rate"] == 0.0

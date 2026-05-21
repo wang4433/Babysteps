@@ -87,6 +87,28 @@ def compute_metrics(records: Iterable[EpisodeRecord]) -> dict:
         sum(succ_attempts) / len(succ_attempts) if succ_attempts else 0.0
     )
 
+    # M3 baseline metrics (present only on baseline runs; absent → 0 / count 0).
+    n_baseline_evaluated = 0
+    n_correct_factor_fixed = 0
+    n_harmful = 0
+    total_should_preserve = 0
+    total_preserved = 0
+    for r in records_list:
+        m = r.metrics
+        if "correct_factor_fixed" not in m:
+            continue
+        n_baseline_evaluated += 1
+        if m.get("correct_factor_fixed") is True:
+            n_correct_factor_fixed += 1
+        if m.get("harmful_revision") is True:
+            n_harmful += 1
+        total_should_preserve += int(m.get("n_should_preserve", 0))
+        total_preserved += int(m.get("n_preserved", 0))
+
+    correct_factor_fixed_rate = _safe_div(n_correct_factor_fixed, n_baseline_evaluated)
+    harmful_revision_rate = _safe_div(n_harmful, n_baseline_evaluated)
+    frozen_preservation_rate_gt = _safe_div(total_preserved, total_should_preserve)
+
     passed = round(delta_pp, 10) >= ACCEPTANCE_DELTA_PP_THRESHOLD
 
     return {
@@ -108,6 +130,10 @@ def compute_metrics(records: Iterable[EpisodeRecord]) -> dict:
         "passed_acceptance": bool(passed),
         "acceptance_threshold_pp": ACCEPTANCE_DELTA_PP_THRESHOLD,
         "task": task_id,
+        "n_baseline_evaluated": n_baseline_evaluated,
+        "correct_factor_fixed_rate": correct_factor_fixed_rate,
+        "harmful_revision_rate": harmful_revision_rate,
+        "frozen_preservation_rate_gt": frozen_preservation_rate_gt,
     }
 
 
