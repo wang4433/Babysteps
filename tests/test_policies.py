@@ -72,3 +72,34 @@ def test_same_intent_retry_keeps_intent_unchanged():
     assert revised == _BASE
     assert rev.operator == "same_intent_retry"
     assert set(rev.frozen_factors) == set(INTENT_FIELDS)
+
+
+from babysteps.policies import babysteps_selective, oracle_factor_revision
+
+
+def _real_revise_ctx(**kw):
+    # revise_fn delegates to the real shared reviser so selective/oracle
+    # produce genuine single-factor edits.
+    from babysteps import revision as revision_mod
+    return _ctx(revise_fn=revision_mod.revise_intent, **kw)
+
+
+def test_selective_revises_attributed_factor():
+    # contact_failure attribution → contact_region revised, others frozen.
+    attr = Attribution(True, "contact_region", tuple(
+        f for f in INTENT_FIELDS if f != "contact_region"), ("contact_region",))
+    out = babysteps_selective(_real_revise_ctx(attribution=attr))
+    assert out is not None
+    revised, rev = out
+    assert rev.factor == "contact_region"
+    assert revised.contact_region != _BASE.contact_region
+
+
+def test_oracle_revises_ground_truth_factor():
+    # Even if attribution is wrong, oracle uses oracle_wrong_factor.
+    wrong_attr = Attribution(True, "approach_direction", (), ("approach_direction",))
+    out = oracle_factor_revision(_real_revise_ctx(
+        attribution=wrong_attr, oracle_wrong_factor="contact_region"))
+    assert out is not None
+    revised, rev = out
+    assert rev.factor == "contact_region"

@@ -75,3 +75,20 @@ def same_intent_retry(ctx: RetryContext) -> Optional[tuple[Intent, Revision]]:
         frozen_factors=INTENT_FIELDS,
     )
     return ctx.initial_intent, rev
+
+
+def babysteps_selective(ctx: RetryContext) -> Optional[tuple[Intent, Revision]]:
+    """Ours: revise only the attributed implicated factor."""
+    return ctx.revise_fn(ctx.initial_intent, ctx.attribution, ctx.scene)
+
+
+def oracle_factor_revision(ctx: RetryContext) -> Optional[tuple[Intent, Revision]]:
+    """Upper bound: revise the ground-truth wrong factor."""
+    factor = ctx.oracle_wrong_factor
+    oracle_attr = Attribution(
+        semantic_failure=True,
+        wrong_factor=factor,
+        freeze=tuple(f for f in INTENT_FIELDS if f != factor),
+        revise=(factor,),
+    )
+    return ctx.revise_fn(ctx.initial_intent, oracle_attr, ctx.scene)
