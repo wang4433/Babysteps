@@ -9,3 +9,15 @@ datasets/stage0_pushcube_blocked/videos/
 datasets/stage0_pushcube_blocked/videos_maniskill/
 datasets/stage0_pushcube_blocked/rollouts/
 /tmp/
+
+# Render artifacts (MP4s + gate data) — local only, never committed.
+# Keep the directory's CLAUDE.md trackable so the docs can still be committed.
+renders/*
+!renders/CLAUDE.md
+
+# SLURM job logs — artifacts (the gate numbers live in slurm/CLAUDE.md + specs).
+slurm/logs/
+
+# Scratch GPU diagnostics — not part of the tested codebase (see scripts/CLAUDE.md).
+scripts/_diag_*.py
+slurm/_diag_*.sbatch
