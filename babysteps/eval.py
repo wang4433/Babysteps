@@ -107,7 +107,12 @@ def compute_metrics(records: Iterable[EpisodeRecord]) -> dict:
 
     correct_factor_fixed_rate = _safe_div(n_correct_factor_fixed, n_baseline_evaluated)
     harmful_revision_rate = _safe_div(n_harmful, n_baseline_evaluated)
-    frozen_preservation_rate_gt = _safe_div(total_preserved, total_should_preserve)
+    # Undefined when nothing should be preserved (e.g. PickCube, whose only
+    # editable factor IS the implicated one) → report None (n/a), not 0.0.
+    frozen_preservation_rate_gt = (
+        _safe_div(total_preserved, total_should_preserve)
+        if total_should_preserve > 0 else None
+    )
 
     passed = round(delta_pp, 10) >= ACCEPTANCE_DELTA_PP_THRESHOLD
 
@@ -203,11 +208,13 @@ def compute_comparison_table(
     for method in methods:
         row: dict = {"method": method}
         for col, _dir in COMPARISON_COLUMNS:
-            per_task = {
-                t: float(metrics_by_method_task[method][t].get(col, 0.0))
-                for t in tasks
-            }
-            per_task["mean"] = sum(per_task.values()) / len(tasks)
+            per_task = {}
+            for t in tasks:
+                v = metrics_by_method_task[method][t].get(col, 0.0)
+                per_task[t] = None if v is None else float(v)
+            # Mean over DEFINED tasks only; all-undefined → None.
+            defined = [v for v in per_task.values() if v is not None]
+            per_task["mean"] = sum(defined) / len(defined) if defined else None
             row[col] = per_task
         rows.append(row)
     return {"methods": methods, "tasks": tasks, "rows": rows}
@@ -229,8 +236,10 @@ def write_comparison_table(table: dict, out_path: Path) -> None:
         cells = [row["method"]]
         for col, _dir in COMPARISON_COLUMNS:
             for t in tasks:
-                cells.append(f"{row[col][t]:.2f}")
-            cells.append(f"{row[col]['mean']:.2f}")
+                v = row[col][t]
+                cells.append("n/a" if v is None else f"{v:.2f}")
+            mv = row[col]["mean"]
+            cells.append("n/a" if mv is None else f"{mv:.2f}")
         lines.append("| " + " | ".join(cells) + " |")
     caption = (
         "\n> Stage-0 procedural baseline table. *full_replan_analogue* and "

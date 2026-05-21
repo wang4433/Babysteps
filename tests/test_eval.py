@@ -226,6 +226,46 @@ def test_compute_metrics_baseline_columns_absent_when_no_keys():
     assert m["correct_factor_fixed_rate"] == 0.0
 
 
+def test_preservation_rate_na_when_nothing_to_preserve():
+    """When every episode has an empty should-preserve set (e.g. PickCube,
+    whose only editable factor IS the implicated one), preservation is
+    undefined — report None (n/a), not a misleading 0.0."""
+    recs = [
+        _baseline_record(correct_fixed=True, harmful=False, n_should=0, n_preserved=0),
+        _baseline_record(correct_fixed=True, harmful=False, n_should=0, n_preserved=0),
+    ]
+    m = compute_metrics(recs)
+    assert m["frozen_preservation_rate_gt"] is None
+    # correct_factor_fixed is still well-defined.
+    assert m["correct_factor_fixed_rate"] == 1.0
+
+
+def test_comparison_table_renders_na_and_excludes_from_mean(tmp_path):
+    from babysteps.eval import compute_comparison_table, write_comparison_table
+    # PickCube preservation is None (undefined); Push/Stack are defined.
+    def cell(pres):
+        return {"final_success_rate": 1.0, "retry_success_rate": 1.0,
+                "correct_factor_fixed_rate": 1.0,
+                "frozen_preservation_rate_gt": pres,
+                "harmful_revision_rate": 0.0,
+                "num_attempts_to_success_mean": 2.0}
+    methods = ["babysteps_selective"]
+    tasks = ["PushCube-v1", "PickCube-v1", "StackCube-v1"]
+    by = {"babysteps_selective": {
+        "PushCube-v1": cell(1.0),
+        "PickCube-v1": cell(None),
+        "StackCube-v1": cell(1.0),
+    }}
+    table = compute_comparison_table(by, methods=methods, tasks=tasks)
+    pres = table["rows"][0]["frozen_preservation_rate_gt"]
+    assert pres["PickCube-v1"] is None
+    # mean averages only the two DEFINED tasks → 1.0, not (1+0+1)/3.
+    assert pres["mean"] == pytest.approx(1.0)
+    out = tmp_path / "table.md"
+    write_comparison_table(table, out)
+    assert "n/a" in out.read_text()
+
+
 def test_compute_comparison_table_shape_and_order(tmp_path):
     from babysteps.eval import compute_comparison_table, write_comparison_table
     # metrics_by_method_task[method][task] = a compute_metrics() dict.
