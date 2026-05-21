@@ -224,3 +224,23 @@ def test_compute_metrics_baseline_columns_absent_when_no_keys():
     m = compute_metrics([rec])
     assert m["n_baseline_evaluated"] == 0
     assert m["correct_factor_fixed_rate"] == 0.0
+
+
+def test_compute_comparison_table_shape_and_order(tmp_path):
+    from babysteps.eval import compute_comparison_table, write_comparison_table
+    # metrics_by_method_task[method][task] = a compute_metrics() dict.
+    fake_metrics = {"final_success_rate": 0.9, "retry_success_rate": 0.9,
+                    "correct_factor_fixed_rate": 1.0,
+                    "frozen_preservation_rate_gt": 1.0,
+                    "harmful_revision_rate": 0.0,
+                    "num_attempts_to_success_mean": 1.8}
+    methods = ["one_shot", "babysteps_selective", "full_replan_analogue"]
+    tasks = ["PushCube-v1", "PickCube-v1", "StackCube-v1"]
+    by = {mth: {t: dict(fake_metrics) for t in tasks} for mth in methods}
+    table = compute_comparison_table(by, methods=methods, tasks=tasks)
+    assert [row["method"] for row in table["rows"]] == methods
+    # each row has a per-task value + a mean for each column
+    assert "mean" in table["rows"][0]["final_success_rate"]
+    out = tmp_path / "table.md"
+    write_comparison_table(table, out)
+    assert out.exists() and "babysteps_selective" in out.read_text()

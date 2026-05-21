@@ -177,3 +177,67 @@ def write_report(metrics: dict, out_dir: Path) -> None:
         json.dumps(metrics, indent=2, sort_keys=True) + "\n"
     )
     (out_dir / "report.md").write_text(_markdown_report(metrics))
+
+
+# M3 comparison table — columns in reporting order (dir: ↑ better / ↓ better).
+COMPARISON_COLUMNS: tuple[tuple[str, str], ...] = (
+    ("final_success_rate", "↑"),
+    ("retry_success_rate", "↑"),
+    ("correct_factor_fixed_rate", "↑"),
+    ("frozen_preservation_rate_gt", "↑"),
+    ("harmful_revision_rate", "↓"),
+    ("num_attempts_to_success_mean", "↓"),
+)
+
+
+def compute_comparison_table(
+    metrics_by_method_task: dict[str, dict[str, dict]],
+    *,
+    methods: list[str],
+    tasks: list[str],
+) -> dict:
+    """Assemble the 7-method × 3-task table. Each cell pulls a column value
+    from the per-(method, task) compute_metrics() dict; 'mean' is the simple
+    mean across tasks."""
+    rows = []
+    for method in methods:
+        row: dict = {"method": method}
+        for col, _dir in COMPARISON_COLUMNS:
+            per_task = {
+                t: float(metrics_by_method_task[method][t].get(col, 0.0))
+                for t in tasks
+            }
+            per_task["mean"] = sum(per_task.values()) / len(tasks)
+            row[col] = per_task
+        rows.append(row)
+    return {"methods": methods, "tasks": tasks, "rows": rows}
+
+
+def write_comparison_table(table: dict, out_path: Path) -> None:
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    tasks = table["tasks"]
+    header_cols = []
+    for col, direction in COMPARISON_COLUMNS:
+        for t in tasks:
+            header_cols.append(f"{col} {direction} ({t.rsplit('-v', 1)[0]})")
+        header_cols.append(f"{col} {direction} (mean)")
+    header = "| method | " + " | ".join(header_cols) + " |"
+    sep = "|" + "---|" * (len(header_cols) + 1)
+    lines = [header, sep]
+    for row in table["rows"]:
+        cells = [row["method"]]
+        for col, _dir in COMPARISON_COLUMNS:
+            for t in tasks:
+                cells.append(f"{row[col][t]:.2f}")
+            cells.append(f"{row[col]['mean']:.2f}")
+        lines.append("| " + " | ".join(cells) + " |")
+    caption = (
+        "\n> Stage-0 procedural baseline table. *full_replan_analogue* and "
+        "*text_feedback_replan* are deterministic procedural analogues, not "
+        "measured LLM/VLM performance. Live replanners are future work.\n"
+    )
+    out_path.write_text(
+        "# BABYSTEPS Stage-0 — Procedural Baseline Comparison\n\n"
+        + "\n".join(lines) + "\n" + caption
+    )
