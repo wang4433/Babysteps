@@ -1,0 +1,13 @@
+# BABYSTEPS Stage-0 — Procedural Baseline Comparison
+
+| method | final_success_rate ↑ (PushCube) | final_success_rate ↑ (PickCube) | final_success_rate ↑ (StackCube) | final_success_rate ↑ (mean) | retry_success_rate ↑ (PushCube) | retry_success_rate ↑ (PickCube) | retry_success_rate ↑ (StackCube) | retry_success_rate ↑ (mean) | correct_factor_fixed_rate ↑ (PushCube) | correct_factor_fixed_rate ↑ (PickCube) | correct_factor_fixed_rate ↑ (StackCube) | correct_factor_fixed_rate ↑ (mean) | frozen_preservation_rate_gt ↑ (PushCube) | frozen_preservation_rate_gt ↑ (PickCube) | frozen_preservation_rate_gt ↑ (StackCube) | frozen_preservation_rate_gt ↑ (mean) | harmful_revision_rate ↓ (PushCube) | harmful_revision_rate ↓ (PickCube) | harmful_revision_rate ↓ (StackCube) | harmful_revision_rate ↓ (mean) | num_attempts_to_success_mean ↓ (PushCube) | num_attempts_to_success_mean ↓ (PickCube) | num_attempts_to_success_mean ↓ (StackCube) | num_attempts_to_success_mean ↓ (mean) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| one_shot | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 1.00 | n/a | 1.00 | 1.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| same_intent_retry | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 1.00 | n/a | 1.00 | 1.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 | 0.00 |
+| random_factor_revision | 0.54 | 0.04 | 0.00 | 0.19 | 0.54 | 0.04 | 0.00 | 0.19 | 0.54 | 1.00 | 0.46 | 0.67 | 0.54 | n/a | 0.46 | 0.50 | 0.46 | 0.00 | 0.54 | 0.33 | 2.00 | 2.00 | 0.00 | 1.33 |
+| babysteps_selective | 0.96 | 0.04 | 0.00 | 0.33 | 0.96 | 0.04 | 0.00 | 0.33 | 1.00 | 1.00 | 0.83 | 0.94 | 1.00 | n/a | 1.00 | 1.00 | 0.00 | 0.00 | 0.00 | 0.00 | 2.00 | 2.00 | 0.00 | 1.33 |
+| text_feedback_replan | 0.00 | 0.04 | 0.00 | 0.01 | 0.00 | 0.04 | 0.00 | 0.01 | 1.00 | 1.00 | 0.83 | 0.94 | 0.00 | n/a | 0.96 | 0.48 | 1.00 | 0.00 | 0.04 | 0.35 | 0.00 | 2.00 | 0.00 | 0.67 |
+| full_replan_analogue | 0.00 | 0.04 | 0.00 | 0.01 | 0.00 | 0.04 | 0.00 | 0.01 | 1.00 | 1.00 | 1.00 | 1.00 | 0.00 | n/a | 0.00 | 0.00 | 1.00 | 0.00 | 1.00 | 0.67 | 0.00 | 2.00 | 0.00 | 0.67 |
+| oracle_factor_revision | 0.96 | 0.04 | 0.00 | 0.33 | 0.96 | 0.04 | 0.00 | 0.33 | 1.00 | 1.00 | 1.00 | 1.00 | 1.00 | n/a | 1.00 | 1.00 | 0.00 | 0.00 | 0.00 | 0.00 | 2.00 | 2.00 | 0.00 | 1.33 |
+
+> Stage-0 procedural baseline table. *full_replan_analogue* and *text_feedback_replan* are deterministic procedural analogues, not measured LLM/VLM performance. Live replanners are future work.
