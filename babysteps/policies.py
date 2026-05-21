@@ -92,3 +92,87 @@ def oracle_factor_revision(ctx: RetryContext) -> Optional[tuple[Intent, Revision
         revise=(factor,),
     )
     return ctx.revise_fn(ctx.initial_intent, oracle_attr, ctx.scene)
+
+
+def _editable_factors(ctx: RetryContext) -> tuple[str, ...]:
+    """Task-editable factors (those with a task-valid token set)."""
+    return tuple(f for f in INTENT_FIELDS if f in ctx.task_valid_tokens)
+
+
+def _perturb(
+    intent: Intent, factors: tuple[str, ...], ctx: RetryContext,
+) -> Intent:
+    """Resample each factor in `factors` to a task-valid non-current token."""
+    out = intent
+    for f in factors:
+        new = resample_factor(out, f, tuple(ctx.task_valid_tokens[f]), ctx.rng)
+        out = replace(out, **{f: new})
+    return out
+
+
+def _frozen_against_ground_truth(ctx: RetryContext) -> tuple[str, ...]:
+    """The factors that SHOULD be preserved = all but the true wrong factor."""
+    return tuple(f for f in INTENT_FIELDS if f != ctx.oracle_wrong_factor)
+
+
+def random_factor_revision(ctx: RetryContext) -> Optional[tuple[Intent, Revision]]:
+    """Ignore attribution: resample one random editable factor."""
+    editable = _editable_factors(ctx)
+    factor = ctx.rng.choice(editable)
+    old = getattr(ctx.initial_intent, factor)
+    revised = _perturb(ctx.initial_intent, (factor,), ctx)
+    rev = Revision(
+        operator="random_factor_revision",
+        factor=factor,
+        old_value=old,
+        new_value=getattr(revised, factor),
+        frozen_factors=_frozen_against_ground_truth(ctx),
+    )
+    return revised, rev
+
+
+def text_feedback_replan(ctx: RetryContext) -> Optional[tuple[Intent, Revision]]:
+    """Fix implicated correctly, then perturb its sibling editable factors
+    (attribution.revise minus the implicated factor)."""
+    fixed, _ = ctx.revise_fn(ctx.initial_intent, ctx.attribution, ctx.scene)
+    siblings = tuple(
+        f for f in ctx.attribution.revise
+        if f != ctx.attribution.wrong_factor and f in ctx.task_valid_tokens
+    )
+    revised = _perturb(fixed, siblings, ctx)
+    rev = Revision(
+        operator="text_feedback_replan",
+        factor=ctx.attribution.wrong_factor or "none",
+        old_value=getattr(ctx.initial_intent, ctx.attribution.wrong_factor),
+        new_value=getattr(revised, ctx.attribution.wrong_factor),
+        frozen_factors=_frozen_against_ground_truth(ctx),
+    )
+    return revised, rev
+
+
+def full_replan_analogue(ctx: RetryContext) -> Optional[tuple[Intent, Revision]]:
+    """Fix implicated correctly, then perturb ALL other editable factors."""
+    fixed, _ = ctx.revise_fn(ctx.initial_intent, ctx.attribution, ctx.scene)
+    others = tuple(
+        f for f in _editable_factors(ctx) if f != ctx.attribution.wrong_factor
+    )
+    revised = _perturb(fixed, others, ctx)
+    rev = Revision(
+        operator="full_replan_analogue",
+        factor=ctx.attribution.wrong_factor or "none",
+        old_value=getattr(ctx.initial_intent, ctx.attribution.wrong_factor),
+        new_value=getattr(revised, ctx.attribution.wrong_factor),
+        frozen_factors=_frozen_against_ground_truth(ctx),
+    )
+    return revised, rev
+
+
+POLICIES: dict[str, RetryPolicy] = {
+    "one_shot": one_shot,
+    "same_intent_retry": same_intent_retry,
+    "random_factor_revision": random_factor_revision,
+    "babysteps_selective": babysteps_selective,
+    "text_feedback_replan": text_feedback_replan,
+    "full_replan_analogue": full_replan_analogue,
+    "oracle_factor_revision": oracle_factor_revision,
+}
