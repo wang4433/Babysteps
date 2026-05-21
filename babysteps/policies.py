@@ -58,3 +58,20 @@ def resample_factor(
 
 
 RetryPolicy = Callable[[RetryContext], Optional[tuple[Intent, Revision]]]
+
+
+def one_shot(ctx: RetryContext) -> Optional[tuple[Intent, Revision]]:
+    """No retry — the lower-bound baseline."""
+    return None
+
+
+def same_intent_retry(ctx: RetryContext) -> Optional[tuple[Intent, Revision]]:
+    """Retry the identical intent (a fresh rollout may recover by luck)."""
+    rev = Revision(
+        operator="same_intent_retry",
+        factor="none",
+        old_value="",
+        new_value="",
+        frozen_factors=INTENT_FIELDS,
+    )
+    return ctx.initial_intent, rev

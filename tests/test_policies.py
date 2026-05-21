@@ -1,6 +1,7 @@
 import random
-from babysteps.policies import resample_factor
-from babysteps.schemas import Intent
+from babysteps.failure import Attribution
+from babysteps.policies import RetryContext, one_shot, resample_factor, same_intent_retry
+from babysteps.schemas import INTENT_FIELDS, Intent, SceneState
 
 _BASE = Intent(
     goal_state="cube_at_target",
@@ -32,3 +33,42 @@ def test_resample_no_alternative_raises():
     rng = random.Random(2)
     with pytest.raises(ValueError):
         resample_factor(_BASE, "contact_region", ("minus_x_face",), rng)
+
+
+_SCENE = SceneState(
+    cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.1, 0.0),
+    tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0), blocked_sides=(),
+)
+
+
+def _ctx(**kw):
+    defaults = dict(
+        initial_intent=_BASE,
+        attribution=Attribution(True, "contact_region", (), ("contact_region",)),
+        scene=_SCENE,
+        oracle_correct_intent=replace_intent_contact(_BASE, "plus_x_face"),
+        oracle_wrong_factor="contact_region",
+        task_valid_tokens={"contact_region": _TOKS},
+        rng=random.Random(0),
+        revise_fn=lambda i, a, s: (i, None),
+    )
+    defaults.update(kw)
+    return RetryContext(**defaults)
+
+
+def replace_intent_contact(intent, value):
+    from dataclasses import replace
+    return replace(intent, contact_region=value)
+
+
+def test_one_shot_returns_none():
+    assert one_shot(_ctx()) is None
+
+
+def test_same_intent_retry_keeps_intent_unchanged():
+    out = same_intent_retry(_ctx())
+    assert out is not None
+    revised, rev = out
+    assert revised == _BASE
+    assert rev.operator == "same_intent_retry"
+    assert set(rev.frozen_factors) == set(INTENT_FIELDS)
