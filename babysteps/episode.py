@@ -11,10 +11,13 @@ for the snapshot guard.
 """
 from __future__ import annotations
 
+import hashlib
+import random
 from dataclasses import replace
 from typing import Optional
 
 from babysteps.envs.task_adapter import BaseTaskAdapter, EnvRunner
+from babysteps.policies import RetryContext, RetryPolicy, babysteps_selective
 from babysteps.schemas import (
     CLAIM_BOUNDARY,
     INTENT_FIELDS,
@@ -129,6 +132,42 @@ def _diff_intents(a: Intent, b: Intent) -> tuple[str, ...]:
     return tuple(f for f in _DIFF_FIELDS if getattr(a, f) != getattr(b, f))
 
 
+def _stable_hash(seed: int, salt: str) -> int:
+    """Deterministic 32-bit seed from (episode seed, salt)."""
+    h = hashlib.sha256(f"{seed}:{salt}".encode()).hexdigest()
+    return int(h[:8], 16)
+
+
+def _baseline_metrics(
+    initial: Intent,
+    revised: Intent,
+    oracle_correct: Intent,
+    oracle_wrong_factor: str,
+    task_valid_tokens: dict,
+) -> dict:
+    """Label-based baseline metrics (spec §5). Computed only for baseline runs.
+
+    - correct_factor_fixed: retry set the true wrong factor to its correct value.
+    - should_preserve: editable factors other than the true wrong factor.
+    - harmful_revision: any should-preserve factor changed (was correct → wrong).
+    """
+    editable = tuple(f for f in INTENT_FIELDS if f in task_valid_tokens)
+    should_preserve = tuple(f for f in editable if f != oracle_wrong_factor)
+    changed = set(_diff_intents(initial, revised))
+    correct_factor_fixed = (
+        getattr(revised, oracle_wrong_factor)
+        == getattr(oracle_correct, oracle_wrong_factor)
+    )
+    n_preserved = sum(1 for f in should_preserve if f not in changed)
+    harmful = any(f in changed for f in should_preserve)
+    return {
+        "correct_factor_fixed": bool(correct_factor_fixed),
+        "harmful_revision": bool(harmful),
+        "n_should_preserve": int(len(should_preserve)),
+        "n_preserved": int(n_preserved),
+    }
+
+
 # ---------- the loop --------------------------------------------------- #
 
 
@@ -137,6 +176,8 @@ def run_episode(
     episode_id: str,
     seed: int,
     adapter: BaseTaskAdapter,
+    policy: RetryPolicy = babysteps_selective,
+    record_baseline_metrics: bool = False,
 ) -> EpisodeRecord:
     """One Stage-0 blocked-approach episode for the adapter's task.
 
@@ -213,10 +254,20 @@ def run_episode(
         )
 
     attribution = adapter.attribute_failure(failure_packet)
+    oracle_correct_intent = adapter.oracle_correct_intent(scene_executor)
+    ctx = RetryContext(
+        initial_intent=initial_intent,
+        attribution=attribution,
+        scene=scene_executor,
+        oracle_correct_intent=oracle_correct_intent,
+        oracle_wrong_factor=oracle_wrong_factor,
+        task_valid_tokens=adapter.task_valid_tokens(),
+        rng=random.Random(_stable_hash(seed, "policy")),
+        revise_fn=adapter.revise_intent,
+    )
+
     try:
-        revised_intent, revision_record = adapter.revise_intent(
-            initial_intent, attribution, scene_executor,
-        )
+        proposal = policy(ctx)
     except NotImplementedError as exc:
         fp_dict = {
             "failure_predicate": failure_packet.failure_predicate,
@@ -239,6 +290,33 @@ def run_episode(
             revision=None, retry=None, metrics=metrics,
         )
 
+    if proposal is None:
+        # one_shot: no retry. Record the failed initial attempt only.
+        fp_dict = {
+            "failure_predicate": failure_packet.failure_predicate,
+            "wrong_factor": attribution.wrong_factor,
+            "oracle_wrong_factor": oracle_wrong_factor,
+            "execution_trace": dict(failure_packet.execution_trace),
+        }
+        metrics = _compute_metrics(
+            initial_success=bool(attempt_1.success), retry_success=None,
+            failure_predicate=failure_packet.failure_predicate,
+            wrong_factor_predicted=attribution.wrong_factor,
+            oracle_wrong_factor=oracle_wrong_factor,
+            factors_changed=(),
+        )
+        if record_baseline_metrics:
+            metrics.update(_baseline_metrics(
+                initial_intent, initial_intent, oracle_correct_intent,
+                oracle_wrong_factor, adapter.task_valid_tokens()))
+        return EpisodeRecord(
+            episode_id=episode_id, stage="stage_0", task=adapter.task_id,
+            claim_boundary=CLAIM_BOUNDARY,
+            demo=demo_dict, execution=execution_dict, failure_packet=fp_dict,
+            revision=None, retry=None, metrics=metrics,
+        )
+
+    revised_intent, revision_record = proposal
     attempt_2 = env_runner.run(revised_intent, scene_executor)
     factors_changed = _diff_intents(initial_intent, revised_intent)
 
@@ -267,6 +345,10 @@ def run_episode(
         factors_changed=factors_changed,
         frozen_factors=revision_record.frozen_factors,
     )
+    if record_baseline_metrics:
+        metrics.update(_baseline_metrics(
+            initial_intent, revised_intent, oracle_correct_intent,
+            oracle_wrong_factor, adapter.task_valid_tokens()))
 
     return EpisodeRecord(
         episode_id=episode_id,

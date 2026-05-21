@@ -146,3 +146,17 @@ def test_run_episode_signature_takes_adapter_keyword():
     assert "adapter" in sig.parameters
     assert "env_runner" not in sig.parameters
     assert "blocked_sides_factory" not in sig.parameters
+
+
+def test_run_episode_one_shot_policy_has_no_retry(fake_env_runner):
+    from babysteps.policies import one_shot
+    adapter = _make_stub_adapter(fake_env_runner)
+    rec = run_episode(
+        episode_id="t", seed=1, adapter=adapter, policy=one_shot)
+    assert rec.retry is None
+    assert rec.revision is None
+
+
+def test_run_episode_default_policy_is_selective(fake_env_runner):
+    params = inspect.signature(run_episode).parameters
+    assert "policy" in params
