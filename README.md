@@ -12,14 +12,15 @@ perception, real human demonstrations, or real-robot execution.
 
 ## Authoritative documents
 
-1. `goal.md` — Stage-0 boundary and data contract.
-2. `docs/superpowers/specs/2026-05-15-stage0-pushcube-blocked-design.md` —
-   the design this implementation follows.
-3. `docs/superpowers/plans/2026-05-15-stage0-pushcube-blocked-plan.md` —
-   the TDD implementation plan that produced this code.
-4. `CLAUDE.md` — long-form cold-start handover. Some sections describe a
-   richer (older) schema; **`goal.md` is the Stage-0 authority** if anything
-   disagrees.
+1. `goal.md` — Stage-0 boundary and data contract (**authority**).
+2. `CLAUDE.md` — high-level project instructions and working invariants.
+3. `CODE_MAP.md` — one-screen map of every directory (each also has a `CLAUDE.md`).
+4. `RUNBOOK.md` — copy-paste operational commands (render / collect / summarize / tests).
+5. `docs/superpowers/specs/2026-05-15-stage0-pushcube-blocked-design.md` and the
+   matching `docs/superpowers/plans/...-plan.md` — the design + TDD plan this
+   implementation follows.
+6. `docs/cold_start_handover_archive.md` — historical long-form handover; its
+   schema has drifted, so **`goal.md` is the Stage-0 authority** if anything disagrees.
 
 ## Quickstart
 
