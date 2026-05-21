@@ -5,6 +5,7 @@ adapter wired around the deterministic FakeEnvRunner (conftest fixture)."""
 from __future__ import annotations
 
 import inspect
+from dataclasses import replace
 
 from babysteps.episode import run_episode
 from babysteps.schemas import CLAIM_BOUNDARY, DemoEvidence, EpisodeRecord
@@ -173,3 +174,25 @@ def test_env_runner_run_accepts_rollout_seed(fake_env_runner):
     r1 = fake_env_runner.run(intent, scene, rollout_seed=1)
     r2 = fake_env_runner.run(intent, scene, rollout_seed=2)
     assert r1.success == r2.success  # deterministic fake env
+
+
+def test_baseline_metrics_correct_factor_fixed_is_inclusion():
+    # correct_factor_fixed must be True when the implicated factor was changed,
+    # even if the new value differs from the oracle's canonical token.
+    from babysteps.episode import _baseline_metrics
+    from babysteps.schemas import Intent
+    base = Intent(
+        goal_state="cube_at_target", object_motion="translate_+x",
+        contact_region="minus_x_face", approach_direction="from_minus_x",
+        constraint_region="none", embodiment_mapping="proxy_contact_to_franka_push")
+    # revised changed approach_direction to a DIFFERENT (non-oracle) unblocked side
+    revised = replace(base, approach_direction="from_plus_y")
+    toks = {"approach_direction": ("from_minus_x", "from_plus_x", "from_plus_y"),
+            "contact_region": ("minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face")}
+    m = _baseline_metrics(base, revised, "approach_direction", toks)
+    assert m["correct_factor_fixed"] is True          # implicated factor was edited
+    assert m["harmful_revision"] is False             # contact_region (should-preserve) untouched
+    assert m["n_should_preserve"] == 1 and m["n_preserved"] == 1
+    # same-intent retry: nothing changed → not fixed
+    m2 = _baseline_metrics(base, base, "approach_direction", toks)
+    assert m2["correct_factor_fixed"] is False

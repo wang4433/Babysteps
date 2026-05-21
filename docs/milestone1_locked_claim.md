@@ -196,7 +196,7 @@ per task and as a mean across the three tasks.
 | Diagnosis | failure-type accuracy | ↑ | `failure_type_accuracy` |
 | **Selectivity (headline)** | frozen-factor preservation | ↑ | `frozen_factor_preservation_rate` |
 | **Selectivity (headline)** | unnecessary factor-change rate | ↓ | `unnecessary_factor_change_rate` |
-| Selectivity | correct factor fixed | ↑ | `correct_factor_fixed_rate` |
+| Selectivity | correct factor fixed (the true implicated factor was among the factors the retry edited — recovery to a valid alternative need not equal a single canonical token) | ↑ | `correct_factor_fixed_rate` |
 | Selectivity | harmful revision rate | ↓ | `harmful_revision_rate` |
 | Selectivity | frozen preservation (GT) | ↑ | `frozen_preservation_rate_gt` |
 

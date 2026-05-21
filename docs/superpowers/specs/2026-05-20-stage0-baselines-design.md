@@ -97,10 +97,13 @@ be strawmen.
 
 **Honest collapse note (text_feedback vs selective).** For StackCube the
 failure's revise-set is `(goal_state,)` — no siblings — so
-`text_feedback_replan == babysteps_selective` there. It diverges on PushCube
-(`approach_blocked → revise=(approach_direction, contact_region)`) and PickCube
-(`grasp_slip → revise=(contact_region, embodiment_mapping)`), which have a
-sibling. We report this rather than invent a wider neighborhood.
+`text_feedback_replan == babysteps_selective` there. For PickCube,
+`task_valid_tokens` omits `embodiment_mapping` (no task-valid alternative token
+exists for PickCube), so the sibling set is also empty and
+`text_feedback_replan == babysteps_selective` on PickCube too. The policies
+diverge only on PushCube, where `approach_blocked → revise=(approach_direction,
+contact_region)` and `contact_region` has task-valid alternatives. We report
+this rather than invent a wider neighborhood.
 
 **selective vs oracle.** When rule-table attribution is correct (Stage-0
 mostly is), `babysteps_selective == oracle_factor_revision`. They diverge only
@@ -167,12 +170,13 @@ strict subset of `unnecessary_factor_change_rate`. Enabled by persisting
 snapshots updated deliberately). Computed in `eval.py` from
 `initial_intent` + `factors_changed` + `oracle_correct_intent`.
 
-**New metric — `correct_factor_fixed` (↑).** Per episode: the retry set the
-**true implicated factor (`oracle_wrong_factor`) to its correct value**. For
-`same_intent_retry` → false; `random_factor_revision` → true only on the lucky
-case; `selective`/`text_feedback`/`full_replan`/`oracle` → true. This is the
-column that explains recovery: *once the wrong factor is fixed, recovery can be
-high; BABYSTEPS' edge is preserving the rest.*
+**New metric — `correct_factor_fixed` (↑).** Per episode: the true implicated
+factor (`oracle_wrong_factor`) was among the factors the retry changed —
+recovery to a valid alternative need not equal a single canonical oracle token.
+For `same_intent_retry` → false; `random_factor_revision` → true only on the
+lucky case; `selective`/`text_feedback`/`full_replan`/`oracle` → true. This is
+the column that explains recovery: *once the wrong factor is fixed, recovery can
+be high; BABYSTEPS' edge is preserving the rest.*
 
 **Comparison table.** `compute_comparison_table(datasets_by_method_task)` →
 rows = the 7 methods (in reporting order), columns below, reported per task and

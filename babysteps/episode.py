@@ -141,23 +141,21 @@ def _stable_hash(seed: int, salt: str) -> int:
 def _baseline_metrics(
     initial: Intent,
     revised: Intent,
-    oracle_correct: Intent,
     oracle_wrong_factor: str,
     task_valid_tokens: dict,
 ) -> dict:
     """Label-based baseline metrics (spec §5). Computed only for baseline runs.
 
-    - correct_factor_fixed: retry set the true wrong factor to its correct value.
+    - correct_factor_fixed: the true wrong factor was among the factors the
+      retry changed (recovery to a valid alternative need not equal a single
+      canonical oracle token).
     - should_preserve: editable factors other than the true wrong factor.
     - harmful_revision: any should-preserve factor changed (was correct → wrong).
     """
     editable = tuple(f for f in INTENT_FIELDS if f in task_valid_tokens)
     should_preserve = tuple(f for f in editable if f != oracle_wrong_factor)
     changed = set(_diff_intents(initial, revised))
-    correct_factor_fixed = (
-        getattr(revised, oracle_wrong_factor)
-        == getattr(oracle_correct, oracle_wrong_factor)
-    )
+    correct_factor_fixed = oracle_wrong_factor in changed
     n_preserved = sum(1 for f in should_preserve if f not in changed)
     harmful = any(f in changed for f in should_preserve)
     return {
@@ -307,7 +305,7 @@ def run_episode(
         )
         if record_baseline_metrics:
             metrics.update(_baseline_metrics(
-                initial_intent, initial_intent, oracle_correct_intent,
+                initial_intent, initial_intent,
                 oracle_wrong_factor, adapter.task_valid_tokens()))
         return EpisodeRecord(
             episode_id=episode_id, stage="stage_0", task=adapter.task_id,
@@ -350,7 +348,7 @@ def run_episode(
     )
     if record_baseline_metrics:
         metrics.update(_baseline_metrics(
-            initial_intent, revised_intent, oracle_correct_intent,
+            initial_intent, revised_intent,
             oracle_wrong_factor, adapter.task_valid_tokens()))
 
     return EpisodeRecord(
