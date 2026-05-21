@@ -117,12 +117,39 @@ def test_waypoint_2_grasp_close_at_cube_z():
     assert wp[2, 2] == pytest.approx(scene.cube_z)
 
 
-def test_waypoint_3_lift_above_goal_at_travel_z():
+def test_waypoint_3_lift_falls_back_to_travel_z_without_goal_z():
+    """No 3D goal height exposed (sim-free / fake-env path) → the lift waypoint
+    falls back to the arm's travel height. Keeps existing callers unaffected."""
     intent = _pick_intent()
     scene = _scene(goal_xy=(0.12, 0.04))
+    assert "goal_z" not in scene.extra
     wp = build_pick_waypoints(scene, intent)
     np.testing.assert_allclose(wp[3, 0:2], scene.goal_xy)
     assert wp[3, 2] == pytest.approx(scene.tcp_start_pose[2])
+
+
+def test_waypoint_3_lift_targets_goal_height_when_known():
+    """When the scene exposes the real 3D goal height (extra['goal_z']), the
+    lift waypoint targets that height so the grasped cube reaches the 3D goal —
+    not the arm's travel height. This is the PickCube real-GPU success fix:
+    PickCube-v1 success needs the cube AT goal_pos (~0.025 tol), and goal_z
+    varies (~0.05-0.29), so lifting to a fixed travel_z can never succeed."""
+    intent = _pick_intent()
+    goal_z = 0.30
+    scene = SceneState(
+        cube_xy=(0.0, 0.0),
+        cube_z=0.02,
+        goal_xy=(0.12, 0.04),
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),  # travel_z = 0.25
+        blocked_sides=(),
+        extra={"goal_z": goal_z},
+    )
+    wp = build_pick_waypoints(scene, intent)
+    np.testing.assert_allclose(wp[3, 0:2], scene.goal_xy)
+    # Cube centre should end at ~goal_z; the TCP target sits a small offset
+    # above the cube centre, so the lift waypoint is within the offset of goal_z
+    # — and clearly NOT the travel_z (0.25) fallback.
+    assert wp[3, 2] == pytest.approx(goal_z, abs=0.02)
 
 
 def test_waypoints_geometry_independent_of_contact_region():

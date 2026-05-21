@@ -31,6 +31,15 @@ _POS_SCALE: float = 0.1
 _PHASE_TOL_M: float = 0.015
 _MAX_CONTROL_STEPS: int = 400         # +100 vs PushCube to allow the lift
 
+# PickCube-v1's default TimeLimit truncates at 50 steps — too short once the
+# settle dwell below is added. Override at gym.make so the trajectory finishes.
+_MAX_EPISODE_STEPS: int = 200
+
+# Hold the cube at the 3D goal with the gripper closed so the arm goes static
+# (PickCube-v1 success = cube at goal_pos AND robot static) — a real settle,
+# not widened tolerances.
+_SETTLE_DWELL_STEPS: int = 25
+
 _GRIPPER_OPEN: float = 1.0
 _GRIPPER_CLOSED: float = -1.0
 
@@ -89,6 +98,7 @@ class PickCubeEnvRunner:
             obs_mode="state_dict",
             control_mode="pd_ee_delta_pose",
             sim_backend="cpu",
+            max_episode_steps=_MAX_EPISODE_STEPS,
         )
         self._last_seed: Optional[int] = None
 
@@ -96,12 +106,17 @@ class PickCubeEnvRunner:
         self._last_seed = int(seed)
         obs, _info = self._env.reset(seed=int(seed))
         tcp, cube_xy, goal_xy, cube_z = _read_obs(obs)
+        # PickCube-v1's goal is a 3D point in the air; SceneState.goal_xy keeps
+        # only the xy, so expose the goal height via extra['goal_z'] for the
+        # pick skill's lift waypoint (the cube must reach the 3D goal_pos).
+        goal_z = float(_to_np(obs["extra"]["goal_pos"])[2])
         return SceneState(
             cube_xy=(float(cube_xy[0]), float(cube_xy[1])),
             cube_z=cube_z,
             goal_xy=(float(goal_xy[0]), float(goal_xy[1])),
             tcp_start_pose=tuple(float(v) for v in tcp),  # type: ignore[arg-type]
             blocked_sides=(),
+            extra={"goal_z": goal_z},
         )
 
     def run(
@@ -146,6 +161,12 @@ class PickCubeEnvRunner:
 
         trajectory: list[tuple[float, float]] = []
         phase_idx = 0
+        dwelling = False
+        dwell_remaining = 0
+        # Only the final lift phase settles — hold at the 3D goal with the
+        # gripper closed so the arm goes static. Earlier phases advance on
+        # arrival.
+        dwell_len = [0, 0, 0, _SETTLE_DWELL_STEPS]
         reached_contact = False
         success = False
 
@@ -153,11 +174,15 @@ class PickCubeEnvRunner:
             tcp, cube_xy, _, cube_z_now = _read_obs(obs)
             trajectory.append((float(cube_xy[0]), float(cube_xy[1])))
             target = targets[phase_idx]
-            if np.linalg.norm(target - tcp[0:3]) < _PHASE_TOL_M:
-                phase_idx += 1
-                if phase_idx >= len(targets):
-                    break
-                target = targets[phase_idx]
+            if not dwelling and np.linalg.norm(target - tcp[0:3]) < _PHASE_TOL_M:
+                if dwell_len[phase_idx] > 0:
+                    dwelling = True
+                    dwell_remaining = dwell_len[phase_idx]
+                else:
+                    phase_idx += 1
+                    if phase_idx >= len(targets):
+                        break
+                    target = targets[phase_idx]
             # Contact heuristic: TCP near cube AND not yet in lift phase.
             if phase_idx >= 1:
                 reached_contact = reached_contact or _gripper_at_cube(
@@ -169,6 +194,13 @@ class PickCubeEnvRunner:
             trunc = bool(_to_np(truncated).item()) if hasattr(truncated, "cpu") else bool(truncated)
             succ_field = info.get("success", False) if hasattr(info, "get") else False
             success = bool(_to_np(succ_field).item()) if hasattr(succ_field, "cpu") else bool(succ_field)
+            if dwelling:
+                dwell_remaining -= 1
+                if dwell_remaining <= 0:
+                    dwelling = False
+                    phase_idx += 1
+                    if phase_idx >= len(targets):
+                        break
             if success or term or trunc:
                 break
 

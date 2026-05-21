@@ -34,6 +34,13 @@ DESCEND_CLEARANCE_M: float = 0.02
 PD controller a soft landing before grasp_close, so the gripper does not
 overshoot the cube and bounce."""
 
+LIFT_TCP_OFFSET_M: float = 0.015
+"""Vertical offset between the TCP frame and the grasped cube's centre during
+the lift (TCP sits ~15 mm above the cube centre — measured from real PickCube-v1
+rollouts). The lift waypoint adds this to the 3D goal height so the grasped
+cube's *centre* lands at goal_z (PickCube-v1 success needs the cube at goal_pos,
+~0.025 tol), not the arm's travel height."""
+
 
 @dataclass(frozen=True)
 class PickSkill:
@@ -80,7 +87,12 @@ def build_pick_waypoints(scene: SceneState, intent: Intent) -> np.ndarray:
     wp[2, 0:2] = cube_xy
     wp[2, 2] = cube_z
     wp[3, 0:2] = goal_xy
-    wp[3, 2] = travel_z
+    # Lift target: if the real 3D goal height is known (extra['goal_z'], set by
+    # the env_runner), aim so the grasped cube's centre lands at goal_z; the
+    # TCP rides LIFT_TCP_OFFSET_M above the cube centre. Otherwise (sim-free /
+    # fake-env callers) fall back to the arm's travel height.
+    goal_z = scene.extra.get("goal_z")
+    wp[3, 2] = (float(goal_z) + LIFT_TCP_OFFSET_M) if goal_z is not None else travel_z
     wp[:, 3:7] = tcp[3:7]
     return wp
 
