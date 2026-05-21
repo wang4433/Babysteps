@@ -11,11 +11,13 @@ Identical semantics to the pre-extraction `_execute_push` /
 `_build_waypoints` / main() flow in scripts/render_stage0_maniskill.py."""
 from __future__ import annotations
 
+import random
 from dataclasses import replace
 
 import numpy as np
 
 from babysteps.envs.task_adapter import BaseTaskAdapter
+from babysteps.policies import RetryContext, full_replan_analogue
 from babysteps.render.common import (
     PUSHCUBE_MAX_CONTROL_STEPS,
     PHASE_TOL_M,
@@ -62,19 +64,14 @@ def _execute_push(env, waypoints, frames: list, *, seed: int) -> dict:
     }
 
 
-def render_episode(
-    env, adapter: BaseTaskAdapter, seed: int, fps: int,
-) -> tuple[dict, dict]:
-    """Run the three-phase BABYSTEPS demo for PushCube and return per-phase
-    frame lists and title metadata.
+def _pushcube_setup(env, adapter: BaseTaskAdapter, seed: int) -> dict:
+    """Phase-1 demo execution + intent/attribution derivation.
 
-    Returns:
-        frames: {"demo": [...], "attempt_blocked": [...], "retry": [...]}
-        titles: {"demo": (title, subtitle), ...}
+    Shared by render_episode (canonical three-phase) and
+    render_baseline_contrast (selective-vs-full_replan retries). Runs the
+    oracle demo, derives the initial intent, builds the blocked executor
+    scene, and attributes the synthetic planner_failed.
     """
-    short_id = f"seed {seed:04d}"
-
-    # === Phase 1 — DEMO PROXY ===
     obs, _ = env.reset(seed=seed)
     tcp_xyzw, cube_xy0, goal_xy, cube_z = read_obs(obs)
     scene = SceneState(
@@ -105,15 +102,10 @@ def render_episode(
         scene, blocked_sides=adapter.default_blocked_factory(initial_intent),
     )
 
-    # === Phase 2 — ATTEMPT 1 (planner_failed, held still) ===
-    obs, _ = env.reset(seed=seed)
-    attempt1_frames = [render_frame(env)] * (fps * 2)
-
-    # === Phase 3 — RETRY with revised approach ===
     # Synthetic AttemptResult: planner_failed means no env stepping occurred,
     # so initial_obj_xy and final_obj_xy are both the scene's initial state.
-    # The fp/attribution/revision pipeline only uses the predicate flags to
-    # derive the wrong_factor — the cube positions are inert here.
+    # The fp/attribution pipeline only uses the predicate flags to derive the
+    # wrong_factor — the cube positions are inert here.
     fp = adapter.build_failure_packet(
         initial_intent,
         AttemptResult(
@@ -126,8 +118,40 @@ def render_episode(
         scene_exec,
     )
     attribution = adapter.attribute_failure(fp)
+    return {
+        "scene": scene,
+        "scene_exec": scene_exec,
+        "correct_intent": correct_intent,
+        "initial_intent": initial_intent,
+        "attribution": attribution,
+        "demo_frames": demo_frames,
+    }
+
+
+def render_episode(
+    env, adapter: BaseTaskAdapter, seed: int, fps: int,
+) -> tuple[dict, dict]:
+    """Run the three-phase BABYSTEPS demo for PushCube and return per-phase
+    frame lists and title metadata.
+
+    Returns:
+        frames: {"demo": [...], "attempt_blocked": [...], "retry": [...]}
+        titles: {"demo": (title, subtitle), ...}
+    """
+    short_id = f"seed {seed:04d}"
+    s = _pushcube_setup(env, adapter, seed)
+    correct_intent = s["correct_intent"]
+    initial_intent = s["initial_intent"]
+    scene_exec = s["scene_exec"]
+    demo_frames = s["demo_frames"]
+
+    # === Phase 2 — ATTEMPT 1 (planner_failed, held still) ===
+    obs, _ = env.reset(seed=seed)
+    attempt1_frames = [render_frame(env)] * (fps * 2)
+
+    # === Phase 3 — RETRY with revised approach (selective) ===
     revised_intent, _rev = adapter.revise_intent(
-        initial_intent, attribution, scene_exec,
+        initial_intent, s["attribution"], scene_exec,
     )
     wp_retry = build_push_waypoints(scene_exec, revised_intent)
     retry_frames: list = []
@@ -156,4 +180,88 @@ def render_episode(
         {"demo": demo_title,
          "attempt_blocked": a1_title,
          "retry": retry_title},
+    )
+
+
+def render_baseline_contrast(
+    env, adapter: BaseTaskAdapter, seed: int, fps: int,
+) -> tuple[dict, dict]:
+    """Render the PushCube baseline contrast: the same demo + blocked attempt,
+    then two retries side-by-side —
+
+      retry_selective:    babysteps_selective — revises approach_direction
+                          only, keeps contact_region → pushes toward goal.
+      retry_full_replan:  full_replan_analogue — fixes approach_direction AND
+                          perturbs contact_region (a collateral edit), so the
+                          push goes the wrong way and recovery fails.
+
+    Both retries use the real policies from babysteps.policies, so the clip
+    shows the measured behaviour, not a hand-staged failure.
+    """
+    short_id = f"seed {seed:04d}"
+    s = _pushcube_setup(env, adapter, seed)
+    correct_intent = s["correct_intent"]
+    initial_intent = s["initial_intent"]
+    scene_exec = s["scene_exec"]
+    attribution = s["attribution"]
+    demo_frames = s["demo_frames"]
+
+    # === Phase 2 — ATTEMPT 1 (planner_failed, held still) ===
+    obs, _ = env.reset(seed=seed)
+    attempt1_frames = [render_frame(env)] * (fps * 2)
+
+    # === Phase 3a — SELECTIVE retry (approach_direction only) ===
+    sel_intent, _ = adapter.revise_intent(initial_intent, attribution, scene_exec)
+    sel_frames: list = []
+    out_sel = _execute_push(
+        env, build_push_waypoints(scene_exec, sel_intent), sel_frames, seed=seed,
+    )
+
+    # === Phase 3b — FULL_REPLAN retry (approach fixed + contact_region perturbed) ===
+    ctx = RetryContext(
+        initial_intent=initial_intent,
+        attribution=attribution,
+        scene=scene_exec,
+        oracle_correct_intent=adapter.oracle_correct_intent(scene_exec),
+        oracle_wrong_factor=adapter.oracle_wrong_factor(initial_intent, scene_exec),
+        task_valid_tokens=adapter.task_valid_tokens(),
+        rng=random.Random(seed),
+        revise_fn=adapter.revise_intent,
+    )
+    fr_intent, _ = full_replan_analogue(ctx)
+    fr_frames: list = []
+    out_fr = _execute_push(
+        env, build_push_waypoints(scene_exec, fr_intent), fr_frames, seed=seed,
+    )
+
+    demo_title = (
+        f"{short_id}  phase 1/4: demo proxy",
+        f"contact_region={correct_intent.contact_region}, "
+        f"approach={correct_intent.approach_direction}",
+    )
+    a1_title = (
+        f"{short_id}  phase 2/4: approach_blocked",
+        f"approach_direction={initial_intent.approach_direction} "
+        f"is blocked → planner_failed",
+    )
+    sel_title = (
+        f"{short_id}  phase 3a/4: babysteps_selective (success={out_sel['success']})",
+        f"approach_substitution: {initial_intent.approach_direction} → "
+        f"{sel_intent.approach_direction}; contact_region preserved "
+        f"(={sel_intent.contact_region})",
+    )
+    fr_title = (
+        f"{short_id}  phase 3b/4: full_replan_analogue (success={out_fr['success']})",
+        f"approach fixed BUT contact_region: {initial_intent.contact_region} -> "
+        f"{fr_intent.contact_region} (collateral edit → wrong-way push)",
+    )
+    return (
+        {"demo": demo_frames,
+         "attempt_blocked": attempt1_frames,
+         "retry_selective": sel_frames,
+         "retry_full_replan": fr_frames},
+        {"demo": demo_title,
+         "attempt_blocked": a1_title,
+         "retry_selective": sel_title,
+         "retry_full_replan": fr_title},
     )

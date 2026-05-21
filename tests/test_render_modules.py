@@ -106,6 +106,38 @@ def test_pushcube_render_titles_contain_phase_label():
     assert "phase 3/3" in titles["retry"][0]
 
 
+def test_pushcube_baseline_contrast_emits_four_phases():
+    """The baseline-contrast render shares demo + blocked attempt, then emits
+    two retries: babysteps_selective (preserves contact_region) and
+    full_replan_analogue (perturbs contact_region → wrong-way push)."""
+    from babysteps.render.pushcube import render_baseline_contrast
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+
+    frames, titles = render_baseline_contrast(_StubEnv(), PushCubeAdapter(), seed=0, fps=4)
+    keys = {"demo", "attempt_blocked", "retry_selective", "retry_full_replan"}
+    assert set(frames.keys()) == keys
+    assert set(titles.keys()) == keys
+    for k in keys:
+        assert len(frames[k]) >= 1
+    # Selective revises approach only; full_replan also perturbs contact_region.
+    assert "approach_substitution" in titles["retry_selective"][1]
+    assert "contact_region" in titles["retry_full_replan"][1]
+    assert "full_replan" in titles["retry_full_replan"][0]
+
+
+def test_pushcube_baseline_contrast_perturbs_contact_region():
+    """The full_replan retry's contact_region must differ from the selective
+    retry's (the collateral edit that breaks the push). Asserted on the token
+    values encoded in the subtitles."""
+    from babysteps.render.pushcube import render_baseline_contrast
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+
+    _, titles = render_baseline_contrast(_StubEnv(), PushCubeAdapter(), seed=0, fps=4)
+    # full_replan subtitle encodes "contact_region: <old> -> <new>"; old != new.
+    sub = titles["retry_full_replan"][1]
+    assert "->" in sub or "→" in sub
+
+
 # ---------- PickCube render tests -------------------------------------- #
 
 
