@@ -134,7 +134,12 @@ class StackCubeEnvRunner:
         scene: SceneState,
         *,
         rollout_log_path: Optional[Path] = None,
+        rollout_seed: Optional[int] = None,
     ) -> AttemptResult:
+        # rollout_seed: EnvRunner fresh-seed-per-attempt protocol. StackCube
+        # resets from the episode seed (layout fixed) with a deterministic
+        # controller; accepted for protocol conformance — see
+        # PushCubeEnvRunner.run for the rationale.
         skill = compile_intent_to_stack_skill(intent, scene)
         # StackSkill never returns None — defensive only.
 

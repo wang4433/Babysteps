@@ -11,6 +11,35 @@ from babysteps.schemas import (
 )
 
 
+# ---------- real runners honour the EnvRunner Protocol ------------------ #
+
+
+def test_real_runners_accept_rollout_seed():
+    """Every concrete real runner's run() must accept the keyword-only
+    `rollout_seed` declared by the EnvRunner Protocol — episode.run_episode
+    passes it on every retry. Sim-free CI uses fake runners, so this inspect
+    guard is what catches a real-runner signature drift before a GPU job does.
+    """
+    import inspect
+
+    from babysteps.envs.crossview_runner import CrossViewPushEnvRunner
+    from babysteps.envs.pickcube_runner import PickCubeEnvRunner
+    from babysteps.envs.pushcube_runner import PushCubeEnvRunner
+    from babysteps.envs.stackcube_runner import StackCubeEnvRunner
+    from babysteps.envs.turnfaucet_runner import TurnFaucetEnvRunner
+
+    for cls in (
+        PushCubeEnvRunner, PickCubeEnvRunner, StackCubeEnvRunner,
+        TurnFaucetEnvRunner, CrossViewPushEnvRunner,
+    ):
+        params = inspect.signature(cls.run).parameters
+        assert "rollout_seed" in params, (
+            f"{cls.__name__}.run is missing the rollout_seed keyword required "
+            f"by the EnvRunner Protocol"
+        )
+        assert params["rollout_seed"].kind is inspect.Parameter.KEYWORD_ONLY
+
+
 # ---------- BaseTaskAdapter is abstract --------------------------------- #
 
 

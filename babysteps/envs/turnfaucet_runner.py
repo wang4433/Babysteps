@@ -188,7 +188,11 @@ class TurnFaucetEnvRunner:
         )
 
     def run(self, intent: Intent, scene: SceneState, *,
-            rollout_log_path: Optional[Path] = None) -> AttemptResult:
+            rollout_log_path: Optional[Path] = None,
+            rollout_seed: Optional[int] = None) -> AttemptResult:
+        # rollout_seed: EnvRunner fresh-seed-per-attempt protocol. TurnFaucet
+        # resets from the episode seed (layout fixed); accepted for protocol
+        # conformance — see PushCubeEnvRunner.run for the rationale.
         seed = self._last_seed
         if seed is None:
             raise RuntimeError("TurnFaucetEnvRunner.run called before reset()")

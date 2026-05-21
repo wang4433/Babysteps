@@ -25,7 +25,11 @@ class CrossViewPushEnvRunner(PushCubeEnvRunner):
     def run(
         self, intent: Intent, scene: SceneState,
         *, rollout_log_path: Optional[Path] = None,
+        rollout_seed: Optional[int] = None,
     ) -> AttemptResult:
         yaw = int(scene.extra["observer_yaw_deg"])
         world_intent = world_resolved_intent(intent, yaw)
-        return super().run(world_intent, scene, rollout_log_path=rollout_log_path)
+        return super().run(
+            world_intent, scene,
+            rollout_log_path=rollout_log_path, rollout_seed=rollout_seed,
+        )
