@@ -16,7 +16,7 @@ cd /scratch/gilbreth/wang4433/babysteps
 source /apps/external/conda/2025.09/etc/profile.d/conda.sh
 conda activate handover
 
-OUT_DIR=/scratch/gilbreth/wang4433/render_stackcube
+OUT_DIR=renders/stackcube
 mkdir -p "$OUT_DIR"
 
 LD_LIBRARY_PATH="$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}" \

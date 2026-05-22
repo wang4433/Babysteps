@@ -65,8 +65,20 @@ class _StubEnv:
         )
 
     def render(self):
-        # Return a tiny deterministic RGB frame (8x8x3 uint8).
+        # Third-person external camera: an 8x8x3 frame (the demo view).
         return (np.ones((8, 8, 3), dtype=np.uint8) * (self._step_count % 256))
+
+    # --- first-person panda_wristcam capture path --- #
+    @property
+    def unwrapped(self):
+        return self
+
+    def get_sensor_images(self):
+        # First-person wrist camera: a distinctly-shaped 4x4x3 frame, batched
+        # (B,H,W,3) like ManiSkill, so tests can tell the wrist view apart from
+        # the 8x8 third-person render() view purely by frame shape.
+        rgb = np.ones((1, 4, 4, 3), dtype=np.uint8) * 50
+        return {"hand_camera": {"rgb": rgb}}
 
     def close(self):
         pass
@@ -94,6 +106,22 @@ def test_pushcube_render_episode_emits_three_phase_frames():
     # Confirm the held frames don't trigger env.step — same frame N times.
     held = frames["attempt_blocked"]
     assert all(np.array_equal(held[0], f) for f in held)
+
+
+def test_pushcube_render_demo_thirdperson_exec_wristcam():
+    """Stage-0 camera split: the demo phase is captured from the third-person
+    external camera (8x8 render() frames); the execution phases (blocked
+    attempt + retry) are captured from the first-person panda_wristcam
+    hand_camera (4x4 get_sensor_images() frames)."""
+    from babysteps.render.pushcube import render_episode
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+
+    frames, _ = render_episode(_StubEnv(), PushCubeAdapter(), seed=0, fps=4)
+    # Demo: third-person external camera (8x8).
+    assert all(f.shape == (8, 8, 3) for f in frames["demo"])
+    # Execution phases: first-person wrist camera (4x4).
+    assert all(f.shape == (4, 4, 3) for f in frames["attempt_blocked"])
+    assert all(f.shape == (4, 4, 3) for f in frames["retry"])
 
 
 def test_pushcube_render_titles_contain_phase_label():

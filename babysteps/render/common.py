@@ -56,9 +56,8 @@ def prop_action(
     return action
 
 
-def render_frame(env) -> np.ndarray:
-    """One (H, W, 3) uint8 RGB frame from env.render()."""
-    f = env.render()
+def _to_uint8_frame(f) -> np.ndarray:
+    """Normalize a (possibly batched / torch / float) RGB image to (H,W,3) uint8."""
     if hasattr(f, "cpu"):
         f = f.cpu().numpy()
     f = np.asarray(f)
@@ -68,6 +67,34 @@ def render_frame(env) -> np.ndarray:
         f = (255.0 * np.clip(f, 0.0, 1.0)).astype(np.uint8) if f.max() <= 1.0 \
             else f.astype(np.uint8)
     return f
+
+
+def render_frame(env) -> np.ndarray:
+    """One (H, W, 3) uint8 RGB frame from the third-person external camera
+    (ManiSkill's human render camera via env.render()). This is the Stage-0
+    *demo* view."""
+    return _to_uint8_frame(env.render())
+
+
+# The wrist sensor uid registered by the `panda_wristcam` agent
+# (mani_skill/agents/robots/panda/panda_wristcam.py).
+WRIST_CAMERA_UID: str = "hand_camera"
+
+
+def render_wrist_frame(env) -> np.ndarray:
+    """One (H, W, 3) uint8 RGB frame from the first-person panda_wristcam
+    `hand_camera`. This is the Stage-0 *execution* view.
+
+    Requires the env to have been created with robot_uids="panda_wristcam"
+    so the hand_camera sensor exists; otherwise raises KeyError."""
+    images = env.unwrapped.get_sensor_images()
+    if WRIST_CAMERA_UID not in images:
+        raise KeyError(
+            f"no {WRIST_CAMERA_UID!r} sensor in env "
+            f"(available: {sorted(images)}); create the env with "
+            f"robot_uids='panda_wristcam' to enable the first-person view."
+        )
+    return _to_uint8_frame(images[WRIST_CAMERA_UID]["rgb"])
 
 
 def annotate_frame(

@@ -16,15 +16,17 @@ node it uses the NVIDIA Vulkan ICD and runs much faster.
 Per-task render flows live in babysteps/render/{pushcube,pickcube}.py;
 this script is just the orchestration over a `--task` choice.
 
+Output goes to <repo>/renders/<task>/videos_maniskill/ by default (all
+project renders live under renders/); pass --out_dir only to override.
+
 Recommended invocation on a GPU node (PickCube):
 
     cd /scratch/gilbreth/wang4433/babysteps
     conda activate handover
-    OUT_DIR=/scratch/gilbreth/wang4433/render_pickcube
     LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH" \\
       python scripts/render_stage0_maniskill.py \\
-        --task PickCube-v1 --out_dir "$OUT_DIR" \\
-        --n_episodes 2 --seed_start 0
+        --task PickCube-v1 --n_episodes 2 --seed_start 0
+    # → renders/pickcube/videos_maniskill/
 """
 from __future__ import annotations
 
@@ -48,7 +50,11 @@ def main(argv=None) -> int:
         "--task", type=str, default="PushCube-v1",
         choices=sorted(TASK_REGISTRY.keys()),
     )
-    p.add_argument("--out_dir", type=Path, required=True)
+    p.add_argument(
+        "--out_dir", type=Path, default=None,
+        help="Output root. Default: <repo>/renders/<task> (e.g. renders/pushcube). "
+             "All project renders live under renders/ — pass this only to override.",
+    )
     p.add_argument("--n_episodes", type=int, default=5)
     p.add_argument("--seed_start", type=int, default=0)
     p.add_argument("--fps", type=int, default=20)
@@ -67,9 +73,27 @@ def main(argv=None) -> int:
     entry = get_task_entry(args.task)
     render_fn = get_render_fn(args.task)
     adapter = entry.adapter_cls()
+    # Default every render under the project's renders/ tree. The first token
+    # of episode_id_prefix is the curated per-task dir name (renders/CLAUDE.md):
+    # pushcube_blocked_approach → renders/pushcube, crossview_grounding →
+    # renders/crossview, etc.
+    out_dir = args.out_dir or (_ROOT / "renders" / entry.episode_id_prefix.split("_")[0])
     try:
-        videos_dir = args.out_dir / "videos_maniskill"
+        videos_dir = out_dir / "videos_maniskill"
         videos_dir.mkdir(parents=True, exist_ok=True)
+
+        # Tasks whose render module captures the execution phases from the
+        # first-person panda_wristcam `hand_camera`. For these we swap in the
+        # wristcam Panda (a kinematically identical Panda subclass that mounts
+        # a gripper camera) and upscale the wrist sensor for a watchable MP4.
+        # The demo phase still uses env.render() (third-person external camera).
+        WRIST_VIEW_TASKS = {"PushCube-v1"}
+        extra_kwargs = {}
+        if args.task in WRIST_VIEW_TASKS:
+            extra_kwargs = dict(
+                robot_uids="panda_wristcam",
+                sensor_configs=dict(width=512, height=512),
+            )
 
         env = gym.make(
             adapter.gym_env_id,
@@ -77,6 +101,7 @@ def main(argv=None) -> int:
             control_mode="pd_ee_delta_pose",
             sim_backend="cpu",
             render_mode="rgb_array",
+            **extra_kwargs,
         )
         try:
             for i in range(args.n_episodes):

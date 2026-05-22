@@ -26,7 +26,7 @@ conda activate handover
 echo "--- ensure partnet_mobility_faucet asset is present ---"
 python -m mani_skill.utils.download_asset partnet_mobility_faucet -y || true
 
-OUT_DIR=/scratch/gilbreth/wang4433/render_turnfaucet
+OUT_DIR=renders/turnfaucet
 mkdir -p "$OUT_DIR"
 
 LD_LIBRARY_PATH="$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}" \

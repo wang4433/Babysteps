@@ -24,21 +24,26 @@ from babysteps.render.common import (
     prop_action,
     read_obs,
     render_frame,
+    render_wrist_frame,
     to_np,
 )
 from babysteps.schemas import AttemptResult, DemoEvidence, SceneState
 from babysteps.skills.push import build_push_waypoints
 
 
-def _execute_push(env, waypoints, frames: list, *, seed: int) -> dict:
+def _execute_push(env, waypoints, frames: list, *, seed: int, capture=render_frame) -> dict:
     """Step through waypoints capturing one frame per step. Re-resets the env
-    at the start so demo / attempt / retry all begin from the same scene."""
+    at the start so demo / attempt / retry all begin from the same scene.
+
+    `capture` selects the view: render_frame (third-person external camera,
+    the demo view) or render_wrist_frame (first-person panda_wristcam, the
+    execution view)."""
     obs, _ = env.reset(seed=int(seed))
     targets = [np.asarray(wp[0:3], dtype=np.float64) for wp in waypoints]
     phase_idx = 0
     success = False
 
-    frames.append(render_frame(env))
+    frames.append(capture(env))
     for _ in range(PUSHCUBE_MAX_CONTROL_STEPS):
         tcp, cube_xy, _, _ = read_obs(obs)
         target = targets[phase_idx]
@@ -49,7 +54,7 @@ def _execute_push(env, waypoints, frames: list, *, seed: int) -> dict:
             target = targets[phase_idx]
         action = prop_action(tcp, target, gripper_cmd=-1.0)
         obs, _r, term, trunc, info = env.step(action)
-        frames.append(render_frame(env))
+        frames.append(capture(env))
         term_b = bool(to_np(term).item()) if hasattr(term, "cpu") else bool(term)
         trunc_b = bool(to_np(trunc).item()) if hasattr(trunc, "cpu") else bool(trunc)
         succ = info.get("success", False) if hasattr(info, "get") else False
@@ -146,8 +151,9 @@ def render_episode(
     demo_frames = s["demo_frames"]
 
     # === Phase 2 — ATTEMPT 1 (planner_failed, held still) ===
+    # Execution phases are observed in the first-person panda_wristcam view.
     obs, _ = env.reset(seed=seed)
-    attempt1_frames = [render_frame(env)] * (fps * 2)
+    attempt1_frames = [render_wrist_frame(env)] * (fps * 2)
 
     # === Phase 3 — RETRY with revised approach (selective) ===
     revised_intent, revision = adapter.revise_intent(
@@ -155,7 +161,9 @@ def render_episode(
     )
     wp_retry = build_push_waypoints(scene_exec, revised_intent)
     retry_frames: list = []
-    out_retry = _execute_push(env, wp_retry, retry_frames, seed=seed)
+    out_retry = _execute_push(
+        env, wp_retry, retry_frames, seed=seed, capture=render_wrist_frame,
+    )
 
     demo_title = (
         f"{short_id}  phase 1/3: demo proxy",
@@ -208,14 +216,16 @@ def render_baseline_contrast(
     demo_frames = s["demo_frames"]
 
     # === Phase 2 — ATTEMPT 1 (planner_failed, held still) ===
+    # Execution phases are observed in the first-person panda_wristcam view.
     obs, _ = env.reset(seed=seed)
-    attempt1_frames = [render_frame(env)] * (fps * 2)
+    attempt1_frames = [render_wrist_frame(env)] * (fps * 2)
 
     # === Phase 3a — SELECTIVE retry (approach_direction only) ===
     sel_intent, _ = adapter.revise_intent(initial_intent, attribution, scene_exec)
     sel_frames: list = []
     out_sel = _execute_push(
         env, build_push_waypoints(scene_exec, sel_intent), sel_frames, seed=seed,
+        capture=render_wrist_frame,
     )
 
     # === Phase 3b — FULL_REPLAN retry (approach fixed + contact_region perturbed) ===
@@ -233,6 +243,7 @@ def render_baseline_contrast(
     fr_frames: list = []
     out_fr = _execute_push(
         env, build_push_waypoints(scene_exec, fr_intent), fr_frames, seed=seed,
+        capture=render_wrist_frame,
     )
 
     demo_title = (
