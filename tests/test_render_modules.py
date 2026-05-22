@@ -106,6 +106,22 @@ def test_pushcube_render_titles_contain_phase_label():
     assert "phase 3/3" in titles["retry"][0]
 
 
+def test_pushcube_render_retry_subtitle_shows_frozen_factors():
+    """The retry subtitle must name the frozen (preserved) factors so the
+    single-factor revision invariant is visible in the rendered caption.
+    For PushCube the revised factor is approach_direction, so frozen_factors
+    includes goal_state and object_motion (all INTENT_FIELDS minus approach_direction)."""
+    from babysteps.render.pushcube import render_episode
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+
+    env = _StubEnv()
+    _, titles = render_episode(env, PushCubeAdapter(), seed=0, fps=4)
+    _title, subtitle = titles["retry"]
+    assert "frozen" in subtitle.lower()
+    assert "goal_state" in subtitle
+    assert "object_motion" in subtitle
+
+
 def test_pushcube_baseline_contrast_emits_four_phases():
     """The baseline-contrast render shares demo + blocked attempt, then emits
     two retries: babysteps_selective (preserves contact_region) and

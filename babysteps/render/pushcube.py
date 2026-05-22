@@ -150,7 +150,7 @@ def render_episode(
     attempt1_frames = [render_frame(env)] * (fps * 2)
 
     # === Phase 3 — RETRY with revised approach (selective) ===
-    revised_intent, _rev = adapter.revise_intent(
+    revised_intent, revision = adapter.revise_intent(
         initial_intent, s["attribution"], scene_exec,
     )
     wp_retry = build_push_waypoints(scene_exec, revised_intent)
@@ -171,7 +171,8 @@ def render_episode(
         f"{short_id}  phase 3/3: retry (success={out_retry['success']})",
         f"approach_substitution: "
         f"{initial_intent.approach_direction} → "
-        f"{revised_intent.approach_direction}",
+        f"{revised_intent.approach_direction}  |  "
+        f"frozen (preserved): {', '.join(revision.frozen_factors)}",
     )
     return (
         {"demo": demo_frames,
