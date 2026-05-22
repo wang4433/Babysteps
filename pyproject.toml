@@ -16,6 +16,7 @@ dependencies = [
 [project.optional-dependencies]
 sim = ["mani_skill"]
 dev = ["pytest"]
+analysis = ["scikit-learn"]
 
 [tool.setuptools.packages.find]
 where = ["."]
