@@ -1,8 +1,8 @@
 #!/bin/bash
 #SBATCH --account=rpaleja
-#SBATCH --partition=a100-40gb
+#SBATCH --partition=a30
 #SBATCH --gres=gpu:1
-#SBATCH --mem=115G
+#SBATCH --mem=48G
 #SBATCH --time=01:00:00
 #SBATCH --job-name=stage4-collect-varied
 #SBATCH --output=slurm/logs/collect-stage4-varied-%j.out
