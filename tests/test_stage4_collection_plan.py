@@ -40,3 +40,17 @@ def test_select_balanced_raises_when_a_class_cannot_be_filled():
     stream = [(s, "translate_+x") for s in range(50)]
     with pytest.raises(ValueError, match="could not fill"):
         select_balanced_seeds(stream, _DIRS, episodes_per_class=10)
+
+
+def test_driver_module_imports_and_builds_pushcube_plan():
+    import importlib.util
+    from pathlib import Path
+    root = Path(__file__).resolve().parent.parent
+    spec = importlib.util.spec_from_file_location(
+        "stage4_collect_varied", root / "scripts/stage4_collect_varied.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)  # must import without a simulator
+    assert mod._DIRS == (
+        "translate_+x", "translate_-x", "translate_+y", "translate_-y")
+    plan = mod.stratified_seed_plan(mod._DIRS, 10, 0)
+    assert len(plan) == 40
