@@ -79,6 +79,14 @@ class PushCubeEnvRunner:
             sim_backend="cpu",
         )
         self._last_seed: Optional[int] = None
+        self._pending_motion: Optional[str] = None
+
+    def set_injection(self, target_motion: Optional[str]) -> None:
+        """Set (or clear with None) the target object_motion for the NEXT
+        reset. The driver calls this per episode before run_episode; reset
+        repositions the cube so cube→goal points along target_motion. See
+        babysteps.envs.scene.injected_cube_xy."""
+        self._pending_motion = target_motion
 
     def reset(self, seed: int) -> SceneState:
         """Reset and return the SceneState. blocked_sides is always ()
@@ -86,6 +94,25 @@ class PushCubeEnvRunner:
         self._last_seed = int(seed)
         obs, _info = self._env.reset(seed=int(seed))
         tcp, cube_xy, goal_xy, cube_z = _read_obs(obs)
+        # NOTE: cube-actor handle (env.unwrapped.obj) + goal-honoring is
+        # verified by the Task-5 GPU spike; fall back to moving goal_region if
+        # repositioning the cube desyncs PushCube-v1's success check.
+        if self._pending_motion is not None:
+            from babysteps.envs.scene import injected_cube_xy
+            push_dist = float(np.linalg.norm(goal_xy - cube_xy))
+            new_xy = injected_cube_xy(
+                (float(goal_xy[0]), float(goal_xy[1])), push_dist,
+                self._pending_motion,
+            )
+            import sapien
+            base = self._env.unwrapped.obj  # PushCube-v1 cube actor
+            pose = base.pose.sp if hasattr(base.pose, "sp") else base.pose
+            base.set_pose(sapien.Pose(
+                p=[new_xy[0], new_xy[1], float(pose.p[2])],
+                q=list(pose.q),
+            ))
+            obs = self._env.unwrapped.get_obs()
+            tcp, cube_xy, goal_xy, cube_z = _read_obs(obs)
         return SceneState(
             cube_xy=(float(cube_xy[0]), float(cube_xy[1])),
             cube_z=cube_z,
