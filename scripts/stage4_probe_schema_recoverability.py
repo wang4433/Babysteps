@@ -87,8 +87,8 @@ def _render_markdown(report: dict) -> str:
     header = [
         "# Stage-4 Schema-Recoverability Probe",
         "",
-        (f"Gate: GEOMETRIC cells must reach probe_acc_mean >= "
-         f"{GATE_THRESHOLD:.2f} AND clear chance + shuffled by "
+        (f"Gate: geometric cells must reach probe_acc_mean >= "
+         f"{GATE_THRESHOLD:.2f} AND beat chance & shuffled each by "
          f"{g['margin']:.2f}."),
         (f"Cells: {g['n_total']} total | {g['n_geometric']} geometric "
          f"({g['n_passing']} pass / {g['n_failing']} fail) | "
@@ -137,8 +137,8 @@ def main(argv=None) -> int:
     if g["n_failing"]:
         failing = ", ".join(f"{t}/{f}" for t, f in g["failing_cells"])
         print(
-            f"WARNING: {g['n_failing']} non-trivial cell(s) below "
-            f"{GATE_THRESHOLD:.2f}: {failing}",
+            f"WARNING: {g['n_failing']} geometric cell(s) below the gate "
+            f"({GATE_THRESHOLD:.2f} + {g['margin']:.2f} margin): {failing}",
             file=sys.stderr,
         )
     return 0
