@@ -87,15 +87,19 @@ def _render_markdown(report: dict) -> str:
     header = [
         "# Stage-4 Schema-Recoverability Probe",
         "",
-        f"Gate: non-trivial cells must reach probe_acc_mean >= {GATE_THRESHOLD:.2f}.",
-        (f"Cells: {g['n_total']} total | {g['n_passing']} pass | "
-         f"{g['n_failing']} fail | {g['n_trivial']} trivially constant."),
+        (f"Gate: GEOMETRIC cells must reach probe_acc_mean >= "
+         f"{GATE_THRESHOLD:.2f} AND clear chance + shuffled by "
+         f"{g['margin']:.2f}."),
+        (f"Cells: {g['n_total']} total | {g['n_geometric']} geometric "
+         f"({g['n_passing']} pass / {g['n_failing']} fail) | "
+         f"{g['n_label_identity']} label-identity | {g['n_trivial']} "
+         f"trivially constant."),
         "",
     ]
     md = "\n".join(header) + "\n" + markdown_table(report)
     if g["n_failing"]:
         failing = ", ".join(f"{t}/{f}" for t, f in g["failing_cells"])
-        md += f"\n**Failing cells (need a notes.md explanation):** {failing}\n"
+        md += f"\n**Failing geometric cells (need a notes.md explanation):** {failing}\n"
     return md
 
 
@@ -127,8 +131,9 @@ def main(argv=None) -> int:
 
     g = report["gate"]
     print(f"wrote {args.out_dir}/schema_recoverability.{{json,md}}")
-    print(f"gate: {g['n_passing']} pass / {g['n_failing']} fail / "
-          f"{g['n_trivial']} trivial (of {g['n_total']} cells)")
+    print(f"geometric gate: {g['n_passing']} pass / {g['n_failing']} fail "
+          f"(of {g['n_geometric']} geometric); "
+          f"{g['n_label_identity']} label-identity, {g['n_trivial']} trivial")
     if g["n_failing"]:
         failing = ", ".join(f"{t}/{f}" for t, f in g["failing_cells"])
         print(
