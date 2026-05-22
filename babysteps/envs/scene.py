@@ -34,6 +34,8 @@ __all__ = [
     "rotate_motion_token",
     "resolve_grounded_motion",
     "world_resolved_intent",
+    "injected_cube_xy",
+    "cubeA_to_cubeB_motion",
 ]
 
 
@@ -123,6 +125,32 @@ def goal_direction_to_motion(goal_vec_xy: np.ndarray) -> str:
     if abs(v[0]) >= abs(v[1]):
         return "translate_+x" if v[0] >= 0 else "translate_-x"
     return "translate_+y" if v[1] >= 0 else "translate_-y"
+
+
+def injected_cube_xy(
+    goal_xy: tuple[float, float], push_distance: float, target_motion: str,
+) -> tuple[float, float]:
+    """Cube xy that, pushed toward the FIXED `goal_xy`, travels `target_motion`.
+
+    Used by the Stage-4 varied cut (Approach A): place the cube `push_distance`
+    away from the goal on the side opposite the target motion, so the
+    cube→goal vector points along `target_motion`. `target_motion` must be one
+    of the four cardinal translate tokens."""
+    unit = motion_to_unit(target_motion)        # raises on non-cardinal tokens
+    gx, gy = float(goal_xy[0]), float(goal_xy[1])
+    d = float(push_distance)
+    return (gx - d * float(unit[0]), gy - d * float(unit[1]))
+
+
+def cubeA_to_cubeB_motion(
+    cubeA_xy: tuple[float, float], cubeB_xy: tuple[float, float],
+) -> str:
+    """The cardinal motion cubeA travels to reach cubeB (StackCube binning).
+
+    Uses the same dominant-axis snap as the demo-evidence labeller, so the bin
+    a seed lands in equals the `object_motion` label its episode will carry."""
+    vec = np.array(cubeB_xy, dtype=np.float64) - np.array(cubeA_xy, dtype=np.float64)
+    return goal_direction_to_motion(vec)
 
 
 # ---------- cross-view grounding (Sub-project E) ----------------------- #
