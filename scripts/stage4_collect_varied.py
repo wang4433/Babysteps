@@ -56,17 +56,20 @@ def _collect_stackcube(
 ) -> int:
     entry = get_task_entry("StackCube-v1")
     adapter = entry.adapter_cls()
-    runner = adapter.env_runner()
-    # Pass 1: bin native resets by cubeA→cubeB direction.
-    stream = []
-    for seed in range(seed_start, seed_start + max_scan):
-        scene = runner.reset(seed)
-        cubeB_xy = scene.extra["cubeB_xy"]
-        stream.append((seed, cubeA_to_cubeB_motion(scene.cube_xy, cubeB_xy)))
-    kept = select_balanced_seeds(stream, _DIRS, per_class)
-    # Pass 2: full episodes on the kept seeds.
     records = []
+    # Single try/finally over BOTH passes: select_balanced_seeds raises
+    # ValueError on an underfillable bin (a designed failure path), and a
+    # native reset can fail mid-scan — either way the GPU env must be released.
     try:
+        runner = adapter.env_runner()  # cached; run_episode reuses this instance
+        # Pass 1: bin native resets by cubeA→cubeB direction.
+        stream = []
+        for seed in range(seed_start, seed_start + max_scan):
+            scene = runner.reset(seed)
+            cubeB_xy = scene.extra["cubeB_xy"]
+            stream.append((seed, cubeA_to_cubeB_motion(scene.cube_xy, cubeB_xy)))
+        kept = select_balanced_seeds(stream, _DIRS, per_class)
+        # Pass 2: full episodes on the kept seeds.
         for seed in kept:
             rec = run_episode(
                 episode_id=f"stackcube_varied_seed_{seed:04d}",
