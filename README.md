@@ -4,11 +4,16 @@ Failure-guided structured-intent revision for Franka manipulation.
 
 The Stage-0 goal (per `goal.md`) is to validate the data contract and the
 factor-local revision loop on `ManiSkill PushCube-v1` before adding learned
-perception, real human demonstrations, or real-robot execution.
+perception, richer cross-view stress, or real-robot execution.
 
-> Stage-0 boundary: data inputs are **third-person demonstration proxies**,
-> not human demonstrations. Read `goal.md` and the design spec before adding
-> new modules or schema fields.
+> **Stage-0 setup.** One Franka, two camera roles. The same Franka
+> demonstrates the task on the desk (recorded from a fixed third-person
+> external camera) and then attempts the task itself (observed from a
+> first-person wrist / robot-front camera). There is no human
+> demonstrator anywhere in the pipeline. The cross-view stressor is
+> *demo camera ≠ execution camera*, never *demo embodiment ≠ execution
+> embodiment*. Read `goal.md` and the design spec before adding new
+> modules or schema fields.
 
 ## Authoritative documents
 

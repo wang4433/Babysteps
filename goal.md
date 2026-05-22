@@ -15,25 +15,43 @@ third-person demonstration proxy
 -> retry
 ```
 
-This stage should validate the data contracts and correction loop before adding real human demonstrations, real-world Franka execution, or learned perception/revision models.
+This stage should validate the data contracts and the correction loop
+before adding richer cross-view stress, real-world Franka execution, or
+learned perception/revision models.
 
 ## Boundary Line
 
-Stage 0 may use ManiSkill and Franka-generated demonstrations, but those demonstrations are not human demonstrations.
+Stage 0 is **Franka-to-Franka**. The same Franka / Panda performs both
+the demonstration and the execution:
+
+1. **Demonstration phase.** A Franka executes the correct task on the
+   desk under an oracle / scripted policy. We record this from a fixed
+   **third-person** external camera (desk-front view). The demo Franka's
+   joint trace is *not* exposed to the BABYSTEPS intent path — only the
+   third-person video and object-centric labels are.
+2. **Execution phase.** The scene is reset and the (same) Franka attempts
+   the task. We observe it from a **first-person** view (wrist /
+   robot-front camera). Failures, attribution, and revisions all happen
+   in this first-person view.
+
+There is no human demonstrator anywhere in Stage 0. The arm is always a
+Franka; the cross-view stressor is *demo camera ≠ execution camera*, not
+*demo embodiment ≠ execution embodiment*.
 
 Use this wording:
 
-> third-person demonstration proxy
+> third-person Franka demonstration proxy
+> (and "first-person Franka execution" for the retry phase)
 
 Do not use this wording:
 
-> human demonstration
+> human demonstration / human pinch / hand-object contact
 
 Stage 0 tests:
 
-- Cross-view intent transfer: external demo view to robot-centric execution view.
+- Cross-view intent transfer: third-person demo view → first-person Franka execution view.
 - Failure-guided intent revision: failure updates a structured intent factor.
-- Franka execution loop: intent compiles into executable robot behavior.
+- Franka execution loop: intent compiles into executable Franka behavior.
 - Data preparation: every episode stores enough evidence for later training and evaluation.
 
 Stage 0 does not test:
@@ -46,7 +64,7 @@ Stage 0 does not test:
 
 The paper-facing claim for Stage 0 is:
 
-> We evaluate BABYSTEPS in a controlled simulated setting where third-person demonstration proxies provide object-centric intent evidence, while a Franka executes from a robot-centric view. This isolates the failure-guided structured intent revision mechanism before moving to real human demonstrations.
+> We evaluate BABYSTEPS in a controlled simulated setting where one Franka demonstrates the task from a third-person external camera and the same Franka then executes the task from its own first-person view. This isolates the failure-guided structured intent revision mechanism under a clean cross-view setup before moving to richer demonstrators in later stages.
 
 ## Core Research Invariant
 
@@ -82,35 +100,44 @@ These factors correspond to the broader BABYSTEPS latent intent:
 - `contact_region`: demonstrated or inferred contact site.
 - `approach_direction`: route or side used to reach contact.
 - `constraint_region`: scene region or object state that must be preserved.
-- `embodiment_mapping`: how a proxy/human-like contact maps to Franka action.
+- `embodiment_mapping`: how the demo-time Franka contact maps to an execution-time Franka skill primitive (e.g. demo grasp-and-turn → execution closed-gripper poke-turn when the handle exceeds the gripper opening).
 
 Avoid task-specific fields such as `drawer_axis_correct`, `push_side_correct`, or `peg_depth_correct`.
 
 ## Stage 0 Data Pipeline
 
-### 1. Generate Third-Person Demonstration Proxy
+### 1. Generate Third-Person Franka Demonstration Proxy
 
-Use ManiSkill to generate a successful manipulation from an external camera.
+Use ManiSkill to generate a successful Franka manipulation, recorded
+from a fixed external (third-person) camera positioned in front of the
+desk.
 
-Acceptable demonstrators:
+The demonstrator is always the Franka arm itself, driven by:
 
-- Oracle planner.
-- Scripted policy.
-- Franka, if the arm is treated only as a proxy demonstrator.
-- Simple hand/contact proxy such as a capsule, sphere fingertip, or kinematic contact tool.
-- Object-only trajectory with contact side labels.
+- An oracle planner, or
+- A scripted policy.
+
+No capsule / sphere fingertip / object-only / hand-proxy demonstrators
+are used in Stage 0. Keeping the demonstrator embodiment fixed (Franka)
+while only varying the camera view (third-person → first-person)
+isolates the cross-view stressor without confounding it with
+cross-embodiment transfer.
 
 Record:
 
-- External RGB or RGB-D video.
+- Third-person RGB or RGB-D video of the demo Franka on the desk.
 - Object masks if available.
 - Object poses.
-- Contact region label.
+- Contact region label (where the demo Franka gripper contacted the object).
 - Start state.
 - End state.
 - Object trajectory.
 
-Do not expose robot joint states or privileged action trajectories to the BABYSTEPS intent inference path. Those can be stored as simulator metadata for debugging, but they must not be treated as demo input.
+Do not expose the demo Franka's joint states or privileged action
+trajectories to the BABYSTEPS intent inference path. Those can be stored
+as simulator metadata for debugging, but they must not be treated as
+demo input — the only demo input is the third-person video and the
+object-centric labels above.
 
 ### 2. Convert Demo Evidence Into Intent Factors
 
@@ -131,21 +158,33 @@ The intent extraction target is structured data, not free-form text:
 
 Later stages can replace scripted labels with DINO/DINOv2 grounding plus VLM symbolization.
 
-### 3. Execute From Robot-Centric View
+### 3. Execute From First-Person Franka View
 
-Reset the scene and execute with Franka using robot-centric observations:
+Reset the scene and execute with the same Franka, but now record and
+condition on its **first-person** observations:
 
-- Wrist camera.
-- Robot front camera.
-- Robot-centric state view during early debugging.
+- Wrist camera, or
+- Robot-front camera.
+- Robot-centric privileged state view is permitted during early
+  debugging, but the conceptual data contract is that the executing
+  Franka sees the world in first person.
 
 The important experimental condition is:
 
 ```text
-demo view != execution view
+demo view  = third-person external desk-front camera
+exec view  = first-person wrist / robot-front camera
+demo view != exec view
 ```
 
-Stage 0 may use privileged simulator state internally for deterministic labels and success checks, but the conceptual data contract should distinguish demo evidence from robot execution evidence.
+Failure detection, attribution, and revision all happen in the
+first-person execution view; the third-person demo is only used to
+ground the *initial* intent.
+
+Stage 0 may use privileged simulator state internally for deterministic
+labels and success checks, but the conceptual data contract is
+demo-evidence (third-person) vs execution-evidence (first-person), not
+just "different cameras".
 
 ### 4. Create Controlled Semantic Failures
 
@@ -350,8 +389,10 @@ oracle factor revision
 
 Do not add these until the Stage 0 data format and PushCube loop are stable:
 
-- Real human videos.
-- Real Franka execution.
+- Real human videos / human demonstrators of any kind.
+- Cross-embodiment demonstrators (no capsules, no proxy hands, no
+  non-Franka arms — Stage 0 is Franka-to-Franka only).
+- Real Franka execution (sim-to-real).
 - Diffusion counterfactual scoring.
 - Learned failure attribution.
 - VLM free-form replanning.
@@ -362,9 +403,10 @@ Do not add these until the Stage 0 data format and PushCube loop are stable:
 
 Stage 0 is complete when:
 
-- A PushCube third-person demonstration proxy is generated and stored.
+- A PushCube third-person Franka demonstration proxy is generated and stored.
 - A structured initial intent is derived from the demo evidence.
-- Franka executes from a robot-centric view or robot-centric state abstraction.
+- The same Franka executes the task from its first-person view (or, during
+  early debugging, a robot-centric state abstraction acceptable as a stand-in).
 - A controlled semantic failure is produced and logged.
 - A structured failure packet identifies the intended wrong factor.
 - BABYSTEPS revises only the implicated factor.
@@ -374,34 +416,158 @@ Stage 0 is complete when:
 
 ## Later Stages
 
+The project stays Franka-to-Franka throughout. Later stages stress the
+*cross-view* and *deployment* axes, never the demonstrator-embodiment
+axis.
+
 Stage 1:
 
 ```text
-Replace proxy demos with real human or human-hand-object videos.
+Richer cross-view stress: more third-person camera placements, occlusions,
+lighting / background variation, and a literal first-person sensor stream
+(wrist / robot-front RGB-D) for the executing Franka — replacing the
+single default render camera that Stage 0 uses for both phases.
 ```
-
-Possible sources include self-recorded demonstrations or datasets such as HOI4D/OakInk, if they fit the manipulation tasks and licensing constraints.
 
 Stage 2:
 
 ```text
-Move selected tasks to a real Franka setup.
+Move selected tasks to a real Franka setup (sim-to-real). Demonstrator
+and executor remain the same physical / kinematic Franka.
 ```
 
 Stage 3:
 
 ```text
-Add learned attribution, revision ranking, and optional diffusion counterfactual scoring.
+Add learned attribution, revision ranking, and optional diffusion
+counterfactual scoring on top of the same Franka-to-Franka loop.
+The learned attribution and revision-ranking components produced here
+are also the supervision signal that the Stage 4 latent slot-intent
+track consumes.
 ```
+
+## Stage 4: Object-Centric Latent Slot-Intent Bottleneck
+
+Stage 4 is the **learned-latent** track. It does not replace Stage 0; it sits
+on top of it. The Stage-0 discrete schema is preserved, but its role changes:
+it becomes the *supervision signal and certification scaffold* for the latent
+representation, not the runtime intent.
+
+### Purpose
+
+Replace the discrete intent JSON with a per-object **latent slot-intent**
+representation, while preserving the BABYSTEPS core invariant:
+
+```text
+failure -> identify implicated slot -> revise only that slot's intent latent -> preserve the rest
+```
+
+### Boundary Line
+
+* Stage 4 stays Franka-to-Franka and sim-only. The Stage-0 cross-view
+  condition (third-person demo, first-person execution) carries over unchanged.
+* The latent representation is **object-centric and slot-local**. There is no
+  monolithic intent vector and no whole-plan rewrite.
+* $\tilde{g}_t^i$ (the corrective intent latent for slot $i$) is produced by a
+  *learned* revision policy trained offline on Stage-0 (failure_packet,
+  revision) pairs. Stage 4 does **not** call a VLM to freely regenerate the
+  intent after failure; doing so would be a latent-space violation of the
+  core selectivity principle.
+
+### Architecture
+
+$$o_t \xrightarrow{\text{SlotEncoder}} Z_t = \{z_t^1, \dots, z_t^K\} \quad \text{(object latents, masked to max object count } K\text{)}$$
+
+$$\text{lang} + Z_t \xrightarrow{\text{IntentHead}} G_t = \{g_t^1, \dots, g_t^K\} \quad \text{(slot intents)}$$
+
+$$(g_t^i, \text{failure\_packet\_vector}) \xrightarrow{\text{ReviseHead}} \tilde{g}_t^i \quad \text{(slot-local edit)}$$
+
+$$\text{edited } G_t, Z_t \xrightarrow{\pi_\theta} a_t \quad \text{(action decoder)}$$
+
+Architectural invariants (enforced by function signature, not by hope):
+
+1. `ReviseHead` consumes **exactly one** slot intent and the vectorized
+   failure packet, and emits **exactly one** revised slot intent.
+   Whole-$G_t$ rewrites are forbidden by the interface.
+2. The action decoder $\pi_\theta$ consumes the edited $G_t$, but cross-slot
+   influence is bounded empirically by the selectivity certification
+   below — not assumed.
+
+### Certification Interface (the Stage-0 scaffold's job)
+
+Every claim about the latent representation is grounded in the discrete schema:
+
+1. **Probe recoverability.** A frozen linear probe must recover each Stage-0
+   discrete factor (`goal_state`, `object_motion`, `contact_region`,
+   `approach_direction`, `constraint_region`, `embodiment_mapping`) from
+   $G_t$ with held-out accuracy $\ge$ 90%. An MLP probe is maintained
+   purely as a capacity diagnostic.
+2. **Frozen-slot preservation.** After applying $g_t^i \leftarrow \tilde{g}_t^i$,
+   the $\ell_2$ drift of all other $g_t^j$ must be $\le \epsilon$. This is
+   the latent analog of Stage-0's `frozen_factor_preservation_rate`.
+3. **Selectivity certification.** Counterfactual rollout pairs (same $Z_t$,
+   one edited slot vs. unedited) must show predicted future-slot drift on
+   slots $j \neq i$ statistically indistinguishable from the natural
+   simulator noise floor $\epsilon_{\text{sim}}$ evaluated across identical
+   seeds (paired $t$-test, $p > \alpha$). This makes the "physically
+   decoupled" claim falsifiable.
+
+If probe recoverability fails, Stage 4 is not yet a faithful refinement of
+Stage 0 and may not be reported as a latent-revision result.
+
+### Data Dependencies
+
+Stage 4 reuses Stage-0 episode JSONs as supervision:
+
+* `chosen_intent` + `oracle_wrong_factor` + revision JSON $\rightarrow$
+  training pairs for `ReviseHead`.
+* `frozen_factors` from each revision JSON $\rightarrow$ attention masks
+  enforcing the slot-local constraint during training.
+* `intent_factor_attribution_accuracy` from Stage 0 is the analytic upper
+  bound the learned attribution must approach.
+
+The hand-coded `failure.py` rules become the **teacher** of the learned
+Stage-4 components, not the thing they replace.
+
+### Success Criteria
+
+Stage 4 is complete when, on the Stage-0 task set:
+
+* Probe recoverability of all six discrete factors from $G_t \ge$ 90%.
+* Frozen-slot $\ell_2$ drift after a single-slot edit $\le \epsilon$
+  (calibrated against the natural per-step drift of unedited rollouts).
+* $\Delta pp$ of latent revision vs. learned-failure-agnostic retry $\ge$ 10.
+* $\Delta pp$ of latent revision vs. oracle discrete revision within 5 pp
+  (ensuring the latent loop does not collapse relative to the Stage-0
+  baseline).
+* Selectivity certification: counterfactual cross-slot drift is
+  indistinguishable from the noise floor (paired test, $p > \alpha$).
+
+All numeric thresholds (90% recoverability, $\Delta pp \ge 10$, 5 pp window,
+$\epsilon$, $\alpha$) are calibrated against Stage-0 oracle variance on the
+existing task set, not arbitrary absolute targets.
+
+### Stage 4 Non-Goals
+
+* Not testing cross-embodiment demonstrators (still Franka-to-Franka).
+* Not testing real-Franka deployment (Stage 2's job).
+* Not adopting a pretrained end-to-end VLA as the policy backbone.
+* Not allowing `ReviseHead` to read $G_t$ as a whole. Whole-bottleneck
+  rewrites are off-limits; the slot-local interface is the contribution.
+* Not relying on a free-form VLM call to produce $\tilde{g}_t^i$ at inference.
 
 ## Guidance for Future Agents
 
 When implementing from this file:
 
-1. Preserve the Stage 0 boundary line: proxy demo, not human demo.
-2. Start with PushCube blocked approach before adding PickCube or orientation refinement.
-3. Keep simulator privilege out of the demo-to-intent input path.
-4. Use simulator privilege only for labels, success checks, and evaluation.
-5. Log every attempt as structured JSON.
-6. Make revision operators explicit and factor-local.
-7. Reject implementations that freely regenerate all intent fields after failure.
+1. Preserve the Stage 0 boundary: third-person Franka demo proxy, not human demo.
+2. Preserve the Stage 0 invariant: demo and execution are the same Franka.
+   No capsules, sphere fingertips, hand proxies, or non-Franka arms.
+3. Preserve the cross-view condition: demo camera (third-person desk-front)
+   ≠ execution camera (first-person wrist / robot-front).
+4. Start with PushCube blocked approach before adding PickCube or orientation refinement.
+5. Keep simulator privilege out of the demo-to-intent input path.
+6. Use simulator privilege only for labels, success checks, and evaluation.
+7. Log every attempt as structured JSON.
+8. Make revision operators explicit and factor-local.
+9. Reject implementations that freely regenerate all intent fields after failure.

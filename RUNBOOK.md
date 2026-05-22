@@ -47,8 +47,10 @@ CrossViewPush-v1}`. `stage0_summarize.py` derives the task from the input JSONL
 
 ## 3. Three-phase MP4 render (GPU)
 
-All tasks use the same script with a different `--task`. Output per task is
-`n_episodes × 3` MP4s in `<out_dir>/videos_maniskill/`, named
+All tasks use the same script with a different `--task`. Output defaults to
+`renders/<task>/videos_maniskill/` under the repo (every project render lives
+under `renders/` — pass `--out_dir` only to override). Each task produces
+`n_episodes × 3` MP4s named
 `<task_prefix>_seed_NNNN__{1_demo,2_attempt_blocked,3_retry}.mp4`.
 
 ```bash
@@ -56,26 +58,24 @@ srun --account=rpaleja --partition=a100-40gb --gres=gpu:1 --mem=115G --time=00:2
   cd /scratch/gilbreth/wang4433/babysteps &&
   source /apps/external/conda/2025.09/etc/profile.d/conda.sh &&
   conda activate handover &&
-  OUT_DIR=/scratch/gilbreth/wang4433/render_<task> &&
   LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH" \
   python scripts/render_stage0_maniskill.py \
     --task <TASK>-v1 \
-    --out_dir "$OUT_DIR" \
     --n_episodes 2 \
     --seed_start 0 &&
-  ls -lh "$OUT_DIR/videos_maniskill"
+  ls -lh renders/<task>/videos_maniskill
 '
 ```
 
-Per-task substitutions (`<TASK>` / `<task>` / `--n_episodes`):
+Per-task substitutions (`<TASK>` / `<task>` dir / `--n_episodes`):
 
-| Task | render OUT_DIR suffix | episodes | prefix |
+| Task | renders/ dir | episodes | prefix |
 | --- | --- | --- | --- |
-| PushCube-v1 | `render_pushcube` | 2 | `pushcube_blocked_approach` |
-| PickCube-v1 | `render_pickcube` | 2 | `pickcube_grasp_slip` |
-| StackCube-v1 | `render_stackcube` | 2 | `stackcube_underspec_goal` |
-| TurnFaucet-v1 | `render_turnfaucet` | 2 | `turnfaucet_*` |
-| CrossViewPush-v1 | `render_crossview` | 3 | `crossview_grounding` |
+| PushCube-v1 | `renders/pushcube` | 2 | `pushcube_blocked_approach` |
+| PickCube-v1 | `renders/pickcube` | 2 | `pickcube_grasp_slip` |
+| StackCube-v1 | `renders/stackcube` | 2 | `stackcube_underspec_goal` |
+| TurnFaucet-v1 | `renders/turnfaucet` | 2 | `turnfaucet_*` |
+| CrossViewPush-v1 | `renders/crossview` | 3 | `crossview_grounding` |
 
 Equivalent batch jobs live in `slurm/*.sbatch` (and `slurm/submit_all.sh`).
 

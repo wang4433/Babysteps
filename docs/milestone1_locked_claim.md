@@ -45,16 +45,23 @@ replanning — is the contribution.
   factors.
 
 **Scope honesty (Stage 0).** We do **not** claim human-to-robot transfer
-yet. Stage 0 validates the revision mechanism in a controlled simulated
-setting where **third-person demonstration proxies** (ManiSkill oracle /
-scripted demonstrators, never human video) provide object-centric intent
-evidence, while a Franka executes from a robot-centric view. The demo view ≠
-execution view condition is the cross-view stressor. The paper-facing
-sentence:
+and we do **not** claim cross-embodiment transfer. Stage 0 is
+deliberately **single-Franka cross-view**: one Franka demonstrates the
+task on the desk under an oracle / scripted policy and is recorded from
+a fixed third-person external camera; the same Franka then attempts the
+task and is observed from its own first-person view (wrist /
+robot-front camera). The demo camera ≠ execution camera condition is the
+cross-view stressor; the demonstrator embodiment = executor embodiment
+on purpose, so the embodiment axis cannot confound the result. The
+paper-facing sentence:
 
-> We first validate structured intent revision in controlled third-person
-> demonstration proxies, then study whether the same factorization supports
-> human-to-robot transfer.
+> We validate structured single-factor intent revision in a controlled
+> single-Franka cross-view setup: one Franka demonstrates the task from
+> a third-person external camera, and the same Franka then attempts the
+> task from its own first-person view. Failures are used to revise one
+> structured intent factor at a time. Cross-embodiment and richer
+> demonstrators are explicitly out of Stage 0 and are deferred to later
+> stages.
 
 **Reviewer one-liner.**
 

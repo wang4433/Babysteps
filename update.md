@@ -1,141 +1,152 @@
-Yes. This is a **much cleaner setup**.
+# Stage-0 framing update — single-Franka cross-view
 
-Do **not** claim “human-to-robot cross-view imitation.” Claim:
+> **Status:** locked 2026-05-21. Supersedes the earlier "Robot A / Robot
+> B" two-robot framing that briefly lived in this file. The Stage-0
+> setup is, and always was in code, **one Franka, two cameras**.
+> `goal.md` is the authoritative data contract; this file records the
+> framing decision.
 
-> **Cross-view robot-to-robot imitation with failure-guided latent target correction.**
+## The setup, in one sentence
 
-Or sharper:
+> One Franka demonstrates the task on the desk and is recorded from a
+> fixed third-person external camera. The same Franka then attempts the
+> task and is observed from its own first-person camera (wrist /
+> robot-front). BABYSTEPS uses the failure of the first-person attempt
+> to revise one structured intent factor, then retries.
 
-> **A robot observes another robot successfully perform a task from a different viewpoint, attempts to reproduce the task from its own view, and uses failure to revise the misgrounded latent imitation target.**
-
-This is more defensible because it removes human embodiment, human hand parsing, and real-video perception as confounds. Prior work already studies third-person visual imitation where an agent observes a demonstration from another viewpoint and must perform the intended task in its own environment, so **cross-view imitation alone is not novel**. The novel part is the BABYSTEPS loop: failed execution diagnoses which latent imitation factor was wrong and selectively revises it. ([NeurIPS Papers][1])
-
-## The claim you should defend
+## The claim we defend
 
 Use this claim:
 
-> Existing cross-view imitation methods aim to transfer a demonstrated behavior across viewpoints. BABYSTEPS studies what happens when that transfer fails: the failure trace provides evidence about which latent imitation target was misgrounded, enabling selective correction and retry.
+> Existing cross-view imitation methods aim to transfer a demonstrated
+> behavior across viewpoints. BABYSTEPS studies what happens when that
+> transfer fails: the failure trace from the executing Franka's
+> first-person view provides evidence about which latent imitation
+> target was misgrounded, enabling selective single-factor correction
+> and retry.
 
 That is stronger than:
 
-> Robot B can imitate Robot A from a different view.
+> "Franka can imitate itself across cameras."
 
-Because robot-to-robot/cross-domain imitation and context translation are already known directions. Some prior imitation-from-observation work explicitly learns a context translation model between a third-person demonstration context and a first-person robot context. ([Google Sites][2]) Cross-embodiment skill learning also already studies transferring skills across human/robot or robot/robot videos, for example by learning embodiment-agnostic skill representations. ([Proceedings of Machine Learning Research][3])
-
-Your novelty should be:
+because the novelty is **failure-guided correction of latent intent
+under cross-view ambiguity**, not the cross-view transfer itself. Prior
+imitation-from-observation work studies the cross-view transfer
+problem; what is new here is using execution failure as evidence about
+which latent intent factor was misinterpreted. ([NeurIPS Papers][1],
+[Google Sites][2])
 
 ```text
-not cross-view imitation itself
+not the cross-view transfer itself
 but failure-guided correction of the latent target after cross-view imitation fails
 ```
 
-## Your simulator setup
+## The two cameras
 
-This is a good setup:
-
-```text
-Robot A performs successful demo.
-Robot B observes Robot A from B's wrist camera / external camera.
-Robot B infers latent imitation target.
-Robot B attempts the task in its own workspace/view.
-If it fails, BABYSTEPS revises the implicated factor.
-Robot B retries.
-```
-
-This gives you a clean experiment:
+Call the two views explicitly:
 
 ```text
-success demo view ≠ execution view
-observation actor ≠ execution actor
-failure trace tells what was misgrounded
+demo view : third-person external camera (fixed, in front of the desk)
+exec view : first-person camera on the executing Franka (wrist / robot-front)
 ```
 
-Call the two views:
+Both are simulated cameras attached to the same ManiSkill scene; the
+demonstrator and the executor are the **same Franka kinematic chain**.
+We never put two arms in the scene; we never use a non-Franka
+demonstrator; we never use a human or a hand proxy.
+
+The clean experimental condition is:
 
 ```text
-observer view: Robot B watching Robot A
-actor view: Robot B executing the task itself
+demo view ≠ exec view  (cross-view stressor)
+demo arm  = exec arm   (no embodiment confound)
+demo task = exec task  (no goal confound)
 ```
 
-That is more precise than just “cross-view.”
+This is what makes the cross-view ambiguity, when it occurs, *attributable
+to a single latent intent factor* — the central claim of BABYSTEPS.
+
+## Why same embodiment
+
+Keep the demo and exec arms identical. If they differed (Franka-vs-other
+arm, or Franka-vs-hand-proxy), reviewers would ask whether the method
+solves view transfer, embodiment transfer, or both. Stage 0 deliberately
+removes the embodiment axis so the method is evaluated only on
+cross-view ambiguity and on the failure-guided correction loop.
+
+Stage 0 → Stage 3 all stay Franka-to-Franka. Cross-embodiment is a
+deferred-and-separately-justified follow-on, not a Stage-0 confound. See
+`goal.md` §"Later Stages".
 
 ## Add this factor to the schema
 
-Your current BABYSTEPS schema has factors like object, target relation, contact region, affordance, motion primitive, and terminal constraint.  For this new claim, you need one additional factor:
-
-```python
-view_grounding = [
-    "observer_frame",
-    "actor_frame",
-    "object_frame",
-    "world_frame"
-]
-```
-
-Or more task-specific:
+The cross-view condition motivates one additional factor over the base
+six-factor schema. Use the locked Stage-0 name `direction_grounding`
+(see `babysteps/schemas.py`):
 
 ```python
 direction_grounding = [
-    "observer_left",
+    "observer_left",   # left in the third-person demo camera frame
     "observer_right",
-    "actor_left",
+    "actor_left",      # left in the executing Franka's first-person frame
     "actor_right",
-    "object_left",
+    "object_left",     # left relative to the object's own frame
     "object_right",
-    "world_left",
-    "world_right"
+    "world_left",      # left in the world / table frame
+    "world_right",
 ]
 ```
 
-Use `direction_grounding` first. It is easier to label and easier for reviewers to understand.
+`direction_grounding` is what gets revised in the CrossViewPush sub-project
+when the executing Franka pushes "left" but resolves "left" in the wrong
+frame.
 
 ## Concrete example
 
 ```text
-Robot A demo:
-place block to the left of the bowl.
+Demo (third-person camera):
+the Franka pushes the cube to the LEFT of the goal marker, as seen by
+the desk-front camera.
 
-Robot B observes from a wrist camera on the opposite side.
+Initial intent inferred by BABYSTEPS:
+target_relation     = left_of_goal
+direction_grounding = observer_frame  (third-person camera's left)
 
-Initial Robot B inference:
-target_relation = left_of
-direction_grounding = observer_frame
-
-Robot B execution:
-places block on the wrong physical side.
+Execution (first-person camera, executing Franka):
+the Franka resolves "left" in its own first-person frame, which is
+rotated relative to the demo camera. The push goes the wrong physical
+way.
 
 Failure trace:
-relation_error = true
 direction_error = true
 
-BABYSTEPS revision:
-direction_grounding = object_frame / world_frame
-target_relation preserved
-object preserved
-motion primitive preserved
+BABYSTEPS revision (single factor):
+direction_grounding : observer_frame → world_frame
+target_relation     : preserved
+object_motion       : preserved
+contact_region      : preserved
 
 Retry:
-places block correctly.
+the cube ends up on the correct physical side.
 ```
 
-This is the core story.
+This is the core story for Sub-project E (CrossViewPush).
 
-## What is novel here?
+## What is novel
 
-The novelty is not:
+The novelty is **not**:
 
 ```text
-Robot B learns from Robot A.
-Robot B transfers across view.
-Robot B imitates a demo.
+A Franka imitates itself across cameras.
+A Franka transfers a demonstrated behavior across viewpoints.
 ```
 
-Those are known themes.
-
-The novelty is:
+Those framings are crowded. The novelty is:
 
 ```text
-Robot B uses its own failed cross-view imitation attempt to infer what aspect of the demo was misgrounded.
+The executing Franka uses its own failed first-person attempt to infer
+which latent factor of the demo-derived intent was misgrounded, and
+revises only that factor.
 ```
 
 That is closer to an ICLR-style representation/inference claim:
@@ -145,53 +156,28 @@ q(z_imitation | demo_view)
 → q(z_imitation | demo_view, failed_execution)
 ```
 
-where `z_imitation` contains factors such as:
+where `z_imitation` is the structured 6+1 factor intent.
 
-```python
-{
-    "object": ...,
-    "target_relation": ...,
-    "contact_region": ...,
-    "motion_primitive": ...,
-    "terminal_constraint": ...,
-    "direction_grounding": ...
-}
-```
+## Data we collect
 
-## Data you should collect
-
-Yes, collect simulator data, but keep it targeted.
-
-Start with:
+Stay deliberately small and Franka-to-Franka:
 
 ```text
-2 robots: A demonstrates, B observes and executes
-same embodiment first: Franka-to-Franka or Panda-to-Panda
-3 task families
-5–8 camera/view configurations
-500–2,000 episodes
+1 robot family : Franka / Panda
+2 camera roles : third-person external (demo), first-person (exec)
+5 task families: PushCube, PickCube, StackCube, TurnFaucet, CrossViewPush
+seeds          : 24+ per task for the main table; more for ablations
 ```
 
-Use same embodiment first. Do **not** add cross-embodiment yet. If Robot A and Robot B have different arms, reviewers may ask whether the method solves view transfer, embodiment transfer, or both.
-
-Task families:
-
-| Task                 | View ambiguity                                             | Failure signal           |
-| -------------------- | ---------------------------------------------------------- | ------------------------ |
-| left/right placement | observer-left vs actor-left vs object-left                 | wrong relation           |
-| push-to-reveal       | push direction from wrong frame                            | marker still hidden      |
-| contact-region task  | observed contact side differs from executable contact side | contact miss / no motion |
-
-Each episode should store:
+Each episode stores:
 
 ```python
 episode = {
-    "demo_robot": "A",
-    "imitator_robot": "B",
-    "demo_view": "B_wrist_observing_A",
-    "execution_view": "B_wrist_executing",
+    "task": "...",
+    "demo_view": "third_person_desk_front",
+    "exec_view": "first_person_wrist_or_front",
     "initial_intent": {...},
-    "first_attempt": trajectory,
+    "first_attempt": trajectory_in_exec_view,
     "failure_trace": {
         "success": False,
         "direction_error": bool,
@@ -200,64 +186,53 @@ episode = {
         "visibility_failure": bool,
         "terminal_state_error": bool
     },
-    "wrong_factor": "direction_grounding",
+    "wrong_factor": "direction_grounding",   # for CrossViewPush; varies per task
     "revised_intent": {...},
-    "retry_success": bool
+    "retry_success": bool,
 }
 ```
 
-## What to compare against
+## What we compare against
 
-Your baselines should be:
+Locked baselines (`docs/milestone1_locked_claim.md` §4):
 
-| Method                                  | What it tests                            |
-| --------------------------------------- | ---------------------------------------- |
-| **Direct cross-view imitation**         | Can B imitate A without correction?      |
-| **Object-centric transfer only**        | Is object-centric representation enough? |
-| **Full replan after failure**           | Does rewriting the whole intent work?    |
-| **Failure-conditioned black-box retry** | Does explicit factor correction matter?  |
-| **BABYSTEPS selective correction**      | Your method                              |
-| **Oracle direction correction**         | Upper bound                              |
+| Method                     | What it tests                                   |
+| -------------------------- | ----------------------------------------------- |
+| `one_shot`                 | initial intent only, no retry                   |
+| `same_intent_retry`        | retry the same intent (luck-only recovery)      |
+| `random_factor_revision`   | revise a random factor; no diagnosis            |
+| `babysteps_selective`      | **ours** — diagnose, revise one factor, retry   |
+| `text_feedback_replan`     | Inner-Monologue-style feedback replan           |
+| `full_replan_analogue`     | full intent regeneration                        |
+| `oracle_factor_revision`   | upper bound (revise the GT wrong factor only)   |
 
-Your main metrics:
+Headline metrics: final / retry success, factor-attribution accuracy,
+**frozen-factor preservation**, **unnecessary-factor-change rate**, harmful
+revision rate.
 
-```text
-initial success
-retry success
-wrong-factor accuracy
-direction_grounding accuracy
-frozen-factor preservation
-harmful revision rate
-```
-
-The key result you want:
+The result we want:
 
 ```text
-BABYSTEPS improves retry success while changing fewer already-correct factors than full replanning.
+BABYSTEPS recovers as well as full replanning while changing far fewer
+already-correct factors.
 ```
 
 ## Best paper framing
 
-Use this framing:
-
-> We study cross-view robot imitation under observer–actor viewpoint mismatch. A robot observes another robot’s successful demonstration from a different viewpoint, infers a latent imitation target, and attempts the task from its own execution view. When the attempt fails, BABYSTEPS uses the failure trace to diagnose which latent factor — especially view/direction grounding — was misinterpreted, revises only that factor, and retries.
-
-This is defensible.
-
-## My recommendation
-
-Proceed with this version. It is cleaner than human-to-robot, easier to simulate, easier to label, and more aligned with your BABYSTEPS mechanism.
-
-But be strict about the claim:
-
-> **Failure-guided correction of cross-view imitation grounding.**
+> We study failure-guided revision of structured intent under
+> cross-view imitation ambiguity. The same Franka demonstrates a task
+> from a third-person desk-front camera and then attempts the task from
+> its own first-person camera. When the first-person attempt fails,
+> BABYSTEPS uses the structured failure trace to diagnose which latent
+> factor — particularly view / direction grounding — was misinterpreted,
+> revises only that factor, and retries.
 
 Not:
 
-> **Cross-view imitation.**
+> "Cross-view imitation."
 
-The first is novel enough to build a paper around. The second is too broad and already crowded.
+The first is novel enough to build a paper around. The second is too
+broad and already crowded.
 
 [1]: https://papers.neurips.cc/paper/8528-third-person-visual-imitation-learning-via-decoupled-hierarchical-controller.pdf?utm_source=chatgpt.com "Third-Person Visual Imitation Learning via Decoupled ..."
 [2]: https://sites.google.com/site/imitationfromobservation/?utm_source=chatgpt.com "Imitation from Observation"
-[3]: https://proceedings.mlr.press/v229/xu23a.html?utm_source=chatgpt.com "XSkill: Cross Embodiment Skill Discovery"

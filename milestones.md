@@ -8,15 +8,23 @@ For ICLR, I’d organize next work around one question:
 
 Current strong claim:
 
-> BABYSTEPS uses robot execution failure to revise one implicated intent factor while preserving the rest.
+> BABYSTEPS uses Franka execution failure (observed in the executing
+> Franka's first-person view) to revise one implicated intent factor
+> while preserving the rest, given a third-person Franka demonstration
+> of the same task.
 
 Avoid overclaiming:
 
 > “We solve human demonstration transfer.”
+> “We solve cross-embodiment transfer.”
 
 Better wording:
 
-> “We first validate structured intent revision in controlled third-person demonstration proxies, then study whether the same factorization supports human-to-robot transfer.”
+> “We validate structured single-factor intent revision in a controlled
+> single-Franka cross-view setup (demo: third-person desk-front camera;
+> execution: first-person wrist / robot-front camera). Cross-embodiment
+> and richer demonstrators are explicit follow-on stages, not Stage-0
+> claims.”
 
 Deliverable:
 - One-page project thesis.
@@ -103,23 +111,39 @@ The key result should look like:
 
 That is the paper’s main empirical story.
 
-## Milestone 5: Human Demo / Correspondence Extension
+## Milestone 5: Richer Cross-View Stress
 
-For ICLR, I think we need at least one bridge toward human demonstrations.
-
-Not necessarily full real-robot deployment, but we should show that the representation is useful for human/proxy transfer.
+For ICLR, we should show that the loop survives more aggressive
+versions of the cross-view condition while staying Franka-to-Franka
+(the embodiment axis is intentionally held constant — see `goal.md`
+"Later Stages").
 
 Possible minimal extension:
 
-- Take a simple human or hand-object video.
-- Extract object motion/contact region manually or with VLM/DINO.
-- Convert it into the same intent schema.
-- Run the BABYSTEPS loop in ManiSkill.
-- Show that failure still revises the right factor.
+- Add multiple third-person camera placements (left / right / oblique
+  desk-front) and verify that `direction_grounding` revision still picks
+  the correct frame.
+- Add a true first-person sensor stream (`panda_wristcam` or
+  robot-front RGB-D) for the executing Franka — replacing the single
+  default render camera that Stage 0 uses for both phases.
+- Add controlled occlusions and lighting / background variation in the
+  third-person demo, and show factor-attribution accuracy degrades
+  gracefully.
+- Run a small hand-labeled object-centric grounding pilot (still on
+  Franka demo videos) to test whether DINOv2 / VLM grounding can
+  replace the scripted labels Stage 0 uses.
 
 This would support the claim:
 
-> We do not directly imitate human joint motion; we transfer object-centric intent factors.
+> BABYSTEPS does not rely on a single canonical demo viewpoint or on
+> privileged labels. It transfers object-centric intent factors across
+> realistic cross-view variation, and uses failure to revise the
+> implicated factor when the cross-view ambiguity is resolved
+> incorrectly.
+
+Cross-embodiment / human-demo extensions are deliberately *not* part of
+this milestone — they would reintroduce the embodiment confound that
+Stage 0 was designed to remove.
 
 ## Milestone 6: Related Work Positioning
 
@@ -146,7 +170,8 @@ Lock claim, clean task set, decide whether to keep or replace `TurnFaucet`.
 Finish baselines and metrics. Generate first complete main table.
 
 **July:**  
-Run larger experiments, ablations, and human-demo/correspondence pilot.
+Run larger experiments, ablations, and the richer cross-view pilot
+(multiple third-person placements + a real first-person sensor stream).
 
 **August:**  
 Write full paper draft, figures, related work, method diagrams.

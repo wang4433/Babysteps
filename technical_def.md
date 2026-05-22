@@ -1,3 +1,14 @@
+> **Stage-0 setup (this document is positioning, not a contract).** All
+> demonstrations and executions in BABYSTEPS Stage 0 are produced by the
+> same robot: a Franka / Panda. The cross-view stressor isolated here is
+> *demo camera ≠ execution camera*: one Franka performs the task on the
+> desk and is recorded from a fixed third-person external camera; the
+> same Franka then attempts the task and is observed from its own
+> first-person view (wrist / robot-front camera). There is no human
+> demonstrator anywhere in the Stage-0 pipeline. `goal.md` is the
+> authoritative data contract; this document is related-work positioning
+> for the BABYSTEPS belief-revision loop.
+
 Those papers are related, but they also show what **not** to do. Do **not** make BABYSTEPS another “LLM inner monologue replans after feedback” system. Inner Monologue already uses environment feedback for embodied planning; VoxPoser already uses LLM/VLM reasoning to compose 3D value maps; BrainBody-LLM and similar works already use closed-loop state/simulator feedback to correct LLM plans; RACER already uses VLM supervision for failure recovery in imitation learning. ([arXiv][1])
 
 Your loop should be different:
@@ -28,8 +39,10 @@ P_t = \text{executable robot plan conditioned on } z
 
 where:
 
-* (D): human demonstration video
-* (X): current robot scene
+* (D): third-person Franka demonstration video (one Franka, viewed from
+  an external desk-front camera)
+* (X): current robot scene seen from the executing Franka's first-person
+  view (wrist / robot-front camera)
 * (F_{1:t}): observed robot failures
 * (z): structured latent intent
 
@@ -56,17 +69,21 @@ This is the representation BABYSTEPS updates.
 
 # The loop
 
-## Step 1: Parse the human demo into grounded candidates
+## Step 1: Parse the third-person Franka demo into grounded candidates
+
+The demo is one Franka executing the task on the desk, recorded from a
+fixed external (third-person) camera. BABYSTEPS never sees the demo
+Franka's joint trace as input — only the third-person video.
 
 Use DINO/DINOv2-style features, segmentation, optical flow, and possibly depth to extract grounded evidence:
 
 * object mask
 * object parts / regions
-* hand-object contact region
+* end-effector / object contact region (Franka gripper-object contact in the demo)
 * object motion
 * before/after object state
 * candidate affordance regions
-* demo-view to robot-view correspondences
+* third-person demo view to first-person execution view correspondences
 
 DINOv2 is useful here because it provides general visual features across image and pixel-level tasks, but it should be treated as a grounding module, not an intent generator. ([arXiv][2])
 
@@ -75,7 +92,7 @@ Output should look like:
 ```json
 {
   "object_regions": ["r1", "r2", "r3", "r4"],
-  "human_contact_region": "r2",
+  "demo_contact_region": "r2",
   "object_motion": "translate-right",
   "final_state": "object-at-target",
   "candidate_contact_regions": ["r1", "r2", "r3"],
@@ -83,7 +100,8 @@ Output should look like:
 }
 ```
 
-Do not let the VLM free-form hallucinate intent. Force it to choose from grounded candidates.
+Do not let the VLM free-form hallucinate intent. Force it to choose from
+grounded candidates extracted from the third-person Franka demo.
 
 ---
 
@@ -169,7 +187,7 @@ Create a structured failure packet:
     "collision": false,
     "grasp_slip": false,
     "planner_failed": false,
-    "human_or_task_region_blocked": true
+    "task_region_blocked": true
   },
   "failure_predicate": "task-region-blocked",
   "visual_evidence": ["robot occupied r2", "target region unchanged"]
@@ -302,9 +320,9 @@ This is what makes BABYSTEPS different from full replanning.
 
 ```text
 Input:
-  Human demo D
-  Robot scene X
-  Robot embodiment E_r
+  Third-person Franka demo D
+  Robot scene X (first-person view of executing Franka)
+  Robot embodiment E_r (Franka / Panda)
   Max retries K
 
 1. Extract grounded visual evidence:
@@ -369,7 +387,11 @@ After many episodes, train:
 
 This is where the paper can become more ICLR-like.
 
-LMPC is relevant because it treats human-robot interaction as a POMDP and uses experience to improve teachability across tasks/embodiments. But BABYSTEPS should not require human corrections; it should use robot failures as the correction signal. ([arXiv][5])
+LMPC is relevant because it treats robot–teacher interaction as a POMDP
+and uses experience to improve teachability across tasks/embodiments. But
+BABYSTEPS should not require external corrections of any kind (human or
+otherwise); it should use the executing Franka's own failures as the
+correction signal. ([arXiv][5])
 
 ---
 
@@ -399,12 +421,12 @@ Update **intent factors**, not raw language and not weights online.
 
 | Factor             | Example correction                                                        |
 | ------------------ | ------------------------------------------------------------------------- |
-| Goal state         | “The object should be upright, not merely moved.”                         |
-| Contact region     | “Do not contact the same region as the human demonstration.”              |
-| Approach direction | “The demonstrated approach is not robot-feasible; use top approach.”      |
-| Constraint region  | “This region must remain free.”                                           |
-| Object affordance  | “The contacted part is a handle/lever/support, not a generic grasp site.” |
-| Embodiment mapping | “Human pinch maps to robot side grasp, not top grasp.”                    |
+| Goal state         | “The object should be upright, not merely moved.”                            |
+| Contact region     | “Do not reuse the same contact region as the third-person Franka demo.”      |
+| Approach direction | “The demonstrated approach is blocked at execution time; use top approach.”  |
+| Constraint region  | “This region must remain free.”                                              |
+| Object affordance  | “The contacted part is a handle/lever/support, not a generic grasp site.”    |
+| Embodiment mapping | “The demo grasp-and-turn maps to a closed-gripper poke-turn at execution.”   |
 
 ## Bad update targets
 
@@ -440,11 +462,12 @@ constraint_region += keep r2 free
 
 ## 3. Role reassignment
 
-Use when the human contact should not be copied by the robot.
+Use when the demo-Franka contact site should not be copied verbatim by
+the executing Franka (e.g. because the execution-time scene blocks it).
 
 ```text
-human_contact_region = task-relevant region
-robot_contact_region = alternative support region
+demo_contact_region = task-relevant region observed in the demo
+exec_contact_region = alternative reachable region the executing Franka uses
 ```
 
 ## 4. Approach substitution
@@ -465,10 +488,14 @@ goal: move object to target → align object orientation at target
 
 ## 6. Embodiment remapping
 
-Use when the same semantic action requires a different physical contact.
+Use when the same semantic action observed in the demo requires a
+different physical contact at execution time. Even Franka-to-Franka, the
+execution-time scene (e.g. a faucet handle whose width exceeds the
+gripper opening) can force a different skill primitive.
 
 ```text
-human pinch → robot parallel-jaw side grasp
+demo grasp-and-turn → execution closed-gripper poke-turn
+demo top-grasp → execution side approach
 ```
 
 These operators make the system testable. They also prevent the VLM from rewriting everything.
@@ -519,7 +546,7 @@ The publishable claim is not:
 
 The publishable claim is:
 
-> We introduce a factorized belief-revision loop where robot execution failures selectively update latent intent inferred from human demonstrations.
+> We introduce a factorized belief-revision loop where Franka execution failures selectively update latent intent inferred from a third-person Franka demonstration of the same task.
 
 To prove that, you need these metrics:
 
@@ -531,7 +558,6 @@ To prove that, you need these metrics:
 | harmful revision rate                      | shows safety of update      |
 | unnecessary revision rate                  | tests semantic-failure gate |
 | success under cross-view mismatch          | tests perception robustness |
-| success under cross-embodiment mismatch    | tests embodiment transfer   |
 | success under contact/affordance ambiguity | tests core novelty          |
 
 The most important ablation:
@@ -557,7 +583,7 @@ If selective revision does not beat full replanning and action recovery, the pap
 Use this as the actual BABYSTEPS pipeline:
 
 ```text
-Human demo
+Third-person Franka demo (one Franka, external desk-front camera)
    ↓
 DINO/SAM/flow grounding
    ↓
@@ -567,7 +593,7 @@ VLM proposes structured intent belief B_0(z)
    ↓
 Feasibility-aware planner chooses executable intent
    ↓
-Robot executes
+Franka executes from its first-person view (wrist / robot-front camera)
    ↓
 Failure monitor creates structured failure packet
    ↓
@@ -581,7 +607,7 @@ Failure-to-factor attribution:
 Selective belief update:
       revise only implicated factor
    ↓
-Retry
+Retry (same Franka, same first-person view)
    ↓
 Store episode for offline training of attribution/revision model
 ```
@@ -590,7 +616,15 @@ This is the version I would pursue.
 
 The clean paper sentence:
 
-> BABYSTEPS differs from closed-loop LLM planning and failure recovery by treating failures as observations in a structured latent-intent belief state. Each retry updates only the factor implicated by the failure, rather than regenerating the full plan or directly recovering the action.
+> BABYSTEPS differs from closed-loop LLM planning and failure recovery by
+> treating Franka execution failures as observations in a structured
+> latent-intent belief state. Stage 0 isolates the mechanism with a
+> deliberately controlled cross-view setup: one Franka demonstrates the
+> task on the desk and is recorded from a third-person external camera;
+> the same Franka then executes the task and is observed from its own
+> first-person view. Each retry updates only the factor implicated by
+> the failure, rather than regenerating the full plan or directly
+> recovering the action.
 
 [1]: https://arxiv.org/abs/2207.05608?utm_source=chatgpt.com "Inner Monologue: Embodied Reasoning through Planning with Language Models"
 [2]: https://arxiv.org/abs/2304.07193?utm_source=chatgpt.com "DINOv2: Learning Robust Visual Features without Supervision"
