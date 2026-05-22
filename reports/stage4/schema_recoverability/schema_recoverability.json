@@ -1,0 +1,203 @@
+{
+  "by_task": {
+    "PickCube-v1": {
+      "approach_direction": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "constraint_region": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "contact_region": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "embodiment_mapping": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "goal_state": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "object_motion": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      }
+    },
+    "PushCube-v1": {
+      "approach_direction": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "constraint_region": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "contact_region": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "embodiment_mapping": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "goal_state": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "object_motion": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      }
+    },
+    "StackCube-v1": {
+      "approach_direction": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "constraint_region": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "contact_region": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "embodiment_mapping": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "goal_state": {
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 24,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "object_motion": {
+        "gate": "FAIL",
+        "majority_class_acc": 0.4166666666666667,
+        "n_episodes": 24,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.75,
+        "probe_acc_std": 0.4330127018922193,
+        "shuffled_features_acc": 0.5416666666666666,
+        "trivially_constant": false
+      }
+    }
+  },
+  "gate": {
+    "failing_cells": [
+      [
+        "StackCube-v1",
+        "object_motion"
+      ]
+    ],
+    "n_failing": 1,
+    "n_passing": 0,
+    "n_total": 18,
+    "n_trivial": 17,
+    "threshold": 0.9
+  }
+}
