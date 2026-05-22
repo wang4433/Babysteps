@@ -10,12 +10,14 @@ babysteps/        the Python package — all importable, tested logic
   envs/           sim adapters + runners + scene geometry + task dispatch
   render/         per-task three-phase MP4 render flows
   skills/         intent → executable skill compilers (push/pick/stack/turn)
+  stage4/         sim-free Stage-4 M1 schema-recoverability probe (analysis)
 scripts/          CLI entry points (collect / summarize / render) + diag scratch
-tests/            sim-free pytest suite (302 tests) + JSON snapshots
+tests/            sim-free pytest suite (343 tests) + JSON snapshots
 docs/             design specs, TDD plans, locked claim, archived handover
 slurm/            sbatch scripts + logs + the canonical GPU run commands
 datasets/         collected Stage-0 episode data (JSONL + videos)
 renders/          committed example MP4s, one folder per task
+reports/          generated analysis reports (e.g. stage4 schema recoverability)
 goal.md           Stage-0 boundary + data contract (AUTHORITY)
 CLAUDE.md         high-level project instructions
 RUNBOOK.md        copy-paste operational commands
@@ -60,10 +62,19 @@ Stage-0 phases: `1_demo`, `2_attempt_blocked`, `3_retry`.
 executable skill (waypoints / motion-plan parameters). `turn.py` dispatches the
 embodiment_substitution (poke-turn) path for Sub-project D.
 
+### `babysteps/stage4/` — learned-latent track (analysis only)
+
+Sim-free Stage-4 Milestone-1 code: `features.py` (firewall-strict 19-dim
+demo-evidence features), `probe.py` (linear probe + chance/shuffled baselines),
+`report.py` (per-task per-factor recoverability table). Reads only
+DemoEvidence-shaped fields, never `execution.initial_intent` (the label).
+
 ## `scripts/`
 
 - `stage0_collect.py` — collect episodes (real or `--fake-env`) → `samples.jsonl`.
 - `stage0_summarize.py` — `samples.jsonl` → `report.{json,md}` (derives task).
+- `stage4_probe_schema_recoverability.py` — Stage-4 M1: probe schema
+  recoverability from demo evidence → `reports/stage4/` (json + md).
 - `render_stage0_maniskill.py` — render three-phase MP4s per task (GPU).
 - `render_stage0_topdown.py` — sim-free 2D top-down render.
 - `smoke_pushcube.py` — PushCube loadability check.
@@ -73,9 +84,10 @@ embodiment_substitution (poke-turn) path for Sub-project D.
 
 ## `tests/`
 
-302 sim-free unit tests. Per-module (`test_schemas`, `test_failure`,
+343 sim-free unit tests. Per-module (`test_schemas`, `test_failure`,
 `test_revision`, `test_episode`, `test_eval`), per-task adapter/skill, CLI
-(`test_stage0_collect_cli`), render modules, plus a single-factor-revision
+(`test_stage0_collect_cli`), render modules, the Stage-4 probe tests
+(`test_stage4_smoke/features/probe/report`), plus a single-factor-revision
 invariant test and JSON `snapshots/`. Runs on the login node, no GPU.
 
 ## `docs/`
