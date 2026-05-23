@@ -95,10 +95,15 @@ def _move_obstacle_to_block(obstacle, cube_xy, cube_z, intent) -> None:
     x = float(cube_xy[0]) + float(unit[0]) * margin
     y = float(cube_xy[1]) + float(unit[1]) * margin
     z = float(cube_z) + _OBSTACLE_HALF_H  # base at cube_z, center at cube_z + half_h
-    obstacle.set_pose(sapien.Pose(
-        p=[x, y, z],
-        q=[1.0, 0.0, 0.0, 0.0],
-    ))
+    # Rotate 90° around z when the approach axis is dominated by y so the
+    # obstacle's wide (0.040 m) face is perpendicular to the EE's path,
+    # not the thin (0.005 m) face. Without this, y-approach seeds get a
+    # paper-thin wall the arm can clip through.
+    if abs(float(unit[1])) > abs(float(unit[0])):
+        q = [0.7071068, 0.0, 0.0, 0.7071068]  # 90° around z
+    else:
+        q = [1.0, 0.0, 0.0, 0.0]
+    obstacle.set_pose(sapien.Pose(p=[x, y, z], q=q))
 
 
 def _park_obstacle(obstacle) -> None:
@@ -256,21 +261,46 @@ def render_episode(
     """Run the three-phase BABYSTEPS demo for PushCube and return per-phase
     frame lists and title metadata.
 
+    Phase 1 (demo): execute the oracle's correct intent.
+    Phase 2 (attempt_blocked): place a static red wall on the demo's
+        approach side; execute the demo-derived push waypoints; the arm
+        physically stalls against the wall and the cube is unmoved.
+    Phase 3 (retry): execute the revised (orthogonal-approach) intent.
+
     Returns:
         frames: {"demo": [...], "attempt_blocked": [...], "retry": [...]}
         titles: {"demo": (title, subtitle), ...}
     """
     short_id = f"seed {seed:04d}"
+
+    # Spawn the obstacle once per env (cached). Parked below the table by
+    # default so phases 1 and 3 are unaffected.
+    obstacle = _get_or_build_obstacle(env)
+    _park_obstacle(obstacle)
+
     s = _pushcube_setup(env, adapter, seed)
     correct_intent = s["correct_intent"]
     initial_intent = s["initial_intent"]
     scene_exec = s["scene_exec"]
     demo_frames = s["demo_frames"]
 
-    # === Phase 2 — ATTEMPT 1 (planner_failed, held still) ===
-    # Execution phases are observed in the first-person panda_wristcam view.
-    obs, _ = env.reset(seed=seed)
-    attempt1_frames = [render_wrist_frame(env)] * (fps * 2)
+    # === Phase 2 — ATTEMPT (approach physically obstructed) ===
+    # Move the wall onto the demo's approach side, then drive the
+    # demo-derived waypoints. The arm reaches the approach standoff,
+    # hits the wall, and the no-progress break ends the clip.
+    _move_obstacle_to_block(
+        obstacle, s["scene"].cube_xy, s["scene"].cube_z, initial_intent,
+    )
+    wp_attempt = build_push_waypoints(scene_exec, initial_intent)
+    attempt1_frames: list = []
+    _ = _execute_push(
+        env, wp_attempt, attempt1_frames, seed=seed,
+        capture=render_wrist_frame,
+        max_steps=120,
+        no_progress_break_steps=20,
+        no_progress_eps_m=0.002,
+    )
+    _park_obstacle(obstacle)
 
     # === Phase 3 — RETRY with revised approach (selective) ===
     revised_intent, revision = adapter.revise_intent(
@@ -290,7 +320,7 @@ def render_episode(
     a1_title = (
         f"{short_id}  phase 2/3: approach_blocked",
         f"approach_direction={initial_intent.approach_direction} "
-        f"is blocked → planner_failed",
+        f"physically obstructed → arm stalls",
     )
     retry_title = (
         f"{short_id}  phase 3/3: retry (success={out_retry['success']})",
