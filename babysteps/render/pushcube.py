@@ -39,6 +39,80 @@ from babysteps.skills.push import build_push_waypoints
 _PUSHCUBE_POS_SCALE: tuple[float, ...] = (0.10, 0.10, 0.40, 0.50)
 
 
+# Obstacle (phase-2 blocked-side wall) — half-extents in meters.
+_OBSTACLE_HALF_W: float = 0.020   # along the approach axis (0.04 m total)
+_OBSTACLE_HALF_T: float = 0.0025  # perpendicular to approach (0.005 m total)
+_OBSTACLE_HALF_H: float = 0.050   # vertical (0.10 m total) — clears EE travel z
+_OBSTACLE_PARK_Z: float = -0.50   # below table plane; invisible / out of the way
+_OBSTACLE_BLOCK_MARGIN_M: float = 0.025  # gap between cube edge and wall face
+
+
+def _get_or_build_obstacle(env):
+    """Spawn (once per env) a static red box obstacle, parked below the
+    table. Returns None when the env does not support actor building
+    (sim-free stub envs).
+
+    Cached on `env._babysteps_obstacle` so repeated render_episode calls
+    on the same env reuse the same actor rather than accumulating walls.
+    """
+    cached = getattr(env, "_babysteps_obstacle",
+                     getattr(env.unwrapped, "_babysteps_obstacle", None))
+    if cached is not None:
+        return cached
+    scene = getattr(env.unwrapped, "scene", None)
+    if scene is None or not hasattr(scene, "create_actor_builder"):
+        return None  # sim-free stub env: helpers no-op below
+    import sapien
+
+    builder = scene.create_actor_builder()
+    half = [_OBSTACLE_HALF_W, _OBSTACLE_HALF_T, _OBSTACLE_HALF_H]
+    builder.add_box_collision(half_size=half)
+    builder.add_box_visual(
+        half_size=half,
+        material=sapien.render.RenderMaterial(base_color=[0.78, 0.20, 0.20, 1.0]),
+    )
+    builder.initial_pose = sapien.Pose(p=[0.0, 0.0, _OBSTACLE_PARK_Z])
+    actor = builder.build_static(name="approach_obstacle")
+    try:
+        env._babysteps_obstacle = actor
+    except AttributeError:
+        # Some env wrappers reject attribute assignment; fall back to
+        # caching on env.unwrapped (best-effort).
+        env.unwrapped._babysteps_obstacle = actor
+    return actor
+
+
+def _move_obstacle_to_block(obstacle, cube_xy, cube_z, intent) -> None:
+    """Place the obstacle on the blocked side of the cube, on the EE's
+    approach path. No-op when obstacle is None."""
+    if obstacle is None:
+        return
+    import sapien
+    from babysteps.envs.scene import approach_to_unit
+    from babysteps.skills.push import CUBE_HALF_SIZE
+    unit = approach_to_unit(intent.approach_direction)
+    margin = CUBE_HALF_SIZE + _OBSTACLE_BLOCK_MARGIN_M
+    x = float(cube_xy[0]) + float(unit[0]) * margin
+    y = float(cube_xy[1]) + float(unit[1]) * margin
+    z = float(cube_z) + _OBSTACLE_HALF_H  # base at cube_z, center at cube_z + half_h
+    obstacle.set_pose(sapien.Pose(
+        p=[x, y, z],
+        q=[1.0, 0.0, 0.0, 0.0],
+    ))
+
+
+def _park_obstacle(obstacle) -> None:
+    """Move the obstacle far below the table — invisible, no contact.
+    No-op when obstacle is None."""
+    if obstacle is None:
+        return
+    import sapien
+    obstacle.set_pose(sapien.Pose(
+        p=[0.0, 0.0, _OBSTACLE_PARK_Z],
+        q=[1.0, 0.0, 0.0, 0.0],
+    ))
+
+
 def _execute_push(
     env, waypoints, frames: list, *,
     seed: int,
