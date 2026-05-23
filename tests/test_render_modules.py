@@ -12,6 +12,59 @@ import numpy as np
 import pytest
 
 
+# ---------- prop_action(pos_scale=...) unit tests ---------- #
+
+
+def test_prop_action_default_pos_scale_matches_legacy():
+    """Default pos_scale must reproduce the legacy 0.1-scaled action so
+    existing render callers are unaffected."""
+    from babysteps.render.common import POS_SCALE, prop_action
+    tcp = np.array([0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 1.0], dtype=np.float64)
+    target = np.array([0.02, 0.0, 0.25], dtype=np.float64)
+    action = prop_action(tcp, target, gripper_cmd=-1.0)
+    # pos_err = (0.02, 0, 0); divided by POS_SCALE=0.1 → (0.2, 0, 0); clipped → (0.2, 0, 0).
+    expected_x = float(np.clip(0.02 / POS_SCALE, -1.0, 1.0))
+    assert action[0] == pytest.approx(expected_x, abs=1e-6)
+    assert action[1] == pytest.approx(0.0, abs=1e-6)
+    assert action[2] == pytest.approx(0.0, abs=1e-6)
+    assert action[6] == pytest.approx(-1.0, abs=1e-6)
+
+
+def test_prop_action_larger_pos_scale_yields_smaller_action():
+    """A larger pos_scale damps the action (smaller magnitude for the
+    same pos_err) — this is the mechanism that drops the contact
+    impulse during the push phase."""
+    from babysteps.render.common import prop_action
+    tcp = np.array([0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 1.0], dtype=np.float64)
+    target = np.array([0.02, 0.0, 0.25], dtype=np.float64)
+    action_default = prop_action(tcp, target, gripper_cmd=-1.0)
+    action_damped = prop_action(tcp, target, gripper_cmd=-1.0, pos_scale=0.5)
+    # Same direction, smaller magnitude.
+    assert abs(action_damped[0]) < abs(action_default[0])
+    assert action_damped[0] == pytest.approx(0.02 / 0.5, abs=1e-6)
+
+
+def test_prop_action_saturation_still_clips():
+    """pos_scale affects normalization, not the ±1 saturation cap."""
+    from babysteps.render.common import prop_action
+    tcp = np.array([0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 1.0], dtype=np.float64)
+    target = np.array([1.0, 0.0, 0.25], dtype=np.float64)  # very far
+    action = prop_action(tcp, target, gripper_cmd=-1.0, pos_scale=0.5)
+    assert action[0] == pytest.approx(1.0, abs=1e-6)  # clipped
+
+
+def test_prop_action_pos_scale_is_keyword_only_or_positional():
+    """Backward-compatible signature: pos_scale is a kwarg with a default,
+    so existing callers in pickcube/stackcube/turnfaucet/crossview render
+    modules continue to work without changes."""
+    from babysteps.render.common import prop_action
+    tcp = np.array([0.0, 0.0, 0.25, 0.0, 0.0, 0.0, 1.0], dtype=np.float64)
+    target = np.array([0.02, 0.0, 0.25], dtype=np.float64)
+    # Legacy call style — must not raise.
+    _ = prop_action(tcp, target)
+    _ = prop_action(tcp, target, gripper_cmd=0.5)
+
+
 # ---------- Stub env --------------------------------------------------- #
 
 
@@ -75,9 +128,11 @@ class _StubEnv:
 
     def get_sensor_images(self):
         # First-person wrist camera: a distinctly-shaped 4x4x3 frame, batched
-        # (B,H,W,3) like ManiSkill, so tests can tell the wrist view apart from
-        # the 8x8 third-person render() view purely by frame shape.
-        rgb = np.ones((1, 4, 4, 3), dtype=np.uint8) * 50
+        # (B,H,W,3) like ManiSkill. The fill value tracks _step_count so
+        # tests can detect that env.step was actually called (a held-still
+        # placeholder produces identical frames; a real execution does not).
+        val = np.uint8(self._step_count % 256)
+        rgb = np.ones((1, 4, 4, 3), dtype=np.uint8) * val
         return {"hand_camera": {"rgb": rgb}}
 
     def close(self):
@@ -88,7 +143,9 @@ class _StubEnv:
 
 
 def test_pushcube_render_episode_emits_three_phase_frames():
-    """render_episode returns frames dict with demo/attempt_blocked/retry."""
+    """render_episode returns frames dict with demo/attempt_blocked/retry,
+    and phase 2 (attempt_blocked) actually steps the env (no longer a
+    held-still placeholder)."""
     from babysteps.render.pushcube import render_episode
     from babysteps.envs.pushcube_adapter import PushCubeAdapter
 
@@ -98,14 +155,16 @@ def test_pushcube_render_episode_emits_three_phase_frames():
 
     assert set(frames.keys()) == {"demo", "attempt_blocked", "retry"}
     assert set(titles.keys()) == {"demo", "attempt_blocked", "retry"}
-    # All three phases must produce at least one frame.
+    # All three phases must produce frames.
     assert len(frames["demo"]) >= 1
-    assert len(frames["attempt_blocked"]) >= 1  # PushCube: held-still loop
     assert len(frames["retry"]) >= 1
-    # PushCube's attempt_blocked is a held-still synthesis (planner_failed).
-    # Confirm the held frames don't trigger env.step — same frame N times.
+    # Phase 2 must step the env (no longer a held-still placeholder):
+    # multiple frames AND at least one pair differs (proves _StubEnv.step
+    # was called, since the stub's wrist frame fill value tracks
+    # _step_count).
     held = frames["attempt_blocked"]
-    assert all(np.array_equal(held[0], f) for f in held)
+    assert len(held) > 1
+    assert not all(np.array_equal(held[0], f) for f in held)
 
 
 def test_pushcube_render_demo_thirdperson_exec_wristcam():

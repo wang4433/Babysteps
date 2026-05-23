@@ -45,13 +45,21 @@ def read_obs(obs) -> tuple[np.ndarray, np.ndarray, np.ndarray, float]:
 
 
 def prop_action(
-    tcp_xyzw: np.ndarray, target_xyz: np.ndarray, gripper_cmd: float = -1.0,
+    tcp_xyzw: np.ndarray,
+    target_xyz: np.ndarray,
+    gripper_cmd: float = -1.0,
+    pos_scale: float = POS_SCALE,
 ) -> np.ndarray:
     """Proportional 7-dim action toward target_xyz with explicit gripper cmd.
-    Default gripper_cmd=-1 (closed) matches PushSkill's behavior."""
+
+    Default gripper_cmd=-1 (closed) matches PushSkill's behavior. The
+    optional `pos_scale` lets per-phase callers damp the action
+    magnitude — a larger pos_scale → smaller saturated velocity → lower
+    contact impulse (used in PushCube's descend + push phases to stop
+    the cube from flying)."""
     pos_err = target_xyz - tcp_xyzw[0:3]
     action = np.zeros(7, dtype=np.float32)
-    action[0:3] = np.clip(pos_err / POS_SCALE, -1.0, 1.0).astype(np.float32)
+    action[0:3] = np.clip(pos_err / pos_scale, -1.0, 1.0).astype(np.float32)
     action[6] = np.float32(gripper_cmd)
     return action
 
