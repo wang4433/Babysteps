@@ -31,6 +31,14 @@ from babysteps.schemas import AttemptResult, DemoEvidence, SceneState
 from babysteps.skills.push import build_push_waypoints
 
 
+# Per-phase pos_scale for the 4-waypoint push (approach, pre_contact_high,
+# descend, push). Larger values → smaller saturated velocity → lower contact
+# impulse. Approach + pre-contact stay at the legacy 0.10 (fast travel);
+# descend and push are damped so contact with the cube is gentle and the
+# cube does not fly. Tunable; eyeball-checked on seed 0.
+_PUSHCUBE_POS_SCALE: tuple[float, ...] = (0.10, 0.10, 0.40, 0.50)
+
+
 def _execute_push(env, waypoints, frames: list, *, seed: int, capture=render_frame) -> dict:
     """Step through waypoints capturing one frame per step. Re-resets the env
     at the start so demo / attempt / retry all begin from the same scene.
@@ -52,7 +60,10 @@ def _execute_push(env, waypoints, frames: list, *, seed: int, capture=render_fra
             if phase_idx >= len(targets):
                 break
             target = targets[phase_idx]
-        action = prop_action(tcp, target, gripper_cmd=-1.0)
+        action = prop_action(
+            tcp, target, gripper_cmd=-1.0,
+            pos_scale=_PUSHCUBE_POS_SCALE[phase_idx],
+        )
         obs, _r, term, trunc, info = env.step(action)
         frames.append(capture(env))
         term_b = bool(to_np(term).item()) if hasattr(term, "cpu") else bool(term)
