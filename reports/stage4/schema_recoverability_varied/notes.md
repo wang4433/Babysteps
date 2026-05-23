@@ -14,44 +14,93 @@
 - Probe: scikit-learn `LogisticRegression` (lbfgs, `max_iter=1000`), 5-fold
   `StratifiedKFold` with `LeaveOneOut` fallback when the smallest class
   has < 5 members; `seed=0`. Same as M1.
-- Feature dim: 19 (`babysteps/stage4/features.py`) — unchanged from M1.
+- Feature dim: 20 (`babysteps/stage4/features.py`) — was 19 during the
+  initial 2026-05-22 run; the angle column was replaced by `[sin, cos]`
+  on 2026-05-23 to fix circular wraparound (see "Update" section below).
 - Cert: the three-way `cell_class` (`babysteps/stage4/report.py`):
   `trivially_constant` → excluded; `label_identity` → flagged, not counted;
   `geometric` → gated at `probe_acc_mean ≥ 0.90` **AND** clearing both
   `majority_class_acc` and `shuffled_features_acc` by `GATE_MARGIN = 0.10`.
 
-## Headline result
+## Headline result (post-2026-05-23 fix)
 
-**12 cells | 2 geometric (1 pass / 1 fail) | 2 label-identity | 8 trivially
-constant.** The varied cut achieved what the spec demanded
-(§8.2: "geometric `object_motion` passes in ≥1 task") — PushCube clears the
-tightened gate. The constant-factor loophole is closed: not one trivially-
-constant or label-identity cell counts as a gate pass. The cut is M2-ready as
-a meaningful certification scaffold.
+**12 cells | 2 geometric (2 pass / 0 fail) | 2 label-identity | 8 trivially
+constant.** Both geometric cells clear the tightened gate. The constant-
+factor loophole is closed. The cut is M2-ready as a meaningful
+certification scaffold.
 
-But the result is **opposite of what M1's notes predicted**: it's PushCube
-(which had to be heroically rescued, see §"Two execution-side fixes" below)
-that lifts cleanly to 0.95 on binary ±x; **StackCube's 4-way `object_motion`
-fails at 0.72 despite full class balance**, contradicting the M1 hypothesis
-that "balance + more episodes would clear 0.90." StackCube's 4-way recovery
-is genuinely hard for the 19-dim hand features.
+## Update (2026-05-23): circular angle encoding fixes StackCube
 
-## Per-cell summary
+The original 2026-05-22 run reported "2 geometric (1 pass / 1 fail)" — see
+the "Initial result (2026-05-22)" section below for the original write-up.
+That FAIL was traced to a feature-extraction defect in
+`babysteps/stage4/features.py`: the displacement direction was emitted as a
+single scalar `angle = arctan2(dy, dx)`, which wraps at ±π. StackCube
+`translate_-x` samples scattered across +157° and −177°, and the linear
+probe could not separate them from `±y`. The diagnostic is reproducible:
+
+```
+class            angle_deg range          n
+translate_+x   [-39, +36]                10
+translate_+y   [+46, +134]               10
+translate_-x   [-177, +157]  ← wraps    10
+translate_-y   [-135, -76]               10
+```
+
+`disp_xy` already separates the four classes cleanly; the raw `angle`
+column added noise that swamped that signal for the `-x` class. Encoding
+as `[sin(angle), cos(angle)]` is continuous around the circle.
+
+**Three feature variants on the same 40-episode cut** (same probe, same
+splitter):
+
+| variant | feat_dim | acc | `-x` correct |
+| --- | --- | --- | --- |
+| A: current (raw angle) | 19 | 0.725 ± 0.050 | 0 / 10 |
+| B: angle → `[sin, cos]` | 20 | **0.950 ± 0.100** | **9 / 10** |
+| C: angle removed | 18 | 0.725 ± 0.094 | 4 / 10 |
+
+(Diagnostic script: `diagnostics/diag_angle_variants.py` + `.out`;
+reproducible from `datasets/stage4/varied_intent/StackCube-v1/samples.jsonl`.
+The script inlines the pre-fix raw-angle definition as variant A so it
+keeps reproducing the 0.725 baseline after `features.py` lands the fix.)
+
+The fix was a 1-dim addition to `features.py` (`FEATURE_DIM 19 → 20`)
+guarded by a focused test
+(`tests/test_stage4_features.py::test_angle_feature_is_continuous_at_pi_wraparound`).
+PushCube `object_motion` is unaffected (already PASS at 0.95; binary ±x
+does not exercise the wrap). All 361 sim-free tests green.
+
+M1's original hypothesis — "balance + more episodes would clear 0.90 with
+the same 19-dim features" — was correct in spirit; the missing step was
+the circular-feature fix. With balance AND a continuous angle, the same
+linear probe on hand-built features clears 0.95.
+
+## Initial result (2026-05-22, pre-fix)
+
+The varied cut achieved what the spec demanded
+(§8.2: "geometric `object_motion` passes in ≥1 task") — PushCube cleared
+the tightened gate at 0.95. **StackCube's 4-way `object_motion`
+failed at 0.72 despite full class balance.** The contradiction with M1's
+"balance lifts to 0.90" prediction was the symptom of the angle-wrap
+defect; see the Update section above.
+
+## Per-cell summary (post-fix; mirrors `schema_recoverability.md`)
 
 ```
 # Stage-4 Schema-Recoverability Probe
 Gate: geometric cells must reach probe_acc_mean >= 0.90 AND beat chance & shuffled each by 0.10.
-Cells: 12 total | 2 geometric (1 pass / 1 fail) | 2 label-identity | 8 trivially constant.
+Cells: 12 total | 2 geometric (2 pass / 0 fail) | 2 label-identity | 8 trivially constant.
 
 ### PushCube-v1
 | factor              | class              | n_unique | n_episodes | majority | shuffled | probe ± std | gate           |
 | ------------------- | ------------------ | -------- | ---------- | -------- | -------- | ----------- | -------------- |
-| approach_direction  | label_identity     | 2        | 20         | 0.50     | 0.65     | 1.00 ± 0.00 | label_identity |
+| approach_direction  | label_identity     | 2        | 20         | 0.50     | 0.40     | 1.00 ± 0.00 | label_identity |
 | constraint_region   | trivially_constant | 1        | 20         | 1.00     | 1.00     | 1.00 ± 0.00 | trivial        |
-| contact_region      | label_identity     | 2        | 20         | 0.50     | 0.65     | 1.00 ± 0.00 | label_identity |
+| contact_region      | label_identity     | 2        | 20         | 0.50     | 0.40     | 1.00 ± 0.00 | label_identity |
 | embodiment_mapping  | trivially_constant | 1        | 20         | 1.00     | 1.00     | 1.00 ± 0.00 | trivial        |
 | goal_state          | trivially_constant | 1        | 20         | 1.00     | 1.00     | 1.00 ± 0.00 | trivial        |
-| object_motion       | geometric          | 3        | 20         | 0.50     | 0.60     | 0.95 ± 0.22 | PASS           |
+| object_motion       | geometric          | 3        | 20         | 0.50     | 0.30     | 0.95 ± 0.22 | PASS           |
 
 ### StackCube-v1
 | factor              | class              | n_unique | n_episodes | majority | shuffled | probe ± std | gate           |
@@ -61,7 +110,7 @@ Cells: 12 total | 2 geometric (1 pass / 1 fail) | 2 label-identity | 8 trivially
 | contact_region      | trivially_constant | 1        | 40         | 1.00     | 1.00     | 1.00 ± 0.00 | trivial        |
 | embodiment_mapping  | trivially_constant | 1        | 40         | 1.00     | 1.00     | 1.00 ± 0.00 | trivial        |
 | goal_state          | trivially_constant | 1        | 40         | 1.00     | 1.00     | 1.00 ± 0.00 | trivial        |
-| object_motion       | geometric          | 4        | 40         | 0.25     | 0.23     | 0.72 ± 0.05 | FAIL           |
+| object_motion       | geometric          | 4        | 40         | 0.25     | 0.38     | 0.95 ± 0.10 | PASS           |
 ```
 
 Machine-readable form: `schema_recoverability.json` (this directory).
@@ -105,37 +154,30 @@ The lone `-y` is a stray: one `-x` demo rollout had a noisy lateral component
 that snapped past the y-axis on `goal_direction_to_motion`'s dominant-axis
 tiebreak. LOO is triggered (`min class = 1`), and the probe gets 19/20 correct
 — the singleton `-y` is the unavoidable miss (LOO cannot predict a class with
-one sample). 0.95 clears 0.90 **and** beats chance (0.50) + shuffled (0.60)
+one sample). 0.95 clears 0.90 **and** beats chance (0.50) + shuffled (0.30)
 by `> 0.10` on both. The signal is the demo trajectory's `dx` sign, which is
 exactly what the cert wants: a genuine geometric inference from the rollout,
-not a label echo.
+not a label echo. (Pre-fix this cell also reported 0.95; binary ±x does not
+straddle the ±π wrap, so the angle column was harmless on PushCube.)
 
-## Cells that did not pass — and why
+## Cells that previously did not pass — and the fix
 
-### `StackCube-v1 / object_motion` — probe 0.72 ± 0.05, geometric FAIL
+### `StackCube-v1 / object_motion` — was 0.72 FAIL, now 0.95 PASS
 
 40 episodes, 4 classes balanced **exactly 10/10/10/10**, 5-fold
-StratifiedKFold (no LOO fallback). 0.72 is not above `chance + margin`
-(0.25 + 0.10 = 0.35 — comfortably cleared) but is well below the 0.90 absolute
-threshold. **This contradicts M1's prediction** that "with balanced classes
-and more episodes the same 19-dim features should clear 0.90." Balance was
-necessary but not sufficient.
+StratifiedKFold (no LOO fallback). The pre-fix 0.72 result was driven
+**not** by a representational ceiling of "the 19-dim hand features are too
+weak for 4-way" but by **one defective feature column**: the raw `arctan2`
+angle. Three candidate contributors were considered (path-length noise,
+linear-probe insufficiency, and angle wrap); the diagnostic in the Update
+section above isolated the angle wrap as the sole driver. With angle
+encoded as `[sin, cos]`, the same linear probe on the same 40 episodes
+reaches **0.95 ± 0.10**, with the `translate_-x` class recovered 9/10
+(see the Update section's confusion-matrix variant B).
 
-The 19-dim demo-evidence features (start_xy, end_xy, disp_xy, |disp|,
-`arctan2` angle, path_len, contact one-hot, final-state one-hot) do not
-linearly separate StackCube's four directions reliably. Likely contributors:
-- StackCube's `object_motion` is `trajectory_to_motion` over cubeA's 2D path
-  during a pick-and-place; the path includes a vertical lift/drop projected
-  onto xy and a horizontal phase whose net displacement is the signal — but
-  the path-length and angle features add noise rather than discrimination.
-- The `arctan2` angle wraps at ±180° exactly where `translate_-x` lives,
-  giving a discontinuous feature column for that class. M1 noted this as
-  secondary; with balance it is more visible because `-x` is now well-
-  represented.
-- `LogisticRegression` is linear; four-way separation across these features
-  appears not to be linearly clean.
-
-This is a meaningful, not a defective, result.
+The geometric signal is the demo `disp_xy`, augmented by direction
+`(sin θ, cos θ)`. `LogisticRegression` is more than sufficient on the
+20-dim feature set.
 
 ## Label-identity cells (informational)
 
@@ -156,23 +198,44 @@ about the latent).
 
 ## Implications for Stage-4 Milestone 2
 
-The varied cut achieves its spec purpose: it closes the certification
-loophole and produces an **evaluable** geometric gate.
+The varied cut + the circular-angle fix together achieve the spec purpose:
+the certification loophole is closed AND both geometric cells clear the
+tightened gate. The pipeline produces an **evaluable, non-trivial,
+and now-passing** geometric gate using **hand-built 20-dim features**.
 
-- **PushCube `object_motion` (geometric, 0.95 PASS)** is the working
-  end-to-end baseline: the cert + probe pipeline correctly confirms a
-  passing factor when the demo evidence carries the signal linearly.
-- **StackCube `object_motion` (geometric, 0.72 FAIL)** is the real M2
-  target. The 19-dim hand features hit a ceiling. The M2 SlotEncoder /
-  IntentHead, whose whole purpose is to learn a richer per-object latent
-  representation, should produce a `G_t` that the same frozen linear probe
-  recovers at ≥ 0.90 on this same 4-way StackCube data. If it does not,
-  that is a clean, falsifiable M2 failure mode.
+This re-frames the M2 target. The pre-fix framing — "M2 must lift
+StackCube object_motion above 0.90" — is no longer falsifiable, because
+hand features already reach 0.95. M2 must instead show that a learned
+latent **adds value the hand features cannot supply**. Candidate
+M2 targets, in increasing strength:
 
-M2 can now begin. The spec's "≥1 geometric pass" gate (§8.2) is met. Future
-work to lift StackCube above 0.90 belongs in M2 (via a learned latent), not
-in this scaffold (which would require either richer hand features or a wider
-probe — both of which would change what the cert measures).
+1. **Match the hand-feature baseline from richer inputs.** The current
+   probe input is the privileged 2-D `object_trajectory`. M2 should run
+   the same probe on slot vectors **extracted from `demo.rgbd_video`**
+   (no privileged trajectory) and clear `≥ 0.90` on PushCube and
+   StackCube `object_motion`. The hand-feature 0.95 becomes the
+   reproducibility floor that M2 must match from raw evidence.
+2. **Make more factors geometric.** Of the 12 cells, 8 are trivially
+   constant and 2 are label-identity (the factor is fed in as a one-hot
+   or deterministically derived from one). M2 should expand the
+   varied-intent cut so `contact_region`/`approach_direction` (and
+   eventually `goal_state`) vary per episode AND become recoverable
+   from slot vectors WITHOUT the corresponding one-hot input. This
+   closes the **label-identity loophole** the same way the varied cut
+   closed the **constant-factor loophole**.
+3. **Single-factor isolation.** Change one factor in the input scene
+   while holding the rest fixed → exactly one slot should change in the
+   learned latent. This is THE BABYSTEPS claim made measurable at the
+   representation level (it is currently asserted only at the revision
+   level via `tests/test_revision.py`).
+4. **Frozen-slot revision in the loop.** Decode a revised slot back
+   into an executable intent, run, and clear the Stage-0 acceptance gate
+   (`delta_pp ≥ 10`) on the same cut.
+
+M2 can now begin. The spec's "≥1 geometric pass" gate (§8.2) is exceeded
+("2 geometric pass / 0 fail"); the cert scaffold works as designed; the
+remaining handcrafted-feature ceiling has been honestly raised to 0.95 on
+both tasks, which is the floor M2 must match from raw observations.
 
 ## Open notes (not blockers)
 
@@ -181,8 +244,18 @@ probe — both of which would change what the cert measures).
   cleanup could drop the singleton (`n_unique` becomes 2, probe still passes)
   if needed.
 - StackCube reaches `passed_acceptance=True` in its per-task `report.md`
-  (episode-loop metrics: initial vs retry success). The probe FAIL is on the
-  separate Stage-4 cert, not the Stage-0 acceptance.
+  (episode-loop metrics: initial vs retry success). Post-fix the probe
+  result agrees with the Stage-0 acceptance signal (both PASS); previously
+  they disagreed because of the angle-wrap defect in the probe features.
 - The diagnostic scripts (`diag_injection.py`, `diag_goalmove.py`) and their
   outputs are committed alongside this notes file under `diagnostics/`. The
-  two bug fixes they drove are committed in `41e9cfc`.
+  two execution-side fixes they drove are committed in `41e9cfc`.
+- The two earlier reports `reports/stage4/schema_recoverability/` and
+  `reports/stage4/schema_recoverability_union/` were generated with the
+  pre-fix 19-dim features on the stage0_baselines data (where 17/18 cells
+  are trivially constant). They are intentionally left as historical
+  evidence; re-running them with the 20-dim features would not change the
+  geometric-cell story on that data (only StackCube/object_motion is
+  non-trivial there, with n=24 / n=48, and any new number would still be
+  on the unbalanced original-pipeline data which is now superseded by
+  this varied cut).

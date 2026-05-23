@@ -9,7 +9,7 @@
         "n_unique_labels": 2,
         "probe_acc_mean": 1.0,
         "probe_acc_std": 0.0,
-        "shuffled_features_acc": 0.65,
+        "shuffled_features_acc": 0.4,
         "trivially_constant": false
       },
       "constraint_region": {
@@ -31,7 +31,7 @@
         "n_unique_labels": 2,
         "probe_acc_mean": 1.0,
         "probe_acc_std": 0.0,
-        "shuffled_features_acc": 0.65,
+        "shuffled_features_acc": 0.4,
         "trivially_constant": false
       },
       "embodiment_mapping": {
@@ -64,7 +64,7 @@
         "n_unique_labels": 3,
         "probe_acc_mean": 0.95,
         "probe_acc_std": 0.21794494717703367,
-        "shuffled_features_acc": 0.6,
+        "shuffled_features_acc": 0.3,
         "trivially_constant": false
       }
     },
@@ -126,29 +126,24 @@
       },
       "object_motion": {
         "cell_class": "geometric",
-        "gate": "FAIL",
+        "gate": "PASS",
         "majority_class_acc": 0.25,
         "n_episodes": 40,
         "n_unique_labels": 4,
-        "probe_acc_mean": 0.725,
-        "probe_acc_std": 0.049999999999999996,
-        "shuffled_features_acc": 0.225,
+        "probe_acc_mean": 0.95,
+        "probe_acc_std": 0.09999999999999999,
+        "shuffled_features_acc": 0.375,
         "trivially_constant": false
       }
     }
   },
   "gate": {
-    "failing_cells": [
-      [
-        "StackCube-v1",
-        "object_motion"
-      ]
-    ],
+    "failing_cells": [],
     "margin": 0.1,
-    "n_failing": 1,
+    "n_failing": 0,
     "n_geometric": 2,
     "n_label_identity": 2,
-    "n_passing": 1,
+    "n_passing": 2,
     "n_total": 12,
     "n_trivial": 8,
     "threshold": 0.9

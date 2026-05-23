@@ -1,0 +1,22 @@
+n=40, classes=[np.str_('translate_+x'), np.str_('translate_+y'), np.str_('translate_-x'), np.str_('translate_-y')]
+
+--- variant A  feat_dim=19  acc=0.725 ± 0.050 ---
+confusion (rows=true, cols=pred), labels: [np.str_('translate_+x'), np.str_('translate_+y'), np.str_('translate_-x'), np.str_('translate_-y')]
+  translate_+x    [10, 0, 0, 0]
+  translate_+y    [1, 9, 0, 0]
+  translate_-x    [0, 5, 0, 5]
+  translate_-y    [0, 0, 0, 10]
+
+--- variant B  feat_dim=20  acc=0.950 ± 0.100 ---
+confusion (rows=true, cols=pred), labels: [np.str_('translate_+x'), np.str_('translate_+y'), np.str_('translate_-x'), np.str_('translate_-y')]
+  translate_+x    [10, 0, 0, 0]
+  translate_+y    [1, 9, 0, 0]
+  translate_-x    [0, 1, 9, 0]
+  translate_-y    [0, 0, 0, 10]
+
+--- variant C  feat_dim=18  acc=0.725 ± 0.094 ---
+confusion (rows=true, cols=pred), labels: [np.str_('translate_+x'), np.str_('translate_+y'), np.str_('translate_-x'), np.str_('translate_-y')]
+  translate_+x    [8, 1, 0, 1]
+  translate_+y    [2, 8, 0, 0]
+  translate_-x    [0, 3, 4, 3]
+  translate_-y    [1, 0, 0, 9]

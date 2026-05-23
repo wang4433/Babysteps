@@ -17,7 +17,23 @@ from babysteps.schemas import CONTACT_REGIONS, GOAL_STATES
 _CONTACT_ORDER: tuple[str, ...] = tuple(sorted(CONTACT_REGIONS))
 _GOAL_ORDER: tuple[str, ...] = tuple(sorted(GOAL_STATES))
 
-FEATURE_DIM: int = 9 + len(_CONTACT_ORDER) + len(_GOAL_ORDER)
+# Base block layout (indices into the returned vector):
+#   0,1: start_xy
+#   2,3: end_xy
+#   4,5: disp_xy
+#   6  : |disp|
+#   7,8: sin(angle), cos(angle)   -- circular encoding; see note below
+#   9  : path_len
+# then contact one-hot, then goal one-hot.
+#
+# `angle` is the displacement direction `arctan2(dy, dx)` and is circular: a
+# single scalar wraps at ±pi, producing a ~2*pi jump between two nearly-
+# identical directions. On the StackCube varied cut this destroyed the
+# `translate_-x` class (its samples scattered across +157° and −177°), pinning
+# the 4-way probe at ~0.72. Encoding as (sin, cos) is continuous around the
+# circle and lifts the same probe to 0.95.
+# See reports/stage4/schema_recoverability_varied/notes.md for the diagnosis.
+FEATURE_DIM: int = 10 + len(_CONTACT_ORDER) + len(_GOAL_ORDER)
 
 
 def extract_episode_features(record: dict) -> np.ndarray:
@@ -45,7 +61,10 @@ def extract_episode_features(record: dict) -> np.ndarray:
         start.astype(np.float64),
         end.astype(np.float64),
         disp.astype(np.float64),
-        np.array([disp_norm, angle, path_len], dtype=np.float64),
+        np.array(
+            [disp_norm, np.sin(angle), np.cos(angle), path_len],
+            dtype=np.float64,
+        ),
         contact_oh,
         goal_oh,
     ])
