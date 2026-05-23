@@ -24,7 +24,7 @@ from babysteps.envs.pushcube_runner import PushCubeEnvRunner
 from babysteps.envs.pushcube_adapter import PushCubeAdapter
 r, a = PushCubeEnvRunner(), PushCubeAdapter()
 ok = True
-for m in ("translate_+x", "translate_-x", "translate_+y", "translate_-y"):
+for m in ("translate_+x", "translate_-x"):  # only the dirs PushCube uses
     r.set_injection(m)
     s = r.reset(7)
     i = a.oracle_correct_intent(s)

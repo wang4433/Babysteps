@@ -30,13 +30,19 @@ from babysteps.stage4.collection_plan import (  # noqa: E402
 )
 
 _DIRS = ("translate_+x", "translate_-x", "translate_+y", "translate_-y")
+# PushCube uses goal-move injection but the +x-tuned open-loop push controller
+# can't drive lateral ±y pushes cleanly (the gripper grazes +x instead of
+# pushing sideways — confirmed by diag_goalmove). So PushCube varies binary
+# along the x-axis only; StackCube (pick-and-place, reaches everywhere)
+# carries the 4-direction headline.
+_PUSHCUBE_DIRS = ("translate_+x", "translate_-x")
 
 
 def _collect_pushcube(out_dir: Path, per_class: int, seed_start: int) -> int:
     entry = get_task_entry("PushCube-v1")
     adapter = entry.adapter_cls()
     runner = adapter.env_runner()
-    plan = stratified_seed_plan(_DIRS, per_class, seed_start)
+    plan = stratified_seed_plan(_PUSHCUBE_DIRS, per_class, seed_start)
     records = []
     try:
         for seed, motion in plan:

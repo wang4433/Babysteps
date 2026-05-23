@@ -84,35 +84,50 @@ class PushCubeEnvRunner:
     def set_injection(self, target_motion: Optional[str]) -> None:
         """Set (or clear with None) the target object_motion for the NEXT
         reset. The driver calls this per episode before run_episode; reset
-        repositions the cube so cube→goal points along target_motion. See
-        babysteps.envs.scene.injected_cube_xy."""
+        moves the GOAL so cube→goal points along target_motion, keeping the
+        cube at its native (reachable) pose. (Cube-move was tried first but the
+        +x-tuned push controller can't push from displaced cube positions; see
+        the Stage-4 injection diagnostics.)"""
         self._pending_motion = target_motion
+
+    def _reset_with_injection(self, seed: int):
+        """env.reset(seed), then (re)apply the pending cube-pose injection.
+
+        CRITICAL: this must run after EVERY self._env.reset — both the
+        standalone reset() and run()'s internal re-reset. env.reset returns the
+        cube to its native pose, so without re-applying here, run() would
+        execute the (injected-scene) push waypoints against the un-injected
+        native layout and the gripper would miss the cube entirely (it never
+        moves). Idempotent: re-injecting an already-injected scene reproduces
+        the same pose — the cube is already exactly push_dist from the goal.
+        Returns the post-injection (obs, tcp, cube_xy, goal_xy, cube_z)."""
+        obs, _info = self._env.reset(seed=int(seed))
+        tcp, cube_xy, goal_xy, cube_z = _read_obs(obs)
+        if self._pending_motion is not None:
+            from babysteps.envs.scene import motion_to_unit
+            # Goal-move: keep the cube at its native (reachable) pose, place the
+            # goal push_dist away along the target motion so cube→goal points in
+            # that direction. push_dist = native cube↔goal distance.
+            push_dist = float(np.linalg.norm(goal_xy - cube_xy))
+            unit = motion_to_unit(self._pending_motion)
+            new_goal = (float(cube_xy[0]) + push_dist * float(unit[0]),
+                        float(cube_xy[1]) + push_dist * float(unit[1]))
+            import sapien
+            gr = self._env.unwrapped.goal_region  # PushCube-v1 goal site
+            gpose = gr.pose.sp if hasattr(gr.pose, "sp") else gr.pose
+            gr.set_pose(sapien.Pose(
+                p=[new_goal[0], new_goal[1], float(gpose.p[2])],
+                q=list(gpose.q),
+            ))
+            obs = self._env.unwrapped.get_obs()
+            tcp, cube_xy, goal_xy, cube_z = _read_obs(obs)
+        return obs, tcp, cube_xy, goal_xy, cube_z
 
     def reset(self, seed: int) -> SceneState:
         """Reset and return the SceneState. blocked_sides is always ()
         — the privileged blocked-sides flag is set by the caller."""
         self._last_seed = int(seed)
-        obs, _info = self._env.reset(seed=int(seed))
-        tcp, cube_xy, goal_xy, cube_z = _read_obs(obs)
-        # NOTE: cube-actor handle (env.unwrapped.obj) + goal-honoring is
-        # verified by the Task-5 GPU spike; fall back to moving goal_region if
-        # repositioning the cube desyncs PushCube-v1's success check.
-        if self._pending_motion is not None:
-            from babysteps.envs.scene import injected_cube_xy
-            push_dist = float(np.linalg.norm(goal_xy - cube_xy))
-            new_xy = injected_cube_xy(
-                (float(goal_xy[0]), float(goal_xy[1])), push_dist,
-                self._pending_motion,
-            )
-            import sapien
-            base = self._env.unwrapped.obj  # PushCube-v1 cube actor
-            pose = base.pose.sp if hasattr(base.pose, "sp") else base.pose
-            base.set_pose(sapien.Pose(
-                p=[new_xy[0], new_xy[1], float(pose.p[2])],
-                q=list(pose.q),
-            ))
-            obs = self._env.unwrapped.get_obs()
-            tcp, cube_xy, goal_xy, cube_z = _read_obs(obs)
+        _obs, tcp, cube_xy, goal_xy, cube_z = self._reset_with_injection(seed)
         return SceneState(
             cube_xy=(float(cube_xy[0]), float(cube_xy[1])),
             cube_z=cube_z,
@@ -159,8 +174,10 @@ class PushCubeEnvRunner:
 
         if self._last_seed is None:
             raise RuntimeError("PushCubeEnvRunner.run called before reset()")
-        obs, _info = self._env.reset(seed=int(self._last_seed))
-        tcp, cube_xy0, goal_xy, cube_z = _read_obs(obs)
+        # Re-apply the injection: env.reset returns the cube to its native pose,
+        # so without this the (injected-scene) waypoints would act on the native
+        # layout and miss the cube (see _reset_with_injection).
+        obs, tcp, cube_xy0, goal_xy, cube_z = self._reset_with_injection(self._last_seed)
         initial_obj_xy = (float(cube_xy0[0]), float(cube_xy0[1]))
 
         # Three waypoint phase targets, each a 3-vec xyz.
