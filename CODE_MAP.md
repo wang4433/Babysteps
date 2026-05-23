@@ -64,17 +64,24 @@ embodiment_substitution (poke-turn) path for Sub-project D.
 
 ### `babysteps/stage4/` — learned-latent track (analysis only)
 
-Sim-free Stage-4 Milestone-1 code: `features.py` (firewall-strict 19-dim
-demo-evidence features), `probe.py` (linear probe + chance/shuffled baselines),
-`report.py` (per-task per-factor recoverability table). Reads only
-DemoEvidence-shaped fields, never `execution.initial_intent` (the label).
+Sim-free Stage-4 code: `features.py` (firewall-strict 19-dim demo-evidence
+features), `probe.py` (linear probe + chance/shuffled baselines), `report.py`
+(three-way `cell_class` — trivial / label-identity / geometric — + margin
+gate), `collection_plan.py` (stratified + rejection-quota planners for the
+varied cut). Reads only DemoEvidence-shaped fields, never
+`execution.initial_intent` (the label). Pure scene geometry for the varied-
+intent collection lives next door in `envs/scene.py`: `injected_cube_xy` and
+`cubeA_to_cubeB_motion`.
 
 ## `scripts/`
 
 - `stage0_collect.py` — collect episodes (real or `--fake-env`) → `samples.jsonl`.
 - `stage0_summarize.py` — `samples.jsonl` → `report.{json,md}` (derives task).
-- `stage4_probe_schema_recoverability.py` — Stage-4 M1: probe schema
+- `stage4_probe_schema_recoverability.py` — Stage-4: probe schema
   recoverability from demo evidence → `reports/stage4/` (json + md).
+- `stage4_collect_varied.py` — Stage-4 varied-intent collection driver (GPU).
+  PushCube goal-move injection (binary ±x) + StackCube rejection sampling
+  (4 directions). Mirror sbatch: `slurm/collect_stage4_varied.sbatch`.
 - `render_stage0_maniskill.py` — render three-phase MP4s per task (GPU).
 - `render_stage0_topdown.py` — sim-free 2D top-down render.
 - `smoke_pushcube.py` — PushCube loadability check.

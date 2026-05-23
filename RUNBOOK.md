@@ -94,6 +94,35 @@ Equivalent batch jobs live in `slurm/*.sbatch` (and `slurm/submit_all.sh`).
   (wrong-way) push. Gate: ≥2 seeds reach `info["success"]` on retry and
   `2_attempt_blocked` visibly pushes the wrong way.
 
+## Stage-4 varied-intent cut + tightened recoverability
+
+Collect the varied cut (sbatch on `a30`, includes a fail-fast injection spike;
+PushCube uses goal-move `±x`, StackCube uses native 4-direction rejection):
+
+```bash
+sbatch slurm/collect_stage4_varied.sbatch    # job writes datasets/stage4/varied_intent/{Push,Stack}Cube-v1/
+```
+
+Equivalent direct invocation on a GPU node:
+
+```bash
+python scripts/stage4_collect_varied.py --task PushCube-v1   # 20 episodes, ±x
+python scripts/stage4_collect_varied.py --task StackCube-v1  # 40 episodes, 4 dirs balanced
+```
+
+Re-run the tightened probe on the varied cut (sim-free; login node):
+
+```bash
+python scripts/stage4_probe_schema_recoverability.py \
+  --jsonl datasets/stage4/varied_intent/PushCube-v1/samples.jsonl \
+  --jsonl datasets/stage4/varied_intent/StackCube-v1/samples.jsonl \
+  --out-dir reports/stage4/schema_recoverability_varied/
+```
+
+Headline geometric gate: PushCube `object_motion` PASS @ 0.95 (binary ±x);
+StackCube `object_motion` FAIL @ 0.72 (4-way, balanced 10/10/10/10 — the M2
+target). See `reports/stage4/schema_recoverability_varied/notes.md`.
+
 ## Run the procedural baseline sweep (M3)
 
 Sim-free smoke (login node):
