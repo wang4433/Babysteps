@@ -1,0 +1,23 @@
+seed       target       intent  succ moved      dx      dy  traj_motion label_ok            cube_init                 goal
+--------------------------------------------------------------------------------------------------------------------------
+   0 translate_+x translate_+x  True  True   0.128   0.005 translate_+x     True      (-0.001, 0.054)       (0.199, 0.054)
+   0 translate_-x translate_-x False False  -0.000  -0.000 translate_-y    False       (0.399, 0.054)       (0.199, 0.054)
+   0 translate_+y translate_+y False False  -0.000  -0.000 translate_-y    False      (0.199, -0.146)       (0.199, 0.054)
+   0 translate_-y translate_-y False False  -0.000  -0.000 translate_-y     True       (0.199, 0.254)       (0.199, 0.054)
+   1 translate_+x translate_+x  True  True   0.148  -0.003 translate_+x     True      (0.052, -0.044)      (0.252, -0.044)
+   1 translate_-x translate_-x False False  -0.000  -0.000 translate_-y    False      (0.452, -0.044)      (0.252, -0.044)
+   1 translate_+y translate_+y False False  -0.000  -0.000 translate_-y    False      (0.252, -0.244)      (0.252, -0.044)
+   1 translate_-y translate_-y False False  -0.000  -0.000 translate_-y     True       (0.252, 0.156)      (0.252, -0.044)
+   2 translate_+x translate_+x  True  True   0.133  -0.003 translate_+x     True      (0.023, -0.024)      (0.223, -0.024)
+   2 translate_-x translate_-x False False  -0.000  -0.000 translate_-y    False      (0.423, -0.024)      (0.223, -0.024)
+   2 translate_+y translate_+y False False  -0.000  -0.000 translate_-y    False      (0.223, -0.224)      (0.223, -0.024)
+   2 translate_-y translate_-y False False  -0.000  -0.000 translate_-y     True       (0.223, 0.176)      (0.223, -0.024)
+   7 translate_+x translate_+x  True  True   0.125  -0.004 translate_+x     True       (0.007, -0.06)       (0.207, -0.06)
+   7 translate_-x translate_-x False False  -0.000  -0.000 translate_-y    False       (0.407, -0.06)       (0.207, -0.06)
+   7 translate_+y translate_+y False False  -0.000  -0.000 translate_-y    False       (0.207, -0.26)       (0.207, -0.06)
+   7 translate_-y translate_-y False False  -0.000  -0.000 translate_-y     True        (0.207, 0.14)       (0.207, -0.06)
+  13 translate_+x translate_+x  True  True   0.116  -0.002 translate_+x     True     (-0.082, -0.004)      (0.118, -0.004)
+  13 translate_-x translate_-x False False  -0.000  -0.000 translate_-y    False      (0.318, -0.004)      (0.118, -0.004)
+  13 translate_+y translate_+y False  True   0.020  -0.010 translate_+x    False      (0.118, -0.204)      (0.118, -0.004)
+  13 translate_-y translate_-y False  True   0.020   0.009 translate_+x    False       (0.118, 0.196)      (0.118, -0.004)
+DIAG DONE

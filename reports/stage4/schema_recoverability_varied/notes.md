@@ -91,9 +91,10 @@ bugs the sim-free reviews could not have caught:
    StackCube (pick-and-place, reaches everywhere) carries the 4-direction
    headline unchanged.
 
-Both fixes landed in commit `41e9cfc`; the diagnostics live in
-`$CLAUDE_JOB_DIR/diag_injection.{py,sbatch,out}` and
-`diag_goalmove.{py,sbatch,out}` and are not committed (scratch).
+Both fixes landed in commit `41e9cfc`; the diagnostic scripts + their
+outputs are archived in `diagnostics/` next to this file
+(`diag_injection.{py,sbatch,out,err}` for the cube-move investigation,
+`diag_goalmove.{py,sbatch,out,err}` for the pivot).
 
 ## Cells that passed
 
@@ -183,5 +184,5 @@ probe — both of which would change what the cert measures).
   (episode-loop metrics: initial vs retry success). The probe FAIL is on the
   separate Stage-4 cert, not the Stage-0 acceptance.
 - The diagnostic scripts (`diag_injection.py`, `diag_goalmove.py`) and their
-  outputs live in `$CLAUDE_JOB_DIR` (not in the repo). The two bug fixes they
-  drove are committed in `41e9cfc`.
+  outputs are committed alongside this notes file under `diagnostics/`. The
+  two bug fixes they drove are committed in `41e9cfc`.
