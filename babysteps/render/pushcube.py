@@ -39,20 +39,38 @@ from babysteps.skills.push import build_push_waypoints
 _PUSHCUBE_POS_SCALE: tuple[float, ...] = (0.10, 0.10, 0.40, 0.50)
 
 
-def _execute_push(env, waypoints, frames: list, *, seed: int, capture=render_frame) -> dict:
+def _execute_push(
+    env, waypoints, frames: list, *,
+    seed: int,
+    capture=render_frame,
+    max_steps: int = PUSHCUBE_MAX_CONTROL_STEPS,
+    no_progress_break_steps: int | None = None,
+    no_progress_eps_m: float = 0.002,
+) -> dict:
     """Step through waypoints capturing one frame per step. Re-resets the env
     at the start so demo / attempt / retry all begin from the same scene.
 
     `capture` selects the view: render_frame (third-person external camera,
     the demo view) or render_wrist_frame (first-person panda_wristcam, the
-    execution view)."""
+    execution view).
+
+    `max_steps` caps the control-step budget (default PUSHCUBE_MAX_CONTROL_STEPS,
+    matching the runner). Phase 2's blocked attempt uses a shorter budget so
+    the stalled clip stays a few seconds rather than the full ~10s cap.
+
+    `no_progress_break_steps` (default None = disabled) exits the loop when
+    the TCP has moved less than `no_progress_eps_m` for that many
+    consecutive steps — used in phase 2 to detect 'arm stalled against the
+    obstacle' and end the clip early."""
     obs, _ = env.reset(seed=int(seed))
     targets = [np.asarray(wp[0:3], dtype=np.float64) for wp in waypoints]
     phase_idx = 0
     success = False
 
     frames.append(capture(env))
-    for _ in range(PUSHCUBE_MAX_CONTROL_STEPS):
+    prev_tcp_xyz: np.ndarray | None = None
+    stalled_steps = 0
+    for _ in range(max_steps):
         tcp, cube_xy, _, _ = read_obs(obs)
         target = targets[phase_idx]
         if np.linalg.norm(target - tcp[0:3]) < PHASE_TOL_M:
@@ -72,6 +90,20 @@ def _execute_push(env, waypoints, frames: list, *, seed: int, capture=render_fra
         success = bool(to_np(succ).item()) if hasattr(succ, "cpu") else bool(succ)
         if success or term_b or trunc_b:
             break
+        # No-progress detection (phase 2: arm stalls against obstacle).
+        if no_progress_break_steps is not None:
+            tcp_now = np.asarray(tcp[0:3], dtype=np.float64)
+            if prev_tcp_xyz is None:
+                prev_tcp_xyz = tcp_now
+                stalled_steps = 0
+            else:
+                if float(np.linalg.norm(tcp_now - prev_tcp_xyz)) < no_progress_eps_m:
+                    stalled_steps += 1
+                else:
+                    stalled_steps = 0
+                    prev_tcp_xyz = tcp_now
+                if stalled_steps >= no_progress_break_steps:
+                    break
 
     tcp, final_cube_xy, _, _ = read_obs(obs)
     return {
