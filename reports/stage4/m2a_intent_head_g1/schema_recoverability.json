@@ -1,0 +1,151 @@
+{
+  "by_task": {
+    "PushCube-v1": {
+      "approach_direction": {
+        "cell_class": "label_identity",
+        "gate": "label_identity",
+        "majority_class_acc": 0.5,
+        "n_episodes": 20,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 0.25,
+        "trivially_constant": false
+      },
+      "constraint_region": {
+        "cell_class": "trivially_constant",
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 20,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "contact_region": {
+        "cell_class": "label_identity",
+        "gate": "label_identity",
+        "majority_class_acc": 0.5,
+        "n_episodes": 20,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 0.2,
+        "trivially_constant": false
+      },
+      "embodiment_mapping": {
+        "cell_class": "trivially_constant",
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 20,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "goal_state": {
+        "cell_class": "trivially_constant",
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 20,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "object_motion": {
+        "cell_class": "geometric",
+        "gate": "PASS",
+        "majority_class_acc": 0.5,
+        "n_episodes": 20,
+        "n_unique_labels": 3,
+        "probe_acc_mean": 0.95,
+        "probe_acc_std": 0.21794494717703367,
+        "shuffled_features_acc": 0.35,
+        "trivially_constant": false
+      }
+    },
+    "StackCube-v1": {
+      "approach_direction": {
+        "cell_class": "trivially_constant",
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 40,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "constraint_region": {
+        "cell_class": "trivially_constant",
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 40,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "contact_region": {
+        "cell_class": "trivially_constant",
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 40,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "embodiment_mapping": {
+        "cell_class": "trivially_constant",
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 40,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "goal_state": {
+        "cell_class": "trivially_constant",
+        "gate": "trivial",
+        "majority_class_acc": 1.0,
+        "n_episodes": 40,
+        "n_unique_labels": 1,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "shuffled_features_acc": 1.0,
+        "trivially_constant": true
+      },
+      "object_motion": {
+        "cell_class": "geometric",
+        "gate": "PASS",
+        "majority_class_acc": 0.25,
+        "n_episodes": 40,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.95,
+        "probe_acc_std": 0.06123724356957945,
+        "shuffled_features_acc": 0.4,
+        "trivially_constant": false
+      }
+    }
+  },
+  "gate": {
+    "failing_cells": [],
+    "margin": 0.1,
+    "n_failing": 0,
+    "n_geometric": 2,
+    "n_label_identity": 2,
+    "n_passing": 2,
+    "n_total": 12,
+    "n_trivial": 8,
+    "threshold": 0.9
+  }
+}
