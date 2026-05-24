@@ -26,3 +26,8 @@ slurm/_diag_*.sbatch
 # committed varied_intent data + scripts/stage4_m2a_train_pack.py.
 # Reproduce: python scripts/stage4_m2a_train_pack.py --jsonl <samples> --out-dir <here>
 models/
+
+# Stage-5 P1 cached demo frames + DINOv2 features. ~40 MB / seed × ~60 seeds
+# ≈ 2 GB; large binary artifacts derived from the committed varied_intent cut.
+# Reproduce: python scripts/stage5_render_demo_frames.py --jsonl <samples> --out-dir <here>
+datasets/stage5/
