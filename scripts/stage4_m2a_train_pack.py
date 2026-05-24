@@ -75,6 +75,12 @@ def main(argv=None) -> int:
                         "contact_region). Default: on.")
     p.add_argument("--no-counterfactual-synthesis",
                    dest="counterfactual_synthesis", action="store_false")
+    p.add_argument("--attribution-head-pt", type=Path, default=None,
+                   help="Optional path to a trained AttributionHead .pt "
+                        "(produced by scripts/stage4_m25_train_attribution.py) "
+                        "to bundle into the saved LatentPack. Without this, "
+                        "the latent policy falls back to rule-based "
+                        "attribute_failure (M2a behavior).")
     args = p.parse_args(argv)
 
     records = _load_records(args.jsonl)
@@ -227,13 +233,25 @@ def main(argv=None) -> int:
     # 4. Pack + save
     label_tokens = {fi: tuple(enc.classes_) for fi, enc in encoders.items()
                     if fi in centroids}
+
+    # 4b. Optional learned attribution head — bundle a pretrained
+    # AttributionHead.pt into the pack so the latent policy overrides
+    # the rule-based wrong_factor at inference (M2.5).
+    attribution_head = None
+    if args.attribution_head_pt is not None:
+        from babysteps.stage4.attribution_head import load_attribution_head
+        attribution_head = load_attribution_head(args.attribution_head_pt)
+        print(f"bundled AttributionHead from {args.attribution_head_pt}")
+
     pack = LatentPack(
         intent_head=head, revise_head=revise,
         centroids=centroids, label_tokens=label_tokens,
+        attribution_head=attribution_head,
     )
     args.out_dir.mkdir(parents=True, exist_ok=True)
     save_latent_pack(pack, args.out_dir)
-    print(f"saved LatentPack to {args.out_dir}")
+    print(f"saved LatentPack to {args.out_dir}"
+          + (" (with attribution_head)" if attribution_head is not None else ""))
     return 0
 
 

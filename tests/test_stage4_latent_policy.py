@@ -76,7 +76,7 @@ _SCENE = SceneState(
 
 
 def _make_ctx(*, wrong_factor="approach_direction", demo_features=None,
-              failure_predicate="approach_blocked"):
+              failure_predicate="approach_blocked", failure_packet=None):
     if demo_features is None:
         demo_features = np.zeros(20, dtype=np.float32)
     return RetryContext(
@@ -98,6 +98,7 @@ def _make_ctx(*, wrong_factor="approach_direction", demo_features=None,
         revise_fn=lambda i, a, s: (i, None),
         demo_features=demo_features,
         failure_predicate=failure_predicate,
+        failure_packet=failure_packet,
     )
 
 
@@ -204,6 +205,128 @@ def test_latent_policy_through_run_episode_smoke(fake_env_runner):
     # everything except the implicated factor.
     assert "approach_direction" not in rec.revision["frozen_factors"]
     assert len(rec.revision["frozen_factors"]) == 5
+
+
+# ---- Stage-4 M2.5 — learned attribution head wire-up tests --------- #
+
+
+def _stub_attribution_head_predicting(factor: str):
+    """Return an AttributionHead-like object whose predict_factor always
+    returns the given factor name. Used so the test does not depend on
+    a trained model file."""
+    class _Stub:
+        def predict_factor(self, fp, intent):
+            return factor
+    return _Stub()
+
+
+def _fp_for_stackcube_ambiguous():
+    """A FailurePacket-shaped dict that mimics the ambiguous slice
+    (direction_error) where the rule says approach_direction but the
+    oracle says goal_state."""
+    return {
+        "failure_predicate": "direction_error",
+        "execution_trace": {
+            "reached_contact": True, "object_moved": True,
+            "collision": False, "planner_failed": False,
+            "grasp_slip": False,
+        },
+        "object_displacement": 0.02,
+        "direction_alignment": -0.4,
+    }
+
+
+def test_attribution_head_overrides_rule_wrong_factor():
+    """When pack.attribution_head is set and ctx.failure_packet is present,
+    the policy must use the head's prediction instead of
+    ctx.attribution.wrong_factor."""
+    from dataclasses import replace as dc_replace
+    from babysteps.stage4.latent_policy import (
+        LatentPack, latent_revision_factory,
+    )
+    pack = _mock_pack_for_pushcube()
+    pack_with_head = dc_replace(
+        pack, attribution_head=_stub_attribution_head_predicting(
+            "contact_region"),  # any factor; we only check it overrides
+    )
+    policy = latent_revision_factory(pack_with_head)
+    # Rule says approach_direction; head says contact_region.
+    out = policy(_make_ctx(failure_packet=_fp_for_stackcube_ambiguous()))
+    assert out is not None
+    _intent, revision = out
+    assert revision.factor == "contact_region"
+
+
+def test_attribution_head_falls_back_when_failure_packet_none():
+    """If ctx.failure_packet is None, the head cannot run; we must fall
+    back to ctx.attribution.wrong_factor without crashing."""
+    from dataclasses import replace as dc_replace
+    from babysteps.stage4.latent_policy import (
+        LatentPack, latent_revision_factory,
+    )
+    pack = _mock_pack_for_pushcube()
+    pack_with_head = dc_replace(
+        pack, attribution_head=_stub_attribution_head_predicting(
+            "contact_region"),
+    )
+    policy = latent_revision_factory(pack_with_head)
+    out = policy(_make_ctx(failure_packet=None))
+    assert out is not None
+    _intent, revision = out
+    # Rule's wrong_factor (approach_direction) used because head not run.
+    assert revision.factor == "approach_direction"
+
+
+def test_attribution_head_fallback_on_unknown_predicted_factor():
+    """If the head predicts a string not in INTENT_FIELDS, fall back."""
+    from dataclasses import replace as dc_replace
+    from babysteps.stage4.latent_policy import (
+        LatentPack, latent_revision_factory,
+    )
+    pack = _mock_pack_for_pushcube()
+    pack_with_head = dc_replace(
+        pack, attribution_head=_stub_attribution_head_predicting("not_a_factor"),
+    )
+    policy = latent_revision_factory(pack_with_head)
+    out = policy(_make_ctx(failure_packet=_fp_for_stackcube_ambiguous()))
+    assert out is not None
+    _intent, revision = out
+    assert revision.factor == "approach_direction"  # rule fallback
+
+
+def test_latent_pack_round_trip_includes_attribution_head(tmp_path):
+    """Full pack with a real AttributionHead must save+load preserving
+    the head's forward output bit-identically."""
+    from dataclasses import replace as dc_replace
+    from babysteps.stage4.attribution_head import AttributionHead
+    from babysteps.stage4.attribution_features import FEATURE_DIM
+    from babysteps.stage4.latent_policy import (
+        LatentPack, load_latent_pack, save_latent_pack,
+    )
+    pack = _mock_pack_for_pushcube()
+    head = AttributionHead(seed=7)
+    pack_with_head = dc_replace(pack, attribution_head=head)
+    out = tmp_path / "pack_with_head"
+    save_latent_pack(pack_with_head, out)
+    reloaded = load_latent_pack(out)
+    assert reloaded.attribution_head is not None
+    x = torch.zeros(2, FEATURE_DIM)
+    torch.testing.assert_close(
+        pack_with_head.attribution_head(x), reloaded.attribution_head(x),
+    )
+
+
+def test_loading_pack_without_head_yields_none(tmp_path):
+    """An M2a-style pack (no attribution_head) must reload with
+    attribution_head=None, preserving rule-based behaviour."""
+    from babysteps.stage4.latent_policy import (
+        load_latent_pack, save_latent_pack,
+    )
+    pack = _mock_pack_for_pushcube()
+    out = tmp_path / "pack_no_head"
+    save_latent_pack(pack, out)
+    reloaded = load_latent_pack(out)
+    assert reloaded.attribution_head is None
 
 
 def test_latent_pack_save_load_round_trip(tmp_path):

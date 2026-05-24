@@ -280,6 +280,7 @@ def run_episode(
         revise_fn=adapter.revise_intent,
         demo_features=demo_features,
         failure_predicate=failure_packet.failure_predicate,
+        failure_packet=failure_packet,
     )
 
     try:

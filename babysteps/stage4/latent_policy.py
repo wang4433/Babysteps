@@ -22,6 +22,9 @@ import torch
 
 from babysteps.policies import RetryContext, RetryPolicy
 from babysteps.schemas import INTENT_FIELDS, Intent, Revision
+from babysteps.stage4.attribution_head import (
+    AttributionHead, load_attribution_head, save_attribution_head,
+)
 from babysteps.stage4.intent_head import IntentHead
 from babysteps.stage4.revise_head import (
     FP_VECTOR_DIM, ReviseHead, apply_revision, vectorize_failure_packet,
@@ -47,11 +50,21 @@ class LatentPack:
         corresponds to `label_tokens[factor_idx][i]`. This is what
         lets the decoded integer round-trip back to a Stage-0 schema
         string.
+    attribution_head : Optional[AttributionHead]
+        Stage-4 M2.5 — optional learned attribution head over
+        (FailurePacket, Intent) → wrong_factor. When provided, the
+        latent policy overrides `ctx.attribution.wrong_factor` with the
+        head's prediction before invoking ReviseHead. When None, the
+        policy falls back to the rule-based attribution that lives on
+        `ctx.attribution.wrong_factor` (M2a behavior). The single-factor
+        revision invariant is preserved by the slot-local ReviseHead
+        interface either way.
     """
     intent_head: IntentHead
     revise_head: ReviseHead
     centroids: dict[int, dict[int, np.ndarray]]
     label_tokens: dict[int, tuple[str, ...]]
+    attribution_head: Optional[AttributionHead] = None
 
 
 def _build_revision(ctx: RetryContext, *, factor: str,
@@ -75,6 +88,24 @@ def latent_revision_factory(pack: LatentPack) -> RetryPolicy:
         wrong_factor = ctx.attribution.wrong_factor
         if wrong_factor is None or wrong_factor not in INTENT_FIELDS:
             return None  # nothing to revise
+
+        # Stage-4 M2.5 — learned attribution head override. When the pack
+        # ships an `attribution_head`, replace the rule's wrong_factor
+        # with the head's prediction. The single-factor revision
+        # invariant is preserved by the slot-local ReviseHead interface
+        # downstream; we only swap which slot the ReviseHead operates
+        # on. Fallback to the rule-based wrong_factor when the head
+        # cannot be invoked (missing failure_packet or unfamiliar
+        # token).
+        if pack.attribution_head is not None and ctx.failure_packet is not None:
+            try:
+                learned = pack.attribution_head.predict_factor(
+                    ctx.failure_packet, ctx.initial_intent,
+                )
+                if learned in INTENT_FIELDS:
+                    wrong_factor = learned
+            except (KeyError, ValueError):
+                pass  # silently fall back to rule
 
         # Without demo features we cannot run the encoder; fall back to a
         # no-op revision (keep the initial intent) rather than crash. This
@@ -179,11 +210,17 @@ def save_latent_pack(pack: LatentPack, out_dir: Path) -> None:
             arrays[key] = vec
             centroid_index[str(fi)].append([ci, key])
     np.savez(out_dir / "centroids.npz", **arrays)
-    (out_dir / "meta.json").write_text(json.dumps({
+    meta_payload = {
         "centroid_index": centroid_index,
         "label_tokens": {str(fi): list(toks)
                           for fi, toks in pack.label_tokens.items()},
-    }, indent=2))
+        "has_attribution_head": pack.attribution_head is not None,
+    }
+    (out_dir / "meta.json").write_text(json.dumps(meta_payload, indent=2))
+    if pack.attribution_head is not None:
+        save_attribution_head(
+            pack.attribution_head, out_dir / "attribution_head.pt",
+        )
 
 
 def load_latent_pack(in_dir: Path) -> LatentPack:
@@ -209,7 +246,15 @@ def load_latent_pack(in_dir: Path) -> LatentPack:
             centroids[fi][int(ci)] = arrs[key]
     label_tokens = {int(fi): tuple(toks)
                     for fi, toks in meta["label_tokens"].items()}
+    # Stage-4 M2.5 — load attribution head when present. Older packs
+    # without the meta flag default to None (rule-based attribution).
+    attribution_head: Optional[AttributionHead] = None
+    if meta.get("has_attribution_head"):
+        attribution_head = load_attribution_head(
+            in_dir / "attribution_head.pt"
+        )
     return LatentPack(
         intent_head=intent_head, revise_head=revise_head,
         centroids=centroids, label_tokens=label_tokens,
+        attribution_head=attribution_head,
     )

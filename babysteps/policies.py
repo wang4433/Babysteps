@@ -45,6 +45,12 @@ class RetryContext:
     # the (F + |FAILURE_PREDICATES|)-dim fp_vec for ReviseHead. Existing
     # M3-baseline policies ignore this.
     failure_predicate: Optional[str] = None
+    # Stage-4 M2.5 — full FailurePacket dataclass (chosen_intent,
+    # execution_trace, predicate, scalars). Needed by the learned
+    # AttributionHead which takes the FailurePacket + chosen Intent.
+    # Optional[Any] so this module does not import babysteps.schemas
+    # types it does not already need. Existing baselines ignore it.
+    failure_packet: Optional[Any] = None
 
 
 def resample_factor(
