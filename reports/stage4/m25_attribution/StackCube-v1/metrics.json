@@ -1,7 +1,10 @@
 {
-  "task": "StackCube-v1",
+  "task": [
+    "StackCube-v1"
+  ],
   "n_samples": 208,
   "feature_dim": 47,
+  "n_unique_label_classes": 1,
   "per_class_count": {
     "goal_state": 208,
     "object_motion": 0,
@@ -83,5 +86,6 @@
     "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/text_feedback_replan/StackCube-v1/samples.jsonl",
     "/scratch/gilbreth/wang4433/babysteps/datasets/stage4/varied_intent/StackCube-v1/samples.jsonl"
   ],
-  "out_path": "models/stage4/m25/StackCube-v1/attribution_head.pt"
+  "out_path": "models/stage4/m25/per_task/StackCube-v1/attribution_head.pt",
+  "note": "per-task labels are constant (single-class) so kfold and shuffled control are uninformative; train jointly over multiple tasks to require intent-conditioned learning"
 }

@@ -1,0 +1,91 @@
+{
+  "task": [
+    "PushCube-v1"
+  ],
+  "n_samples": 188,
+  "feature_dim": 47,
+  "n_unique_label_classes": 1,
+  "per_class_count": {
+    "goal_state": 0,
+    "object_motion": 0,
+    "contact_region": 0,
+    "approach_direction": 188,
+    "constraint_region": 0,
+    "embodiment_mapping": 0
+  },
+  "held_out_acc_kfold": 1.0,
+  "shuffled_label_control_acc": 1.0,
+  "final_train_acc": 1.0,
+  "final_train_loss": 5.7068278991323496e-09,
+  "confusion_matrix_labels": [
+    "goal_state",
+    "object_motion",
+    "contact_region",
+    "approach_direction",
+    "constraint_region",
+    "embodiment_mapping"
+  ],
+  "confusion_matrix": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      188,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "dropped_label_count": 0,
+  "data_paths": [
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/babysteps_selective/PushCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/full_replan_analogue/PushCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/one_shot/PushCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/oracle_factor_revision/PushCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/random_factor_revision/PushCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/same_intent_retry/PushCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/text_feedback_replan/PushCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage4/varied_intent/PushCube-v1/samples.jsonl"
+  ],
+  "out_path": "models/stage4/m25/per_task/PushCube-v1/attribution_head.pt",
+  "note": "per-task labels are constant (single-class) so kfold and shuffled control are uninformative; train jointly over multiple tasks to require intent-conditioned learning"
+}
