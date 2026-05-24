@@ -68,3 +68,14 @@ def extract_episode_features(record: dict) -> np.ndarray:
         contact_oh,
         goal_oh,
     ])
+
+
+# Public layout constants for downstream callers that need to know where
+# the contact and goal one-hots live within the returned feature vector.
+# Match the return order of `extract_episode_features`: 10 base dims
+# (start_xy(2), end_xy(2), disp_xy(2), |disp|, sin/cos angle, path_len),
+# then contact one-hot, then goal one-hot.
+CONTACT_OH_START: int = 10
+GOAL_OH_START: int = CONTACT_OH_START + len(_CONTACT_ORDER)
+CONTACT_ORDER: tuple[str, ...] = _CONTACT_ORDER
+GOAL_ORDER: tuple[str, ...] = _GOAL_ORDER

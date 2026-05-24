@@ -1,0 +1,545 @@
+{
+  "config": {
+    "eval_seeds": [
+      200,
+      201,
+      202,
+      203,
+      204,
+      205,
+      206,
+      207,
+      208,
+      209,
+      210,
+      211,
+      212,
+      213,
+      214,
+      215,
+      216,
+      217,
+      218,
+      219
+    ],
+    "fake": true,
+    "pack_dir": "models/stage4/m2a/StackCube-v1",
+    "task": "StackCube-v1"
+  },
+  "per_policy": {
+    "babysteps_selective": {
+      "final_success_rate": 1.0,
+      "initial_success_rate": 0.0,
+      "n": 20,
+      "rows": [
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 200
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 201
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 202
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 203
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 204
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 205
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 206
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 207
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 208
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 209
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 210
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 211
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 212
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 213
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 214
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 215
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 216
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 217
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 218
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 219
+        }
+      ]
+    },
+    "latent": {
+      "final_success_rate": 1.0,
+      "initial_success_rate": 0.0,
+      "n": 20,
+      "rows": [
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 200
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 201
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 202
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 203
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 204
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 205
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 206
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 207
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 208
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 209
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 210
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 211
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 212
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 213
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 214
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 215
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 216
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 217
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 218
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 219
+        }
+      ]
+    },
+    "oracle_factor_revision": {
+      "final_success_rate": 1.0,
+      "initial_success_rate": 0.0,
+      "n": 20,
+      "rows": [
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 200
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 201
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 202
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 203
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 204
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 205
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 206
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 207
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 208
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 209
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 210
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 211
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 212
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 213
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 214
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 215
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 216
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 217
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 218
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 219
+        }
+      ]
+    },
+    "same_intent_retry": {
+      "final_success_rate": 0.0,
+      "initial_success_rate": 0.0,
+      "n": 20,
+      "rows": [
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 200
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 201
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 202
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 203
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 204
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 205
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 206
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 207
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 208
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 209
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 210
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 211
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 212
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 213
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 214
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 215
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 216
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 217
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 218
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 219
+        }
+      ]
+    }
+  },
+  "summary": {
+    "delta_pp_vs_babysteps_selective": 0.0,
+    "delta_pp_vs_oracle": 0.0,
+    "delta_pp_vs_same_intent_retry": 100.0,
+    "latent_final_success_rate": 1.0
+  }
+}

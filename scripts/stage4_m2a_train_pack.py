@@ -33,6 +33,9 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from babysteps.schemas import INTENT_FIELDS, EpisodeRecord  # noqa: E402
+from babysteps.stage4.counterfactual import (  # noqa: E402
+    substitute_label_identity_feature,
+)
 from babysteps.stage4.features import extract_episode_features  # noqa: E402
 from babysteps.stage4.intent_head import (  # noqa: E402
     IntentHead, train_intent_head_joint,
@@ -64,6 +67,14 @@ def main(argv=None) -> int:
     p.add_argument("--n-epochs-intent", type=int, default=300)
     p.add_argument("--n-epochs-revise", type=int, default=600)
     p.add_argument("--lr", type=float, default=1e-2)
+    p.add_argument("--counterfactual-synthesis", action="store_true",
+                   default=True,
+                   help="Augment training with counterfactual samples for "
+                        "label-identity factors whose revised values are "
+                        "absent from initial intents (goal_state, "
+                        "contact_region). Default: on.")
+    p.add_argument("--no-counterfactual-synthesis",
+                   dest="counterfactual_synthesis", action="store_false")
     args = p.parse_args(argv)
 
     records = _load_records(args.jsonl)
@@ -93,6 +104,71 @@ def main(argv=None) -> int:
         labels_per_factor[fi] = (y, len(enc.classes_))
     print(f"non-trivial supervised factors: "
           f"{[INTENT_FIELDS[fi] for fi in labels_per_factor]}")
+
+    # 0b. Counterfactual synthesis for label-identity factors. For each
+    # revision whose `new_value` doesn't already appear in any initial
+    # intent (and whose factor is supported — currently goal_state and
+    # contact_region), synthesize Z' by flipping the relevant one-hot
+    # and label all OTHER factors with constants from the source episode.
+    # This unblocks revisions like StackCube/goal_state where every
+    # initial intent has `cube_at_target` but every revision targets
+    # `cubeA_on_cubeB`.
+    if args.counterfactual_synthesis:
+        synth_Zs: list[np.ndarray] = []
+        synth_labels_per_factor: dict[int, list[int]] = {fi: [] for fi in labels_per_factor}
+        synth_count_per_factor: dict[str, int] = {}
+        for i, r in enumerate(records):
+            rv = r.get("revision")
+            if not rv:
+                continue
+            factor = rv["factor"]
+            if factor not in ("goal_state", "contact_region"):
+                continue  # not a supported label-identity factor
+            fi = INTENT_FIELDS.index(factor)
+            if fi not in encoders:
+                continue
+            new_value = rv["new_value"]
+            # Skip if the encoder hasn't registered new_value (defensive)
+            if new_value not in encoders[fi].classes_:
+                continue
+            # Skip if this class already appears in initial intents.
+            y_orig, _ = labels_per_factor[fi]
+            new_class_int = int(encoders[fi].transform([new_value])[0])
+            if new_class_int in set(y_orig.tolist()):
+                continue
+            try:
+                Z_synth = substitute_label_identity_feature(
+                    Z[i], factor, new_value,
+                ).astype(np.float32)
+            except ValueError:
+                continue
+            synth_Zs.append(Z_synth)
+            synth_count_per_factor[factor] = synth_count_per_factor.get(factor, 0) + 1
+            # For each supervised factor, set the new sample's label:
+            # - For the synthesized factor: the revised class.
+            # - For all OTHER factors: the original episode's initial-intent label
+            #   (keep all other factors stable; the synthetic sample is a
+            #   "what if only this factor differed" point).
+            for sfi, (y_sf, _) in labels_per_factor.items():
+                if sfi == fi:
+                    synth_labels_per_factor[sfi].append(new_class_int)
+                else:
+                    synth_labels_per_factor[sfi].append(int(y_sf[i]))
+        if synth_Zs:
+            Z_synth_arr = np.stack(synth_Zs).astype(np.float32)
+            Z = np.concatenate([Z, Z_synth_arr], axis=0)
+            for sfi in labels_per_factor:
+                y_old, n_cls = labels_per_factor[sfi]
+                y_new = np.concatenate(
+                    [y_old, np.array(synth_labels_per_factor[sfi], dtype=np.int64)]
+                )
+                # Recompute n_classes in case synthesis added a new class
+                labels_per_factor[sfi] = (y_new, max(n_cls, int(y_new.max()) + 1))
+            print(f"counterfactual synthesis added {len(synth_Zs)} sample(s) "
+                  f"({synth_count_per_factor})")
+        else:
+            print("counterfactual synthesis: no eligible revisions "
+                  "(all revised classes already in initial intents)")
 
     # 1. Joint train IntentHead
     head = IntentHead(z_dim=Z.shape[1], n_factors=len(INTENT_FIELDS),
