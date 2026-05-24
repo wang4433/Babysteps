@@ -1,0 +1,87 @@
+{
+  "task": "StackCube-v1",
+  "n_samples": 208,
+  "feature_dim": 47,
+  "per_class_count": {
+    "goal_state": 208,
+    "object_motion": 0,
+    "contact_region": 0,
+    "approach_direction": 0,
+    "constraint_region": 0,
+    "embodiment_mapping": 0
+  },
+  "held_out_acc_kfold": 1.0,
+  "shuffled_label_control_acc": 1.0,
+  "final_train_acc": 1.0,
+  "final_train_loss": 3.4387286351744706e-09,
+  "confusion_matrix_labels": [
+    "goal_state",
+    "object_motion",
+    "contact_region",
+    "approach_direction",
+    "constraint_region",
+    "embodiment_mapping"
+  ],
+  "confusion_matrix": [
+    [
+      208,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  ],
+  "dropped_label_count": 0,
+  "data_paths": [
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/babysteps_selective/StackCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/full_replan_analogue/StackCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/one_shot/StackCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/oracle_factor_revision/StackCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/random_factor_revision/StackCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/same_intent_retry/StackCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage0_baselines/text_feedback_replan/StackCube-v1/samples.jsonl",
+    "/scratch/gilbreth/wang4433/babysteps/datasets/stage4/varied_intent/StackCube-v1/samples.jsonl"
+  ],
+  "out_path": "models/stage4/m25/StackCube-v1/attribution_head.pt"
+}
