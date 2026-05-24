@@ -109,6 +109,25 @@ StackCube decode acc. Both are deferred from M2a A2 because the
 spec-mandated G2 gate already passes; surfacing the limitation is
 the honest result.
 
+### 2026-05-23 update — Path 2 implemented + StackCube unblocked
+
+Path 2 (counterfactual synthesis) was implemented in commit `db46257`:
+`babysteps/stage4/counterfactual.py::substitute_label_identity_feature`
++ `scripts/stage4_m2a_train_pack.py --counterfactual-synthesis`
+(default-on). The retrained StackCube pack at
+`models/stage4/m2a/StackCube-v1/` reports:
+
+```
+counterfactual synthesis added 34 sample(s) ({'goal_state': 34})
+trained ReviseHead on 34 certable revision pairs
+```
+
+Sim-free FakeEnv smoke (`reports/stage4/m2a_a3_smoke_fake_stackcube/`):
+latent 20/20 PASS, oracle 20/20, baselines_selective 20/20,
+same_intent_retry 0/20 → **G4 +100pp / G5 0pp**. The remaining
+6 StackCube revisions (approach_direction → from_minus_x) stay
+uncertable until path 1; only path 1 fixes them.
+
 ## Per-fold detail
 
 PushCube: 5-fold KFold (n_episodes=20, n_train=16 per fold).
