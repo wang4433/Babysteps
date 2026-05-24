@@ -53,7 +53,10 @@ if str(_ROOT) not in sys.path:
 from babysteps.envs.task_registry import get_task_entry  # noqa: E402
 from babysteps.render.common import (  # noqa: E402
     PHASE_TOL_M,
+    PUSHCUBE_MAX_CONTROL_STEPS,
+    STACKCUBE_MAX_CONTROL_STEPS,
     prop_action,
+    read_obs,
     render_frame,
     to_np,
 )
@@ -75,12 +78,11 @@ _PUSHCUBE_INJECTION_BY_SEED: dict[int, str] = dict(
 )
 
 
-# Control-step cap per task. Matches the runners' caps (PushCube 300,
-# StackCube 400) so the cached demo never runs longer than the real
-# env_runner would have run it.
-_PUSHCUBE_MAX_STEPS = 300
-_STACKCUBE_MAX_STEPS = 400
-
+# !!! Drift hazard: these mirror StackCubeEnvRunner constants by value
+# (babysteps/envs/stackcube_runner.py: _MAX_EPISODE_STEPS, _GRASP_DWELL_STEPS,
+# _SETTLE_DWELL_STEPS, _GRIPPER_OPEN, _GRIPPER_CLOSED, and the per-phase
+# gripper schedules). If you tune the runner's PD/dwell/gripper timings,
+# update these too or cached frames will diverge from the production rollout.
 # StackCube TimeLimit override — matches StackCubeEnvRunner.
 _STACKCUBE_MAX_EPISODE_STEPS = 200
 
@@ -115,18 +117,6 @@ def _seed_from_record(rec: dict) -> int:
     return int(rec["episode_id"].split("_")[-1])
 
 
-def _read_pushcube_obs(obs):
-    """(tcp_xyzw, cube_xy, goal_xy, cube_z) from a PushCube obs."""
-    raw = to_np(obs["extra"]["tcp_pose"])
-    raw = np.asarray(raw, dtype=np.float64)
-    tcp = np.concatenate([raw[0:3], raw[4:7], raw[3:4]])
-    cube_full = to_np(obs["extra"]["obj_pose"])
-    cube_xy = cube_full[0:2].astype(np.float64)
-    cube_z = float(cube_full[2])
-    goal_xy = to_np(obs["extra"]["goal_pos"])[0:2].astype(np.float64)
-    return tcp, cube_xy, goal_xy, cube_z
-
-
 def _read_stackcube_obs(obs):
     """(tcp_xyzw, cubeA_xy, cubeA_z, cubeB_xy, cubeB_z) from a StackCube obs."""
     raw = to_np(obs["extra"]["tcp_pose"])
@@ -153,7 +143,7 @@ def _pushcube_inject_goal(env, seed: int, object_motion: str):
     from babysteps.envs.scene import motion_to_unit
 
     obs, _info = env.reset(seed=int(seed))
-    _, cube_xy, goal_xy, _ = _read_pushcube_obs(obs)
+    _, cube_xy, goal_xy, _ = read_obs(obs)
     push_dist = float(np.linalg.norm(goal_xy - cube_xy))
     unit = motion_to_unit(object_motion)
     new_goal = (
@@ -180,7 +170,7 @@ def _capture_pushcube_demo(env, adapter, seed: int, object_motion: str) -> np.nd
     from babysteps.skills.push import build_push_waypoints
 
     obs = _pushcube_inject_goal(env, seed, object_motion)
-    tcp, cube_xy0, goal_xy, cube_z = _read_pushcube_obs(obs)
+    tcp, cube_xy0, goal_xy, cube_z = read_obs(obs)
     scene = SceneState(
         cube_xy=(float(cube_xy0[0]), float(cube_xy0[1])),
         cube_z=cube_z,
@@ -194,8 +184,8 @@ def _capture_pushcube_demo(env, adapter, seed: int, object_motion: str) -> np.nd
 
     frames: list[np.ndarray] = [render_frame(env)]
     phase_idx = 0
-    for _ in range(_PUSHCUBE_MAX_STEPS):
-        tcp, _, _, _ = _read_pushcube_obs(obs)
+    for _ in range(PUSHCUBE_MAX_CONTROL_STEPS):
+        tcp, _, _, _ = read_obs(obs)
         target = targets[phase_idx]
         if np.linalg.norm(target - tcp[0:3]) < PHASE_TOL_M:
             phase_idx += 1
@@ -257,7 +247,7 @@ def _capture_stackcube_demo(env, adapter, seed: int) -> np.ndarray:
     phase_idx = 0
     dwelling = False
     dwell_remaining = 0
-    for _ in range(_STACKCUBE_MAX_STEPS):
+    for _ in range(STACKCUBE_MAX_CONTROL_STEPS):
         tcp, _cubeA_xy, _cubeA_z, _, _ = _read_stackcube_obs(obs)
         target = targets[phase_idx]
         if not dwelling and np.linalg.norm(target - tcp[0:3]) < PHASE_TOL_M:
