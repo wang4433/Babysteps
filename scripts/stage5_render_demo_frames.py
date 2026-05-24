@@ -15,9 +15,14 @@ existing ``samples.jsonl`` records. Downstream (S3) consumes these
 Reuses three things from the codebase rather than duplicating logic:
 
 * The per-seed cube-pose injection used by ``stage4_collect_varied.py``
-  (PushCube only). The object_motion target is read straight off the
-  source record's ``execution.initial_intent.object_motion``, so the
-  script does not need to know the original collection plan.
+  (PushCube only). The object_motion target comes from a local
+  reconstruction of ``stratified_seed_plan`` (the same call
+  ``stage4_collect_varied._collect_pushcube`` makes) — *not* from the
+  source record's ``execution.initial_intent.object_motion``. That
+  observed-motion field is derived from the demo trajectory and can drift
+  from the originally-injected target when the cube barely moves (e.g.
+  seed 19: injected ``translate_-x`` but observed motion snapped to
+  ``translate_-y`` due to float noise — see commit ``c9a5426`` bug fix).
 * :func:`babysteps.skills.push.build_push_waypoints` and
   :func:`babysteps.skills.stack.compile_intent_to_stack_skill` — the
   same waypoint compilers the real env_runners use.
@@ -53,6 +58,21 @@ from babysteps.render.common import (  # noqa: E402
     to_np,
 )
 from babysteps.schemas import EpisodeRecord, SceneState  # noqa: E402
+from babysteps.stage4.collection_plan import stratified_seed_plan  # noqa: E402
+
+
+# PushCube injection plan — must mirror scripts/stage4_collect_varied.py
+# (`_PUSHCUBE_DIRS` and the `stratified_seed_plan(..., per_class=10,
+# seed_start=0)` call in `_collect_pushcube`). We reconstruct the plan
+# here instead of reading the observed motion from
+# `execution.initial_intent.object_motion` because the latter is derived
+# from the demo trajectory and can drift from the original injection
+# target when the cube barely moves (commit c9a5426 bug — see module
+# docstring).
+_PUSHCUBE_DIRS = ("translate_+x", "translate_-x")
+_PUSHCUBE_INJECTION_BY_SEED: dict[int, str] = dict(
+    stratified_seed_plan(_PUSHCUBE_DIRS, episodes_per_class=10, seed_start=0)
+)
 
 
 # Control-step cap per task. Matches the runners' caps (PushCube 300,
@@ -313,7 +333,18 @@ def _load_records(jsonl: Path, limit: Optional[int]) -> list[dict]:
 def _capture_one(env, adapter, task: str, rec: dict) -> tuple[int, np.ndarray]:
     seed = _seed_from_record(rec)
     if task == "PushCube-v1":
-        motion = rec["execution"]["initial_intent"]["object_motion"]
+        # Source of truth is the stratified collection plan, NOT
+        # `execution.initial_intent.object_motion` (observed motion can drift
+        # from the injection target when the cube barely moves — see module
+        # docstring / commit c9a5426 bug).
+        try:
+            motion = _PUSHCUBE_INJECTION_BY_SEED[seed]
+        except KeyError:
+            raise RuntimeError(
+                f"seed {seed} is not in the stratified PushCube injection plan; "
+                f"can't reproduce the original demo. Update the plan reconstruction "
+                f"to match the collection seed range."
+            )
         frames = _capture_pushcube_demo(env, adapter, seed, motion)
     elif task == "StackCube-v1":
         frames = _capture_stackcube_demo(env, adapter, seed)

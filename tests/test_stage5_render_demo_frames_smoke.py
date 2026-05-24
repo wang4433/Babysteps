@@ -62,3 +62,20 @@ def test_main_returns_nonzero_on_empty_jsonl(tmp_path: Path):
     out = tmp_path / "frames"
     rc = main(["--jsonl", str(empty), "--out-dir", str(out)])
     assert rc != 0
+
+
+def test_pushcube_injection_plan_uses_stratified_collection_seed():
+    """Regression: script must derive injection from stratified plan, NOT from
+    execution.initial_intent.object_motion (the observed motion can drift from
+    the injected target when the cube barely moves — see commit c9a5426 bug)."""
+    from scripts.stage5_render_demo_frames import _PUSHCUBE_INJECTION_BY_SEED
+
+    # Round-robin: even-indexed in (_PUSHCUBE_DIRS, per_class=10) plan → +x,
+    # odd-indexed → -x. The 20-seed PushCube cut is fully covered.
+    for seed in range(20):
+        assert seed in _PUSHCUBE_INJECTION_BY_SEED, (
+            f"seed {seed} not in PushCube injection plan; will fail at render time"
+        )
+    # Seed 19 (the empirical bug-trigger): must inject -x even though the
+    # original episode's observed motion was -y.
+    assert _PUSHCUBE_INJECTION_BY_SEED[19] == "translate_-x"
