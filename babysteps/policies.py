@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass, replace
-from typing import Callable, Mapping, Optional
+from typing import Any, Callable, Mapping, Optional
 
 from babysteps.failure import Attribution
 from babysteps.schemas import INTENT_FIELDS, Intent, Revision, SceneState
@@ -33,6 +33,18 @@ class RetryContext:
     # adapter.revise_intent, bound — used by selective/oracle policies so this
     # module never imports the adapter (avoids an import cycle).
     revise_fn: Callable[[Intent, Attribution, SceneState], tuple[Intent, Revision]]
+    # Stage-4 M2a — optional handcrafted demo-evidence encoding consumed by
+    # the latent revision policy. Type is `Optional[Any]` so this module
+    # does not import numpy / torch / any Stage-4 stack at evaluation
+    # time; existing M3-baseline policies ignore it. Populated by
+    # `episode.run_episode` from the current episode's DemoEvidence
+    # when available (see `babysteps/stage4/latent_policy.py`).
+    demo_features: Optional[Any] = None
+    # Stage-4 M2a — current episode's failure predicate (e.g.
+    # "approach_blocked"). Needed by the latent revision policy to build
+    # the (F + |FAILURE_PREDICATES|)-dim fp_vec for ReviseHead. Existing
+    # M3-baseline policies ignore this.
+    failure_predicate: Optional[str] = None
 
 
 def resample_factor(

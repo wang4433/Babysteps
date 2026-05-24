@@ -88,6 +88,12 @@ REVISION_OPERATORS: frozenset[str] = frozenset({
     "random_factor_revision",
     "text_feedback_replan",
     "full_replan_analogue",
+    # Stage-4 M2a — learned latent revision through IntentHead + ReviseHead +
+    # slot_decode (see babysteps/stage4/latent_policy.py). The slot-local
+    # interface preserves the single-factor invariant; the operator label
+    # records that the new_value was derived from a learned latent edit
+    # rather than the rule-based discrete operators above.
+    "latent_revision",
 })
 
 CLAIM_BOUNDARY: str = "third_person_demo_proxy_not_human_demo"

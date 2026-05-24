@@ -21,3 +21,8 @@ slurm/logs/
 # Scratch GPU diagnostics — not part of the tested codebase (see scripts/CLAUDE.md).
 scripts/_diag_*.py
 slurm/_diag_*.sbatch
+
+# Stage-4 trained M2a artifacts (weights + centroids). Derived from
+# committed varied_intent data + scripts/stage4_m2a_train_pack.py.
+# Reproduce: python scripts/stage4_m2a_train_pack.py --jsonl <samples> --out-dir <here>
+models/

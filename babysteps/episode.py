@@ -253,6 +253,22 @@ def run_episode(
 
     attribution = adapter.attribute_failure(failure_packet)
     oracle_correct_intent = adapter.oracle_correct_intent(scene_executor)
+    # Stage-4 M2a: pre-compute the handcrafted demo encoding so a latent
+    # revision policy can read it from RetryContext. Sim-free policies
+    # (one_shot, babysteps_selective, …) ignore the field. We import
+    # inside the function so episode.py keeps its no-Stage-4 default
+    # import surface; the import is cheap and runs once per episode.
+    try:
+        from babysteps.stage4.features import extract_episode_features as _ef
+        demo_features = _ef({"demo": {
+            "object_trajectory": [list(p) for p in demo_evidence.object_trajectory],
+            "contact_region_label": demo_evidence.contact_region_label,
+            "final_state": demo_evidence.final_state,
+        }})
+    except Exception:
+        # Stage-4 not importable here (e.g. fake adapter without contact
+        # label in whitelist); leave demo_features None.
+        demo_features = None
     ctx = RetryContext(
         initial_intent=initial_intent,
         attribution=attribution,
@@ -262,6 +278,8 @@ def run_episode(
         task_valid_tokens=adapter.task_valid_tokens(),
         rng=random.Random(_stable_hash(seed, "policy")),
         revise_fn=adapter.revise_intent,
+        demo_features=demo_features,
+        failure_predicate=failure_packet.failure_predicate,
     )
 
     try:
