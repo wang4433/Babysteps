@@ -68,8 +68,16 @@ class _FakeEncoder(torch.nn.Module):
 
 
 def test_extract_vision_features_end_to_end_with_fake_encoder():
-    """Full path: uint8 frames -> preprocess -> encode -> pool -> numpy."""
-    from babysteps.stage4.vision_features import extract_vision_features
+    """Full path: uint8 frames -> preprocess -> encode -> pool -> numpy.
+
+    With identical input frames and a deterministic _FakeEncoder, the
+    output equals (arange(d) / d) * x_normalized.mean() — a numerical
+    identity that catches any future regression in the pipeline.
+    """
+    from babysteps.stage4.vision_features import (
+        _preprocess_frames,
+        extract_vision_features,
+    )
 
     frames = [
         (128 * np.ones((512, 512, 3), dtype=np.uint8))
@@ -78,14 +86,19 @@ def test_extract_vision_features_end_to_end_with_fake_encoder():
     z = extract_vision_features(
         frames,
         device="cpu",
-        _encoder=_FakeEncoder(d=768),  # injection for test
+        _encoder=_FakeEncoder(d=768),
     )
     assert isinstance(z, np.ndarray)
     assert z.shape == (768,)
     assert z.dtype == np.float32
-    # Identical input frames -> identical per-frame embeddings -> mean = embedding.
-    # Embedding magnitude > 0 (non-trivial signal).
-    assert float(np.abs(z).sum()) > 0.0
+
+    # Identity: the fake encoder returns base * per_t where base = arange(d)/d
+    # and per_t = x.mean(dim=(1,2,3)). For identical input frames, per_t is the
+    # same scalar across T, so the time-mean equals base * scalar.
+    x = _preprocess_frames(frames, resolution=224)
+    scalar = float(x.mean())
+    expected = (np.arange(768, dtype=np.float32) / 768.0) * scalar
+    np.testing.assert_allclose(z, expected, rtol=1e-5, atol=1e-6)
 
 
 def test_extract_vision_features_rejects_empty_frames():
@@ -93,3 +106,42 @@ def test_extract_vision_features_rejects_empty_frames():
 
     with pytest.raises(ValueError, match="at least one frame"):
         extract_vision_features([], device="cpu", _encoder=_FakeEncoder())
+
+
+def test_preprocess_frames_single_frame_T1():
+    """T=1 edge case: shape is (1, 3, 224, 224); mean still finite."""
+    from babysteps.stage4.vision_features import _preprocess_frames
+
+    frames = [(128 * np.ones((512, 512, 3), dtype=np.uint8))]
+    x = _preprocess_frames(frames, resolution=224)
+    assert x.shape == (1, 3, 224, 224)
+    assert x.dtype == torch.float32
+    assert np.isfinite(float(x.mean()))
+
+
+def test_preprocess_frames_non_square_resizes_correctly():
+    """(H!=W) input gets resized to (R, R)."""
+    from babysteps.stage4.vision_features import _preprocess_frames
+
+    frames = [(128 * np.ones((480, 640, 3), dtype=np.uint8)) for _ in range(2)]
+    x = _preprocess_frames(frames, resolution=224)
+    assert x.shape == (2, 3, 224, 224)
+
+
+def test_preprocess_frames_rejects_non_uint8_dtype():
+    """The dtype-check branch must trigger for any non-uint8 input."""
+    from babysteps.stage4.vision_features import _preprocess_frames
+
+    frames = [np.ones((512, 512, 3), dtype=np.float32) for _ in range(2)]
+    with pytest.raises(ValueError, match="must be uint8"):
+        _preprocess_frames(frames, resolution=224)
+
+
+def test_preprocess_frames_rejects_wrong_shape():
+    """The shape-check branch must trigger for any non-(T, H, W, 3) input."""
+    from babysteps.stage4.vision_features import _preprocess_frames
+
+    # 4-channel frames trigger shape[-1] != 3.
+    frames = [np.zeros((512, 512, 4), dtype=np.uint8) for _ in range(2)]
+    with pytest.raises(ValueError, match=r"shape \(T, H, W, 3\)"):
+        _preprocess_frames(frames, resolution=224)
