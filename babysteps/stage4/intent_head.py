@@ -97,6 +97,59 @@ def _train_one_slot(
         opt.step()
 
 
+def train_intent_head_joint(
+    head: IntentHead,
+    Z_tr: np.ndarray,
+    labels_per_factor: dict[int, tuple[np.ndarray, int]],
+    *,
+    n_epochs: int = 200,
+    lr: float = 1e-2,
+    seed: int = 0,
+) -> dict[int, nn.Linear]:
+    """Train IntentHead with per-slot CE supervision across multiple factors.
+
+    `labels_per_factor`: {factor_idx: (y_tr, n_classes)} for each
+    non-trivial factor to supervise. The total loss is the sum of
+    per-slot cross-entropy losses; gradients flow through the shared
+    trunk so all supervised slots end up populated simultaneously.
+
+    Returns the per-slot decoders (one `nn.Linear(d_slot, n_classes)`
+    per supervised factor). The caller may either discard them (use a
+    frozen LR probe like G1) or keep them (e.g. for inspection). The
+    canonical M2a slot decoder is the centroid lookup in
+    `babysteps.stage4.slot_decode`, not these per-slot classifiers.
+    """
+    if not labels_per_factor:
+        return {}
+    torch.manual_seed(seed)
+    z = torch.tensor(Z_tr, dtype=torch.float32)
+    decoders: dict[int, nn.Linear] = {}
+    targets: dict[int, torch.Tensor] = {}
+    for fi, (y, n_cls) in labels_per_factor.items():
+        if n_cls < 2:
+            # Trivially-constant factors carry no signal; skip
+            continue
+        decoders[fi] = nn.Linear(head.d_slot, n_cls)
+        targets[fi] = torch.tensor(y, dtype=torch.long)
+    if not decoders:
+        return {}
+    params = list(head.parameters())
+    for dec in decoders.values():
+        params += list(dec.parameters())
+    opt = torch.optim.Adam(params, lr=lr)
+    head.train()
+    for _ in range(n_epochs):
+        G = head(z)
+        loss = sum(
+            F.cross_entropy(decoders[fi](G[:, fi]), targets[fi])
+            for fi in decoders
+        )
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
+    return decoders
+
+
 def nested_cv_probe_one_factor(
     Z: np.ndarray,
     y: np.ndarray,

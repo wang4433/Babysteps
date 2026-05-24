@@ -1,0 +1,145 @@
+{
+  "config": {
+    "d_slot": 16,
+    "hidden": 64,
+    "lr": 0.01,
+    "n_epochs_intent": 200,
+    "n_epochs_revise": 400,
+    "seed": 0
+  },
+  "per_task": {
+    "PushCube-v1": {
+      "aggregate": {
+        "decode_accuracy_certable": 1.0,
+        "g2_passes": true,
+        "max_other_slot_drift_l2": 0.0,
+        "n_revisions_certable": 20,
+        "n_revisions_uncertable": 0
+      },
+      "factor_counts": {
+        "approach_direction": 2,
+        "contact_region": 2,
+        "object_motion": 3
+      },
+      "folds": [
+        {
+          "decode_certable_total": 4,
+          "decode_correct": 4,
+          "fold": 0,
+          "max_other_slot_drift_l2": 0.0,
+          "n_test": 4,
+          "n_train": 16,
+          "n_uncertable": 0
+        },
+        {
+          "decode_certable_total": 4,
+          "decode_correct": 4,
+          "fold": 1,
+          "max_other_slot_drift_l2": 0.0,
+          "n_test": 4,
+          "n_train": 16,
+          "n_uncertable": 0
+        },
+        {
+          "decode_certable_total": 4,
+          "decode_correct": 4,
+          "fold": 2,
+          "max_other_slot_drift_l2": 0.0,
+          "n_test": 4,
+          "n_train": 16,
+          "n_uncertable": 0
+        },
+        {
+          "decode_certable_total": 4,
+          "decode_correct": 4,
+          "fold": 3,
+          "max_other_slot_drift_l2": 0.0,
+          "n_test": 4,
+          "n_train": 16,
+          "n_uncertable": 0
+        },
+        {
+          "decode_certable_total": 4,
+          "decode_correct": 4,
+          "fold": 4,
+          "max_other_slot_drift_l2": 0.0,
+          "n_test": 4,
+          "n_train": 16,
+          "n_uncertable": 0
+        }
+      ],
+      "n_episodes": 20,
+      "n_revisions": 20,
+      "revision_factor_counts": {
+        "approach_direction": 20
+      }
+    },
+    "StackCube-v1": {
+      "aggregate": {
+        "decode_accuracy_certable": NaN,
+        "g2_passes": true,
+        "max_other_slot_drift_l2": 0.0,
+        "n_revisions_certable": 0,
+        "n_revisions_uncertable": 40
+      },
+      "factor_counts": {
+        "approach_direction": 2,
+        "goal_state": 2,
+        "object_motion": 4
+      },
+      "folds": [
+        {
+          "decode_certable_total": 0,
+          "decode_correct": 0,
+          "fold": 0,
+          "max_other_slot_drift_l2": 0.0,
+          "n_test": 8,
+          "n_train": 32,
+          "n_uncertable": 8
+        },
+        {
+          "decode_certable_total": 0,
+          "decode_correct": 0,
+          "fold": 1,
+          "max_other_slot_drift_l2": 0.0,
+          "n_test": 8,
+          "n_train": 32,
+          "n_uncertable": 8
+        },
+        {
+          "decode_certable_total": 0,
+          "decode_correct": 0,
+          "fold": 2,
+          "max_other_slot_drift_l2": 0.0,
+          "n_test": 8,
+          "n_train": 32,
+          "n_uncertable": 8
+        },
+        {
+          "decode_certable_total": 0,
+          "decode_correct": 0,
+          "fold": 3,
+          "max_other_slot_drift_l2": 0.0,
+          "n_test": 8,
+          "n_train": 32,
+          "n_uncertable": 8
+        },
+        {
+          "decode_certable_total": 0,
+          "decode_correct": 0,
+          "fold": 4,
+          "max_other_slot_drift_l2": 0.0,
+          "n_test": 8,
+          "n_train": 32,
+          "n_uncertable": 8
+        }
+      ],
+      "n_episodes": 40,
+      "n_revisions": 40,
+      "revision_factor_counts": {
+        "approach_direction": 6,
+        "goal_state": 34
+      }
+    }
+  }
+}

@@ -107,6 +107,51 @@ def test_g1_collapses_on_shuffled_labels():
     assert out["probe_acc_mean"] < chance + 0.10, out
 
 
+def test_joint_train_all_slots_populated():
+    """Joint training supervises multiple slots simultaneously through the
+    shared trunk. The trained decoders, when fed their slot's G column,
+    must each recover the corresponding training factor at >=0.90 on train.
+
+    This is what A2 requires: a single per-task IntentHead with all slots
+    populated at once (so frozen-slot preservation can be measured).
+    """
+    from babysteps.stage4.intent_head import IntentHead, train_intent_head_joint
+    Z, y0 = _synthetic_dataset(n_per_class=12, n_classes=4, seed=0)
+    # Second factor: a different label whose signal lives in dim [1] vs [0].
+    # Construct y1 from sign of dim 1 → 2 classes.
+    y1 = (Z[:, 1] > 0).astype(np.int64)
+    labels = {0: (y0, 4), 1: (y1, 2)}
+    head = IntentHead(z_dim=20, n_factors=6, d_slot=16, seed=0)
+    decoders = train_intent_head_joint(
+        head, Z, labels, n_epochs=300, lr=1e-2, seed=0,
+    )
+    assert set(decoders.keys()) == {0, 1}
+    head.eval()
+    with torch.no_grad():
+        G = head(torch.from_numpy(Z)).numpy()  # (B, 6, 16)
+    # Check each supervised slot's training accuracy
+    for fi, (y, _) in labels.items():
+        logits = decoders[fi](torch.from_numpy(G[:, fi])).detach().numpy()
+        pred = logits.argmax(axis=-1)
+        train_acc = float(np.mean(pred == y))
+        assert train_acc >= 0.90, (fi, train_acc)
+
+
+def test_joint_train_determinism():
+    """Same seed + same data → bitwise-identical G + decoders."""
+    from babysteps.stage4.intent_head import IntentHead, train_intent_head_joint
+    Z, y0 = _synthetic_dataset(n_per_class=12, n_classes=4, seed=0)
+    labels = {0: (y0, 4)}
+    h1 = IntentHead(z_dim=20, n_factors=6, d_slot=16, seed=0)
+    d1 = train_intent_head_joint(h1, Z, labels, n_epochs=50, lr=1e-2, seed=0)
+    h2 = IntentHead(z_dim=20, n_factors=6, d_slot=16, seed=0)
+    d2 = train_intent_head_joint(h2, Z, labels, n_epochs=50, lr=1e-2, seed=0)
+    h1.eval(); h2.eval()
+    with torch.no_grad():
+        torch.testing.assert_close(h1(torch.from_numpy(Z)), h2(torch.from_numpy(Z)))
+        torch.testing.assert_close(d1[0].weight, d2[0].weight)
+
+
 def test_trivially_constant_factor_short_circuits():
     """Factors with one unique label must short-circuit, matching probe.py's
     behavior (acc=1.0, trivially_constant=True), so the cert table treats
