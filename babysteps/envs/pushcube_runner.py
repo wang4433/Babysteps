@@ -68,16 +68,21 @@ class PushCubeEnvRunner:
     seed before executing the compiled push.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, render_mode: Optional[str] = None) -> None:
         import gymnasium as gym
         import mani_skill.envs  # noqa: F401 — registers PushCube-v1
 
-        self._env = gym.make(
-            "PushCube-v1",
+        kwargs: dict = dict(
             obs_mode="state_dict",
             control_mode="pd_ee_delta_pose",
             sim_backend="cpu",
         )
+        if render_mode is not None:
+            # Optional: when set (e.g. "rgb_array") the env allocates a
+            # render camera. Default None preserves the data-collection
+            # path byte-for-byte (matches all previously-collected runs).
+            kwargs["render_mode"] = render_mode
+        self._env = gym.make("PushCube-v1", **kwargs)
         self._last_seed: Optional[int] = None
         self._pending_motion: Optional[str] = None
 

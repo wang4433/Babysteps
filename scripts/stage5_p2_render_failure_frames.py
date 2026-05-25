@@ -57,6 +57,27 @@ def _save_png(path: Path, frame: np.ndarray) -> None:
     Image.fromarray(frame.astype(np.uint8)).save(path)
 
 
+def _make_render_runner(task: str):
+    """Construct a task-specific env_runner with render_mode='rgb_array'.
+
+    We bypass adapter.env_runner() (which caches a NON-render-mode runner)
+    because the data-collection runner doesn't allocate a render camera —
+    render_frame fails with `render_mode is not set`. The render_mode
+    constructor flag is the minimum-invasive addition (default None
+    preserves all existing data-collection behavior byte-for-byte).
+    """
+    if task == "PushCube-v1":
+        from babysteps.envs.pushcube_runner import PushCubeEnvRunner
+        return PushCubeEnvRunner(render_mode="rgb_array")
+    if task == "PickCube-v1":
+        from babysteps.envs.pickcube_runner import PickCubeEnvRunner
+        return PickCubeEnvRunner(render_mode="rgb_array")
+    if task == "StackCube-v1":
+        from babysteps.envs.stackcube_runner import StackCubeEnvRunner
+        return StackCubeEnvRunner(render_mode="rgb_array")
+    raise ValueError(f"unsupported task: {task}")
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--task", required=True,
@@ -69,6 +90,9 @@ def main(argv: list[str] | None = None) -> int:
     seeds = _parse_seed_range(args.seeds)
     entry = get_task_entry(args.task)
     adapter = entry.adapter_cls()
+    # Use a render-enabled runner directly (NOT adapter.env_runner()).
+    env_runner = _make_render_runner(args.task)
+
     args.out_dir.mkdir(parents=True, exist_ok=True)
     episodes_path = args.out_dir / "episodes.jsonl"
     n_saved, n_failure = 0, 0
@@ -77,7 +101,6 @@ def main(argv: list[str] | None = None) -> int:
         for seed in seeds:
             try:
                 # Step 1: reset + demo + intent — same path as run_episode.
-                env_runner = adapter.env_runner()
                 scene_initial = env_runner.reset(seed)
                 demo_evidence = generate_proxy_demo(
                     env_runner, scene_initial, adapter,
@@ -87,17 +110,15 @@ def main(argv: list[str] | None = None) -> int:
                     scene_initial,
                     blocked_sides=adapter.default_blocked_factory(initial_intent),
                 )
-                # Step 2: reset to the executor scene so attempt is from the
-                # same physical state as a true Stage-0 attempt.
+                # Step 2: re-reset to the executor scene so attempt is from
+                # the same physical state as a true Stage-0 attempt.
                 env_runner.reset(seed)
-                # Step 3: run the attempt. After this returns, env state is
-                # at the end-of-attempt (for stepped tasks) or post-reset
-                # (for planner_failed cases like PushCube approach_blocked).
+                # Step 3: run the attempt. run() resets internally, then
+                # either steps the env (PickCube/StackCube/PushCube-unblocked)
+                # or returns planner_failed without stepping (PushCube
+                # approach_blocked). Either way, env_runner._env's state
+                # after this call is the right thing to render.
                 attempt = env_runner.run(initial_intent, scene_executor)
-                # Step 4: render the env. _env is the underlying gym env;
-                # accessed here as a script-level convenience (the runner
-                # protocol does not expose a public .env, but scripts in
-                # scripts/ already pierce this veil, e.g. _diag_*).
                 env = env_runner._env  # noqa: SLF001 — intentional script-only access
                 frame = render_frame(env)
             except Exception as exc:
@@ -137,7 +158,8 @@ def main(argv: list[str] | None = None) -> int:
             }
             ef.write(json.dumps(row, sort_keys=True) + "\n")
 
-    adapter.close()
+    env_runner.close()
+    adapter.close()  # idempotent; no-op since we never called adapter.env_runner()
     print(f"saved {n_saved} frames ({n_failure} failures) → {args.out_dir}")
     print(f"wrote {episodes_path}")
     return 0

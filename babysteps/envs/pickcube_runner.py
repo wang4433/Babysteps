@@ -89,17 +89,19 @@ class PickCubeEnvRunner:
     the captured seed before executing the compiled pick.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, render_mode: Optional[str] = None) -> None:
         import gymnasium as gym
         import mani_skill.envs  # noqa: F401 — registers PickCube-v1
 
-        self._env = gym.make(
-            "PickCube-v1",
+        kwargs: dict = dict(
             obs_mode="state_dict",
             control_mode="pd_ee_delta_pose",
             sim_backend="cpu",
             max_episode_steps=_MAX_EPISODE_STEPS,
         )
+        if render_mode is not None:
+            kwargs["render_mode"] = render_mode
+        self._env = gym.make("PickCube-v1", **kwargs)
         self._last_seed: Optional[int] = None
 
     def reset(self, seed: int) -> SceneState:
