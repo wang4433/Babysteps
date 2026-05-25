@@ -68,7 +68,7 @@ def main(argv: list[str] | None = None) -> int:
 
     seeds = _parse_seed_range(args.seeds)
     entry = get_task_entry(args.task)
-    adapter = entry.adapter_factory()
+    adapter = entry.adapter_cls()
     args.out_dir.mkdir(parents=True, exist_ok=True)
     episodes_path = args.out_dir / "episodes.jsonl"
     n_saved, n_failure = 0, 0
