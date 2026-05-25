@@ -54,7 +54,7 @@ def test_partial_subclass_cannot_be_instantiated():
         def make_env_runner(self):  # noqa: D401
             raise NotImplementedError
         # Missing: oracle_correct_intent, default_blocked_factory,
-        # oracle_wrong_factor, scripted_demo_to_intent, compile_skill.
+        # oracle_wrong_factor, scripted_demo_to_intent.
     with pytest.raises(TypeError):
         HalfAdapter()  # type: ignore[abstract]
 
@@ -82,7 +82,6 @@ class _CountingAdapter(BaseTaskAdapter):
     def default_blocked_factory(self, intent): return ()
     def oracle_wrong_factor(self, intent, scene): return "none"
     def scripted_demo_to_intent(self, evidence): return _ok_intent()
-    def compile_skill(self, intent, scene): return None
 
 
 def test_env_runner_caches_after_first_call():
@@ -133,9 +132,6 @@ class _StubAdapter(BaseTaskAdapter):
 
     def scripted_demo_to_intent(self, evidence):
         return _ok_intent()
-
-    def compile_skill(self, intent, scene):
-        return None
 
 
 def _ok_intent() -> Intent:
@@ -251,7 +247,6 @@ def test_subclass_without_task_id_raises_at_definition():
             def default_blocked_factory(self, intent): return ()
             def oracle_wrong_factor(self, initial_intent, scene_executor): return "none"
             def scripted_demo_to_intent(self, evidence): return _ok_intent()
-            def compile_skill(self, intent, scene): return None
 
 
 def test_base_task_valid_tokens_defaults_empty():
@@ -264,6 +259,5 @@ def test_base_task_valid_tokens_defaults_empty():
         def default_blocked_factory(self, intent): return ()
         def oracle_wrong_factor(self, i, s): return "none"
         def scripted_demo_to_intent(self, e): raise NotImplementedError
-        def compile_skill(self, i, s): return None
 
     assert _Stub().task_valid_tokens() == {}

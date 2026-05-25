@@ -7,7 +7,6 @@ Pulls every PushCube-specific decision behind one class:
   * oracle_wrong_factor   → "approach_direction" if intent's approach is in
                             blocked_sides, else "none"
   * scripted_demo_to_intent → contact_region_label + trajectory → Intent
-  * compile_skill         → wraps skills.push.compile_intent_to_push_skill
 
 Hook defaults (build_failure_packet / attribute_failure / revise_intent) are
 inherited unchanged from BaseTaskAdapter."""
@@ -19,7 +18,6 @@ from babysteps.demo import trajectory_to_motion
 from babysteps.envs.scene import direction_to_face, face_to_approach
 from babysteps.envs.task_adapter import BaseTaskAdapter, EnvRunner
 from babysteps.schemas import CONTACT_REGIONS, DemoEvidence, Intent, SceneState
-from babysteps.skills.push import compile_intent_to_push_skill
 
 
 class PushCubeAdapter(BaseTaskAdapter):
@@ -72,9 +70,6 @@ class PushCubeAdapter(BaseTaskAdapter):
             constraint_region="none",
             embodiment_mapping="proxy_contact_to_franka_push",
         )
-
-    def compile_skill(self, intent: Intent, scene: SceneState):
-        return compile_intent_to_push_skill(intent, scene)
 
     def task_valid_tokens(self) -> dict[str, tuple[str, ...]]:
         return {

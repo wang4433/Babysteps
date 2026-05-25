@@ -13,7 +13,6 @@ import pytest
 from babysteps.envs.pushcube_adapter import PushCubeAdapter
 from babysteps.envs.task_adapter import BaseTaskAdapter
 from babysteps.schemas import DemoEvidence, Intent, SceneState
-from babysteps.skills.push import PushSkill
 
 
 # ---------- Class-level checks ----------------------------------------- #
@@ -155,42 +154,6 @@ def test_scripted_demo_to_intent_rejects_unknown_contact_region():
     ev = _evidence([(0.0, 0.0), (0.1, 0.0)], "not_a_face")
     with pytest.raises(ValueError, match="contact_region"):
         PushCubeAdapter().scripted_demo_to_intent(ev)
-
-
-# ---------- compile_skill parity --------------------------------------- #
-
-
-def _correct_push_intent() -> Intent:
-    return Intent(
-        goal_state="cube_at_target",
-        object_motion="translate_+x",
-        contact_region="minus_x_face",
-        approach_direction="from_minus_x",
-        constraint_region="none",
-        embodiment_mapping="proxy_contact_to_franka_push",
-    )
-
-
-def test_compile_skill_unblocked_returns_pushskill():
-    intent = _correct_push_intent()
-    scene = SceneState(
-        cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.2, 0.0),
-        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
-        blocked_sides=(),
-    )
-    skill = PushCubeAdapter().compile_skill(intent, scene)
-    assert isinstance(skill, PushSkill)
-    assert skill.contact_region == "minus_x_face"
-
-
-def test_compile_skill_blocked_returns_none():
-    intent = _correct_push_intent()
-    scene = SceneState(
-        cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.2, 0.0),
-        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
-        blocked_sides=("from_minus_x",),
-    )
-    assert PushCubeAdapter().compile_skill(intent, scene) is None
 
 
 # ---------- Hook inheritance check ------------------------------------- #

@@ -125,19 +125,6 @@ def test_scripted_demo_to_intent_ignores_contact_region_label():
     assert i1.embodiment_mapping == "proxy_contact_to_franka_grasp_turn"
 
 
-def test_compile_skill_delegates_to_turn_skill():
-    from babysteps.skills.turn import TurnSkill
-    intent = Intent(
-        goal_state="faucet_turned", object_motion="turn",
-        contact_region="handle_grip", approach_direction="from_above",
-        constraint_region="none",
-        embodiment_mapping="proxy_contact_to_franka_poke_turn",
-    )
-    adapter = TurnFaucetAdapter()
-    skill = adapter.compile_skill(intent, _scene_with_extra())
-    assert isinstance(skill, TurnSkill)
-
-
 def test_adapter_inherits_default_hooks():
     assert (
         TurnFaucetAdapter.build_failure_packet

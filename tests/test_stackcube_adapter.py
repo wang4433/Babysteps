@@ -168,26 +168,6 @@ def test_scripted_demo_to_intent_rejects_bad_contact_region():
         adapter.scripted_demo_to_intent(evidence)
 
 
-def test_compile_skill_delegates_to_stack_skill():
-    """compile_skill wraps compile_intent_to_stack_skill from the skill module."""
-    from babysteps.skills.stack import StackSkill
-    intent = Intent(
-        goal_state="cubeA_on_cubeB", object_motion="place_on",
-        contact_region="minus_x_face", approach_direction="from_above",
-        constraint_region="none",
-        embodiment_mapping="proxy_contact_to_franka_pick_and_place",
-    )
-    scene = SceneState(
-        cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=(0.1, 0.0),
-        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
-        blocked_sides=(),
-        extra={"cubeB_xy": (0.1, 0.0), "cubeB_z": 0.02, "cubeB_top_z": 0.06},
-    )
-    adapter = StackCubeAdapter()
-    skill = adapter.compile_skill(intent, scene)
-    assert isinstance(skill, StackSkill)
-
-
 def test_adapter_inherits_default_hooks():
     """StackCubeAdapter does not override the three optional hooks —
     failure attribution and revision use the shared modules unchanged."""

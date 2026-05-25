@@ -11,7 +11,6 @@ Pulls every PickCube-specific decision behind one class:
   * scripted_demo_to_intent → contact_region_label → Intent (object_motion
                               and approach_direction are PickCube-fixed:
                               "lift_up" and "from_above")
-  * compile_skill         → wraps skills.pick.compile_intent_to_pick_skill
 
 Hook defaults (build_failure_packet / attribute_failure / revise_intent)
 are inherited unchanged from BaseTaskAdapter — the new `grasp_slip`
@@ -21,7 +20,6 @@ from __future__ import annotations
 
 from babysteps.envs.task_adapter import BaseTaskAdapter, EnvRunner
 from babysteps.schemas import CONTACT_REGIONS, DemoEvidence, Intent, SceneState
-from babysteps.skills.pick import compile_intent_to_pick_skill
 
 # Deterministic fallback order for the oracle when several faces are
 # unblocked. Matches the order used by revision._pick_unblocked_face so
@@ -83,9 +81,6 @@ class PickCubeAdapter(BaseTaskAdapter):
             constraint_region="none",
             embodiment_mapping="proxy_contact_to_franka_grasp",
         )
-
-    def compile_skill(self, intent: Intent, scene: SceneState):
-        return compile_intent_to_pick_skill(intent, scene)
 
     def task_valid_tokens(self) -> dict[str, tuple[str, ...]]:
         # PickCube's controlled fault is a slip-prone contact face.

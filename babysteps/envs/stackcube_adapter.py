@@ -12,7 +12,6 @@ Pulls every StackCube-specific decision behind one class:
                               "cube_at_target". The 2D trajectory
                               summarization can't see vertical motion,
                               so the demo's true stacking is hidden.
-  * compile_skill         → wraps skills.stack.compile_intent_to_stack_skill
 
 Hook defaults (build_failure_packet / attribute_failure / revise_intent)
 are inherited unchanged from BaseTaskAdapter — the goal_refinement
@@ -25,7 +24,6 @@ import numpy as np
 from babysteps.demo import trajectory_to_motion
 from babysteps.envs.task_adapter import BaseTaskAdapter, EnvRunner
 from babysteps.schemas import CONTACT_REGIONS, DemoEvidence, Intent, SceneState
-from babysteps.skills.stack import compile_intent_to_stack_skill
 
 
 # Default contact_region for the oracle — pick-and-place doesn't depend
@@ -81,9 +79,6 @@ class StackCubeAdapter(BaseTaskAdapter):
             constraint_region="none",
             embodiment_mapping="proxy_contact_to_franka_pick_and_place",
         )
-
-    def compile_skill(self, intent: Intent, scene: SceneState):
-        return compile_intent_to_stack_skill(intent, scene)
 
     def task_valid_tokens(self) -> dict[str, tuple[str, ...]]:
         return {

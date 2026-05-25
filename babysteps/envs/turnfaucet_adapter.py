@@ -16,7 +16,6 @@ Pulls every TurnFaucet-specific decision behind one class:
                               The 2D summarizer observes "hand-like interaction"
                               and encodes grasp; it cannot know that the Franka
                               cannot mechanically envelop the faucet handle.
-  * compile_skill         → wraps skills.turn.compile_intent_to_turn_skill
 
 Hook defaults (build_failure_packet / attribute_failure / revise_intent)
 are inherited unchanged from BaseTaskAdapter — the grasp_infeasible predicate
@@ -26,7 +25,6 @@ from __future__ import annotations
 
 from babysteps.envs.task_adapter import BaseTaskAdapter, EnvRunner
 from babysteps.schemas import DemoEvidence, Intent, SceneState
-from babysteps.skills.turn import compile_intent_to_turn_skill
 
 
 class TurnFaucetAdapter(BaseTaskAdapter):
@@ -70,6 +68,3 @@ class TurnFaucetAdapter(BaseTaskAdapter):
             constraint_region="none",
             embodiment_mapping="proxy_contact_to_franka_grasp_turn",  # DELIBERATELY infeasible
         )
-
-    def compile_skill(self, intent: Intent, scene: SceneState):
-        return compile_intent_to_turn_skill(intent, scene)

@@ -13,7 +13,6 @@ import pytest
 from babysteps.envs.pickcube_adapter import PickCubeAdapter
 from babysteps.envs.task_adapter import BaseTaskAdapter
 from babysteps.schemas import DemoEvidence, Intent, SceneState
-from babysteps.skills.pick import PickSkill
 
 
 # ---------- Class-level checks ----------------------------------------- #
@@ -141,35 +140,6 @@ def test_scripted_demo_to_intent_per_contact(contact):
 def test_scripted_demo_to_intent_rejects_unknown_contact():
     with pytest.raises(ValueError, match="contact_region"):
         PickCubeAdapter().scripted_demo_to_intent(_evidence("not_a_face"))
-
-
-# ---------- compile_skill ---------------------------------------------- #
-
-
-def _correct_pick_intent() -> Intent:
-    return Intent(
-        goal_state="cube_lifted_at_target",
-        object_motion="lift_up",
-        contact_region="minus_x_face",
-        approach_direction="from_above",
-        constraint_region="none",
-        embodiment_mapping="proxy_contact_to_franka_grasp",
-    )
-
-
-def test_compile_skill_returns_pickskill_when_unblocked():
-    skill = PickCubeAdapter().compile_skill(_correct_pick_intent(), _scene())
-    assert isinstance(skill, PickSkill)
-
-
-def test_compile_skill_returns_pickskill_even_when_contact_blocked():
-    """PickCube's controlled failure is execution-time, not compile-time.
-    Contrast with PushCubeAdapter.compile_skill which returns None for
-    blocked approach."""
-    skill = PickCubeAdapter().compile_skill(
-        _correct_pick_intent(), _scene(blocked=("minus_x_face",)),
-    )
-    assert isinstance(skill, PickSkill)
 
 
 # ---------- Hook inheritance ------------------------------------------- #

@@ -7,7 +7,7 @@ without touching the loop or the orchestration code.
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Optional, Protocol
+from typing import Optional, Protocol
 
 from babysteps.failure import Attribution
 from babysteps.schemas import (
@@ -126,13 +126,6 @@ class BaseTaskAdapter(ABC):
         """Privileged-firewalled scripted intent extraction. Takes ONLY a
         DemoEvidence — never a SceneState. Future stages replace this with
         DINO/VLM grounding."""
-
-    @abstractmethod
-    def compile_skill(self, intent: Intent, scene: SceneState) -> Any:
-        """Compile the intent + scene into an executable skill object. The
-        env_runner consumes whatever this returns. Returns None when the
-        intent is infeasible (e.g., approach_direction in blocked_sides) —
-        None propagates as planner_failed=True downstream."""
 
     # ---- overridable hooks: default delegates to shared modules ----------- #
 

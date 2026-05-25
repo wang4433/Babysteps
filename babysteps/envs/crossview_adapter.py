@@ -3,13 +3,12 @@
 Reuses PushCube physics; the cross-view-ness lives entirely in:
   * observe_demo        → rotate the demo trajectory into the observer frame (-yaw)
   * scripted_demo_to_intent → grounds in actor_frame (the egocentric bug)
-  * compile_skill       → resolve observer-relative intent to world via direction_grounding
   * attribute_failure   → direction_error / goal_not_satisfied → direction_grounding
 The revision (grounding_substitution) is inherited from the shared reviser.
+World-resolution from observer-relative intent to world frame happens in
+CrossViewPushEnvRunner.run (see babysteps/envs/crossview_runner.py).
 """
 from __future__ import annotations
-
-from typing import Any
 
 import numpy as np
 
@@ -19,7 +18,6 @@ from babysteps.envs.scene import (
     face_to_approach,
     goal_direction_to_motion,
     rotate_xy,
-    world_resolved_intent,
 )
 from babysteps.envs.task_adapter import BaseTaskAdapter, EnvRunner
 from babysteps.failure import Attribution
@@ -30,7 +28,6 @@ from babysteps.schemas import (
     Intent,
     SceneState,
 )
-from babysteps.skills.push import compile_intent_to_push_skill
 
 # Deterministic per-seed observer yaw schedule. All non-zero so the
 # egocentric (actor_frame) grounding always produces a wrong push.
@@ -113,10 +110,6 @@ class CrossViewPushAdapter(BaseTaskAdapter):
         if yaw % 360 != 0 and initial_intent.direction_grounding == "actor_frame":
             return "direction_grounding"
         return "none"
-
-    def compile_skill(self, intent: Intent, scene: SceneState) -> Any:
-        yaw = int(scene.extra.get("observer_yaw_deg", 0))
-        return compile_intent_to_push_skill(world_resolved_intent(intent, yaw), scene)
 
     def attribute_failure(self, fp: FailurePacket) -> Attribution:
         # In this task there is no goal ambiguity and the object_motion content
