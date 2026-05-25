@@ -627,6 +627,20 @@ not memorized one-hot labels passed through a bottleneck.
 
 ### Priority 2 — VLM Attribution (diagnosis, not replanning)
 
+> **Status (2026-05-25):** P2 done on PushCube/PickCube/StackCube with
+> **InternVL3.5-8B** (BF16, A100-40GB), 50 held-out failure episodes
+> per task. C1 (constrained-diagnosis + slot-local revision) **matches
+> or beats** C2 (free-form replan) on final success everywhere (PushCube
+> tie 98%; PickCube **+90pp**; StackCube tie 0%) and on intent
+> preservation everywhere (StackCube **+62pp**). C1 attribution accuracy
+> matches the rule-table only on PushCube (visually-obvious blocked
+> approach); it underperforms on PickCube grasp_slip (96% vs 100%) and
+> fails on StackCube goal_not_satisfied (0% vs 86% — the VLM picks
+> `object_motion` 43/50, mistaking "cube did not end at goal" for a
+> motion error). The goal_state failure mode is the remaining open
+> problem for VLM attribution. See `reports/stage5/p2_vlm_attribution/`
+> and `slurm/CLAUDE.md` §"Stage-5 P2".
+
 Use a VLM (GPT-4o / Gemini) for the failure attribution step.
 The VLM outputs **one factor name** from the fixed set — it never
 freely regenerates the entire intent.

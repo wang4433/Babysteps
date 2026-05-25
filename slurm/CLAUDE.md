@@ -60,6 +60,45 @@ The one miss is honest real-sim noise: seed 0019's push missed contact →
 failures were attributed and fixed. Render: 9 MP4s; `2_attempt_blocked` clips
 are larger (the wrong-way push is visible).
 
+### Stage-5 P2 — VLM attribution (jobs 10806525 + 10806596 + 10806755, 2026-05-25)
+
+InternVL3.5-8B (BF16) on A100-40GB. 50 held-out failure episodes per task
+(seeds 100-149), three tasks. C1 = VLM-constrained-diagnosis (one factor
+name) + slot-local discrete revision. C2 = VLM-free-form replan (verbatim
+6-field JSON). Frames captured with the new `render_mode="rgb_array"` flag
+on the data-collection runners.
+
+| task           | C1 attr | rule-table | C1 pres | C2 pres | Δpres pp | C1 succ | C2 succ | Δsucc pp |
+| -------------- | ------- | ---------- | ------- | ------- | -------- | ------- | ------- | -------- |
+| PushCube-v1    | 1.000   | 1.000      | 1.000   | 1.000   | +0.0     | 0.980   | 0.980   | +0.0     |
+| PickCube-v1    | 0.960   | 1.000      | 1.000   | 1.000   | +0.0     | 0.900   | 0.000   | +90.0    |
+| StackCube-v1   | 0.000   | 0.860      | 1.000   | 0.380   | +62.0    | 0.000   | 0.000   | +0.0     |
+
+Gates (per task: `attr ≥ rule-table · pres ≥ C2 · succ within 5pp of C2`):
+- **PushCube-v1**: PASS · PASS · PASS
+- **PickCube-v1**: FAIL · PASS · PASS
+- **StackCube-v1**: FAIL · PASS · PASS
+
+Headline: **C1 ≥ C2 on success everywhere and on preservation everywhere**;
+strictly better on PickCube success (+90pp — C2 returns the unchanged intent
+verbatim 50/50) and StackCube preservation (+62pp — C2 makes unnecessary
+edits to 62% of the non-implicated factors).
+
+VLM attribution accuracy under-runs the rule table on PickCube (2/50 wrong;
+both episodes the VLM picked `embodiment_mapping` instead of `contact_region`
+on a grasp_slip — plausible from the frame) and catastrophically on
+StackCube (0/50; the VLM picks `object_motion` 43× when the oracle is
+`goal_state`, mistaking "cube didn't end at goal" for a motion error). The
+goal_state failure pattern is the genuine open problem.
+
+C2 max_new_tokens had to be split from C1 (256 vs 32): the first run used
+shared 64 and truncated every C2 JSON output → 100% parse_failed; the
+re-run job 10806755 with the split limit fixed it.
+
+Re-running just C2 (after a single-condition rerun): use
+`scripts/stage5_p2_regenerate_reports.py` afterward to rebuild the merged
+per-task `report.md` from the two on-disk JSONs.
+
 ## Rules
 
 - Job logs are artifacts — fine to prune old ones; the gate *numbers* live in
