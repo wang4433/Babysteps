@@ -94,6 +94,15 @@ REVISION_OPERATORS: frozenset[str] = frozenset({
     # records that the new_value was derived from a learned latent edit
     # rather than the rule-based discrete operators above.
     "latent_revision",
+    # Stage-5 P2 — VLM-driven retry operators.
+    # vlm_constrained_revision: VLM picks ONE factor name from the 6-factor
+    #   menu; the existing discrete revision.revise_intent then performs the
+    #   slot-local edit. Single-factor invariant preserved.
+    # vlm_free_form_replan: VLM emits the full 6-factor revised intent JSON;
+    #   we use it verbatim as the retry intent (after schema validation).
+    #   May change any subset of factors — used as the C2 baseline only.
+    "vlm_constrained_revision",
+    "vlm_free_form_replan",
 })
 
 CLAIM_BOUNDARY: str = "third_person_demo_proxy_not_human_demo"

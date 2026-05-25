@@ -556,3 +556,18 @@ def test_baseline_revision_operators_whitelisted():
         "full_replan_analogue",
     ):
         assert op in REVISION_OPERATORS
+
+
+def test_vlm_revision_operators_in_whitelist() -> None:
+    """Stage-5 P2 operators are whitelisted (additive schema change)."""
+    from babysteps.schemas import REVISION_OPERATORS, Revision
+    assert "vlm_constrained_revision" in REVISION_OPERATORS
+    assert "vlm_free_form_replan" in REVISION_OPERATORS
+    # Round-trip: a Revision using each operator constructs cleanly.
+    for op in ("vlm_constrained_revision", "vlm_free_form_replan"):
+        r = Revision(
+            operator=op, factor="approach_direction",
+            old_value="from_minus_x", new_value="from_plus_x",
+            frozen_factors=("goal_state", "object_motion"),
+        )
+        assert r.operator == op
