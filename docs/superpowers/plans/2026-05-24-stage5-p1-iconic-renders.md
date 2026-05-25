@@ -469,8 +469,16 @@ def main(argv=None) -> int:
 
     entry = get_task_entry("PushCube-v1")
     adapter = entry.adapter_cls()
-    env = gym.make("PushCube-v1", obs_mode="state_dict", render_mode="rgb_array",
-                    sim_backend="gpu")
+    # Mirror render_baseline_contrast.py:58–63 exactly — the obstacle helper
+    # mutates a static actor's pose, which only works on the CPU sim backend,
+    # and the push waypoints assume the pd_ee_delta_pose action shape.
+    env = gym.make(
+        adapter.gym_env_id,
+        obs_mode="state_dict",
+        control_mode="pd_ee_delta_pose",
+        sim_backend="cpu",
+        render_mode="rgb_array",
+    )
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
