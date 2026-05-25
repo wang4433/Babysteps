@@ -71,11 +71,6 @@ def main(argv=None) -> int:
              "tests/conftest. Useful for verifying the loop and JSONL "
              "shape on a login node where Vulkan is unavailable.",
     )
-    p.add_argument(
-        "--rollouts-subdir", type=str, default="rollouts",
-        help="Sub-directory of out_dir to hold per-episode rollout .npz "
-             "files. Only the real env_runner writes these.",
-    )
     args = p.parse_args(argv)
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
