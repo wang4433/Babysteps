@@ -469,15 +469,20 @@ def main(argv=None) -> int:
 
     entry = get_task_entry("PushCube-v1")
     adapter = entry.adapter_cls()
-    # Mirror render_baseline_contrast.py:58–63 exactly — the obstacle helper
-    # mutates a static actor's pose, which only works on the CPU sim backend,
-    # and the push waypoints assume the pd_ee_delta_pose action shape.
+    # Mirror render_stage0_maniskill.py:90–105 exactly. PushCube renders
+    # capture the execution phases from the panda_wristcam `hand_camera`
+    # sensor, so robot_uids + sensor_configs are required — without them
+    # render_wrist_frame raises KeyError on the first capture. cpu backend
+    # is required because the obstacle helper mutates a static actor's
+    # pose, and pd_ee_delta_pose matches the push waypoint action shape.
     env = gym.make(
         adapter.gym_env_id,
         obs_mode="state_dict",
         control_mode="pd_ee_delta_pose",
         sim_backend="cpu",
         render_mode="rgb_array",
+        robot_uids="panda_wristcam",
+        sensor_configs=dict(width=512, height=512),
     )
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
