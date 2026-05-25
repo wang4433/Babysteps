@@ -1,0 +1,37 @@
+{
+  "per_task": [
+    {
+      "task": "PushCube-v1",
+      "c1_attribution_acc": 1.0,
+      "rule_table_acc": 1.0,
+      "c1_frozen_preservation": 1.0,
+      "c2_frozen_preservation": 1.0,
+      "c1_final_success": 0.98,
+      "c2_final_success": 0.98,
+      "delta_pres_pp": 0.0,
+      "delta_success_pp": 0.0
+    },
+    {
+      "task": "PickCube-v1",
+      "c1_attribution_acc": 0.96,
+      "rule_table_acc": 1.0,
+      "c1_frozen_preservation": 1.0,
+      "c2_frozen_preservation": 1.0,
+      "c1_final_success": 0.9,
+      "c2_final_success": 0.0,
+      "delta_pres_pp": 0.0,
+      "delta_success_pp": 90.0
+    },
+    {
+      "task": "StackCube-v1",
+      "c1_attribution_acc": 0.0,
+      "rule_table_acc": 0.86,
+      "c1_frozen_preservation": 1.0,
+      "c2_frozen_preservation": 0.38,
+      "c1_final_success": 0.0,
+      "c2_final_success": 0.0,
+      "delta_pres_pp": 62.0,
+      "delta_success_pp": 0.0
+    }
+  ]
+}
