@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --account=rpaleja
 #SBATCH --partition=a100-40gb
+#SBATCH --qos=standby
 #SBATCH --gres=gpu:1
 #SBATCH --mem=115G
 #SBATCH --time=01:00:00
@@ -12,6 +13,10 @@
 # Wall time: 60 min. Sibling `render_pushcube.sbatch` does 6 clips in 20 min
 # (~17s/phase, ~50s/episode after env load). 20 episodes × ~50s + ~3-5 min
 # env load ≈ 22 min expected; 60 min is ~2.7× safety margin.
+# QoS standby: lower priority but typically starts sooner on idle nodes;
+# max 4h wall (we use 1h); preemptible — rare in practice, but if killed
+# mid-flight any in-progress MP4 is lost (no checkpointing). For a ~22-min
+# job this risk is small.
 # Spec:  docs/superpowers/specs/2026-05-24-stage5-p1-iconic-renders-design.md
 # Plan:  docs/superpowers/plans/2026-05-24-stage5-p1-iconic-renders.md
 
