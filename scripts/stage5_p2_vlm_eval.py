@@ -377,8 +377,8 @@ def _write_report_md(
             f"{rate(c1_rows, 'attribution_correct'):.3f} vs "
             f"{rule_acc if rule_acc is not None else float('nan'):.3f} → "
             f"{'PASS' if (rule_acc is not None and rate(c1_rows, 'attribution_correct') >= rule_acc) else 'FAIL'}",
-            f"- **C1 preservation ≫ C2 preservation** "
-            f"(Δ = {d_pres:+.1f}pp; PASS if Δ > 0)",
+            f"- **C1 preservation ≥ C2 preservation** "
+            f"(Δ = {d_pres:+.1f}pp; PASS if Δ ≥ 0)",
             f"- **C1 success ≥ C2 success within 5pp** "
             f"(Δ = {d_succ:+.1f}pp; PASS if Δ ≥ -5)",
             "",

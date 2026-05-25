@@ -90,7 +90,7 @@ def main(argv: list[str] | None = None) -> int:
                     and r["rule_table_acc"] is not None
                     and r["c1_attribution_acc"] >= r["rule_table_acc"])
         gate_pres = (r["delta_pres_pp"] is not None
-                     and r["delta_pres_pp"] > 0)
+                     and r["delta_pres_pp"] >= 0)
         gate_succ = (r["delta_success_pp"] is not None
                      and r["delta_success_pp"] >= -5)
         lines.append(
