@@ -20,7 +20,10 @@ analysis = ["scikit-learn"]
 # Stage-5 P2 — InternVL3.5-8B VLM attribution. torchvision is required by
 # the load_image dynamic-tile preprocessor copied from the InternVL3.5
 # model card. flash-attn is optional (faster inference if available).
-vlm = ["transformers>=4.52.1", "torch", "torchvision", "pillow",
+# transformers v5+ removed `all_tied_weights_keys` which InternVL3.5's
+# trust_remote_code modeling file requires. Pin to v4.x until upstream
+# updates the model card (tracked by InternVL3.5-8B HF discussions).
+vlm = ["transformers>=4.52.1,<5", "torch", "torchvision", "pillow",
        "einops", "timm"]
 
 [tool.setuptools.packages.find]
