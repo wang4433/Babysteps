@@ -241,6 +241,84 @@ def test_pushcube_baseline_contrast_perturbs_contact_region():
     assert "->" in sub or "→" in sub
 
 
+def test_pushcube_render_policy_episode_smoke_same_intent():
+    """render_policy_episode runs the full demo + blocked + retry flow for a
+    single policy and returns one flat concatenated frame list plus a single
+    (title, subtitle) tuple. Exercised with same_intent_retry because it
+    needs no LatentPack / demo_features and the result is deterministic on
+    the stub env."""
+    from babysteps.render.pushcube import render_policy_episode
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+    from babysteps.policies import same_intent_retry
+
+    frames, title = render_policy_episode(
+        _StubEnv(),
+        PushCubeAdapter(),
+        seed=0,
+        policy_name="same_intent_retry",
+        policy_callable=same_intent_retry,
+        demo_features_provider=None,
+        fps=4,
+    )
+    assert isinstance(frames, list)
+    assert len(frames) >= 3  # at least one frame per phase
+    assert isinstance(title, tuple) and len(title) == 2
+    assert "same_intent_retry" in title[0]
+    assert "seed 0000" in title[0]
+
+
+def test_pushcube_render_policy_episode_smoke_oracle():
+    """oracle_factor_revision path: also no demo_features needed. Asserts the
+    title encodes the policy name and the frame list is non-empty."""
+    from babysteps.render.pushcube import render_policy_episode
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+    from babysteps.policies import oracle_factor_revision
+
+    frames, title = render_policy_episode(
+        _StubEnv(),
+        PushCubeAdapter(),
+        seed=0,
+        policy_name="oracle_factor_revision",
+        policy_callable=oracle_factor_revision,
+        demo_features_provider=None,
+        fps=4,
+    )
+    assert len(frames) >= 3
+    assert "oracle_factor_revision" in title[0]
+
+
+def test_pushcube_render_policy_episode_passes_demo_features_to_policy():
+    """When demo_features_provider is supplied, render_policy_episode must
+    pass its output through to the policy via RetryContext.demo_features.
+    Verified with a stub policy that captures its ctx and returns a no-op
+    same-intent revision so the rest of the flow runs cleanly."""
+    from babysteps.render.pushcube import render_policy_episode
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+    from babysteps.policies import same_intent_retry
+    import numpy as np
+
+    captured = {}
+    sentinel = np.array([0.5, -0.25, 1.0], dtype=np.float32)
+
+    def capturing_policy(ctx):
+        captured["demo_features"] = ctx.demo_features
+        captured["failure_predicate"] = ctx.failure_predicate
+        return same_intent_retry(ctx)
+
+    _, _ = render_policy_episode(
+        _StubEnv(),
+        PushCubeAdapter(),
+        seed=0,
+        policy_name="latent",
+        policy_callable=capturing_policy,
+        demo_features_provider=lambda seed: sentinel,
+        fps=4,
+    )
+    assert captured["demo_features"] is sentinel
+    # PushCube blocked-approach predicate must be plumbed for latent.
+    assert captured["failure_predicate"] is not None
+
+
 # ---------- PickCube render tests -------------------------------------- #
 
 
