@@ -302,10 +302,25 @@ def main(argv: list[str] | None = None) -> int:
         }, indent=2, sort_keys=True) + "\n")
         print(f"C2 summary: {c2_summary}")
 
+    # If we only ran ONE condition this invocation, load the other's
+    # results from disk (from a previous full run) so the merged report
+    # carries both columns + the gates. This is the C2-only re-run path.
+    report_c1 = c1_rows if "c1" in conditions else None
+    report_c2 = c2_rows if "c2" in conditions else None
+    report_rule_acc = rule_acc
+    if report_c1 is None and (args.out_dir / "c1_results.json").exists():
+        prev = json.loads((args.out_dir / "c1_results.json").read_text())
+        report_c1 = prev["per_episode"]
+        # Prefer the saved rule_table_accuracy from the original run (it
+        # was computed across the full episode set, identical to this run).
+        if report_rule_acc is None:
+            report_rule_acc = prev.get("rule_table_accuracy")
+    if report_c2 is None and (args.out_dir / "c2_results.json").exists():
+        prev = json.loads((args.out_dir / "c2_results.json").read_text())
+        report_c2 = prev["per_episode"]
     _write_report_md(
-        args.out_dir / "report.md", args.task, rule_acc,
-        c1_rows if "c1" in conditions else None,
-        c2_rows if "c2" in conditions else None,
+        args.out_dir / "report.md", args.task, report_rule_acc,
+        report_c1, report_c2,
     )
     print(f"\nwrote {args.out_dir}/")
     return 0
