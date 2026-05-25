@@ -41,9 +41,11 @@ _PUSHCUBE_POS_SCALE: tuple[float, ...] = (0.10, 0.10, 0.40, 0.50)
 
 
 # Obstacle (phase-2 blocked-side wall) — half-extents in meters.
+# Sized so the wall is a clearly visible red barrier from both third-person and
+# wrist-cam views (was 4 cm x 0.5 cm x 10 cm — invisible at overview distance).
 _OBSTACLE_HALF_W: float = 0.020   # along the approach axis (0.04 m total)
-_OBSTACLE_HALF_T: float = 0.0025  # perpendicular to approach (0.005 m total)
-_OBSTACLE_HALF_H: float = 0.050   # vertical (0.10 m total) — clears EE travel z
+_OBSTACLE_HALF_T: float = 0.075   # perpendicular to approach (0.15 m total)
+_OBSTACLE_HALF_H: float = 0.075   # vertical (0.15 m total) — clears EE travel z
 _OBSTACLE_PARK_Z: float = -0.50   # below table plane; invisible / out of the way
 _OBSTACLE_BLOCK_MARGIN_M: float = 0.025  # gap between cube edge and wall face
 
@@ -442,3 +444,142 @@ def render_baseline_contrast(
          "retry_selective": sel_title,
          "retry_full_replan": fr_title},
     )
+
+
+def render_policy_episode(
+    env,
+    adapter: BaseTaskAdapter,
+    seed: int,
+    *,
+    policy_name: str,
+    policy_callable,
+    demo_features_provider=None,
+    fps: int = 20,
+) -> tuple[list, tuple[str, str]]:
+    """Render one continuous PushCube episode under a single retry policy.
+
+    Phases run in order and frames are concatenated into one list:
+      1. demo (oracle correct intent, no obstacle)
+      2. attempt_blocked (initial intent + wall in place → arm stalls)
+      3. retry (policy_callable's revised intent vs the same wall)
+
+    Returns (frames, (title, subtitle)) where the title encodes seed +
+    policy_name and the subtitle records the revision (or "no_revision"
+    for one_shot-style policies). Designed for the Stage-5 P1 iconic
+    contrast renders, where the same (seed, demo, attempt) prefix is
+    re-rendered per policy so each MP4 is a self-contained "full episode"
+    clip.
+
+    Parameters
+    ----------
+    policy_name : str
+        Short tag burned into the title (e.g. "latent",
+        "oracle_factor_revision", "babysteps_selective",
+        "same_intent_retry"). Identity only — does not switch behaviour.
+    policy_callable : RetryPolicy
+        A `(RetryContext) -> Optional[(Intent, Revision)]` function. May
+        be the LatentPack closure from
+        `babysteps.stage4.latent_policy.latent_revision_factory`.
+    demo_features_provider : Optional[Callable[[int], Any]]
+        If provided, `demo_features_provider(seed)` is called and the
+        result is attached to `RetryContext.demo_features`. Required for
+        the latent policy; pass None for all others.
+
+    Notes
+    -----
+    `fps` is accepted for signature parity with `render_episode` and
+    `render_baseline_contrast`; frame capture cadence is governed by
+    `_execute_push`, not by this argument.
+    """
+    short_id = f"seed {seed:04d}"
+
+    # Spawn / park obstacle (no-op if already cached on env).
+    obstacle = _get_or_build_obstacle(env)
+    _park_obstacle(obstacle)
+
+    s = _pushcube_setup(env, adapter, seed)
+    correct_intent = s["correct_intent"]
+    initial_intent = s["initial_intent"]
+    scene_exec = s["scene_exec"]
+    attribution = s["attribution"]
+    demo_frames = s["demo_frames"]
+
+    # === Phase 2 — initial intent vs the wall ===
+    _move_obstacle_to_block(
+        obstacle, s["scene"].cube_xy, s["scene"].cube_z, initial_intent,
+    )
+    wp_attempt = build_push_waypoints(scene_exec, initial_intent)
+    attempt_frames: list = []
+    _ = _execute_push(
+        env, wp_attempt, attempt_frames, seed=seed,
+        capture=render_wrist_frame,
+        max_steps=120,
+        no_progress_break_steps=20,
+        no_progress_eps_m=0.002,
+    )
+    # Note: leave the wall in place for the retry — every policy must
+    # face the same physical obstacle.
+
+    # === Phase 3 — policy retry ===
+    fp = adapter.build_failure_packet(
+        initial_intent,
+        AttemptResult(
+            initial_obj_xy=s["scene"].cube_xy,
+            final_obj_xy=s["scene"].cube_xy,
+            goal_xy=s["scene"].goal_xy,
+            reached_contact=False, object_moved=False,
+            planner_failed=True, collision=False, grasp_slip=False,
+            rollout_log_path=None, success=False,
+        ),
+        scene_exec,
+    )
+    demo_features = (
+        demo_features_provider(seed) if demo_features_provider is not None else None
+    )
+    ctx = RetryContext(
+        initial_intent=initial_intent,
+        attribution=attribution,
+        scene=scene_exec,
+        oracle_correct_intent=adapter.oracle_correct_intent(scene_exec),
+        oracle_wrong_factor=adapter.oracle_wrong_factor(initial_intent, scene_exec),
+        task_valid_tokens=adapter.task_valid_tokens(),
+        rng=random.Random(seed),
+        revise_fn=adapter.revise_intent,
+        demo_features=demo_features,
+        failure_predicate=fp.failure_predicate,
+        failure_packet=fp,
+    )
+    out = policy_callable(ctx)
+    retry_frames: list = []
+    if out is None:
+        # one_shot-style: no retry. Capture a single still frame so the
+        # concatenated clip ends cleanly rather than truncating mid-stream.
+        retry_frames.append(render_wrist_frame(env))
+        retry_intent = initial_intent
+        revision_subtitle = "no_revision (one_shot)"
+        retry_success = False
+    else:
+        retry_intent, revision = out
+        out_exec = _execute_push(
+            env,
+            build_push_waypoints(scene_exec, retry_intent),
+            retry_frames,
+            seed=seed,
+            capture=render_wrist_frame,
+        )
+        retry_success = bool(out_exec["success"])
+        if revision.factor == "none":
+            revision_subtitle = "no_revision (same_intent_retry)"
+        else:
+            revision_subtitle = (
+                f"{revision.factor}: {revision.old_value} → {revision.new_value}"
+            )
+
+    title = (
+        f"{short_id}  policy: {policy_name}  (success={retry_success})",
+        f"demo({correct_intent.contact_region}/{correct_intent.approach_direction})"
+        f"  →  blocked({initial_intent.approach_direction})"
+        f"  →  retry({revision_subtitle})",
+    )
+    frames = list(demo_frames) + list(attempt_frames) + list(retry_frames)
+    return frames, title
