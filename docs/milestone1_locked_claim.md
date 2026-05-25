@@ -241,3 +241,70 @@ they must be in the main table, not an appendix.
 
 Open follow-ons (not Milestone 1): implement the 7 procedural baselines (M3);
 deprecated-token removal pass once `git grep` confirms no live references.
+
+---
+
+## 6. Stage 5 — Vision-Grounded Latent Intent (ICLR pivot)
+
+> Added 2026-05-24. See `goal.md` §"Stage 5" for the authoritative spec and
+> `update.md` §"2026-05-24" for the rationale.
+
+### Paper framing (Framing B)
+
+The paper's contribution is **the representation + the VLM-diagnosis /
+learned-repair split**, not just the discrete framework:
+
+> A VLM diagnoses which latent intent factor caused a manipulation
+> failure; a learned slot-local editor repairs only that factor in
+> continuous visual-intent space, verified by counterfactual
+> world-model rollouts.
+
+This requires that the slot intents are grounded in raw visual
+observations (not handcrafted features). The Stage-0 discrete schema
+remains as the supervision signal and certification scaffold.
+
+### Revised comparison-table design (extends §4)
+
+The M3 procedural baselines (7 rows × 3 tasks) remain as the
+**Stage-0 baseline table**. Stage 5 adds a second table:
+
+**Rows (methods) — Stage 5 table:**
+
+1. `one_shot` — no retry.
+2. `same_intent_retry` — retry identical intent.
+3. `babysteps_selective` (rule attr + rule revision) — Stage-0 baseline.
+4. `babysteps_latent` (rule attr + learned ReviseHead on handcrafted Z) — Stage-4 baseline.
+5. **`babysteps_vision` (rule attr + learned ReviseHead on DINOv2 Z)** — P1 result.
+6. **`vlm_diagnosis_slot_edit` (VLM attr + learned ReviseHead on DINOv2 Z)** — P2 result.
+7. **`vlm_free_replan`** (VLM regenerates entire intent JSON) — the baseline to beat on selectivity.
+8. `oracle_factor_revision` — upper bound.
+
+**Key new columns:**
+
+| Metric | What it shows |
+| --- | --- |
+| VLM attribution accuracy | Does VLM diagnosis match oracle wrong factor? |
+| Vision G1 probe accuracy | Do vision-grounded slots recover discrete factors? |
+| G3 counterfactual selectivity | Does the world model confirm single-slot sufficiency? |
+
+**Headline result target:**
+
+```text
+vlm_diagnosis_slot_edit matches vlm_free_replan on recovery rate
+  but preserves 95%+ of already-correct intent structure
+  while vlm_free_replan preserves < 50%.
+```
+
+### Tasks — expanded from §4
+
+Promote **TurnFaucet** and **CrossViewPush** to the main table (5 tasks
+total). The direction_grounding factor exercised by CrossViewPush is
+the most novel cross-view claim; it must be in the main table, not
+an appendix. Increase seeds to **50 per task** with error bars.
+
+### Priority order
+
+1. P1 — Vision encoder swap (DINOv2 on demo frames). Gate: G1 ≥ 90%.
+2. P2 — VLM attribution baseline (GPT-4o / Gemini). Gate: attr acc ≥ rule.
+3. P3 — World model counterfactual. Gate: G3 passes.
+4. P4 — Learned action decoder. Optional / deferrable.

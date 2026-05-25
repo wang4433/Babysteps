@@ -9,24 +9,41 @@ BABYSTEPS is a **failure-guided structured-intent revision** framework for
 Franka manipulation. The core loop:
 
 ```text
-third-person demonstration proxy
-  → structured intent factors
+demo video frames → [vision encoder] → slot intents G
   → Franka first-person execution
   → structured failure packet
-  → revise ONLY the implicated intent factor (freeze the rest)
+  → [VLM diagnosis] → which slot failed?
+  → [learned ReviseHead] → edit ONLY that slot (freeze the rest)
   → retry
 ```
 
-The research claim is **factor-level intent revision**, not generic retry.
-Failure is treated as evidence about *which part of the task intent was
-misunderstood*, not just as an action-recovery signal.
+The research claim is **slot-local intent revision in a vision-grounded
+latent space**, not generic retry or free-form VLM replanning. Failure is
+treated as evidence about *which latent intent factor was misgrounded*,
+not just as an action-recovery signal.
+
+## Current priority: Stage 5 (ICLR submission track)
+
+The active development track is **Stage 5** (`goal.md` §"Stage 5"):
+
+1. **P1 — Vision encoder swap** (critical): frozen DINOv2/R3M on demo
+   frames → IntentHead → vision-grounded slot intents.
+2. **P2 — VLM attribution**: GPT-4o/Gemini for failure diagnosis
+   (constrained to one factor name, never free-form replanning).
+3. **P3 — World model counterfactual**: learned dynamics for G3
+   selectivity certification.
+4. **P4 — Learned action decoder** (optional): replace skill compiler.
+
+Stage 0–4 are complete; their discrete schema and episode data serve as
+supervision and certification scaffold for Stage 5.
 
 ## What this project is NOT
 
 - not cross-embodiment imitation, end-to-end VLA, RL, or diffusion-policy control
-- not "ask a VLM/LLM to replan the whole thing after failure"
+- not "ask a VLM/LLM to replan the whole thing after failure" — the VLM
+  does *diagnosis only* (which factor?); the learned ReviseHead does the edit
 - the robot is always **Franka/Panda**; the low-level controller is a fixed
-  skill primitive / motion planner, never learned from scratch
+  skill primitive / motion planner (until P4 adds a learned decoder)
 
 ## Stage-0 intent schema (object-centric)
 

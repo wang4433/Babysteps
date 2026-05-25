@@ -111,39 +111,55 @@ The key result should look like:
 
 That is the paper’s main empirical story.
 
-## Milestone 5: Richer Cross-View Stress
+## Milestone 5: Vision-Grounded Latent Intent (Stage 5 — ICLR target)
 
-For ICLR, we should show that the loop survives more aggressive
-versions of the cross-view condition while staying Franka-to-Franka
-(the embodiment axis is intentionally held constant — see `goal.md`
-"Later Stages").
+> **Updated 2026-05-24.** Replaces the earlier "Richer Cross-View Stress"
+> milestone with the Stage 5 vision-grounded latent track. See `goal.md`
+> §"Stage 5" for the full spec and `update.md` §"2026-05-24" for rationale.
 
-Possible minimal extension:
+The paper's contribution is the **representation + VLM-diagnosis /
+learned-repair split**:
 
-- Add multiple third-person camera placements (left / right / oblique
-  desk-front) and verify that `direction_grounding` revision still picks
-  the correct frame.
-- Add a true first-person sensor stream (`panda_wristcam` or
-  robot-front RGB-D) for the executing Franka — replacing the single
-  default render camera that Stage 0 uses for both phases.
-- Add controlled occlusions and lighting / background variation in the
-  third-person demo, and show factor-attribution accuracy degrades
-  gracefully.
-- Run a small hand-labeled object-centric grounding pilot (still on
-  Franka demo videos) to test whether DINOv2 / VLM grounding can
-  replace the scripted labels Stage 0 uses.
+> A VLM diagnoses which latent intent factor caused a manipulation
+> failure; a learned slot-local editor repairs only that factor in
+> continuous visual-intent space, verified by counterfactual
+> world-model rollouts.
 
-This would support the claim:
+### M5a: Vision Encoder Swap (P1 — critical first step)
 
-> BABYSTEPS does not rely on a single canonical demo viewpoint or on
-> privileged labels. It transfers object-centric intent factors across
-> realistic cross-view variation, and uses failure to revise the
-> implicated factor when the cross-view ambiguity is resolved
-> incorrectly.
+**Goal:** Replace handcrafted 20-dim Z with frozen DINOv2 features on
+demo RGB frames. Retrain IntentHead. Gate: G1 probe ≥ 90%.
 
-Cross-embodiment / human-demo extensions are deliberately *not* part of
-this milestone — they would reintroduce the embodiment confound that
-Stage 0 was designed to remove.
+Deliverable:
+- `babysteps/stage4/vision_features.py` — DINOv2 extraction + caching.
+- Re-rendered varied-intent episodes with saved demo frames.
+- G1 probe report on vision-grounded G (pass/fail per cell).
+- ReviseHead retrained on vision G; G4/G5 sim rollout eval.
+
+### M5b: VLM Attribution Baseline (P2)
+
+**Goal:** Run GPT-4o / Gemini on failure packets, measure attribution
+accuracy. Compare VLM-diag + slot-edit vs. VLM free-form replan.
+
+Deliverable:
+- VLM attribution accuracy on 50+ episodes per task.
+- Comparison row: `vlm_diagnosis_slot_edit` vs. `vlm_free_replan` on
+  recovery rate AND selectivity (frozen-factor preservation).
+
+### M5c: World Model Counterfactual (P3)
+
+**Goal:** Train a latent dynamics model on ManiSkill rollouts. Use it
+for G3 selectivity certification (counterfactual slot-drift test).
+
+Deliverable:
+- Forward model on rollout data.
+- G3 counterfactual selectivity report.
+- Revision-ranking ablation (world-model-guided edit selection).
+
+### M5d: Learned Action Decoder (P4 — optional)
+
+**Goal:** Replace skill compiler with a small policy conditioned on G.
+Deferrable; the paper is strong with M5a–M5c and existing compilers.
 
 ## Milestone 6: Related Work Positioning
 
@@ -153,36 +169,43 @@ Need a clean related-work story:
 - **Third-person imitation:** transfers behavior across viewpoint/embodiment.
 - **Affordance / correspondence methods:** infer contact or action possibilities.
 - **Inner Monologue / ReAct / SayCan:** replan after feedback.
-- **BABYSTEPS:** diagnoses which latent intent factor was wrong and edits only that factor.
+- **BABYSTEPS:** VLM diagnoses which latent intent factor was wrong; a
+  learned slot-local editor revises only that factor in visual-intent
+  space.
 
 This distinction needs to appear in the intro, method, and experiments.
 
-## Milestone 7: Paper Draft Early
+## Milestone 7: Paper Draft
 
-ICLR deadlines are usually around September, so we should not wait.
+ICLR deadlines are usually around September/October.
 
-Suggested schedule:
+**Revised schedule (as of 2026-05-24):**
 
-**Now to early June:**  
-Lock claim, clean task set, decide whether to keep or replace `TurnFaucet`.
+**Late May – mid June:**
+M5a — Vision encoder swap. G1 probe on DINOv2 features. This is the
+go/no-go gate for Framing B. If G1 fails, diagnose and fix (spatial
+pooling, R3M, fine-tuning) before proceeding.
 
-**June:**  
-Finish baselines and metrics. Generate first complete main table.
+**Mid June – early July:**
+M5b — VLM attribution experiments. Build the `vlm_free_replan` baseline.
+Generate the Stage 5 comparison table.
 
-**July:**  
-Run larger experiments, ablations, and the richer cross-view pilot
-(multiple third-person placements + a real first-person sensor stream).
+**July:**
+M5c — World model training + G3 counterfactual. Run 5-task × 50-seed
+full evaluation. Ablations (pooling, encoder, slot dim, multi-retry).
 
-**August:**  
-Write full paper draft, figures, related work, method diagrams.
+**August:**
+Write full paper draft, figures, method diagram. Promote TurnFaucet
+and CrossViewPush to the main table (5 tasks total).
 
-**Early September:**  
+**Early September:**
 Polish, rerun final experiments, write rebuttal-ready limitations.
 
-## My Recommendation
+## Priorities (updated 2026-05-24)
 
-The next concrete milestone should be:
+The immediate next step is **M5a** (vision encoder swap):
 
-> By the next professor meeting, show a draft main comparison table with rows for one-shot, full replanning, text-feedback replanning, BABYSTEPS selective, and oracle revision across at least PushCube, PickCube, and StackCube.
-
-That will make the project feel like an ICLR paper, not just a demo.
+> Implement `vision_features.py`, re-render episodes with frame capture,
+> train IntentHead on DINOv2 features, run G1 probe. This is the
+> critical gate — without vision-grounded features, the "latent" claim
+> doesn't land.

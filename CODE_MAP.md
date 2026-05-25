@@ -62,16 +62,21 @@ Stage-0 phases: `1_demo`, `2_attempt_blocked`, `3_retry`.
 executable skill (waypoints / motion-plan parameters). `turn.py` dispatches the
 embodiment_substitution (poke-turn) path for Sub-project D.
 
-### `babysteps/stage4/` — learned-latent track (analysis only)
+### `babysteps/stage4/` — learned-latent track
 
-Sim-free Stage-4 code: `features.py` (firewall-strict 19-dim demo-evidence
-features), `probe.py` (linear probe + chance/shuffled baselines), `report.py`
-(three-way `cell_class` — trivial / label-identity / geometric — + margin
-gate), `collection_plan.py` (stratified + rejection-quota planners for the
-varied cut). Reads only DemoEvidence-shaped fields, never
-`execution.initial_intent` (the label). Pure scene geometry for the varied-
-intent collection lives next door in `envs/scene.py`: `injected_cube_xy` and
-`cubeA_to_cubeB_motion`.
+Stage 4 (complete) + Stage 5 (active, ICLR target). Stage-4 modules:
+`features.py` (firewall-strict 19-dim demo-evidence features), `probe.py`
+(linear probe + chance/shuffled baselines), `report.py` (three-way
+`cell_class` — trivial / label-identity / geometric — + margin gate),
+`collection_plan.py` (stratified + rejection-quota planners for the varied
+cut), `intent_head.py` (IntentHead MLP), `revise_head.py` (slot-local
+ReviseHead), `attribution_head.py` (M2.5 learned attribution),
+`latent_policy.py` (LatentPack + RetryPolicy wrapper).
+
+Stage 5 adds: `vision_features.py` (frozen DINOv2/R3M feature extraction
+from demo RGB frames — P1). Reads only DemoEvidence-shaped fields, never
+`execution.initial_intent` (the label). See `goal.md` §"Stage 5" and
+`docs/superpowers/specs/2026-05-24-stage5-vision-encoder-swap-design.md`.
 
 ## `scripts/`
 

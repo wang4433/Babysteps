@@ -1,4 +1,73 @@
-# Stage-0 framing update — single-Franka cross-view
+# BABYSTEPS framing updates
+
+> This file records major framing decisions in reverse chronological
+> order. `goal.md` is the authoritative data contract; this file
+> records the rationale behind pivots.
+
+---
+
+## 2026-05-24 — Stage 5: Vision-grounded latent intent (ICLR pivot)
+
+> **Status:** active. Supersedes the Stage-4 handcrafted-feature
+> bottleneck as the paper-submission track.
+
+### Problem diagnosed
+
+Stage 4 proved the slot-local revision interface works, but an honest
+assessment reveals the "latent" claim is hollow:
+
+1. **IntentHead input is handcrafted.** A 20-dim vector of trajectory
+   summary stats + one-hot labels. No pixels, no images.
+2. **Output quantizes back to discrete tokens.** Nearest-centroid
+   lookup to the same Stage-0 schema strings.
+3. **The continuous bottleneck adds nothing** the discrete pipeline
+   doesn't already provide. On PushCube the latent ties the rule-based
+   baseline; on StackCube it gains 10pp purely from better attribution,
+   not from a richer representation.
+
+For ICLR, "latent slot-intent" must mean vision-grounded learned
+representations, not a supervised classification bottleneck over
+hand-engineered features.
+
+### Decision: four-priority roadmap
+
+See `goal.md` §"Stage 5" for the full spec. Summary:
+
+| Priority | Component | What changes | Gate |
+| --- | --- | --- | --- |
+| **P1** | Vision encoder swap | 20-dim handcrafted → frozen DINOv2 (768-dim) on demo frames | G1 probe ≥ 90% on vision features |
+| **P2** | VLM attribution | Rule table / learned MLP → GPT-4o / Gemini (constrained to one factor name) | VLM attr acc ≥ rule; VLM-diag + slot-edit beats VLM free-replan on selectivity |
+| **P3** | World model counterfactual | Mechanical G2 (bit-identity) → learned dynamics model for G3 | G3 counterfactual selectivity passes |
+| **P4** | Learned action decoder | Fixed skill compiler → small policy conditioned on G | Optional; deferrable |
+
+**P1 is the critical first step.** Without vision-grounded features,
+the "latent" claim doesn't land regardless of what else is added.
+
+### What does NOT change
+
+- Stage-0 discrete schema remains as supervision + certification.
+- Single-factor revision invariant (one slot, one ReviseHead call).
+- Franka-to-Franka setup (no cross-embodiment).
+- The VLM does *diagnosis only* (which factor failed?), never
+  free-form intent regeneration.
+
+### Paper framing (Framing B)
+
+> **Title direction:** Slot-Local Intent Revision: Diagnosing and
+> Repairing Manipulation Failures One Factor at a Time
+>
+> **One-line:** A VLM diagnoses which latent intent factor caused a
+> manipulation failure; a learned slot-local editor repairs only that
+> factor in continuous visual-intent space, verified by counterfactual
+> world-model rollouts.
+>
+> **Punchline:** VLMs are good at diagnosing failures but wasteful at
+> fixing them. Give the VLM the diagnosis job; give a learned
+> slot-local editor the repair job.
+
+---
+
+## 2026-05-21 — Stage-0 framing: single-Franka cross-view
 
 > **Status:** locked 2026-05-21. Supersedes the earlier "Robot A / Robot
 > B" two-robot framing that briefly lived in this file. The Stage-0

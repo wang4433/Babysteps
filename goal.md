@@ -556,6 +556,237 @@ existing task set, not arbitrary absolute targets.
   rewrites are off-limits; the slot-local interface is the contribution.
 * Not relying on a free-form VLM call to produce $\tilde{g}_t^i$ at inference.
 
+## Stage 5: Vision-Grounded Latent Intent (ICLR target)
+
+> **Status:** planned 2026-05-24. This is the paper-submission track.
+> Stage 5 replaces Stage 4's handcrafted-feature bottleneck with
+> vision-grounded slot intents, VLM-based attribution, and world-model
+> counterfactual verification. Stage 0's discrete schema remains as the
+> supervision signal and certification scaffold — it is never discarded.
+
+### Motivation
+
+Stage 4 proved the slot-local revision interface works end-to-end, but
+its IntentHead consumes a 20-dim handcrafted feature vector (trajectory
+stats + one-hot labels), and the output quantizes back to discrete
+tokens via nearest-centroid lookup. The continuous bottleneck adds
+nothing that the discrete schema alone does not provide. An ICLR
+"latent intent" claim requires that the representation is grounded in
+raw observations, not hand-engineered inputs.
+
+### Architecture (target)
+
+```text
+Demo video frames ──→ [Frozen Vision Encoder] ──→ z_demo
+                                                     │
+                                                     ▼
+                                           [IntentHead (learned)]
+                                                     │
+                                                     ▼
+                                         G = {g¹, g², ..., g⁶}     (slot intents)
+                                                     │
+                             ┌───────────────────────┤
+                             │                       │
+                        [Skill Decoder]         [on failure]
+                             │                       │
+                             ▼                       ▼
+                         action a_t       [VLM Attribution] → "which slot?"
+                                                     │
+                                                     ▼
+                                           [ReviseHead (learned)]
+                                             g^i, fp → g̃^i
+                                                     │
+                                                     ▼
+                                           [World Model Verifier]
+                                         "does this revision help?"
+                                                     │
+                                                     ▼
+                                             revised G → retry
+```
+
+### Priority 1 — Vision Encoder Swap (critical first step)
+
+Replace the 20-dim handcrafted `Z` with a **frozen pretrained vision
+encoder** (DINOv2, R3M, or SPA) applied to third-person demo frames
+rendered by ManiSkill. The IntentHead architecture stays the same; only
+`z_dim` changes (e.g. 20 → 768).
+
+```python
+demo_frames: Tensor   # (T, 3, 224, 224) from env.render()
+z_demo = dinov2(demo_frames).mean(dim=0)   # (768,) pooled over time
+G = intent_head(z_demo)                    # (6, d_slot)
+```
+
+**Gate:** G1 probe recoverability of all six discrete factors from
+the vision-grounded $G_t$ at ≥ 90% held-out accuracy. If this fails,
+the vision features do not carry enough task-intent signal and the
+encoder or pooling strategy must be revised before proceeding.
+
+**What this proves:** The slot intents encode visual task structure,
+not memorized one-hot labels passed through a bottleneck.
+
+### Priority 2 — VLM Attribution (diagnosis, not replanning)
+
+Use a VLM (GPT-4o / Gemini) for the failure attribution step.
+The VLM outputs **one factor name** from the fixed set — it never
+freely regenerates the entire intent.
+
+```text
+Prompt template:
+  You are diagnosing a robot manipulation failure.
+  The robot attempted: {initial_intent as JSON}
+  Failure observation: {failure trace / first-person frames}
+
+  Which ONE intent factor was wrong? Choose exactly one:
+  [goal_state, object_motion, contact_region,
+   approach_direction, constraint_region, embodiment_mapping]
+
+  Output ONLY the factor name.
+```
+
+**Comparison:** VLM-constrained-attribution + slot-local revision
+vs. VLM free-form replanning (the VLM regenerates the entire intent
+JSON). The paper's punchline: *VLMs are good at diagnosing failures
+but wasteful at fixing them; give the VLM the diagnosis job, give a
+learned slot-local editor the repair job.*
+
+**Core invariant preserved:** The VLM is used for *diagnosis only*.
+It selects which slot to edit; it does NOT produce the revised intent.
+The ReviseHead (learned, slot-local) produces $\tilde{g}_t^i$. This
+is not "ask a VLM/LLM to replan the whole thing after failure."
+
+### Priority 3 — World Model Counterfactual Verification
+
+Train a latent dynamics model on ManiSkill rollouts:
+
+$$(z_t, a_t) \xrightarrow{f_\phi} z_{t+1}, \quad z_t \xrightarrow{r_\phi} \hat{r}_t$$
+
+This serves three purposes:
+
+1. **G3 selectivity certification.** Counterfactual rollout pairs
+   (same $Z_t$, edited slot $i$ vs. unedited) must show predicted
+   future-slot drift on $j \neq i$ indistinguishable from the
+   simulator noise floor. The world model provides the forward
+   predictions; G3 becomes a real test, not a mechanical bit-identity.
+2. **Revision ranking.** When multiple slots are plausible edit
+   targets, simulate both revisions in imagination and pick the one
+   with higher predicted success.
+3. **Paper narrative.** "We use a world model to verify that
+   single-factor revision is physically sufficient — the
+   counterfactual rollout confirms that editing one slot does not
+   require compensating edits to other slots."
+
+### Priority 4 — Learned Action Decoder (optional)
+
+Replace the fixed skill compiler with a small policy conditioned on G.
+This closes the loop (everything is learned) but is the riskiest
+change. Deferrable; the paper is strong with Priorities 1–3 and the
+existing skill compilers.
+
+### Stage 5 Success Criteria
+
+* Priority 1 gate: G1 probe ≥ 90% on vision-grounded $G_t$ (not
+  handcrafted features).
+* Priority 2 gate: VLM attribution accuracy ≥ rule-table accuracy;
+  VLM-diagnosis + slot-local revision ≥ VLM free-form replan on
+  frozen-factor preservation with comparable recovery rate.
+* Priority 3 gate: G3 counterfactual selectivity passes with
+  world-model forward predictions (not mechanical bit-identity).
+* $\Delta pp$ of vision-grounded latent revision vs. same_intent_retry
+  ≥ 10; vs. oracle discrete revision within 5 pp.
+
+### Stage 5 Non-Goals
+
+* Not replacing the Stage-0 discrete schema (it remains as supervision
+  + certification scaffold).
+* Not training the vision encoder end-to-end (frozen pretrained only
+  in v1; fine-tuning is a follow-on if frozen features pass G1).
+* Not adding cross-embodiment demonstrators (still Franka-to-Franka).
+* Not allowing the VLM to produce the revised intent value (only the
+  factor name — the ReviseHead produces the edit).
+
+### Immediate Next Step — P1 Implementation Sequence
+
+> What to build right now. This is the P1 critical path. Do these in
+> order; each step unlocks the next.
+
+**Step 1. `babysteps/stage4/vision_features.py` — DINOv2 extraction.**
+
+Create a new module that takes demo RGB frames and returns a feature
+vector. Must obey the Stage-4 firewall (no label-side fields):
+
+```python
+def extract_vision_features(
+    demo_frames: list[np.ndarray],   # T × (H, W, 3) uint8 from env.render()
+    encoder: str = "dinov2_vitb14",
+    pool: str = "cls_mean",
+    device: str = "cuda",
+) -> np.ndarray:
+    """Return (d_encoder,) float32. DINOv2 ViT-B/14 → CLS → mean-pool over T."""
+```
+
+Input: the RGB frames already captured by `render_frame(env)` in
+`babysteps/render/common.py`. Output: `(768,)` for DINOv2 ViT-B/14.
+
+Requires GPU for DINOv2 inference but is fast (~2 min for 50 episodes).
+Write a sim-free unit test with a random tensor to verify shapes.
+
+**Step 2. Extend the collection pipeline to save demo frames.**
+
+The existing `run_episode()` in `babysteps/episode.py` calls
+`generate_proxy_demo()` which internally calls `env_runner.run()`.
+The env_runner already steps the env, but does NOT capture RGB frames
+(it only reads `obs["extra"]` for poses).
+
+Two options:
+- **Option A (simpler):** Add a separate `collect_demo_frames()` that
+  re-runs the demo execution with `env.render()` per step. Called
+  after `run_episode()` for the same seed, saves frames as `.npz`.
+- **Option B (cleaner):** Extend `EnvRunner.run()` to optionally
+  capture `env.render()` per step and return frames alongside the
+  `AttemptResult`. Requires touching the runner interface.
+
+Prefer Option A for speed — it avoids changing the tested runner
+interface. The demo is deterministic (same seed, same oracle), so
+re-running it yields identical frames.
+
+Output path: `datasets/stage5/varied_intent/<task>/frames/seed_NNNN.npz`.
+
+**Step 3. Extract and cache DINOv2 features for each episode.**
+
+Run Step 1's extractor on each seed's saved frames. Cache the output
+as `seed_NNNN_dinov2.npy` alongside the `.npz`. This is a one-off
+GPU job (~2 min per task).
+
+**Step 4. Train IntentHead on vision features + run G1 probe.**
+
+Modify the existing `scripts/stage4_m2a_train_pack.py` (or write a
+new `scripts/stage5_p1_vision_probe.py`) to:
+1. Load cached DINOv2 features instead of `features.py` output.
+2. Instantiate `IntentHead(z_dim=768, d_slot=32, hidden=256)`.
+3. Train with the same per-slot CE supervision as M2a.
+4. Run the same nested-CV G1 probe as M2a A1.
+5. Write the G1 report to `reports/stage5/p1_vision_g1/`.
+
+**Pass:** all non-trivially-constant (task, factor) cells ≥ 90%.
+
+**Step 5. Retrain ReviseHead on vision-grounded G + run G4/G5.**
+
+Same as M2a A2/A3 but on vision-grounded slots. ReviseHead L2 loss
+to centroids in the new slot space. Then sim rollout eval on held-out
+seeds (GPU job). Gate: G4 Δpp ≥ 10, G5 within 5 pp of oracle.
+
+**Data prerequisite:** The varied-intent collection currently has
+PushCube (20 episodes) and StackCube (40 episodes). For the vision
+probe to be meaningful, we need:
+- At least 50 seeds per task with saved demo frames.
+- PickCube varied cut (not yet collected).
+- Intent diversity across seeds (the M1.5 varied cut partially
+  addresses this for PushCube and StackCube; PickCube needs a
+  parallel varied-cut design).
+
+Collect new data with frame saving as part of Step 2.
+
 ## Guidance for Future Agents
 
 When implementing from this file:
