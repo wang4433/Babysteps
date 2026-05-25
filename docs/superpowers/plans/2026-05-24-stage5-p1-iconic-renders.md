@@ -468,7 +468,7 @@ def main(argv=None) -> int:
     }
 
     entry = get_task_entry("PushCube-v1")
-    adapter = entry.adapter
+    adapter = entry.adapter_cls()
     env = gym.make("PushCube-v1", obs_mode="state_dict", render_mode="rgb_array",
                     sim_backend="gpu")
 
