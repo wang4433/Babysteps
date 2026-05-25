@@ -1,0 +1,109 @@
+{
+  "features_dir": "datasets/stage5/varied_intent/PushCube-v1/features",
+  "gates": {
+    "g4_delta_pp_vs_same_intent_retry": 96.0,
+    "g4_pass": true,
+    "g5_delta_pp_vs_oracle": -2.0000000000000018,
+    "g5_pass": true
+  },
+  "n_seeds": 50,
+  "pack_dir": "models/stage5/p1_vision/PushCube-v1",
+  "per_policy": {
+    "babysteps_selective": {
+      "display_name": "babysteps_selective",
+      "failure_seeds": [
+        126
+      ],
+      "final_success_count": 49,
+      "final_success_rate": 0.98,
+      "n": 50,
+      "n_failures": 1
+    },
+    "latent": {
+      "display_name": "latent (vision-grounded)",
+      "failure_seeds": [
+        126,
+        143
+      ],
+      "final_success_count": 48,
+      "final_success_rate": 0.96,
+      "n": 50,
+      "n_failures": 2
+    },
+    "oracle_factor_revision": {
+      "display_name": "oracle",
+      "failure_seeds": [
+        126
+      ],
+      "final_success_count": 49,
+      "final_success_rate": 0.98,
+      "n": 50,
+      "n_failures": 1
+    },
+    "same_intent_retry": {
+      "display_name": "same_intent_retry",
+      "failure_seeds": [
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        134,
+        135,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149
+      ],
+      "final_success_count": 0,
+      "final_success_rate": 0.0,
+      "n": 50,
+      "n_failures": 50
+    }
+  },
+  "real_env": true,
+  "seed_range": [
+    100,
+    149
+  ],
+  "task": "PushCube-v1"
+}

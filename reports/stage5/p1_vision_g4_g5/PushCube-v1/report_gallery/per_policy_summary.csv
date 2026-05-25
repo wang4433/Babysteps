@@ -1,0 +1,5 @@
+policy,display_name,n,final_success_count,final_success_rate,initial_success_rate,n_failures
+latent,latent (vision-grounded),50,48,0.96,0.0,2
+oracle_factor_revision,oracle,50,49,0.98,0.0,1
+babysteps_selective,babysteps_selective,50,49,0.98,0.0,1
+same_intent_retry,same_intent_retry,50,0,0.0,0.0,50
