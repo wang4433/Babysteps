@@ -291,6 +291,13 @@ def render_episode(
     # Move the wall onto the demo's approach side, then drive the
     # demo-derived waypoints. The arm reaches the approach standoff,
     # hits the wall, and the no-progress break ends the clip.
+    #
+    # Deliberate divergence from the collection path: render needs a
+    # visible failure (MP4 for reviewers), so we spawn a physical wall
+    # and step the env. The collection path in
+    # babysteps/envs/pushcube_runner.py instead returns
+    # planner_failed=True without stepping — fast for 1k-episode runs.
+    # Do not unify.
     _move_obstacle_to_block(
         obstacle, s["scene"].cube_xy, s["scene"].cube_z, initial_intent,
     )

@@ -158,6 +158,12 @@ class PushCubeEnvRunner:
         re-seed the reset, which would desynchronise the layout from `scene`."""
         skill = compile_intent_to_push_skill(intent, scene)
         if skill is None:
+            # Deliberate divergence from the render path: collection labels
+            # this as planner_failed=True without stepping the env — fast,
+            # and the right attribution for the schema. The render-path
+            # equivalent (babysteps/render/pushcube.py) spawns a physical
+            # red wall and steps until the arm stalls, because reviewers
+            # see the MP4. Do not unify.
             return AttemptResult(
                 initial_obj_xy=scene.cube_xy,
                 final_obj_xy=scene.cube_xy,
