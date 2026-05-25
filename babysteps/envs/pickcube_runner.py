@@ -125,12 +125,8 @@ class PickCubeEnvRunner:
         scene: SceneState,
         *,
         rollout_log_path: Optional[Path] = None,
-        rollout_seed: Optional[int] = None,
+        rollout_seed: Optional[int] = None,  # see EnvRunner protocol docstring
     ) -> AttemptResult:
-        # rollout_seed: EnvRunner fresh-seed-per-attempt protocol. PickCube
-        # resets from the episode seed (layout fixed) and the controller is
-        # deterministic, so accepting it for protocol conformance is enough;
-        # see PushCubeEnvRunner.run for the rationale.
         skill = compile_intent_to_pick_skill(intent, scene)
         # PickSkill never returns None — the Stage-0 controlled failure
         # is execution-time slip, not compile-time block.

@@ -26,7 +26,18 @@ class EnvRunner(Protocol):
     add their own runners; the adapter constructs them in make_env_runner.
 
     This is the canonical EnvRunner Protocol; episode.run_episode imports
-    it from here. (It was relocated from babysteps.episode in Plan Task 6.)"""
+    it from here. (It was relocated from babysteps.episode in Plan Task 6.)
+
+    On `rollout_seed`: kwarg accepted by `run` for fresh-seed-per-attempt
+    protocol conformance. All current concrete runners reset from the
+    captured episode seed (recorded in `reset`) to hold the scene layout
+    fixed across the attempt — the controllers are deterministic, so the
+    rollout is a function of (layout, waypoints) alone, and a distinct
+    intent changes the waypoints and therefore the outcome. Using
+    `rollout_seed` to re-seed the reset would desynchronise the layout
+    from the passed-in `scene`. Runners therefore accept the kwarg and
+    intentionally ignore it. (Same-intent retry is provably 0% under this
+    determinism — that is intentional and documented in the M3 spec.)"""
 
     def reset(self, seed: int) -> SceneState: ...
     def run(

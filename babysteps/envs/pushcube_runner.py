@@ -142,20 +142,11 @@ class PushCubeEnvRunner:
         scene: SceneState,
         *,
         rollout_log_path: Optional[Path] = None,
-        rollout_seed: Optional[int] = None,
+        rollout_seed: Optional[int] = None,  # see EnvRunner protocol docstring
     ) -> AttemptResult:
         """Execute one push attempt for `intent` under `scene` (`scene` carries
         blocked_sides). If the intent is blocked, returns planner_failed without
-        stepping the env.
-
-        `rollout_seed` is part of the EnvRunner fresh-seed-per-attempt protocol.
-        PushCube resets from the episode seed to hold the scene layout fixed,
-        and the prop controller is deterministic, so the rollout is a function
-        of (layout, waypoints) alone: a distinct intent changes the waypoints
-        and therefore the outcome, while an identical intent reproduces the
-        attempt exactly (the spec's "same_intent_retry is provably 0%" caveat).
-        It is accepted for protocol conformance and intentionally not used to
-        re-seed the reset, which would desynchronise the layout from `scene`."""
+        stepping the env."""
         skill = compile_intent_to_push_skill(intent, scene)
         if skill is None:
             # Deliberate divergence from the render path: collection labels
