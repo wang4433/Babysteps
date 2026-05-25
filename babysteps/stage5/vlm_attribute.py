@@ -179,13 +179,22 @@ class MockVLMClient:
 
 
 class InternVLClient:
-    """Real InternVL3.5-8B client. Heavy imports happen in :meth:`load`."""
+    """Real InternVL3.5-8B client. Heavy imports happen in :meth:`load`.
+
+    ``max_new_tokens_*`` are split per method because the constrained C1
+    answer is one factor name (~6 tokens) while the free-form C2 answer
+    is a 6-field JSON object (~80 tokens). A single shared budget at 64
+    truncated every C2 output during the first run (100% parse failure
+    on all three tasks); 256 is comfortably above the JSON length.
+    """
 
     def __init__(self, model_id: str = _MODEL_ID, max_num_tiles: int = 12,
-                 max_new_tokens: int = 64) -> None:
+                 max_new_tokens_constrained: int = 32,
+                 max_new_tokens_free_form: int = 256) -> None:
         self.model_id = model_id
         self.max_num_tiles = max_num_tiles
-        self.max_new_tokens = max_new_tokens
+        self.max_new_tokens_constrained = max_new_tokens_constrained
+        self.max_new_tokens_free_form = max_new_tokens_free_form
         self._model = None
         self._tokenizer = None
         self._load_image = None  # populated from the model card helper
@@ -213,14 +222,15 @@ class InternVLClient:
             self.model_id, trust_remote_code=True, use_fast=False,
         )
 
-    def _chat(self, *, image_path: str | Path, question: str) -> str:
+    def _chat(self, *, image_path: str | Path, question: str,
+              max_new_tokens: int) -> str:
         import torch
         if self._model is None:
             self.load()
         pixel_values = self._load_image(
             str(image_path), max_num=self.max_num_tiles,
         ).to(torch.bfloat16).cuda()
-        gen_kwargs = dict(max_new_tokens=self.max_new_tokens, do_sample=False)
+        gen_kwargs = dict(max_new_tokens=max_new_tokens, do_sample=False)
         response = self._model.chat(
             self._tokenizer, pixel_values, question, gen_kwargs,
         )
@@ -233,7 +243,10 @@ class InternVLClient:
         prompt = build_constrained_prompt(
             initial_intent=initial_intent, failure_predicate=failure_predicate,
         )
-        raw = self._chat(image_path=image_path, question=prompt)
+        raw = self._chat(
+            image_path=image_path, question=prompt,
+            max_new_tokens=self.max_new_tokens_constrained,
+        )
         return parse_constrained_output(raw)
 
     def diagnose_free_form(
@@ -243,7 +256,10 @@ class InternVLClient:
         prompt = build_free_form_prompt(
             initial_intent=initial_intent, failure_predicate=failure_predicate,
         )
-        raw = self._chat(image_path=image_path, question=prompt)
+        raw = self._chat(
+            image_path=image_path, question=prompt,
+            max_new_tokens=self.max_new_tokens_free_form,
+        )
         return parse_free_form_output(raw)
 
 
