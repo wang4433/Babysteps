@@ -159,17 +159,29 @@ def _pushcube_inject_goal(env, seed: int, object_motion: str):
     return env.unwrapped.get_obs()
 
 
-def _capture_pushcube_demo(env, adapter, seed: int, object_motion: str) -> np.ndarray:
+def _capture_pushcube_demo(
+    env, adapter, seed: int, object_motion: Optional[str],
+) -> np.ndarray:
     """Re-run the PushCube oracle demo on `seed` and return a (T,H,W,3) uint8 stack.
 
     Mirrors ``babysteps.episode.generate_proxy_demo`` for PushCube: builds the
-    SceneState from the post-injection obs, asks the adapter for the oracle
-    correct intent, compiles waypoints via ``build_push_waypoints``, then
-    steps the env open-loop. Captures one third-person RGB frame per step.
+    SceneState from the post-injection obs (or the native reset when
+    ``object_motion is None``), asks the adapter for the oracle correct intent,
+    compiles waypoints via ``build_push_waypoints``, then steps the env
+    open-loop. Captures one third-person RGB frame per step.
+
+    When ``object_motion`` is None, no goal injection is performed and the
+    env is reset natively (`env.reset(seed)`). This matches M2a's held-out
+    `generate_proxy_demo` flow on eval seeds (no stratified injection).
     """
     from babysteps.skills.push import build_push_waypoints
 
-    obs = _pushcube_inject_goal(env, seed, object_motion)
+    if object_motion is None:
+        # Native reset, no goal injection — matches M2a eval's
+        # generate_proxy_demo path on held-out seeds.
+        obs, _info = env.reset(seed=int(seed))
+    else:
+        obs = _pushcube_inject_goal(env, seed, object_motion)
     tcp, cube_xy0, goal_xy, cube_z = read_obs(obs)
     scene = SceneState(
         cube_xy=(float(cube_xy0[0]), float(cube_xy0[1])),
@@ -348,35 +360,105 @@ def _capture_one(env, adapter, task: str, rec: dict) -> tuple[int, np.ndarray]:
     return seed, frames
 
 
+def _capture_one_native(env, adapter, task: str, seed: int) -> tuple[int, np.ndarray]:
+    """Capture one demo with NATIVE env reset (no stratified injection).
+
+    Used by the --seed-range mode for held-out eval cuts where the source of
+    truth is M2a's `generate_proxy_demo` flow (no injection). Currently only
+    PushCube-v1 is supported in this mode; StackCube native capture would be
+    identical to `_capture_stackcube_demo` (which already uses a native reset)
+    if/when needed.
+    """
+    if task == "PushCube-v1":
+        frames = _capture_pushcube_demo(env, adapter, seed, object_motion=None)
+    elif task == "StackCube-v1":
+        frames = _capture_stackcube_demo(env, adapter, seed)
+    else:
+        raise NotImplementedError(
+            f"stage5_render_demo_frames: task {task!r} not supported in "
+            f"--seed-range mode (supported: PushCube-v1, StackCube-v1)"
+        )
+    if frames.shape[0] == 0:
+        raise RuntimeError(f"demo produced 0 frames for seed {seed}")
+    return seed, frames
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
-    p.add_argument("--jsonl", type=Path, required=True,
-                   help="Source varied-intent samples.jsonl.")
+    # Mutually exclusive seed sources: stratified collection (training cut)
+    # vs explicit range (eval cut, no injection — matches M2a's native-reset
+    # generate_proxy_demo flow on held-out seeds).
+    grp = p.add_mutually_exclusive_group(required=True)
+    grp.add_argument("--jsonl", type=Path, default=None,
+                     help="Source varied-intent samples.jsonl (training cut "
+                          "with stratified injection per _PUSHCUBE_INJECTION_BY_SEED).")
+    grp.add_argument("--seed-range", type=str, default=None,
+                     help="Inclusive seed range A-B for native-reset rendering "
+                          "(matches M2a's held-out generate_proxy_demo path; "
+                          "no injection). Example: --seed-range 100-149.")
     p.add_argument("--out-dir", type=Path, required=True,
                    help="Output directory for seed_NNNN.npz files.")
     p.add_argument("--limit", type=int, default=None,
                    help="Optional cap on number of seeds (smoke test).")
+    p.add_argument("--task", type=str, default="PushCube-v1",
+                   help="Task id (only used by --seed-range; --jsonl derives "
+                        "task from records).")
     args = p.parse_args(argv)
 
-    records = _load_records(args.jsonl, args.limit)
-    if not records:
-        print("no records to render", file=sys.stderr)
+    if args.jsonl is not None:
+        records = _load_records(args.jsonl, args.limit)
+        if not records:
+            print("no records to render", file=sys.stderr)
+            return 1
+
+        task = records[0]["task"]
+        if not all(r["task"] == task for r in records):
+            print(f"mixed tasks in {args.jsonl}; aborting", file=sys.stderr)
+            return 2
+
+        entry = get_task_entry(task)
+        adapter = entry.adapter_cls()
+        args.out_dir.mkdir(parents=True, exist_ok=True)
+
+        env = _make_env(task)
+        try:
+            for rec in records:
+                seed, frames = _capture_one(env, adapter, task, rec)
+                out = args.out_dir / f"seed_{seed:04d}.npz"
+                np.savez_compressed(out, frames=frames)
+                print(
+                    f"wrote {out} (T={frames.shape[0]}, "
+                    f"H={frames.shape[1]}, W={frames.shape[2]})",
+                    flush=True,
+                )
+        finally:
+            try:
+                env.close()
+            except Exception:
+                pass
+            adapter.close()
+        return 0
+
+    # --seed-range mode: NATIVE reset (no injection), matches M2a's
+    # generate_proxy_demo flow for held-out eval seeds.
+    lo_str, hi_str = args.seed_range.split("-")
+    seeds = list(range(int(lo_str), int(hi_str) + 1))
+    if args.limit is not None:
+        seeds = seeds[:args.limit]
+    if not seeds:
+        print(f"empty --seed-range {args.seed_range}", file=sys.stderr)
         return 1
 
-    task = records[0]["task"]
-    if not all(r["task"] == task for r in records):
-        print(f"mixed tasks in {args.jsonl}; aborting", file=sys.stderr)
-        return 2
-
+    task = args.task
     entry = get_task_entry(task)
     adapter = entry.adapter_cls()
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
     env = _make_env(task)
     try:
-        for rec in records:
-            seed, frames = _capture_one(env, adapter, task, rec)
-            out = args.out_dir / f"seed_{seed:04d}.npz"
+        for seed in seeds:
+            seed_out, frames = _capture_one_native(env, adapter, task, seed)
+            out = args.out_dir / f"seed_{seed_out:04d}.npz"
             np.savez_compressed(out, frames=frames)
             print(
                 f"wrote {out} (T={frames.shape[0]}, "

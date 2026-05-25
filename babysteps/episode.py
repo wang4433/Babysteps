@@ -14,7 +14,7 @@ from __future__ import annotations
 import hashlib
 import random
 from dataclasses import replace
-from typing import Optional
+from typing import Any, Callable, Optional
 
 from babysteps.envs.task_adapter import BaseTaskAdapter, EnvRunner
 from babysteps.policies import RetryContext, RetryPolicy, babysteps_selective
@@ -176,6 +176,7 @@ def run_episode(
     adapter: BaseTaskAdapter,
     policy: RetryPolicy = babysteps_selective,
     record_baseline_metrics: bool = False,
+    demo_features_provider: Optional[Callable[[int], Any]] = None,
 ) -> EpisodeRecord:
     """One Stage-0 blocked-approach episode for the adapter's task.
 
@@ -191,6 +192,14 @@ def run_episode(
 
     The adapter owns the env_runner lifecycle. Callers should call
     adapter.close() once they're done with this adapter instance.
+
+    Stage-5 P1 hook
+    ---------------
+    `demo_features_provider`, when given, is a callable
+    ``provider(seed: int) -> Z`` that supplies the demo-encoded feature
+    vector consumed by latent revision policies. It overrides the
+    default handcrafted `extract_episode_features` path (M2a behavior).
+    The default `None` preserves the M2a / Stage-4 byte-for-byte path.
     """
     env_runner = adapter.env_runner()      # cached on the adapter
     scene_initial = env_runner.reset(seed)
@@ -258,17 +267,30 @@ def run_episode(
     # (one_shot, babysteps_selective, …) ignore the field. We import
     # inside the function so episode.py keeps its no-Stage-4 default
     # import surface; the import is cheap and runs once per episode.
-    try:
-        from babysteps.stage4.features import extract_episode_features as _ef
-        demo_features = _ef({"demo": {
-            "object_trajectory": [list(p) for p in demo_evidence.object_trajectory],
-            "contact_region_label": demo_evidence.contact_region_label,
-            "final_state": demo_evidence.final_state,
-        }})
-    except Exception:
-        # Stage-4 not importable here (e.g. fake adapter without contact
-        # label in whitelist); leave demo_features None.
-        demo_features = None
+    #
+    # Stage-5 P1: `demo_features_provider`, when given, overrides this
+    # handcrafted path with a vision-grounded vector (e.g. cached DINOv2
+    # features keyed by seed). Default `None` preserves M2a behavior.
+    if demo_features_provider is not None:
+        try:
+            demo_features = demo_features_provider(seed)
+        except Exception:
+            # Provider failure should not abort the episode; fall back
+            # to None (latent_revision_factory degrades to a no-op
+            # revision in that branch).
+            demo_features = None
+    else:
+        try:
+            from babysteps.stage4.features import extract_episode_features as _ef
+            demo_features = _ef({"demo": {
+                "object_trajectory": [list(p) for p in demo_evidence.object_trajectory],
+                "contact_region_label": demo_evidence.contact_region_label,
+                "final_state": demo_evidence.final_state,
+            }})
+        except Exception:
+            # Stage-4 not importable here (e.g. fake adapter without contact
+            # label in whitelist); leave demo_features None.
+            demo_features = None
     ctx = RetryContext(
         initial_intent=initial_intent,
         attribution=attribution,

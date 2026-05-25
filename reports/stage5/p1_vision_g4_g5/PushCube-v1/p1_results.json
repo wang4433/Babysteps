@@ -1,0 +1,1296 @@
+{
+  "config": {
+    "eval_seeds": [
+      100,
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      114,
+      115,
+      116,
+      117,
+      118,
+      119,
+      120,
+      121,
+      122,
+      123,
+      124,
+      125,
+      126,
+      127,
+      128,
+      129,
+      130,
+      131,
+      132,
+      133,
+      134,
+      135,
+      136,
+      137,
+      138,
+      139,
+      140,
+      141,
+      142,
+      143,
+      144,
+      145,
+      146,
+      147,
+      148,
+      149
+    ],
+    "fake": false,
+    "features_dir": "datasets/stage5/varied_intent/PushCube-v1/features",
+    "pack_dir": "models/stage5/p1_vision/PushCube-v1",
+    "task": "PushCube-v1"
+  },
+  "per_policy": {
+    "babysteps_selective": {
+      "final_success_rate": 0.98,
+      "initial_success_rate": 0.0,
+      "n": 50,
+      "rows": [
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 100
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 101
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 102
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 103
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 104
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 105
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 106
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 107
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 108
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 109
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 110
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 111
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 112
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 113
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 114
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 115
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 116
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 117
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 118
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 119
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 120
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 121
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 122
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 123
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 124
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 125
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 126
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 127
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 128
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 129
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 130
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 131
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 132
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 133
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 134
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 135
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 136
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 137
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 138
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 139
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 140
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 141
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 142
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 143
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 144
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 145
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 146
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 147
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 148
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 149
+        }
+      ]
+    },
+    "latent": {
+      "final_success_rate": 0.96,
+      "initial_success_rate": 0.0,
+      "n": 50,
+      "rows": [
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 100
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 101
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 102
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 103
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 104
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 105
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 106
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 107
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 108
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 109
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 110
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 111
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 112
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 113
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 114
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 115
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 116
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 117
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 118
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 119
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 120
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 121
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 122
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 123
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 124
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 125
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 126
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 127
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 128
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 129
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 130
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 131
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 132
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 133
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 134
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 135
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 136
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 137
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 138
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 139
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 140
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 141
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 142
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 143
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 144
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 145
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 146
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 147
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 148
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 149
+        }
+      ]
+    },
+    "oracle_factor_revision": {
+      "final_success_rate": 0.98,
+      "initial_success_rate": 0.0,
+      "n": 50,
+      "rows": [
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 100
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 101
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 102
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 103
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 104
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 105
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 106
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 107
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 108
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 109
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 110
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 111
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 112
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 113
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 114
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 115
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 116
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 117
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 118
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 119
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 120
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 121
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 122
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 123
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 124
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 125
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 126
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 127
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 128
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 129
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 130
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 131
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 132
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 133
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 134
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 135
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 136
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 137
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 138
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 139
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 140
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 141
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 142
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 143
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 144
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 145
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 146
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 147
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 148
+        },
+        {
+          "final_success": true,
+          "initial_success": false,
+          "retry_success": true,
+          "seed": 149
+        }
+      ]
+    },
+    "same_intent_retry": {
+      "final_success_rate": 0.0,
+      "initial_success_rate": 0.0,
+      "n": 50,
+      "rows": [
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 100
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 101
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 102
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 103
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 104
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 105
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 106
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 107
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 108
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 109
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 110
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 111
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 112
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 113
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 114
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 115
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 116
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 117
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 118
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 119
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 120
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 121
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 122
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 123
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 124
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 125
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 126
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 127
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 128
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 129
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 130
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 131
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 132
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 133
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 134
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 135
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 136
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 137
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 138
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 139
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 140
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 141
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 142
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 143
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 144
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 145
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 146
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 147
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 148
+        },
+        {
+          "final_success": false,
+          "initial_success": false,
+          "retry_success": false,
+          "seed": 149
+        }
+      ]
+    }
+  },
+  "summary": {
+    "delta_pp_vs_babysteps_selective": -2.0000000000000018,
+    "delta_pp_vs_oracle": -2.0000000000000018,
+    "delta_pp_vs_same_intent_retry": 96.0,
+    "latent_final_success_rate": 0.96
+  }
+}

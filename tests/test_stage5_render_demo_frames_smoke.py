@@ -79,3 +79,73 @@ def test_pushcube_injection_plan_uses_stratified_collection_seed():
     # Seed 19 (the empirical bug-trigger): must inject -x even though the
     # original episode's observed motion was -y.
     assert _PUSHCUBE_INJECTION_BY_SEED[19] == "translate_-x"
+
+
+def test_main_accepts_seed_range_without_jsonl():
+    """--seed-range A-B is a valid alternative to --jsonl (M2a held-out path).
+
+    This is a sim-free pin on the CLI surface: the parser must accept
+    --seed-range, the two seed-source flags must be mutually exclusive, and
+    the --jsonl flag must NOT be required when --seed-range is given. The
+    actual render is GPU-only so we don't invoke main(); we just verify the
+    parser contract and the existence of the native-capture helper.
+    """
+    import argparse
+    import scripts.stage5_render_demo_frames as mod
+
+    # Source pin: main() registers --seed-range. This catches accidental
+    # removal of the flag during future refactors.
+    import inspect
+    src = inspect.getsource(mod.main)
+    assert "--seed-range" in src, "main() must register --seed-range flag"
+
+    # Native-capture helper must exist so --seed-range can dispatch through it.
+    assert hasattr(mod, "_capture_one_native"), (
+        "stage5_render_demo_frames must expose _capture_one_native for "
+        "--seed-range mode (no stratified injection)"
+    )
+
+    # The PushCube capture helper must accept object_motion=None to support
+    # the native-reset branch. Verify via signature inspection (sim-free).
+    sig = inspect.signature(mod._capture_pushcube_demo)
+    om_param = sig.parameters.get("object_motion")
+    assert om_param is not None, (
+        "_capture_pushcube_demo must declare an object_motion parameter"
+    )
+    # The "None means native reset" contract must be visible to the
+    # type-checker / reader as Optional[str], otherwise mypy / readers
+    # could legitimately reject `object_motion=None`. We just smoke-check
+    # the docstring documents the contract.
+    doc = mod._capture_pushcube_demo.__doc__ or ""
+    assert "object_motion" in doc and "None" in doc, (
+        "_capture_pushcube_demo docstring must explain the "
+        "object_motion=None (native reset) contract"
+    )
+
+
+def test_seed_range_and_jsonl_are_mutually_exclusive():
+    """argparse must reject specifying both --jsonl and --seed-range, AND
+    must require at least one (the SystemExit path)."""
+    from scripts.stage5_render_demo_frames import main
+    import io
+    import contextlib
+
+    # Neither flag → SystemExit (required group).
+    with contextlib.redirect_stderr(io.StringIO()):
+        try:
+            main(["--out-dir", "/tmp/x"])
+            assert False, "expected SystemExit when neither seed source is given"
+        except SystemExit as e:
+            assert e.code != 0
+
+    # Both flags → SystemExit (mutually exclusive group).
+    with contextlib.redirect_stderr(io.StringIO()):
+        try:
+            main([
+                "--jsonl", "/nonexistent.jsonl",
+                "--seed-range", "100-149",
+                "--out-dir", "/tmp/x",
+            ])
+            assert False, "expected SystemExit when both seed sources are given"
+        except SystemExit as e:
+            assert e.code != 0
