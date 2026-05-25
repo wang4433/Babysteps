@@ -145,3 +145,87 @@ def test_preprocess_frames_rejects_wrong_shape():
     frames = [np.zeros((512, 512, 4), dtype=np.uint8) for _ in range(2)]
     with pytest.raises(ValueError, match=r"shape \(T, H, W, 3\)"):
         _preprocess_frames(frames, resolution=224)
+
+
+def test_pool_cls_first_last_concat_correct():
+    """(T, d) -> (2*d,) concatenation of first and last frame CLS."""
+    from babysteps.stage4.vision_features import _pool_cls
+
+    cls = torch.tensor([
+        [1.0, 2.0, 3.0],
+        [3.0, 2.0, 1.0],
+        [9.0, 8.0, 7.0],
+    ])  # (3, 3)
+    z = _pool_cls(cls, pool="cls_first_last")
+    assert z.shape == (6,)
+    # First frame is [1, 2, 3], last is [9, 8, 7] → concat = [1, 2, 3, 9, 8, 7].
+    torch.testing.assert_close(z, torch.tensor([1.0, 2.0, 3.0, 9.0, 8.0, 7.0]))
+
+
+def test_pool_cls_first_last_T1_duplicates_single_frame():
+    """T=1 edge case: output is still (2*d,) with the single CLS duplicated."""
+    from babysteps.stage4.vision_features import _pool_cls
+
+    cls = torch.tensor([[5.0, 6.0, 7.0]])  # (1, 3)
+    z = _pool_cls(cls, pool="cls_first_last")
+    assert z.shape == (6,)
+    torch.testing.assert_close(z, torch.tensor([5.0, 6.0, 7.0, 5.0, 6.0, 7.0]))
+
+
+class _FakePatchEncoder(torch.nn.Module):
+    """Mock DINOv2 that exposes forward_features for the spatial_mean path.
+
+    Returns (T, N_patches, d) patch tokens whose spatial-temporal mean is a
+    known function of the inputs — checkable.
+    """
+
+    def __init__(self, d: int = 768, n_patches: int = 256):
+        super().__init__()
+        self.d = d
+        self.n_patches = n_patches
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        # Won't be called in the spatial_mean path, but defining it keeps
+        # the duck-typed interface complete.
+        raise AssertionError("spatial_mean must use forward_features, not forward")
+
+    def forward_features(self, x: torch.Tensor) -> dict:
+        # x: (T, 3, R, R). Return per-frame, per-patch embeddings whose
+        # mean over (T, N) equals arange(d)/d * mean(x). Identical structure
+        # to _FakeEncoder.forward but expanded to a patch axis.
+        T = x.shape[0]
+        base = torch.arange(self.d, dtype=torch.float32) / self.d
+        per_t = x.mean(dim=(1, 2, 3))  # (T,)
+        # Each (t, n) patch token gets base * per_t[t], independent of n.
+        patches = base.view(1, 1, self.d) * per_t.view(T, 1, 1)
+        patches = patches.expand(T, self.n_patches, self.d).contiguous()
+        return {"x_norm_patchtokens": patches}
+
+
+def test_extract_vision_features_spatial_mean_uses_forward_features():
+    """spatial_mean must read patch tokens via forward_features, not CLS."""
+    from babysteps.stage4.vision_features import (
+        _preprocess_frames,
+        extract_vision_features,
+    )
+
+    frames = [
+        (128 * np.ones((512, 512, 3), dtype=np.uint8))
+        for _ in range(5)
+    ]
+    z = extract_vision_features(
+        frames,
+        device="cpu",
+        pool="spatial_mean",
+        _encoder=_FakePatchEncoder(d=768, n_patches=256),
+    )
+    assert isinstance(z, np.ndarray)
+    assert z.shape == (768,)
+    assert z.dtype == np.float32
+
+    # Identity: for identical input frames, per_t is the same scalar across T.
+    # Mean over (T, N) of base * per_t = base * per_t.mean() = base * scalar.
+    x = _preprocess_frames(frames, resolution=224)
+    scalar = float(x.mean())
+    expected = (np.arange(768, dtype=np.float32) / 768.0) * scalar
+    np.testing.assert_allclose(z, expected, rtol=1e-5, atol=1e-6)

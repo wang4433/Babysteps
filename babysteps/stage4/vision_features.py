@@ -48,15 +48,24 @@ def _preprocess_frames(
 
 
 def _pool_cls(cls_tokens: torch.Tensor, *, pool: str = "cls_mean") -> torch.Tensor:
-    """(T, d) -> (d,). Time-pooling strategies.
+    """(T, d) -> (d,) for cls_mean, or (2*d,) for cls_first_last.
 
     Strategies (per the design spec § 3.2):
       - cls_mean: mean over T (default; simplest baseline).
-      Future ablations (cls_first_last, spatial_mean) can be added here
-      without changing the public extract_vision_features signature.
+      - cls_first_last: concat first and last frame CLS — preserves the
+        start-vs-end delta that mean-pooling discards. Targets factors
+        like object_motion that are naturally between-frame deltas
+        (spec § 6 ablation order). For T == 1, duplicates the single CLS
+        so the output is still (2*d,).
+      spatial_mean is dispatched separately in extract_vision_features
+      (it uses model.forward_features patch tokens rather than CLS).
     """
     if pool == "cls_mean":
         return cls_tokens.mean(dim=0)
+    if pool == "cls_first_last":
+        first = cls_tokens[0]
+        last = cls_tokens[-1] if cls_tokens.shape[0] > 1 else cls_tokens[0]
+        return torch.cat([first, last], dim=0)
     raise ValueError(f"unknown pool strategy: {pool!r}")
 
 
@@ -114,6 +123,16 @@ def extract_vision_features(
     model = _encoder if _encoder is not None else _load_dinov2(encoder, device)
     x = _preprocess_frames(demo_frames, resolution=resolution).to(device)
     with torch.no_grad():
-        cls = model(x)  # (T, d) — DINOv2's default forward returns CLS
-    z = _pool_cls(cls, pool=pool)
+        if pool == "spatial_mean":
+            # Patch-token path: DINOv2 forward_features returns a dict with
+            # `x_norm_patchtokens` of shape (T, N_patches, d). Mean over both
+            # the patch and time axes -> (d,). Stays 768-dim, which keeps the
+            # G1 linear probe out of the d >> n overfitting regime that hurt
+            # cls_first_last (1536-dim, n=40).
+            features = model.forward_features(x)
+            patches = features["x_norm_patchtokens"]  # (T, N, d)
+            z = patches.mean(dim=(0, 1))
+        else:
+            cls = model(x)  # (T, d) — DINOv2's default forward returns CLS
+            z = _pool_cls(cls, pool=pool)
     return z.detach().cpu().numpy().astype(np.float32)
