@@ -240,16 +240,18 @@
       "vlm_factor": "contact_region"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "contact_region"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "contact_region",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 117,
       "unnecessary_change": false,
-      "vlm_factor": "embodiment_mapping"
+      "vlm_factor": "contact_region"
     },
     {
       "attribution_correct": true,
@@ -336,16 +338,18 @@
       "vlm_factor": "contact_region"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "contact_region"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "contact_region",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 124,
       "unnecessary_change": false,
-      "vlm_factor": "embodiment_mapping"
+      "vlm_factor": "contact_region"
     },
     {
       "attribution_correct": true,
@@ -394,11 +398,11 @@
       "factors_changed": [
         "contact_region"
       ],
-      "final_success": true,
+      "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "contact_region",
       "parse_failed": false,
-      "retry_success": true,
+      "retry_success": false,
       "seed": 128,
       "unnecessary_change": false,
       "vlm_factor": "contact_region"
@@ -700,8 +704,8 @@
   ],
   "rule_table_accuracy": 1.0,
   "summary": {
-    "attribution_correct_rate": 0.96,
-    "final_success_rate": 0.9,
+    "attribution_correct_rate": 1.0,
+    "final_success_rate": 0.92,
     "frozen_factor_preserved_rate": 1.0,
     "n_attribution_correct": 50,
     "n_final_success": 50,

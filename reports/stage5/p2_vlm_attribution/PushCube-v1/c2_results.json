@@ -28,15 +28,13 @@
       "unnecessary_change": false
     },
     {
-      "factors_changed": [
-        "approach_direction"
-      ],
-      "final_success": true,
-      "fixed_oracle_factor": true,
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "approach_direction",
       "parse_failed": false,
-      "retry_success": true,
+      "retry_success": false,
       "seed": 102,
       "unnecessary_change": false
     },
@@ -653,8 +651,8 @@
     }
   ],
   "summary": {
-    "final_success_rate": 0.98,
-    "fixed_oracle_factor_rate": 1.0,
+    "final_success_rate": 0.96,
+    "fixed_oracle_factor_rate": 0.98,
     "frozen_factor_preserved_rate": 1.0,
     "n_final_success": 50,
     "n_fixed_oracle_factor": 50,

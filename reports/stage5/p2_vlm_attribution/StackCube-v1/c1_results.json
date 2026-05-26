@@ -2,408 +2,458 @@
   "n_episodes": 50,
   "per_episode": [
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 100,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 101,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 102,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 103,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 104,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 105,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
       "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": false,
       "seed": 106,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
       "attribution_correct": false,
-      "factors_changed": [
-        "approach_direction"
-      ],
+      "factors_changed": [],
       "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": false,
+      "retry_success": null,
       "seed": 107,
       "unnecessary_change": false,
-      "vlm_factor": "approach_direction"
+      "vlm_factor": "object_motion"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
       "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": false,
       "seed": 108,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
       "attribution_correct": false,
-      "factors_changed": [
-        "approach_direction"
-      ],
+      "factors_changed": [],
       "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": false,
+      "retry_success": null,
       "seed": 109,
       "unnecessary_change": false,
-      "vlm_factor": "approach_direction"
+      "vlm_factor": "object_motion"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 110,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 111,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
       "attribution_correct": false,
-      "factors_changed": [
-        "approach_direction"
-      ],
+      "factors_changed": [],
       "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": false,
+      "retry_success": null,
       "seed": 112,
       "unnecessary_change": false,
-      "vlm_factor": "approach_direction"
+      "vlm_factor": "object_motion"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 113,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 114,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 115,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 116,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 117,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
-      "frozen_factor_preserved": true,
-      "oracle_wrong_factor": "goal_state",
-      "parse_failed": false,
-      "retry_success": null,
-      "seed": 118,
-      "unnecessary_change": false,
-      "vlm_factor": "object_motion"
-    },
-    {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
-      "frozen_factor_preserved": true,
-      "oracle_wrong_factor": "goal_state",
-      "parse_failed": false,
-      "retry_success": null,
-      "seed": 119,
-      "unnecessary_change": false,
-      "vlm_factor": "object_motion"
-    },
-    {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
-      "frozen_factor_preserved": true,
-      "oracle_wrong_factor": "goal_state",
-      "parse_failed": false,
-      "retry_success": null,
-      "seed": 120,
-      "unnecessary_change": false,
-      "vlm_factor": "object_motion"
-    },
-    {
-      "attribution_correct": false,
+      "attribution_correct": true,
       "factors_changed": [
-        "approach_direction"
+        "goal_state"
       ],
       "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
       "retry_success": false,
+      "seed": 118,
+      "unnecessary_change": false,
+      "vlm_factor": "goal_state"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 119,
+      "unnecessary_change": false,
+      "vlm_factor": "goal_state"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 120,
+      "unnecessary_change": false,
+      "vlm_factor": "goal_state"
+    },
+    {
+      "attribution_correct": false,
+      "factors_changed": [],
+      "final_success": false,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": null,
       "seed": 121,
       "unnecessary_change": false,
-      "vlm_factor": "approach_direction"
+      "vlm_factor": "object_motion"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 122,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
       "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": false,
       "seed": 123,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 124,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 125,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
       "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": false,
       "seed": 126,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 127,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 128,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 129,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 130,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 131,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 132,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
       "attribution_correct": false,
@@ -415,129 +465,145 @@
       "retry_success": null,
       "seed": 133,
       "unnecessary_change": false,
-      "vlm_factor": "embodiment_mapping"
+      "vlm_factor": "object_motion"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 134,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 135,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
-      "frozen_factor_preserved": true,
-      "oracle_wrong_factor": "goal_state",
-      "parse_failed": false,
-      "retry_success": null,
-      "seed": 136,
-      "unnecessary_change": false,
-      "vlm_factor": "object_motion"
-    },
-    {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
-      "frozen_factor_preserved": true,
-      "oracle_wrong_factor": "goal_state",
-      "parse_failed": false,
-      "retry_success": null,
-      "seed": 137,
-      "unnecessary_change": false,
-      "vlm_factor": "object_motion"
-    },
-    {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
-      "frozen_factor_preserved": true,
-      "oracle_wrong_factor": "goal_state",
-      "parse_failed": false,
-      "retry_success": null,
-      "seed": 138,
-      "unnecessary_change": false,
-      "vlm_factor": "object_motion"
-    },
-    {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
-      "frozen_factor_preserved": true,
-      "oracle_wrong_factor": "goal_state",
-      "parse_failed": false,
-      "retry_success": null,
-      "seed": 139,
-      "unnecessary_change": false,
-      "vlm_factor": "object_motion"
-    },
-    {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
-      "frozen_factor_preserved": true,
-      "oracle_wrong_factor": "goal_state",
-      "parse_failed": false,
-      "retry_success": null,
-      "seed": 140,
-      "unnecessary_change": false,
-      "vlm_factor": "object_motion"
-    },
-    {
-      "attribution_correct": false,
+      "attribution_correct": true,
       "factors_changed": [
-        "approach_direction"
+        "goal_state"
       ],
       "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
       "retry_success": false,
+      "seed": 136,
+      "unnecessary_change": false,
+      "vlm_factor": "goal_state"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 137,
+      "unnecessary_change": false,
+      "vlm_factor": "goal_state"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 138,
+      "unnecessary_change": false,
+      "vlm_factor": "goal_state"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 139,
+      "unnecessary_change": false,
+      "vlm_factor": "goal_state"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 140,
+      "unnecessary_change": false,
+      "vlm_factor": "goal_state"
+    },
+    {
+      "attribution_correct": false,
+      "factors_changed": [],
+      "final_success": false,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": null,
       "seed": 141,
       "unnecessary_change": false,
-      "vlm_factor": "approach_direction"
+      "vlm_factor": "object_motion"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 142,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 143,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
       "attribution_correct": false,
@@ -549,73 +615,83 @@
       "retry_success": null,
       "seed": 144,
       "unnecessary_change": false,
-      "vlm_factor": "embodiment_mapping"
+      "vlm_factor": "object_motion"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 145,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
       "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": false,
       "seed": 146,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 147,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
-      "final_success": false,
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": true,
       "seed": 148,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     },
     {
-      "attribution_correct": false,
-      "factors_changed": [],
+      "attribution_correct": true,
+      "factors_changed": [
+        "goal_state"
+      ],
       "final_success": false,
       "frozen_factor_preserved": true,
       "oracle_wrong_factor": "goal_state",
       "parse_failed": false,
-      "retry_success": null,
+      "retry_success": false,
       "seed": 149,
       "unnecessary_change": false,
-      "vlm_factor": "object_motion"
+      "vlm_factor": "goal_state"
     }
   ],
   "rule_table_accuracy": 0.86,
   "summary": {
-    "attribution_correct_rate": 0.0,
-    "final_success_rate": 0.0,
+    "attribution_correct_rate": 0.86,
+    "final_success_rate": 0.7,
     "frozen_factor_preserved_rate": 1.0,
     "n_attribution_correct": 50,
     "n_final_success": 50,

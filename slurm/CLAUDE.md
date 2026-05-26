@@ -99,6 +99,72 @@ Re-running just C2 (after a single-condition rerun): use
 `scripts/stage5_p2_regenerate_reports.py` afterward to rebuild the merged
 per-task `report.md` from the two on-disk JSONs.
 
+### Stage-5 P2 — VLM attribution v2, task-aware prompts (job 10827248, 2026-05-26)
+
+InternVL3.5-8B (BF16) on A100-40GB. Same held-out cut as the first P2 run
+(seeds 100-149, 50 episodes per task). Only change: per-task context now
+injected into both C1 and C2 prompts — task name, one-line success
+description, and the valid `goal_state` tokens for that task (no explicit
+"pick goal_state" hint; the VLM still has to spot the symbolic mismatch).
+Commit `4ddca7f`. Wall time: 10:41.
+
+| task           | C1 attr | rule-table | C1 pres | C2 pres | Δpres pp | C1 succ | C2 succ | Δsucc pp |
+| -------------- | ------- | ---------- | ------- | ------- | -------- | ------- | ------- | -------- |
+| PushCube-v1    | 1.000   | 1.000      | 1.000   | 1.000   | +0.0     | 0.980   | 0.960   | +2.0     |
+| PickCube-v1    | 1.000   | 1.000      | 1.000   | 1.000   | +0.0     | 0.920   | 0.000   | +92.0    |
+| StackCube-v1   | 0.860   | 0.860      | 1.000   | 0.500   | +50.0    | 0.700   | 0.220   | +48.0    |
+
+Gates (per task: `attr ≥ rule-table · pres ≥ C2 · succ within 5pp of C2`):
+- **PushCube-v1**: PASS · PASS · PASS
+- **PickCube-v1**: PASS · PASS · PASS
+- **StackCube-v1**: PASS · PASS · PASS — **all three gates now pass on all three tasks.**
+
+Headline: StackCube C1 attribution jumped from **0/50 → 43/50** (= rule-table
+exactly); StackCube C1 success jumped from **0.000 → 0.700** (= the
+`babysteps_selective` M3 baseline). PickCube nudged up to 1.000 / 0.920
+(was 0.960 / 0.900). PushCube unchanged at ceiling on attribution; succ
+0.98 → 0.96 (within run-to-run noise, +2pp vs C2). The 7 StackCube residual
+misses all still land on `object_motion` — the genuinely visually-ambiguous
+cases where the cube ended up in *some* incorrect xy and motion looks wrong
+in the frame.
+
+C2 also gets the task context for fairness. On PushCube/PickCube it's
+unchanged; on StackCube C2 success climbed from 0.000 → 0.220 (the model
+now knows `cubeA_on_cubeB` exists), but parse failures jumped to 76%
+because the slightly longer prompt nudges JSON output to drift off the
+schema. C1 wins on both the strict and parse-conditional preservation
+definitions.
+
+### Stage-5 M3 — Procedural baselines main table (job 10826466, 2026-05-26)
+
+A100-40GB, 50 held-out seeds (100-149), three tasks, all seven procedural
+retry policies from `babysteps.policies.POLICIES`.
+
+| policy                   | PushCube | PickCube | StackCube |
+| ------------------------ | -------- | -------- | --------- |
+| `one_shot`               | 0.000    | 0.000    | 0.000     |
+| `same_intent_retry`      | 0.000    | 0.000    | 0.000     |
+| `random_factor_revision`  | 0.540    | 0.920    | 0.420     |
+| **`babysteps_selective`** | **0.980** | **0.920** | **0.700** |
+| `text_feedback_replan`    | 0.000    | 0.920    | 0.700     |
+| `full_replan_analogue`    | 0.000    | 0.920    | 0.820     |
+| `oracle_factor_revision`  | 0.980    | 0.920    | 0.820     |
+
+Headline: **PushCube is the clearest differentiation case.** `babysteps_selective`
+(98%) matches oracle and crushes all baselines. `text_feedback_replan` and
+`full_replan_analogue` get 0% because perturbing already-correct factors
+(especially `approach_direction`) re-breaks the scene. `random_factor_revision`
+reaches 54% by chance (sometimes picks the right factor).
+
+PickCube has only one editable factor (`contact_region`), so every method that
+does any revision at all ties at 92%. This task is a ceiling sanity check, not
+a differentiator.
+
+StackCube: `babysteps_selective` (70%) vs `oracle` (82%) — gap of 12pp from
+imperfect rule attribution. `full_replan_analogue` also reaches 82% because
+the only goal_state alternative is the correct one; perturbing "all other
+factors" is harmless when there's nothing else to break.
+
 ## Rules
 
 - Job logs are artifacts — fine to prune old ones; the gate *numbers* live in
