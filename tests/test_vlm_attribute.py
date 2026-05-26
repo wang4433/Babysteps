@@ -14,8 +14,14 @@ from babysteps.stage5.vlm_attribute import (
     MockVLMClient,
     build_constrained_prompt,
     build_free_form_prompt,
+    get_factor_menu,
     parse_constrained_output,
     parse_free_form_output,
+)
+
+ALL_TASKS = (
+    "PushCube-v1", "PickCube-v1", "StackCube-v1",
+    "TurnFaucet-v1", "CrossViewPush-v1",
 )
 
 
@@ -51,7 +57,7 @@ def test_free_form_prompt_lists_all_six_keys():
     assert "JSON" in prompt or "json" in prompt
 
 
-@pytest.mark.parametrize("task", ["PushCube-v1", "PickCube-v1", "StackCube-v1"])
+@pytest.mark.parametrize("task", ALL_TASKS)
 def test_constrained_prompt_includes_task_context(task: str):
     prompt = build_constrained_prompt(
         task=task, initial_intent=SAMPLE_INTENT,
@@ -59,14 +65,15 @@ def test_constrained_prompt_includes_task_context(task: str):
     )
     info = TASK_PROMPT_INFO[task]
     assert info["name"] in prompt
-    # Every valid goal_state token for this task must appear in the prompt.
-    for tok in info["valid_goal_states"]:
-        assert tok in prompt, (
-            f"valid goal_state {tok!r} missing from {task} prompt"
-        )
+    # Every expected token for every factor with hints must appear in the prompt.
+    for factor, valid in info["expected_tokens"].items():
+        for tok in valid:
+            assert tok in prompt, (
+                f"expected token {tok!r} for {factor} missing from {task} prompt"
+            )
 
 
-@pytest.mark.parametrize("task", ["PushCube-v1", "PickCube-v1", "StackCube-v1"])
+@pytest.mark.parametrize("task", ALL_TASKS)
 def test_free_form_prompt_includes_task_context(task: str):
     prompt = build_free_form_prompt(
         task=task, initial_intent=SAMPLE_INTENT,
@@ -74,8 +81,9 @@ def test_free_form_prompt_includes_task_context(task: str):
     )
     info = TASK_PROMPT_INFO[task]
     assert info["name"] in prompt
-    for tok in info["valid_goal_states"]:
-        assert tok in prompt
+    for factor, valid in info["expected_tokens"].items():
+        for tok in valid:
+            assert tok in prompt
 
 
 def test_constrained_prompt_unknown_task_raises():
@@ -180,10 +188,82 @@ def test_factor_names_constant_matches_intent_fields():
 
 
 def test_task_prompt_info_covers_p2_tasks():
-    """The three P2 eval tasks must each have a prompt-info entry."""
-    for task in ("PushCube-v1", "PickCube-v1", "StackCube-v1"):
+    """All five P2 eval tasks must each have a prompt-info entry."""
+    for task in ALL_TASKS:
         assert task in TASK_PROMPT_INFO
         info = TASK_PROMPT_INFO[task]
         assert info["name"]
         assert info["success_description"]
-        assert info["valid_goal_states"]
+        assert info["expected_tokens"]
+        assert "goal_state" in info["expected_tokens"]
+        assert info["factor_menu"]
+
+
+def test_factor_menu_six_vs_seven():
+    """CrossViewPush is the only task with a 7-factor menu (adds
+    direction_grounding). The other four are 6-factor."""
+    for task in ("PushCube-v1", "PickCube-v1", "StackCube-v1", "TurnFaucet-v1"):
+        menu = get_factor_menu(task)
+        assert len(menu) == 6
+        assert "direction_grounding" not in menu
+    menu = get_factor_menu("CrossViewPush-v1")
+    assert len(menu) == 7
+    assert "direction_grounding" in menu
+
+
+def test_crossview_prompt_lists_direction_grounding_in_menu():
+    """CrossViewPush C1 menu must include direction_grounding as a choice."""
+    prompt = build_constrained_prompt(
+        task="CrossViewPush-v1", initial_intent=SAMPLE_INTENT,
+        failure_predicate="direction_error",
+    )
+    # The choice list — not the success description — must include the token.
+    # We assert the substring "direction_grounding]" so we catch the menu line,
+    # not just the success-description mention.
+    assert "direction_grounding" in prompt
+    # The expected fix value should also be surfaced.
+    assert "observer_frame" in prompt
+
+
+def test_pushcube_prompt_does_not_offer_direction_grounding():
+    """Non-cross-view tasks must NOT include direction_grounding in the menu."""
+    prompt = build_constrained_prompt(
+        task="PushCube-v1", initial_intent=SAMPLE_INTENT,
+        failure_predicate="approach_blocked",
+    )
+    assert "direction_grounding" not in prompt
+
+
+def test_parse_constrained_respects_factor_menu():
+    """direction_grounding should ONLY parse under the 7-factor menu."""
+    assert parse_constrained_output("direction_grounding") is None
+    assert parse_constrained_output(
+        "direction_grounding",
+        factor_menu=get_factor_menu("CrossViewPush-v1"),
+    ) == "direction_grounding"
+
+
+def test_parse_free_form_crossview_seven_field_json():
+    """7-field JSON is required for CrossViewPush — 6-field must fail."""
+    six_field = (
+        '{"goal_state":"cube_at_target","object_motion":"translate_+x",'
+        '"contact_region":"plus_x_face","approach_direction":"from_plus_x",'
+        '"constraint_region":"none","embodiment_mapping":"proxy_contact_to_franka_push"}'
+    )
+    # Without direction_grounding key, parser must return None under 7-menu.
+    out = parse_free_form_output(
+        six_field, factor_menu=get_factor_menu("CrossViewPush-v1"),
+    )
+    assert out is None
+    # With direction_grounding key, parser must return a valid Intent.
+    seven_field = (
+        '{"goal_state":"cube_at_target","object_motion":"translate_+x",'
+        '"contact_region":"plus_x_face","approach_direction":"from_plus_x",'
+        '"constraint_region":"none","embodiment_mapping":"proxy_contact_to_franka_push",'
+        '"direction_grounding":"observer_frame"}'
+    )
+    out = parse_free_form_output(
+        seven_field, factor_menu=get_factor_menu("CrossViewPush-v1"),
+    )
+    assert out is not None
+    assert out.direction_grounding == "observer_frame"

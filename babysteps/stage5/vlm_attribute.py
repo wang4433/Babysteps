@@ -26,13 +26,17 @@ from typing import Optional
 
 from babysteps.schemas import (
     APPROACH_DIRECTIONS, CONSTRAINT_REGIONS, CONTACT_REGIONS,
-    EMBODIMENT_MAPPINGS, GOAL_STATES, INTENT_FIELDS, Intent, OBJECT_MOTIONS,
+    DIRECTION_GROUNDINGS, EMBODIMENT_MAPPINGS, GOAL_STATES, INTENT_FIELDS,
+    Intent, OBJECT_MOTIONS,
 )
 
-# The VLM's menu of factor names — IS the Stage-0 6-factor schema.
+# The 6 core factors — what most tasks use as their C1 menu. CrossViewPush
+# extends this to 7 (see TASK_PROMPT_INFO[...]["factor_menu"]).
 INTENT_FACTOR_NAMES: tuple[str, ...] = INTENT_FIELDS
 
-# Per-factor whitelist used for C2 JSON validation.
+# Per-factor token whitelist used for C2 JSON validation. Keys cover all 7
+# possible Intent fields; per-task `factor_menu` decides which subset of
+# keys must be present in a valid C2 JSON.
 _FACTOR_TOKENS = {
     "goal_state": GOAL_STATES,
     "object_motion": OBJECT_MOTIONS,
@@ -40,6 +44,7 @@ _FACTOR_TOKENS = {
     "approach_direction": APPROACH_DIRECTIONS,
     "constraint_region": CONSTRAINT_REGIONS,
     "embodiment_mapping": EMBODIMENT_MAPPINGS,
+    "direction_grounding": DIRECTION_GROUNDINGS,
 }
 
 _MODEL_ID = "OpenGVLab/InternVL3_5-8B"
@@ -48,13 +53,24 @@ _MODEL_ID = "OpenGVLab/InternVL3_5-8B"
 # ---------- per-task prompt context ------------------------------------- #
 
 # Each entry supplies the VLM with (a) what task it is looking at,
-# (b) a one-line description of what success looks like, and (c) the
-# valid `goal_state` tokens for that task. The intent's `goal_state` is
-# pre-set per task by the demo pipeline (e.g. PushCube → cube_at_target),
-# but for StackCube the demo seeds a deliberately-wrong cube_at_target
-# token and the correct value cubeA_on_cubeB. Surfacing the valid tokens
-# lets the VLM notice that symbolic mismatch without being told "pick
-# goal_state" explicitly.
+# (b) a one-line description of what success looks like, (c) per-factor
+# valid-token hints (`expected_tokens`) for the factors that matter for
+# this task, and (d) the `factor_menu` the VLM picks from in C1 and emits
+# as JSON keys in C2.
+#
+# expected_tokens drives the "valid X tokens for this task" prompt line.
+# It exists because some Stage-0 failure modes are symbolic — the wrong
+# factor is the *token name* in the intent, not anything visible in the
+# image. StackCube (goal_state=cube_at_target → cubeA_on_cubeB) and
+# CrossViewPush (direction_grounding=actor_frame → observer_frame) are
+# the canonical cases.
+#
+# factor_menu is the C1 ranked-choice. PushCube/PickCube/StackCube/
+# TurnFaucet stay at the 6 core factors. CrossViewPush adds
+# direction_grounding (the 7th additive factor from Sub-project E).
+_FACTOR_MENU_6: tuple[str, ...] = INTENT_FIELDS
+_FACTOR_MENU_7: tuple[str, ...] = INTENT_FIELDS + ("direction_grounding",)
+
 TASK_PROMPT_INFO: dict[str, dict[str, object]] = {
     "PushCube-v1": {
         "name": "PushCube",
@@ -62,7 +78,8 @@ TASK_PROMPT_INFO: dict[str, dict[str, object]] = {
             "the cube is pushed sideways across the table to a marked "
             "target position"
         ),
-        "valid_goal_states": ("cube_at_target",),
+        "expected_tokens": {"goal_state": ("cube_at_target",)},
+        "factor_menu": _FACTOR_MENU_6,
     },
     "PickCube-v1": {
         "name": "PickCube",
@@ -70,7 +87,8 @@ TASK_PROMPT_INFO: dict[str, dict[str, object]] = {
             "the cube is grasped, lifted above the table, and held at a "
             "target xyz position"
         ),
-        "valid_goal_states": ("cube_lifted_at_target",),
+        "expected_tokens": {"goal_state": ("cube_lifted_at_target",)},
+        "factor_menu": _FACTOR_MENU_6,
     },
     "StackCube-v1": {
         "name": "StackCube",
@@ -78,9 +96,48 @@ TASK_PROMPT_INFO: dict[str, dict[str, object]] = {
             "cubeA (red) is picked up and placed on top of cubeB (green), "
             "with cubeA resting stably on cubeB"
         ),
-        "valid_goal_states": ("cubeA_on_cubeB",),
+        "expected_tokens": {"goal_state": ("cubeA_on_cubeB",)},
+        "factor_menu": _FACTOR_MENU_6,
+    },
+    "TurnFaucet-v1": {
+        "name": "TurnFaucet",
+        "success_description": (
+            "the faucet handle is rotated past its target angle. The Franka "
+            "parallel-jaw gripper cannot enclose the handle, so the only "
+            "mechanically feasible interaction is to poke the handle "
+            "sideways rather than grasping it"
+        ),
+        "expected_tokens": {
+            "goal_state": ("faucet_turned",),
+            "embodiment_mapping": (
+                "proxy_contact_to_franka_poke_turn",
+            ),
+        },
+        "factor_menu": _FACTOR_MENU_6,
+    },
+    "CrossViewPush-v1": {
+        "name": "CrossViewPush",
+        "success_description": (
+            "the cube is pushed to a target position. The demo was recorded "
+            "from an observer camera offset from the actor's egocentric "
+            "frame, so the demo trajectory direction must be interpreted in "
+            "the observer's frame rather than the actor's (egocentric) frame"
+        ),
+        "expected_tokens": {
+            "goal_state": ("cube_at_target",),
+            "direction_grounding": ("observer_frame",),
+        },
+        "factor_menu": _FACTOR_MENU_7,
     },
 }
+
+
+def get_factor_menu(task: str) -> tuple[str, ...]:
+    """Return the C1 factor menu (and C2 required JSON keys) for `task`."""
+    if task not in TASK_PROMPT_INFO:
+        known = sorted(TASK_PROMPT_INFO)
+        raise KeyError(f"unknown task {task!r}; known: {known}")
+    return TASK_PROMPT_INFO[task]["factor_menu"]  # type: ignore[return-value]
 
 
 def _format_task_context(task: str) -> str:
@@ -88,12 +145,18 @@ def _format_task_context(task: str) -> str:
         known = sorted(TASK_PROMPT_INFO)
         raise KeyError(f"unknown task {task!r}; known: {known}")
     info = TASK_PROMPT_INFO[task]
-    valid = ", ".join(info["valid_goal_states"])  # type: ignore[arg-type]
-    return (
-        f"Task: {info['name']}. "
-        f"On a successful attempt, {info['success_description']}. "
-        f"For this task the goal_state factor should be one of: [{valid}]."
-    )
+    lines = [
+        f"Task: {info['name']}.",
+        f"On a successful attempt, {info['success_description']}.",
+    ]
+    expected = info["expected_tokens"]  # type: ignore[index]
+    for factor, valid in expected.items():  # type: ignore[union-attr]
+        valid_str = ", ".join(valid)
+        lines.append(
+            f"For this task the {factor} factor should be one of: "
+            f"[{valid_str}]."
+        )
+    return " ".join(lines)
 
 
 # ---------- prompt builders --------------------------------------------- #
@@ -102,8 +165,8 @@ def _format_task_context(task: str) -> str:
 def build_constrained_prompt(
     *, task: str, initial_intent: Intent, failure_predicate: str,
 ) -> str:
-    """C1 prompt: pick ONE factor name from the fixed 6-set."""
-    factor_list = ", ".join(INTENT_FACTOR_NAMES)
+    """C1 prompt: pick ONE factor name from the per-task factor menu."""
+    factor_list = ", ".join(get_factor_menu(task))
     intent_json = json.dumps(initial_intent.to_dict(), sort_keys=True)
     return (
         "<image>\n"
@@ -120,8 +183,9 @@ def build_constrained_prompt(
 def build_free_form_prompt(
     *, task: str, initial_intent: Intent, failure_predicate: str,
 ) -> str:
-    """C2 prompt: emit the full corrected intent as JSON."""
-    factor_list = ", ".join(INTENT_FACTOR_NAMES)
+    """C2 prompt: emit the full corrected intent as JSON with the per-task
+    factor menu as required keys."""
+    factor_list = ", ".join(get_factor_menu(task))
     intent_json = json.dumps(initial_intent.to_dict(), sort_keys=True)
     return (
         "<image>\n"
@@ -138,29 +202,40 @@ def build_free_form_prompt(
 # ---------- output parsers ---------------------------------------------- #
 
 
-def parse_constrained_output(raw: str) -> Optional[str]:
-    """Return the first INTENT_FACTOR_NAMES token in ``raw``, else None.
+def parse_constrained_output(
+    raw: str, *, factor_menu: tuple[str, ...] = INTENT_FACTOR_NAMES,
+) -> Optional[str]:
+    """Return the first ``factor_menu`` token in ``raw``, else None.
 
     Tolerant of leading/trailing whitespace, surrounding quotes, and a
     one-sentence prose preamble (e.g. 'The wrong factor is X because ...').
+
+    ``factor_menu`` defaults to the 6-factor schema. CrossViewPush passes
+    the 7-factor menu (with `direction_grounding`).
     """
     if not raw:
         return None
     # Try literal match first (fast path for clean outputs).
     stripped = raw.strip().strip('"').strip("'").strip()
-    if stripped in INTENT_FACTOR_NAMES:
+    if stripped in factor_menu:
         return stripped
     # Fallback: scan for first factor name anywhere in the string.
     # ``\b`` is fine here — factor names are alphanumeric + underscore.
-    for name in INTENT_FACTOR_NAMES:
+    for name in factor_menu:
         if re.search(rf"\b{re.escape(name)}\b", raw):
             return name
     return None
 
 
-def parse_free_form_output(raw: str) -> Optional[Intent]:
+def parse_free_form_output(
+    raw: str, *, factor_menu: tuple[str, ...] = INTENT_FACTOR_NAMES,
+) -> Optional[Intent]:
     """Parse a JSON intent. Returns None on any failure (missing keys, bad
-    tokens, malformed JSON). Strips a single `````json …````` fence if present."""
+    tokens, malformed JSON). Strips a single `````json …````` fence if present.
+
+    ``factor_menu`` lists the JSON keys that MUST be present in the parsed
+    object. Defaults to the 6-factor schema.
+    """
     if not raw:
         return None
     s = raw.strip()
@@ -179,22 +254,15 @@ def parse_free_form_output(raw: str) -> Optional[Intent]:
         return None
     if not isinstance(obj, dict):
         return None
-    # Strict key/token check.
-    for field in INTENT_FIELDS:
+    # Strict key/token check over the per-task menu.
+    for field in factor_menu:
         if field not in obj:
             return None
         if obj[field] not in _FACTOR_TOKENS[field]:
             return None
     try:
-        return Intent(
-            goal_state=obj["goal_state"],
-            object_motion=obj["object_motion"],
-            contact_region=obj["contact_region"],
-            approach_direction=obj["approach_direction"],
-            constraint_region=obj["constraint_region"],
-            embodiment_mapping=obj["embodiment_mapping"],
-        )
-    except (TypeError, ValueError):
+        return Intent.from_dict({field: obj[field] for field in factor_menu})
+    except (TypeError, ValueError, KeyError):
         return None
 
 
@@ -220,7 +288,9 @@ class MockVLMClient:
             task=task, initial_intent=initial_intent,
             failure_predicate=failure_predicate,
         )
-        return parse_constrained_output(self.constrained_response)
+        return parse_constrained_output(
+            self.constrained_response, factor_menu=get_factor_menu(task),
+        )
 
     def diagnose_free_form(
         self, *, task: str, image_path: str | Path, initial_intent: Intent,
@@ -230,7 +300,9 @@ class MockVLMClient:
             task=task, initial_intent=initial_intent,
             failure_predicate=failure_predicate,
         )
-        return parse_free_form_output(self.free_form_response)
+        return parse_free_form_output(
+            self.free_form_response, factor_menu=get_factor_menu(task),
+        )
 
 
 class InternVLClient:
@@ -303,7 +375,7 @@ class InternVLClient:
             image_path=image_path, question=prompt,
             max_new_tokens=self.max_new_tokens_constrained,
         )
-        return parse_constrained_output(raw)
+        return parse_constrained_output(raw, factor_menu=get_factor_menu(task))
 
     def diagnose_free_form(
         self, *, task: str, image_path: str | Path, initial_intent: Intent,
@@ -317,7 +389,7 @@ class InternVLClient:
             image_path=image_path, question=prompt,
             max_new_tokens=self.max_new_tokens_free_form,
         )
-        return parse_free_form_output(raw)
+        return parse_free_form_output(raw, factor_menu=get_factor_menu(task))
 
 
 # ---------- model-card load_image helper -------------------------------- #

@@ -43,7 +43,7 @@ from babysteps.envs.task_registry import get_task_entry  # noqa: E402
 from babysteps.failure import Attribution  # noqa: E402
 from babysteps.schemas import INTENT_FIELDS, Intent  # noqa: E402
 from babysteps.stage5.vlm_attribute import (  # noqa: E402
-    InternVLClient, MockVLMClient,
+    InternVLClient, MockVLMClient, get_factor_menu,
 )
 
 
@@ -52,24 +52,31 @@ def _read_episodes(path: Path) -> list[dict]:
     return [r for r in rows if r.get("is_failure", False)]
 
 
-def _make_vlm_attribution(factor: str) -> Attribution:
-    """Build an Attribution where the VLM's factor IS the wrong_factor."""
+def _make_vlm_attribution(factor: str, factor_menu: tuple[str, ...]) -> Attribution:
+    """Build an Attribution where the VLM's factor IS the wrong_factor.
+
+    `factor_menu` is the per-task factor list (6 for the four 6-factor tasks,
+    7 for CrossViewPush). Freeze = every other factor in the menu.
+    """
     return Attribution(
         semantic_failure=True,
         wrong_factor=factor,
-        freeze=tuple(f for f in INTENT_FIELDS if f != factor),
+        freeze=tuple(f for f in factor_menu if f != factor),
         revise=(factor,),
     )
 
 
-def _factors_changed(a: Intent, b: Intent) -> tuple[str, ...]:
-    return tuple(f for f in INTENT_FIELDS if getattr(a, f) != getattr(b, f))
+def _factors_changed(
+    a: Intent, b: Intent, fields: tuple[str, ...] = INTENT_FIELDS,
+) -> tuple[str, ...]:
+    return tuple(f for f in fields if getattr(a, f) != getattr(b, f))
 
 
 def _per_episode_c1(
     *, vlm_factor: Optional[str], oracle_factor: str,
     initial_intent: Intent, revised_intent: Optional[Intent],
     retry_success: Optional[bool], initial_success: bool,
+    factor_menu: tuple[str, ...] = INTENT_FIELDS,
 ) -> dict:
     """Compute C1 metrics for one episode."""
     if vlm_factor is None:
@@ -83,11 +90,11 @@ def _per_episode_c1(
             "final_success": bool(initial_success),
             "retry_success": None,
         }
-    factors_changed = (_factors_changed(initial_intent, revised_intent)
+    factors_changed = (_factors_changed(initial_intent, revised_intent, factor_menu)
                        if revised_intent is not None else ())
     # Frozen: no factor OTHER than the VLM-picked one changed.
     frozen_preserved = all(
-        f == vlm_factor or f not in factors_changed for f in INTENT_FIELDS
+        f == vlm_factor or f not in factors_changed for f in factor_menu
     )
     unnecessary = any(f != vlm_factor for f in factors_changed)
     final = (bool(retry_success) if retry_success is not None
@@ -107,7 +114,7 @@ def _per_episode_c1(
 def _per_episode_c2(
     *, revised_intent: Optional[Intent], oracle_factor: str,
     initial_intent: Intent, retry_success: Optional[bool],
-    initial_success: bool,
+    initial_success: bool, factor_menu: tuple[str, ...] = INTENT_FIELDS,
 ) -> dict:
     """Compute C2 metrics. For C2 there is no 'predicted factor' — instead
     we measure which factors changed vs the oracle-frozen set (all but the
@@ -122,10 +129,10 @@ def _per_episode_c2(
             "final_success": bool(initial_success),
             "retry_success": None,
         }
-    factors_changed = _factors_changed(initial_intent, revised_intent)
+    factors_changed = _factors_changed(initial_intent, revised_intent, factor_menu)
     # Frozen-preserved (C2 sense): no factor OTHER than oracle_factor changed.
     frozen_preserved = all(
-        f == oracle_factor or f not in factors_changed for f in INTENT_FIELDS
+        f == oracle_factor or f not in factors_changed for f in factor_menu
     )
     # Unnecessary: any factor change OTHER than the oracle's wrong factor.
     unnecessary = any(f != oracle_factor for f in factors_changed)
@@ -157,7 +164,8 @@ def _aggregate(rows: list[dict], keys: list[str]) -> dict:
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--task", required=True,
-                   choices=["PushCube-v1", "PickCube-v1", "StackCube-v1"])
+                   choices=["PushCube-v1", "PickCube-v1", "StackCube-v1",
+                            "TurnFaucet-v1", "CrossViewPush-v1"])
     p.add_argument("--episodes", type=Path, required=True,
                    help="episodes.jsonl from stage5_p2_render_failure_frames.py")
     p.add_argument("--out-dir", type=Path, required=True)
@@ -176,6 +184,7 @@ def main(argv: list[str] | None = None) -> int:
 
     entry = get_task_entry(args.task)
     adapter = entry.adapter_cls()
+    factor_menu = get_factor_menu(args.task)
 
     vlm: MockVLMClient | InternVLClient
     if args.mock:
@@ -221,7 +230,7 @@ def main(argv: list[str] | None = None) -> int:
             retry_success: Optional[bool] = None
             if vlm_factor is not None:
                 try:
-                    attribution = _make_vlm_attribution(vlm_factor)
+                    attribution = _make_vlm_attribution(vlm_factor, factor_menu)
                     revised, _rev = adapter.revise_intent(
                         initial, attribution, scene_executor,
                     )
@@ -237,6 +246,7 @@ def main(argv: list[str] | None = None) -> int:
                 initial_intent=initial, revised_intent=revised,
                 retry_success=retry_success,
                 initial_success=ep["initial_success"],
+                factor_menu=factor_menu,
             )
             row.update({"seed": seed, "oracle_wrong_factor": oracle_factor})
             c1_rows.append(row)
@@ -266,6 +276,7 @@ def main(argv: list[str] | None = None) -> int:
                 revised_intent=revised2, oracle_factor=oracle_factor,
                 initial_intent=initial, retry_success=retry_success2,
                 initial_success=ep["initial_success"],
+                factor_menu=factor_menu,
             )
             row2.update({"seed": seed, "oracle_wrong_factor": oracle_factor})
             c2_rows.append(row2)

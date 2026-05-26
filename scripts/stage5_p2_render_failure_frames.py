@@ -75,13 +75,20 @@ def _make_render_runner(task: str):
     if task == "StackCube-v1":
         from babysteps.envs.stackcube_runner import StackCubeEnvRunner
         return StackCubeEnvRunner(render_mode="rgb_array")
+    if task == "TurnFaucet-v1":
+        from babysteps.envs.turnfaucet_runner import TurnFaucetEnvRunner
+        return TurnFaucetEnvRunner(render_mode="rgb_array")
+    if task == "CrossViewPush-v1":
+        from babysteps.envs.crossview_runner import CrossViewPushEnvRunner
+        return CrossViewPushEnvRunner(render_mode="rgb_array")
     raise ValueError(f"unsupported task: {task}")
 
 
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--task", required=True,
-                   choices=["PushCube-v1", "PickCube-v1", "StackCube-v1"])
+                   choices=["PushCube-v1", "PickCube-v1", "StackCube-v1",
+                            "TurnFaucet-v1", "CrossViewPush-v1"])
     p.add_argument("--seeds", required=True,
                    help="Seed range A-B (inclusive) or single int.")
     p.add_argument("--out-dir", type=Path, required=True)

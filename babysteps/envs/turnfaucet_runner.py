@@ -156,15 +156,20 @@ def _execute_skill(env, skill, *, seed, needed_delta, contact_xy, max_steps):
 class TurnFaucetEnvRunner:
     """Real ManiSkill TurnFaucet-v1 runner. See run() for dispatch logic."""
 
-    def __init__(self) -> None:
+    def __init__(self, render_mode: Optional[str] = None) -> None:
         import gymnasium as gym
         import mani_skill.envs  # noqa: F401
-        self._env = gym.make(
-            "TurnFaucet-v1",
+        kwargs: dict = dict(
             obs_mode="state_dict",
             control_mode="pd_ee_delta_pose",
             sim_backend="gpu",   # CPU IK is broken for this env
         )
+        if render_mode is not None:
+            # Optional: when set (e.g. "rgb_array") the env allocates a render
+            # camera. Default None preserves the data-collection path
+            # byte-for-byte (matches all previously-collected runs).
+            kwargs["render_mode"] = render_mode
+        self._env = gym.make("TurnFaucet-v1", **kwargs)
         self._last_seed: Optional[int] = None
 
     def reset(self, seed: int) -> SceneState:
