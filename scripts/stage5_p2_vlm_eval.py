@@ -212,6 +212,7 @@ def main(argv: list[str] | None = None) -> int:
         # ---------- C1: VLM constrained → discrete revision ---------- #
         if "c1" in conditions:
             vlm_factor = vlm.diagnose_constrained(
+                task=args.task,
                 image_path=ep["frame_path"],
                 initial_intent=initial,
                 failure_predicate=ep["failure_predicate"],
@@ -246,6 +247,7 @@ def main(argv: list[str] | None = None) -> int:
         # ---------- C2: VLM free-form → verbatim retry ---------- #
         if "c2" in conditions:
             revised2 = vlm.diagnose_free_form(
+                task=args.task,
                 image_path=ep["frame_path"],
                 initial_intent=initial,
                 failure_predicate=ep["failure_predicate"],

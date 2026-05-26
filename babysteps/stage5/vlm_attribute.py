@@ -45,11 +45,62 @@ _FACTOR_TOKENS = {
 _MODEL_ID = "OpenGVLab/InternVL3_5-8B"
 
 
+# ---------- per-task prompt context ------------------------------------- #
+
+# Each entry supplies the VLM with (a) what task it is looking at,
+# (b) a one-line description of what success looks like, and (c) the
+# valid `goal_state` tokens for that task. The intent's `goal_state` is
+# pre-set per task by the demo pipeline (e.g. PushCube → cube_at_target),
+# but for StackCube the demo seeds a deliberately-wrong cube_at_target
+# token and the correct value cubeA_on_cubeB. Surfacing the valid tokens
+# lets the VLM notice that symbolic mismatch without being told "pick
+# goal_state" explicitly.
+TASK_PROMPT_INFO: dict[str, dict[str, object]] = {
+    "PushCube-v1": {
+        "name": "PushCube",
+        "success_description": (
+            "the cube is pushed sideways across the table to a marked "
+            "target position"
+        ),
+        "valid_goal_states": ("cube_at_target",),
+    },
+    "PickCube-v1": {
+        "name": "PickCube",
+        "success_description": (
+            "the cube is grasped, lifted above the table, and held at a "
+            "target xyz position"
+        ),
+        "valid_goal_states": ("cube_lifted_at_target",),
+    },
+    "StackCube-v1": {
+        "name": "StackCube",
+        "success_description": (
+            "cubeA (red) is picked up and placed on top of cubeB (green), "
+            "with cubeA resting stably on cubeB"
+        ),
+        "valid_goal_states": ("cubeA_on_cubeB",),
+    },
+}
+
+
+def _format_task_context(task: str) -> str:
+    if task not in TASK_PROMPT_INFO:
+        known = sorted(TASK_PROMPT_INFO)
+        raise KeyError(f"unknown task {task!r}; known: {known}")
+    info = TASK_PROMPT_INFO[task]
+    valid = ", ".join(info["valid_goal_states"])  # type: ignore[arg-type]
+    return (
+        f"Task: {info['name']}. "
+        f"On a successful attempt, {info['success_description']}. "
+        f"For this task the goal_state factor should be one of: [{valid}]."
+    )
+
+
 # ---------- prompt builders --------------------------------------------- #
 
 
 def build_constrained_prompt(
-    *, initial_intent: Intent, failure_predicate: str,
+    *, task: str, initial_intent: Intent, failure_predicate: str,
 ) -> str:
     """C1 prompt: pick ONE factor name from the fixed 6-set."""
     factor_list = ", ".join(INTENT_FACTOR_NAMES)
@@ -57,6 +108,7 @@ def build_constrained_prompt(
     return (
         "<image>\n"
         "You are diagnosing a robot manipulation failure.\n"
+        f"{_format_task_context(task)}\n"
         f"The robot attempted: {intent_json}\n"
         f"Failure observation: {failure_predicate}\n"
         "Which ONE intent factor was wrong? Choose exactly one from:\n"
@@ -66,7 +118,7 @@ def build_constrained_prompt(
 
 
 def build_free_form_prompt(
-    *, initial_intent: Intent, failure_predicate: str,
+    *, task: str, initial_intent: Intent, failure_predicate: str,
 ) -> str:
     """C2 prompt: emit the full corrected intent as JSON."""
     factor_list = ", ".join(INTENT_FACTOR_NAMES)
@@ -74,6 +126,7 @@ def build_free_form_prompt(
     return (
         "<image>\n"
         "You are a robot manipulation planner.\n"
+        f"{_format_task_context(task)}\n"
         f"The robot attempted: {intent_json}\n"
         f"Failure observation: {failure_predicate}\n"
         "Output the corrected full intent as JSON with these exact keys:\n"
@@ -159,21 +212,23 @@ class MockVLMClient:
     )
 
     def diagnose_constrained(
-        self, *, image_path: str | Path, initial_intent: Intent,
+        self, *, task: str, image_path: str | Path, initial_intent: Intent,
         failure_predicate: str,
     ) -> Optional[str]:
         # Build/parse exercised for realism even in mock mode.
         _ = build_constrained_prompt(
-            initial_intent=initial_intent, failure_predicate=failure_predicate,
+            task=task, initial_intent=initial_intent,
+            failure_predicate=failure_predicate,
         )
         return parse_constrained_output(self.constrained_response)
 
     def diagnose_free_form(
-        self, *, image_path: str | Path, initial_intent: Intent,
+        self, *, task: str, image_path: str | Path, initial_intent: Intent,
         failure_predicate: str,
     ) -> Optional[Intent]:
         _ = build_free_form_prompt(
-            initial_intent=initial_intent, failure_predicate=failure_predicate,
+            task=task, initial_intent=initial_intent,
+            failure_predicate=failure_predicate,
         )
         return parse_free_form_output(self.free_form_response)
 
@@ -237,11 +292,12 @@ class InternVLClient:
         return response
 
     def diagnose_constrained(
-        self, *, image_path: str | Path, initial_intent: Intent,
+        self, *, task: str, image_path: str | Path, initial_intent: Intent,
         failure_predicate: str,
     ) -> Optional[str]:
         prompt = build_constrained_prompt(
-            initial_intent=initial_intent, failure_predicate=failure_predicate,
+            task=task, initial_intent=initial_intent,
+            failure_predicate=failure_predicate,
         )
         raw = self._chat(
             image_path=image_path, question=prompt,
@@ -250,11 +306,12 @@ class InternVLClient:
         return parse_constrained_output(raw)
 
     def diagnose_free_form(
-        self, *, image_path: str | Path, initial_intent: Intent,
+        self, *, task: str, image_path: str | Path, initial_intent: Intent,
         failure_predicate: str,
     ) -> Optional[Intent]:
         prompt = build_free_form_prompt(
-            initial_intent=initial_intent, failure_predicate=failure_predicate,
+            task=task, initial_intent=initial_intent,
+            failure_predicate=failure_predicate,
         )
         raw = self._chat(
             image_path=image_path, question=prompt,
