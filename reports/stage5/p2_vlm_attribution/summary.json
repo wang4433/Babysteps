@@ -32,6 +32,28 @@
       "c2_final_success": 0.22,
       "delta_pres_pp": 50.0,
       "delta_success_pp": 48.0
+    },
+    {
+      "task": "TurnFaucet-v1",
+      "c1_attribution_acc": 1.0,
+      "rule_table_acc": 0.5,
+      "c1_frozen_preservation": 1.0,
+      "c2_frozen_preservation": 1.0,
+      "c1_final_success": 0.04,
+      "c2_final_success": 0.02,
+      "delta_pres_pp": 0.0,
+      "delta_success_pp": 2.0
+    },
+    {
+      "task": "CrossViewPush-v1",
+      "c1_attribution_acc": 1.0,
+      "rule_table_acc": 0.0,
+      "c1_frozen_preservation": 1.0,
+      "c2_frozen_preservation": 1.0,
+      "c1_final_success": 1.0,
+      "c2_final_success": 1.0,
+      "delta_pres_pp": 0.0,
+      "delta_success_pp": 0.0
     }
   ]
 }

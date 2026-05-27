@@ -14,7 +14,10 @@ from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parent.parent
 REPORT_ROOT = _ROOT / "reports" / "stage5" / "p2_vlm_attribution"
-TASKS = ("PushCube-v1", "PickCube-v1", "StackCube-v1")
+TASKS = (
+    "PushCube-v1", "PickCube-v1", "StackCube-v1",
+    "TurnFaucet-v1", "CrossViewPush-v1",
+)
 
 
 def main(argv: list[str] | None = None) -> int:

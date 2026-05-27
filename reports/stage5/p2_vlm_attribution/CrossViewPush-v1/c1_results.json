@@ -1,0 +1,719 @@
+{
+  "n_episodes": 50,
+  "per_episode": [
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 100,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 101,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 102,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 103,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 104,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 105,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 106,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 107,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 108,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 109,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 110,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 111,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 112,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 113,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 114,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 115,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 116,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 117,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 118,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 119,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 120,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 121,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 122,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 123,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 124,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 125,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 126,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 127,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 128,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 129,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 130,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 131,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 132,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 133,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 134,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 135,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 136,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 137,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 138,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 139,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 140,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 141,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 142,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 143,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 144,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 145,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 146,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 147,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 148,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    },
+    {
+      "attribution_correct": true,
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 149,
+      "unnecessary_change": false,
+      "vlm_factor": "direction_grounding"
+    }
+  ],
+  "rule_table_accuracy": 0.0,
+  "summary": {
+    "attribution_correct_rate": 1.0,
+    "final_success_rate": 1.0,
+    "frozen_factor_preserved_rate": 1.0,
+    "n_attribution_correct": 50,
+    "n_final_success": 50,
+    "n_frozen_factor_preserved": 50,
+    "n_parse_failed": 50,
+    "n_unnecessary_change": 50,
+    "parse_failed_rate": 0.0,
+    "unnecessary_change_rate": 0.0
+  },
+  "task": "CrossViewPush-v1"
+}

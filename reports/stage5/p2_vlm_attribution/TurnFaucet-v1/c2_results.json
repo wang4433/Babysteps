@@ -1,0 +1,662 @@
+{
+  "n_episodes": 50,
+  "per_episode": [
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 100,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 101,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 102,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 103,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 104,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 105,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 106,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 107,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 108,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 109,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 110,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 111,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 112,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 113,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 114,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 115,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 116,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 117,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 118,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 119,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 120,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 121,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 122,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 123,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 124,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 125,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 126,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 127,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 128,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 129,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 130,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 131,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 132,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 133,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 134,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 135,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 136,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 137,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 138,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 139,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 140,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 141,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 142,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 143,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 144,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 145,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 146,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 147,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 148,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 149,
+      "unnecessary_change": false
+    }
+  ],
+  "summary": {
+    "final_success_rate": 0.02,
+    "fixed_oracle_factor_rate": 1.0,
+    "frozen_factor_preserved_rate": 1.0,
+    "n_final_success": 50,
+    "n_fixed_oracle_factor": 47,
+    "n_frozen_factor_preserved": 47,
+    "n_parse_failed": 50,
+    "n_unnecessary_change": 47,
+    "parse_failed_rate": 0.06,
+    "unnecessary_change_rate": 0.0
+  },
+  "task": "TurnFaucet-v1"
+}

@@ -135,6 +135,55 @@ because the slightly longer prompt nudges JSON output to drift off the
 schema. C1 wins on both the strict and parse-conditional preservation
 definitions.
 
+### Stage-5 P2 — VLM attribution 5-task expansion (job 10842893, 2026-05-26)
+
+InternVL3.5-8B (BF16) on A100-40GB. Adds **TurnFaucet-v1** and
+**CrossViewPush-v1** to the P2 main table (now 5 tasks, matching the
+locked paper claim in `docs/milestone1_locked_claim.md` §6). Same
+held-out cut (seeds 100-149, 50 episodes/task). Commit `50bc778`.
+Wall time: 36:44.
+
+CrossViewPush required extending the C1 factor menu to 7 (adds
+`direction_grounding`). TurnFaucet uses the standard 6-factor menu.
+TASK_PROMPT_INFO now carries a per-task `factor_menu` so the two
+schema-sizes coexist. Failure frames rendered by job 10837407 (16 min).
+
+| task             | C1 attr | rule-table | C1 pres | C2 pres | Δpres pp | C1 succ | C2 succ | Δsucc pp |
+| ---------------- | ------- | ---------- | ------- | ------- | -------- | ------- | ------- | -------- |
+| PushCube-v1      | 1.000   | 1.000      | 1.000   | 1.000   | +0.0     | 0.980   | 0.960   | +2.0     |
+| PickCube-v1      | 1.000   | 1.000      | 1.000   | 1.000   | +0.0     | 0.920   | 0.000   | +92.0    |
+| StackCube-v1     | 0.860   | 0.860      | 1.000   | 0.500   | +50.0    | 0.700   | 0.220   | +48.0    |
+| TurnFaucet-v1    | 1.000   | 0.500      | 1.000   | 1.000   | +0.0     | 0.040   | 0.020   | +2.0     |
+| CrossViewPush-v1 | 1.000   | 0.000      | 1.000   | 1.000   | +0.0     | 1.000   | 1.000   | +0.0     |
+
+Gates: **all 5 tasks pass all 3 gates** (attr ≥ rule, pres ≥ C2, succ
+within 5pp of C2).
+
+Headlines for the two new tasks:
+
+- **TurnFaucet attribution: VLM 1.000 vs rule 0.500.** The held-out cut
+  has three failure predicates (`grasp_infeasible` 25, `contact_failure`
+  20, `goal_not_satisfied` 5). Rule-table maps only `grasp_infeasible` to
+  `embodiment_mapping`; the other two predicates get routed to
+  `contact_region` / `goal_state` even though the oracle is always
+  `embodiment_mapping` (the gripper can't enclose the handle, period).
+  VLM correctly picks `embodiment_mapping` 50/50.
+  **TurnFaucet succ low** (C1 2/50, C2 1/50): the poke_turn skill
+  primitive is unreliable in real ManiSkill. This is an execution
+  problem, not attribution — both conditions succeed at the *revision*
+  (frozen_factor_preserved=1.000, factors_changed=embodiment_mapping
+  for every episode). Future work to harden the poke_turn skill is
+  needed; the P2 attribution claim still holds.
+- **CrossViewPush at ceiling.** C1 attr 1.000, succ 1.000. Rule-table
+  cannot attribute these failures (it doesn't know about
+  `direction_grounding`; only `CrossViewPushAdapter.attribute_failure`
+  does), so VLM beats rule by +100pp on attribution. The 7-factor menu
+  with the per-task `factor_menu` (TASK_PROMPT_INFO) is doing the work.
+  The grounding_substitution revision (actor_frame → observer_frame)
+  recovers every episode.
+
+This completes the 5-task main table.
+
 ### Stage-5 M3 — Procedural baselines main table (job 10826466, 2026-05-26)
 
 A100-40GB, 50 held-out seeds (100-149), three tasks, all seven procedural
