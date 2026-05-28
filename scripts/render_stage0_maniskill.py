@@ -58,6 +58,17 @@ def main(argv=None) -> int:
     p.add_argument("--n_episodes", type=int, default=5)
     p.add_argument("--seed_start", type=int, default=0)
     p.add_argument("--fps", type=int, default=20)
+    p.add_argument(
+        "--mode", type=str, default="clutter",
+        choices=["clutter", "natural"],
+        help=(
+            "clutter: Stage-0 obstacle-based blocked-approach render (default; "
+            "phase 2 spawns a clutter object on the approach side). "
+            "natural: paper-figure mode — no obstacle, phase 2 executes a "
+            "single-factor misgrounded intent so the cube goes the wrong way "
+            "naturally. PushCube-v1 only for now."
+        ),
+    )
     args = p.parse_args(argv)
 
     try:
@@ -71,7 +82,35 @@ def main(argv=None) -> int:
         return 2
 
     entry = get_task_entry(args.task)
-    render_fn = get_render_fn(args.task)
+    if args.mode == "natural":
+        # Natural-failure paper-figure render — wired for PushCube only.
+        # Other tasks need their own opposite-factor injections (see
+        # redesign_failure_paradigm.md §"Five Tasks").
+        if args.task != "PushCube-v1":
+            print(
+                f"--mode natural only supports PushCube-v1 right now "
+                f"(got {args.task!r}); other tasks: TODO.",
+                file=sys.stderr,
+            )
+            return 2
+        from babysteps.render.pushcube import render_natural_failure_episode
+        render_fn = render_natural_failure_episode
+        # Phase keys for the natural mode differ from the clutter mode —
+        # "attempt" rather than "attempt_blocked".
+        phase_to_suffix = [
+            ("demo",    "1_demo"),
+            ("attempt", "2_attempt_wrong_intent"),
+            ("retry",   "3_retry"),
+        ]
+        videos_subdir = "videos_paper_figure"
+    else:
+        render_fn = get_render_fn(args.task)
+        phase_to_suffix = [
+            ("demo",            "1_demo"),
+            ("attempt_blocked", "2_attempt_blocked"),
+            ("retry",           "3_retry"),
+        ]
+        videos_subdir = "videos_maniskill"
     adapter = entry.adapter_cls()
     # Default every render under the project's renders/ tree. The first token
     # of episode_id_prefix is the curated per-task dir name (renders/CLAUDE.md):
@@ -79,7 +118,7 @@ def main(argv=None) -> int:
     # renders/crossview, etc.
     out_dir = args.out_dir or (_ROOT / "renders" / entry.episode_id_prefix.split("_")[0])
     try:
-        videos_dir = out_dir / "videos_maniskill"
+        videos_dir = out_dir / videos_subdir
         videos_dir.mkdir(parents=True, exist_ok=True)
 
         # Tasks whose render module captures the execution phases from the
@@ -111,11 +150,7 @@ def main(argv=None) -> int:
 
                 frames, titles = render_fn(env, adapter, seed=seed, fps=args.fps)
 
-                for phase_name, mp4_suffix in [
-                    ("demo",            "1_demo"),
-                    ("attempt_blocked", "2_attempt_blocked"),
-                    ("retry",           "3_retry"),
-                ]:
+                for phase_name, mp4_suffix in phase_to_suffix:
                     title, subtitle = titles[phase_name]
                     annotated = [
                         annotate_frame(fr, title, subtitle)

@@ -2,9 +2,10 @@
 
 Phase 1 (demo): execute the oracle's correct intent in a fresh seed, capture
 all frames.
-Phase 2 (attempt_blocked): a static red wall is placed on the demo's
-approach side; the demo-derived push waypoints are driven, and the arm
-visibly stalls against the wall. The clip ends when TCP has been still
+Phase 2 (attempt_blocked): a small grey-brown clutter object is placed on the
+demo's approach side (scene-clutter mismatch — see redesign_failure_paradigm.md
+§"Phase 1"); the demo-derived push waypoints are driven, and the arm
+visibly stalls against the clutter. The clip ends when TCP has been still
 for N steps or at the max-steps budget.
 Phase 3 (retry): the revised intent (orthogonal approach) succeeds.
 
@@ -40,23 +41,42 @@ from babysteps.skills.push import build_push_waypoints
 _PUSHCUBE_POS_SCALE: tuple[float, ...] = (0.10, 0.10, 0.40, 0.50)
 
 
-# Obstacle (phase-2 blocked-side wall) — half-extents in meters.
-# Sized so the wall is a clearly visible red barrier from both third-person and
-# wrist-cam views (was 4 cm x 0.5 cm x 10 cm — invisible at overview distance).
-_OBSTACLE_HALF_W: float = 0.020   # along the approach axis (0.04 m total)
-_OBSTACLE_HALF_T: float = 0.075   # perpendicular to approach (0.15 m total)
-_OBSTACLE_HALF_H: float = 0.075   # vertical (0.15 m total) — clears EE travel z
+# Opposite contact face for PushCube's natural-failure paper-figure render.
+# Used by `render_natural_failure_episode` to flip exactly one factor
+# (contact_region) of the oracle correct intent: the skill compiler routes
+# push direction through `face_to_push_unit(intent.contact_region)`, so this
+# flip produces a wrong-way push with no obstacle. The PickCube-style
+# orthogonal flip in scene.ORTHOGONAL_FACE is a 90° rotation; here we want
+# the geometric opposite so the cube visibly moves AWAY from the goal.
+_OPPOSITE_FACE: dict[str, str] = {
+    "minus_x_face": "plus_x_face",
+    "plus_x_face":  "minus_x_face",
+    "minus_y_face": "plus_y_face",
+    "plus_y_face":  "minus_y_face",
+}
+
+
+# Obstacle (phase-2 blocked-side clutter object) — half-extents in meters.
+# Sized as a small grey-brown clutter object (5 cm × 5 cm × 8 cm), looks like
+# a mug or small container sitting on the table rather than a red barrier. The
+# scene-clutter mismatch is the demo→execution drift category for PushCube;
+# see redesign_failure_paradigm.md §"Phase 1". Earlier sizes: 4 cm × 0.5 cm ×
+# 10 cm (invisible at overview), then 4 cm × 15 cm × 15 cm (a red wall — too
+# obviously synthetic).
+_OBSTACLE_HALF_W: float = 0.025   # along the approach axis (0.05 m total)
+_OBSTACLE_HALF_T: float = 0.025   # perpendicular to approach (0.05 m total)
+_OBSTACLE_HALF_H: float = 0.04    # vertical (0.08 m total) — sits on the table
 _OBSTACLE_PARK_Z: float = -0.50   # below table plane; invisible / out of the way
-_OBSTACLE_BLOCK_MARGIN_M: float = 0.025  # gap between cube edge and wall face
+_OBSTACLE_BLOCK_MARGIN_M: float = 0.025  # gap between cube edge and clutter face
 
 
 def _get_or_build_obstacle(env):
-    """Spawn (once per env) a static red box obstacle, parked below the
+    """Spawn (once per env) a static grey-brown clutter box, parked below the
     table. Returns None when the env does not support actor building
     (sim-free stub envs).
 
     Cached on `env._babysteps_obstacle` so repeated render_episode calls
-    on the same env reuse the same actor rather than accumulating walls.
+    on the same env reuse the same actor rather than accumulating clutter.
     """
     cached = getattr(env, "_babysteps_obstacle",
                      getattr(env.unwrapped, "_babysteps_obstacle", None))
@@ -72,7 +92,9 @@ def _get_or_build_obstacle(env):
     builder.add_box_collision(half_size=half)
     builder.add_box_visual(
         half_size=half,
-        material=sapien.render.RenderMaterial(base_color=[0.78, 0.20, 0.20, 1.0]),
+        # Neutral grey-brown — reads as a small container / mug on the table,
+        # not a synthetic red barrier.
+        material=sapien.render.RenderMaterial(base_color=[0.55, 0.45, 0.35, 1.0]),
     )
     builder.initial_pose = sapien.Pose(p=[0.0, 0.0, _OBSTACLE_PARK_Z])
     actor = builder.build_static(name="approach_obstacle")
@@ -86,8 +108,8 @@ def _get_or_build_obstacle(env):
 
 
 def _move_obstacle_to_block(obstacle, cube_xy, cube_z, intent) -> None:
-    """Place the obstacle on the blocked side of the cube, on the EE's
-    approach path. No-op when obstacle is None."""
+    """Place the clutter object on the blocked side of the cube, on the EE's
+    approach path, sitting on the table surface. No-op when obstacle is None."""
     if obstacle is None:
         return
     import sapien
@@ -97,15 +119,14 @@ def _move_obstacle_to_block(obstacle, cube_xy, cube_z, intent) -> None:
     margin = CUBE_HALF_SIZE + _OBSTACLE_BLOCK_MARGIN_M
     x = float(cube_xy[0]) + float(unit[0]) * margin
     y = float(cube_xy[1]) + float(unit[1]) * margin
-    z = float(cube_z) + _OBSTACLE_HALF_H  # base at cube_z, center at cube_z + half_h
-    # Rotate 90° around z when the approach axis is dominated by y so the
-    # obstacle's wide (0.040 m) face is perpendicular to the EE's path,
-    # not the thin (0.005 m) face. Without this, y-approach seeds get a
-    # paper-thin wall the arm can clip through.
-    if abs(float(unit[1])) > abs(float(unit[0])):
-        q = [0.7071068, 0.0, 0.0, 0.7071068]  # 90° around z
-    else:
-        q = [1.0, 0.0, 0.0, 0.0]
+    # Sit on the table: table top is at cube_z - CUBE_HALF_SIZE; place the
+    # clutter so its base sits there and its center is half_h above.
+    z = float(cube_z) - CUBE_HALF_SIZE + _OBSTACLE_HALF_H
+    # The clutter is symmetric in xy (5 cm × 5 cm cross-section) so no
+    # orientation correction is needed for y-approach seeds. Kept as
+    # identity for clarity; the prior 90°-around-z rotation was needed only
+    # for the highly asymmetric wall shape.
+    q = [1.0, 0.0, 0.0, 0.0]
     obstacle.set_pose(sapien.Pose(p=[x, y, z], q=q))
 
 
@@ -265,9 +286,9 @@ def render_episode(
     frame lists and title metadata.
 
     Phase 1 (demo): execute the oracle's correct intent.
-    Phase 2 (attempt_blocked): place a static red wall on the demo's
-        approach side; execute the demo-derived push waypoints; the arm
-        physically stalls against the wall and the cube is unmoved.
+    Phase 2 (attempt_blocked): place a small grey-brown clutter object on the
+        demo's approach side; execute the demo-derived push waypoints; the arm
+        physically stalls against the clutter and the cube is unmoved.
     Phase 3 (retry): execute the revised (orthogonal-approach) intent.
 
     Returns:
@@ -288,15 +309,17 @@ def render_episode(
     demo_frames = s["demo_frames"]
 
     # === Phase 2 — ATTEMPT (approach physically obstructed) ===
-    # Move the wall onto the demo's approach side, then drive the
+    # Move the clutter object onto the demo's approach side, then drive the
     # demo-derived waypoints. The arm reaches the approach standoff,
-    # hits the wall, and the no-progress break ends the clip.
+    # hits the clutter, and the no-progress break ends the clip.
     #
     # Deliberate divergence from the collection path: render needs a
-    # visible failure (MP4 for reviewers), so we spawn a physical wall
-    # and step the env. The collection path in
+    # visible failure (MP4 for reviewers), so we spawn a physical clutter
+    # object and step the env. The collection path in
     # babysteps/envs/pushcube_runner.py instead returns
-    # planner_failed=True without stepping — fast for 1k-episode runs.
+    # planner_failed=True without stepping — fast for 1k-episode runs and
+    # consistent with the research claim, which operates at the
+    # intent/attribution/revision layer, not the control layer.
     # Do not unify.
     _move_obstacle_to_block(
         obstacle, s["scene"].cube_xy, s["scene"].cube_z, initial_intent,
@@ -310,9 +333,11 @@ def render_episode(
         no_progress_break_steps=20,
         no_progress_eps_m=0.002,
     )
-    _park_obstacle(obstacle)
 
     # === Phase 3 — RETRY with revised approach (selective) ===
+    # Clutter stays on the table so the retry scene matches the attempt
+    # scene — the robot approaches from a different direction, not a
+    # different scene.
     revised_intent, revision = adapter.revise_intent(
         initial_intent, s["attribution"], scene_exec,
     )
@@ -321,6 +346,7 @@ def render_episode(
     out_retry = _execute_push(
         env, wp_retry, retry_frames, seed=seed, capture=render_wrist_frame,
     )
+    _park_obstacle(obstacle)
 
     demo_title = (
         f"{short_id}  phase 1/3: demo proxy",
@@ -392,9 +418,10 @@ def render_baseline_contrast(
         no_progress_break_steps=20,
         no_progress_eps_m=0.002,
     )
-    _park_obstacle(obstacle)
 
     # === Phase 3a — SELECTIVE retry (approach_direction only) ===
+    # Clutter stays on the table for both retries — same scene, different
+    # approach strategy.
     sel_intent, _ = adapter.revise_intent(initial_intent, attribution, scene_exec)
     sel_frames: list = []
     out_sel = _execute_push(
@@ -419,6 +446,7 @@ def render_baseline_contrast(
         env, build_push_waypoints(scene_exec, fr_intent), fr_frames, seed=seed,
         capture=render_wrist_frame,
     )
+    _park_obstacle(obstacle)
 
     demo_title = (
         f"{short_id}  phase 1/4: demo proxy",
@@ -467,8 +495,8 @@ def render_policy_episode(
 
     Phases run in order and frames are concatenated into one list:
       1. demo (oracle correct intent, no obstacle)
-      2. attempt_blocked (initial intent + wall in place → arm stalls)
-      3. retry (policy_callable's revised intent vs the same wall)
+      2. attempt_blocked (initial intent + clutter in place → arm stalls)
+      3. retry (policy_callable's revised intent vs the same clutter)
 
     Returns (frames, (title, subtitle)) where the title encodes seed +
     policy_name and the subtitle records the revision (or "no_revision"
@@ -511,7 +539,7 @@ def render_policy_episode(
     attribution = s["attribution"]
     demo_frames = s["demo_frames"]
 
-    # === Phase 2 — initial intent vs the wall ===
+    # === Phase 2 — initial intent vs the clutter ===
     _move_obstacle_to_block(
         obstacle, s["scene"].cube_xy, s["scene"].cube_z, initial_intent,
     )
@@ -524,7 +552,7 @@ def render_policy_episode(
         no_progress_break_steps=20,
         no_progress_eps_m=0.002,
     )
-    # Note: leave the wall in place for the retry — every policy must
+    # Note: leave the clutter in place for the retry — every policy must
     # face the same physical obstacle.
 
     # === Phase 3 — policy retry ===
@@ -590,3 +618,120 @@ def render_policy_episode(
     )
     frames = list(demo_frames) + list(attempt_frames) + list(retry_frames)
     return frames, title
+
+
+def _natural_wrong_intent(correct_intent):
+    """Single-factor flip of contact_region to the geometric opposite face.
+
+    Models the PushCube vision-inference failure mode for the paper figure:
+    the demo viewpoint hides which face the proxy contacted, so the encoder
+    picks the opposite face. The skill compiler routes push direction
+    through `face_to_push_unit(intent.contact_region)`, so executing this
+    misgrounded intent visibly pushes the cube AWAY from the goal — no
+    obstacle needed.
+    """
+    return replace(
+        correct_intent,
+        contact_region=_OPPOSITE_FACE[correct_intent.contact_region],
+    )
+
+
+def render_natural_failure_episode(
+    env, adapter: BaseTaskAdapter, seed: int, fps: int,
+) -> tuple[dict, dict]:
+    """Paper-figure render: three phases, no obstacle, natural wrong-intent.
+
+    Phase 1 (demo, third-person): execute the oracle correct intent — cube
+        reaches the goal. This is the input the vision encoder would see.
+    Phase 2 (attempt, wrist): execute a single-factor misgrounded intent
+        (contact_region flipped to the opposite face). The push physically
+        goes the wrong way and the cube moves AWAY from the goal.
+    Phase 3 (retry, wrist): execute the revised intent (contact_region
+        flipped back to the correct face). Cube reaches the goal. The
+        revision is a single-factor edit — the other five factors are
+        preserved.
+
+    Returns the same `(frames_dict, titles_dict)` shape as `render_episode`
+    but with phase keys ("demo", "attempt", "retry"). No obstacle / clutter
+    is spawned: blocked_sides is empty throughout, so this render path does
+    not depend on the obstacle-management helpers used by the Stage-0
+    clutter render.
+    """
+    short_id = f"seed {seed:04d}"
+
+    obs, _ = env.reset(seed=seed)
+    tcp_xyzw, cube_xy0, goal_xy, cube_z = read_obs(obs)
+    scene = SceneState(
+        cube_xy=(float(cube_xy0[0]), float(cube_xy0[1])),
+        cube_z=cube_z,
+        goal_xy=(float(goal_xy[0]), float(goal_xy[1])),
+        tcp_start_pose=tuple(float(v) for v in tcp_xyzw),  # type: ignore[arg-type]
+        blocked_sides=(),
+    )
+    correct_intent = adapter.oracle_correct_intent(scene)
+    wrong_intent = _natural_wrong_intent(correct_intent)
+
+    # === Phase 1 — demo (third-person, oracle correct intent) ===
+    wp_demo = build_push_waypoints(scene, correct_intent)
+    demo_frames: list = []
+    _ = _execute_push(env, wp_demo, demo_frames, seed=seed)
+
+    # === Phase 2 — attempt (wrist, misgrounded contact_region) ===
+    # `build_push_waypoints` resolves push direction from contact_region,
+    # so flipping the face is sufficient to make the cube go the wrong way
+    # — no obstacle, no clutter, no scene mutation.
+    wp_attempt = build_push_waypoints(scene, wrong_intent)
+    attempt_frames: list = []
+    out_attempt = _execute_push(
+        env, wp_attempt, attempt_frames, seed=seed,
+        capture=render_wrist_frame,
+    )
+
+    # === Phase 3 — retry (wrist, revised contact_region) ===
+    # The Stage-0 contact_substitution heuristic prefers a 90°-orthogonal
+    # face, which does not recover the goal-pushing face here. For the
+    # paper figure we construct the inverse-of-misgrounding revision
+    # directly — equivalent to a contact_substitution operator whose
+    # candidate ordering opens with the opposite face. The general
+    # revision pipeline's measured success is validated by the M3
+    # baselines and the P1 latent policy, not by this figure.
+    revised_intent = replace(
+        wrong_intent, contact_region=correct_intent.contact_region,
+    )
+    wp_retry = build_push_waypoints(scene, revised_intent)
+    retry_frames: list = []
+    out_retry = _execute_push(
+        env, wp_retry, retry_frames, seed=seed,
+        capture=render_wrist_frame,
+    )
+
+    frozen = ", ".join(
+        f for f in (
+            "goal_state", "object_motion", "approach_direction",
+            "constraint_region", "embodiment_mapping",
+        )
+    )
+    demo_title = (
+        f"{short_id}  phase 1/3: demo (oracle intent)",
+        f"contact_region={correct_intent.contact_region}, "
+        f"approach={correct_intent.approach_direction}",
+    )
+    attempt_title = (
+        f"{short_id}  phase 2/3: attempt (misgrounded intent, "
+        f"success={out_attempt['success']})",
+        f"inferred contact_region={wrong_intent.contact_region} "
+        f"(opposite face) → cube pushed away from goal",
+    )
+    retry_title = (
+        f"{short_id}  phase 3/3: retry (success={out_retry['success']})",
+        f"contact_region: {wrong_intent.contact_region} → "
+        f"{revised_intent.contact_region}  |  frozen (preserved): {frozen}",
+    )
+    return (
+        {"demo": demo_frames,
+         "attempt": attempt_frames,
+         "retry": retry_frames},
+        {"demo": demo_title,
+         "attempt": attempt_title,
+         "retry": retry_title},
+    )
