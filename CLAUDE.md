@@ -64,16 +64,19 @@ single-factor invariant is the headline reviewer-facing property — guard it.
 
 ## Sub-projects (Stage-0 task families)
 
-| ID | Task | Revised factor | Failure |
+| ID | Task | Revised factor | Inference failure mode |
 | --- | --- | --- | --- |
-| A | PushCube-v1 | `approach_direction` | approach blocked |
-| B | PickCube-v1 | `contact_region` | grasp slip |
-| C | StackCube-v1 | `goal_state` | underspecified goal |
-| D | TurnFaucet-v1 | `embodiment_mapping` | handle not graspable → poke-turn |
-| E | CrossViewPush-v1 | `direction_grounding` | observer/actor frame mismatch |
+| A | PushCube-v1 | `contact_region` (paper-figure render) / `approach_direction` (Stage-0 clutter ablation) | demo viewpoint conflates which cube face the proxy contacted |
+| B | PickCube-v1 | `contact_region` | grasp face occluded in demo video |
+| C | StackCube-v1 | `goal_state` | demo goal-ambiguous (place near vs stack on) |
+| D | TurnFaucet-v1 | `embodiment_mapping` | demo strategy (grasp-turn) infeasible on execution object |
+| E | CrossViewPush-v1 | `direction_grounding` | demo camera ≠ robot camera → direction-frame mismatch |
 
 All five are implemented and pass the acceptance gate (`delta_pp >= 10`
-between revised-retry and initial-attempt success rates).
+between revised-retry and initial-attempt success rates). In Stage 0,
+failures are simulated via the `blocked_sides` mechanism for controlled
+ablation; in Stage 5, they arise naturally from the vision encoder's
+imperfect intent inference (see `redesign_failure_paradigm.md`).
 
 ## Working invariants (do not violate)
 
