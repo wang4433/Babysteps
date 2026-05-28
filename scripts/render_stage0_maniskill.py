@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from datetime import datetime
 from pathlib import Path
 
 # Make the project root importable without `pip install -e .`.
@@ -117,9 +118,15 @@ def main(argv=None) -> int:
     # pushcube_blocked_approach → renders/pushcube, crossview_grounding →
     # renders/crossview, etc.
     out_dir = args.out_dir or (_ROOT / "renders" / entry.episode_id_prefix.split("_")[0])
+    # Timestamp each render run so re-runs don't overwrite prior outputs and a
+    # reviewer can tell at a glance which set of MP4s belongs to which run.
+    # Format: YYYY-MM-DD_HHMMSS (sorts chronologically, no shell-hostile chars).
+    run_timestamp = datetime.now().strftime("%Y-%m-%d_%H%M%S")
     try:
-        videos_dir = out_dir / videos_subdir
+        videos_dir = out_dir / videos_subdir / run_timestamp
         videos_dir.mkdir(parents=True, exist_ok=True)
+        print(f"writing {args.n_episodes} episode(s) × 3 phases to {videos_dir}",
+              flush=True)
 
         # Tasks whose render module captures the execution phases from the
         # first-person panda_wristcam `hand_camera`. For these we swap in the
