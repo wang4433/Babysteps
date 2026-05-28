@@ -793,13 +793,7 @@ reliability.
   artifacts. `_diag_tf_poke5.py` is the canonical mechanism reference
   for the poke geometry constants.
 
-## 17. Plan file
-
-This spec drives one plan file (created next via writing-plans):
-
-- `docs/superpowers/plans/2026-05-18-stage0-turnfaucet-embodiment-plan.md`
-
-## 18. Summary
+## 17. Summary
 
 Sub-project D is reframed from `constraint_introduction` (multi-factor,
 contrived demo, never-passing gate) to `embodiment_substitution`

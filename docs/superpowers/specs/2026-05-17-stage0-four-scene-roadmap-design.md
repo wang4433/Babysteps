@@ -7,7 +7,7 @@ B (full) → C (full) → D (full). C and D are scoped here so the schema and
 operator surface area is decided once.
 
 - Date: 2026-05-17
-- Predecessor spec: `2026-05-16-stage0-task-adapter-refactor-design.md`
+- Predecessor spec: the task-adapter refactor spec (pruned 2026-05-27 — see git history)
 - Goal-of-record: `goal.md` (Stage-0 boundary; object-centric intent schema)
 
 ## 1. Motivation
@@ -386,16 +386,7 @@ per-scene as each sub-project lands.
    to handle). The render script's `_build_waypoints` becomes a
    `dispatch(adapter)` call.
 
-## 10. Plan files
-
-This spec drives three plan files (created at the start of each
-sub-project, not all at once):
-
-- `docs/superpowers/plans/2026-05-17-stage0-pickcube-b-plan.md` (next)
-- `docs/superpowers/plans/2026-MM-DD-stage0-stackcube-c-plan.md` (after B)
-- `docs/superpowers/plans/2026-MM-DD-stage0-drawer-d-plan.md` (after C)
-
-## 11. Summary
+## 10. Summary
 
 The four-scene roadmap commits to a tight set of schema additions, two
 new failure predicates, and three new revision operators. Each addition

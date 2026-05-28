@@ -2,9 +2,10 @@
 
 **Date:** 2026-05-15
 **Status:** Approved (failure mechanism = privileged `blocked_sides` flag).
-**Supersedes (for Stage 0):** `2026-05-15-pushcube-vertical-slice-design.md`
-(that spec uses a `target / goal / interaction.contact_site / reference_frame`
-intent schema; Stage 0 uses the object-centric schema mandated by `goal.md`).
+**Supersedes (for Stage 0):** an earlier vertical-slice spec (pruned
+2026-05-27 — see git history) that used a
+`target / goal / interaction.contact_site / reference_frame` intent
+schema; Stage 0 uses the object-centric schema mandated by `goal.md`.
 
 ---
 
@@ -545,7 +546,6 @@ babysteps/
 ├── technical_def.md (existing)
 ├── docs/superpowers/
 │   ├── specs/
-│   │   ├── 2026-05-15-pushcube-vertical-slice-design.md   (existing; older schema)
 │   │   └── 2026-05-15-stage0-pushcube-blocked-design.md   (THIS FILE)
 │   └── plans/
 │       └── 2026-05-15-stage0-pushcube-blocked-plan.md     (next: writing-plans)

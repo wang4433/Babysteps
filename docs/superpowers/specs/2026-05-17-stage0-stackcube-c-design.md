@@ -405,13 +405,7 @@ byte-identical.
    after the final waypoint to let the physics settle. Mitigation: tail
    padding on phase 3 too (not just phase 2).
 
-## 16. Plan file
-
-This spec drives one plan file (created next via writing-plans):
-
-- `docs/superpowers/plans/2026-05-17-stage0-stackcube-c-plan.md`
-
-## 17. Summary
+## 16. Summary
 
 Sub-project C lands StackCube-v1 as the third adapter in the Stage-0
 loop, demonstrating the third distinct failure mode (`goal_state`

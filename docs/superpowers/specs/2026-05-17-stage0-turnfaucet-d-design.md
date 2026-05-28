@@ -469,13 +469,7 @@ remain byte-identical.
    deterministically; real-sim performance is best-effort and will
    be confirmed by the GPU spot-check.
 
-## 16. Plan file
-
-This spec drives one plan file (created next via writing-plans):
-
-- `docs/superpowers/plans/2026-05-17-stage0-turnfaucet-d-plan.md`
-
-## 17. Summary
+## 16. Summary
 
 Sub-project D lands TurnFaucet-v1 as the fourth Stage-0 adapter,
 covering the `constraint_region` intent factor via the
