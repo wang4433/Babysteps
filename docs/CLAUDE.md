@@ -31,6 +31,7 @@ them); the specs below remain because code, tests, and reports cite them.
 | Stage-4 M2.5 attribution head | `2026-05-23-stage4-m2.5-attribution-head-design` | done |
 | Stage-5 P1 vision encoder swap | `2026-05-24-stage5-vision-encoder-swap-design` | done (PushCube held-out latent matches oracle) |
 | Stage-5 P3 world model | `2026-05-26-stage5-p3-world-model-design` (+ matching plan) | **active** |
+| Stage-5 official-demo replay | `2026-05-30-stage5-official-demo-replay-design` | **planned** (Scope A approved: replay official ManiSkill MP demos third-person for `1_demo` clips; Scope B encoder re-base gated) |
 
 ## Rules
 

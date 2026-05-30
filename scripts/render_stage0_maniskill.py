@@ -70,7 +70,41 @@ def main(argv=None) -> int:
             "naturally. PushCube-v1 only for now."
         ),
     )
+    p.add_argument(
+        "--demo-source", type=str, default="scripted",
+        choices=["scripted", "official"],
+        help=(
+            "scripted (default): the 1_demo phase is the babysteps skill "
+            "compiler executing the oracle intent (current behavior). "
+            "official: replace the 1_demo clip with ManiSkill's official "
+            "Panda oracle demo, rendered third-person. Only the demo phase "
+            "changes; attempt/retry are untouched. PushCube/PickCube/StackCube."
+        ),
+    )
+    p.add_argument(
+        "--official-source", type=str, default="state_replay",
+        choices=["state_replay", "solver"],
+        help=(
+            "When --demo-source official: state_replay (default) teleports "
+            "through the downloaded trajectory.h5 env_states (needs no mplib); "
+            "solver runs the official motion planner live (needs a working "
+            "mplib). Both render third-person and never read recorded actions."
+        ),
+    )
+    p.add_argument(
+        "--official-stride", type=int, default=1,
+        help="Frame stride for --demo-source official state_replay (1 = full).",
+    )
     args = p.parse_args(argv)
+
+    OFFICIAL_DEMO_TASKS = {"PushCube-v1", "PickCube-v1", "StackCube-v1"}
+    if args.demo_source == "official" and args.task not in OFFICIAL_DEMO_TASKS:
+        print(
+            f"--demo-source official supports {sorted(OFFICIAL_DEMO_TASKS)}; "
+            f"got {args.task!r}.",
+            file=sys.stderr,
+        )
+        return 2
 
     try:
         import gymnasium as gym
@@ -156,6 +190,32 @@ def main(argv=None) -> int:
                 print(f"[{i + 1}/{args.n_episodes}] {episode_id}", flush=True)
 
                 frames, titles = render_fn(env, adapter, seed=seed, fps=args.fps)
+
+                # Optionally replace ONLY the demo clip with the official
+                # ManiSkill oracle demo (rendered third-person via its own
+                # isolated env). Attempt/retry stay on the babysteps env.
+                if args.demo_source == "official":
+                    from babysteps.render.official_demo import official_demo_frames
+                    # The dispatcher forwards `seed` itself; kw carries only
+                    # source-specific extras (stride for state_replay).
+                    kw = {}
+                    if args.official_source == "state_replay":
+                        kw = dict(stride=args.official_stride)
+                    official_frames = official_demo_frames(
+                        adapter.gym_env_id, seed,
+                        source=args.official_source, **kw,
+                    )
+                    frames["demo"] = official_frames
+                    base_title, _ = titles["demo"]
+                    titles["demo"] = (
+                        base_title,
+                        f"official ManiSkill oracle demo "
+                        f"({args.official_source}, third-person)",
+                    )
+                    print(
+                        f"   demo: official {args.official_source} "
+                        f"({len(official_frames)} frames)"
+                    )
 
                 for phase_name, mp4_suffix in phase_to_suffix:
                     title, subtitle = titles[phase_name]
