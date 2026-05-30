@@ -245,3 +245,94 @@ def test_compile_poke_z_above_handle_for_finger_dangle():
     # contact_z (waypoint 1 and 2) is handle_z + _POKE_HEIGHT_ABOVE_M.
     assert skill.waypoints[1, 2] == 0.10 + 0.04
     assert skill.waypoints[2, 2] == 0.10 + 0.04
+
+
+# --- v1-geometry port: scene.extra['poke_*'] overrides ---------------------
+#
+# The GPU runner precomputes the v1 poke geometry (OBB handle centre + true
+# circular tangent cross(joint_axis_3d, radius_3d)) and threads it through
+# scene.extra. When those keys are present the compiler MUST use them instead
+# of the target_link_pos + perp(axis_xy) heuristic. When absent (sim-free
+# callers, snapshots) the compiler keeps its original behaviour — that
+# back-compat is what every test above this point exercises.
+
+
+def _make_poke_scene_with_precomputed_geometry(
+    *, handle_xy=(0.05, 0.02), handle_z=0.10,
+    poke_handle_xy=(0.12, -0.03), poke_handle_z=0.17,
+    poke_tangent_xy=(1.0, 0.0), axis_xy=(0.0, 0.0),
+):
+    from babysteps.schemas import SceneState
+    return SceneState(
+        cube_xy=handle_xy, cube_z=handle_z, goal_xy=handle_xy,
+        tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+        blocked_sides=(),
+        extra={
+            "handle_xy": handle_xy,
+            "handle_z": handle_z,
+            "target_joint_axis_xy": axis_xy,
+            "poke_handle_xy": poke_handle_xy,
+            "poke_handle_z": poke_handle_z,
+            "poke_tangent_xy": poke_tangent_xy,
+        },
+    )
+
+
+def test_compile_poke_uses_precomputed_handle_and_tangent():
+    """With poke_* keys present the sweep is centred on poke_handle_xy at
+    poke_handle_z, swept along poke_tangent_xy — NOT target_link_pos /
+    perp(axis_xy). axis_xy=(0,0) would degenerate the heuristic to +y; the
+    precomputed tangent (+x here) must win."""
+    import numpy as np
+    from babysteps.skills.turn import (
+        _POKE_LATERAL_OFFSET_M, _POKE_SWEEP_DISTANCE_M, _POKE_HEIGHT_ABOVE_M,
+        compile_intent_to_turn_skill,
+    )
+    scene = _make_poke_scene_with_precomputed_geometry(
+        poke_handle_xy=(0.12, -0.03), poke_handle_z=0.17,
+        poke_tangent_xy=(1.0, 0.0), axis_xy=(0.0, 0.0),
+    )
+    skill = compile_intent_to_turn_skill(_make_poke_intent(), scene, sign=+1)
+    handle = np.array([0.12, -0.03])
+    tangent = np.array([1.0, 0.0])
+    # contact_z uses poke_handle_z, not handle_z.
+    assert skill.waypoints[1, 2] == pytest.approx(0.17 + _POKE_HEIGHT_ABOVE_M)
+    assert skill.waypoints[2, 2] == pytest.approx(0.17 + _POKE_HEIGHT_ABOVE_M)
+    # pre_xy = handle - tangent*offset ; post_xy = handle + tangent*sweep.
+    np.testing.assert_allclose(
+        skill.waypoints[1, 0:2], handle - tangent * _POKE_LATERAL_OFFSET_M, atol=1e-9)
+    np.testing.assert_allclose(
+        skill.waypoints[2, 0:2], handle + tangent * _POKE_SWEEP_DISTANCE_M, atol=1e-9)
+    # approach waypoint shares the pre xy.
+    np.testing.assert_allclose(skill.waypoints[0, 0:2], skill.waypoints[1, 0:2], atol=1e-9)
+
+
+def test_compile_poke_precomputed_tangent_not_renormalized():
+    """The precomputed tangent is used verbatim (matches v1, which projects a
+    3D-unit tangent to xy and does NOT re-normalise in 2D). A non-unit xy
+    tangent therefore scales the lateral offset / sweep distance."""
+    import numpy as np
+    from babysteps.skills.turn import (
+        _POKE_SWEEP_DISTANCE_M, compile_intent_to_turn_skill,
+    )
+    tangent = (0.6, 0.0)  # |xy| = 0.6 < 1, as for a tilted joint axis
+    scene = _make_poke_scene_with_precomputed_geometry(
+        poke_handle_xy=(0.0, 0.0), poke_tangent_xy=tangent,
+    )
+    skill = compile_intent_to_turn_skill(_make_poke_intent(), scene, sign=+1)
+    np.testing.assert_allclose(
+        skill.waypoints[2, 0:2],
+        np.array(tangent) * _POKE_SWEEP_DISTANCE_M, atol=1e-9)
+
+
+def test_compile_poke_precomputed_sign_negative_flips_sweep():
+    import numpy as np
+    from babysteps.skills.turn import compile_intent_to_turn_skill
+    scene = _make_poke_scene_with_precomputed_geometry(poke_handle_xy=(0.12, -0.03))
+    sp = compile_intent_to_turn_skill(_make_poke_intent(), scene, sign=+1)
+    sn = compile_intent_to_turn_skill(_make_poke_intent(), scene, sign=-1)
+    handle = np.array([0.12, -0.03])
+    np.testing.assert_allclose(
+        sp.waypoints[1, 0:2] - handle, -(sn.waypoints[1, 0:2] - handle), atol=1e-9)
+    np.testing.assert_allclose(
+        sp.waypoints[2, 0:2] - handle, -(sn.waypoints[2, 0:2] - handle), atol=1e-9)

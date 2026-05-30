@@ -195,28 +195,54 @@ def _compile_grasp_compat(intent: Intent, scene: SceneState) -> TurnSkill:
 def _compile_poke(intent: Intent, scene: SceneState, sign: int) -> TurnSkill:
     """Poke-mode TurnSkill (3 waypoints, closed-gripper throughout).
 
-    Closed-gripper lateral brute-force sweep. Per spec §7: the tangent
-    direction is a HEURISTIC SEED — the actual winning direction is
-    decided at runtime by TurnFaucetEnvRunner's auto-sign retry. The
-    cross-product-based tangent is correct geometrically, but partnet
-    faucets' qpos sign convention is inconsistent across models.
+    Closed-gripper lateral brute-force sweep.
+
+    Geometry source. When the GPU runner has precomputed the v1 poke
+    geometry (`turnfaucet_runner._compute_poke_geometry`) it threads it
+    through scene.extra as ``poke_handle_xy`` / ``poke_handle_z`` /
+    ``poke_tangent_xy`` and this compiler uses those verbatim:
+      - the handle is the OBB *centre* of the switch-link mesh, not the
+        link-frame origin (``target_link_pos``) — the origin is often
+        offset from the graspable handle, which starved the sweep of
+        contact (the diagnostic's ``no_contact`` band);
+      - the tangent is the true circular tangent cross(joint_axis_3d,
+        radius_3d) projected to xy. The fallback ``perp(axis_xy)`` below
+        is only correct for a purely-horizontal joint axis and degenerates
+        to a fixed +y for the common vertical-axis faucet — which sweeps
+        the handle along the wrong direction (the diagnostic's
+        ``contact_no_motion`` band). Auto-sign cannot fix this: it flips
+        the sign, it cannot rotate the direction.
+    The precomputed tangent is used verbatim (NOT re-normalised in xy) so
+    a tilted axis correctly shortens the lateral sweep, matching v1.
+
+    When the keys are absent (sim-free callers / snapshots) the compiler
+    falls back to the target_link_pos + perp(axis_xy) heuristic. Per spec
+    §7 the resulting direction is still only a SEED — the runtime auto-sign
+    retry picks the winning sign per seed.
     """
     if intent.contact_region != "handle_grip":
         raise ValueError(
             f"poke_turn requires contact_region='handle_grip', "
             f"got {intent.contact_region!r}"
         )
-    handle_xy = np.asarray(scene.extra["handle_xy"], dtype=np.float64)
+    handle_xy = np.asarray(
+        scene.extra.get("poke_handle_xy", scene.extra["handle_xy"]),
+        dtype=np.float64,
+    )
+    handle_z = float(scene.extra.get("poke_handle_z", scene.extra["handle_z"]))
     axis_xy = np.asarray(scene.extra["target_joint_axis_xy"], dtype=np.float64)
-    handle_z = float(scene.extra["handle_z"])
     tcp = np.asarray(scene.tcp_start_pose, dtype=np.float64)
     travel_z = float(tcp[2])
 
-    axis_norm = float(np.linalg.norm(axis_xy))
-    if axis_norm < 1e-3:
-        tangent = np.array([0.0, 1.0])
+    precomputed_tangent = scene.extra.get("poke_tangent_xy")
+    if precomputed_tangent is not None:
+        tangent = np.asarray(precomputed_tangent, dtype=np.float64)
     else:
-        tangent = np.array([-axis_xy[1], axis_xy[0]]) / axis_norm
+        axis_norm = float(np.linalg.norm(axis_xy))
+        if axis_norm < 1e-3:
+            tangent = np.array([0.0, 1.0])
+        else:
+            tangent = np.array([-axis_xy[1], axis_xy[0]]) / axis_norm
     sweep_dir = tangent * sign
 
     contact_z = handle_z + _POKE_HEIGHT_ABOVE_M

@@ -158,12 +158,19 @@ def render_episode(env, adapter, seed, fps):
     handle_xy = (float(handle_xyz[0]), float(handle_xyz[1]))
     handle_z = float(handle_xyz[2])
     axis_xy = (float(axis_xyz[0]), float(axis_xyz[1]))
+    # v1 poke geometry (OBB centre + true tangent), matching the production
+    # runner so the rendered retry uses the same sweep the data path does.
+    # Imported lazily: the helper touches physx/mani_skill at call time only,
+    # keeping render/turnfaucet.py import sim-free for test_render_modules.
+    from babysteps.envs.turnfaucet_runner import _poke_geometry_extra
+    extra = {"handle_xy": handle_xy, "handle_z": handle_z,
+             "target_joint_axis_xy": axis_xy}
+    extra.update(_poke_geometry_extra(env, obs))
     scene = SceneState(
         cube_xy=handle_xy, cube_z=handle_z, goal_xy=handle_xy,
         tcp_start_pose=tuple(float(v) for v in tcp),  # type: ignore[arg-type]
         blocked_sides=(),
-        extra={"handle_xy": handle_xy, "handle_z": handle_z,
-                "target_joint_axis_xy": axis_xy},
+        extra=extra,
     )
 
     demo_evidence = DemoEvidence(

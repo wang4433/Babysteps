@@ -64,6 +64,83 @@ def _read_needed_delta(env) -> float:
     return target_angle - _read_faucet_qpos(env)
 
 
+def _compute_poke_geometry(env, obs):
+    """Port of scripts/_diag_tf_poke5.py::compute_geometry — the empirically
+    validated v1 poke geometry. Returns (handle_xy, handle_z, tangent_xy) or
+    None when it cannot be computed (caller then keeps the target_link_pos +
+    perp(axis_xy) fallback).
+
+    Two things this recovers over the obs-only path:
+      - handle position = the OBB *centre* of the switch-link handle mesh
+        (target_link_pos is the link-frame origin, often offset from the
+        graspable handle).
+      - tangent = the true circular tangent cross(joint_axis_3d, radius_3d)
+        projected to xy, where radius = handle_centre - joint_anchor. This is
+        the direction the handle actually traces; perp(axis_xy) only matches
+        it for a purely-horizontal joint axis and degenerates for vertical
+        axes. The 3D-unit tangent is projected to xy WITHOUT 2D
+        re-normalisation, matching v1 (a tilted axis shortens the xy sweep).
+
+    GPU-side only: imports the mani_skill trimesh helper lazily and reads the
+    physx switch-link mesh, so this never executes in the sim-free package.
+    """
+    switch_link = getattr(getattr(env, "unwrapped", env), "target_switch_link", None)
+    # Only a real physx articulation link carries _objs + pose; the sim-free
+    # stub env in tests/ has neither. Gate here so the sim-free render test
+    # never imports mani_skill or touches the mesh path — it falls back to the
+    # perp(axis_xy) heuristic, exactly as before this port.
+    if (switch_link is None or not hasattr(switch_link, "_objs")
+            or not hasattr(switch_link, "pose")):
+        return None
+    from mani_skill.utils.geometry.trimesh_utils import get_component_mesh
+
+    comp = switch_link._objs[0]
+    mesh_local = get_component_mesh(comp, to_world_frame=False)
+    if mesh_local is None:
+        return None
+    obb_local = mesh_local.bounding_box_oriented
+    link_T_batched = switch_link.pose.to_transformation_matrix()
+    link_T = (
+        link_T_batched[0].cpu().numpy() if hasattr(link_T_batched, "cpu")
+        else np.asarray(link_T_batched)[0]
+    )
+    obb_T_world = link_T @ np.array(obb_local.primitive.transform)
+    handle_center = obb_T_world[:3, 3]
+
+    joint_anchor = _to_np(switch_link.joint.get_global_pose().p).astype(np.float64)
+    joint_axis = _to_np(obs["extra"]["target_joint_axis"]).astype(np.float64)
+    jn = float(np.linalg.norm(joint_axis))
+    if jn < 1e-6:
+        return None
+    joint_axis = joint_axis / jn
+    radius = handle_center - joint_anchor
+    tangent_3d = np.cross(joint_axis, radius)
+    tn = float(np.linalg.norm(tangent_3d))
+    if tn < 1e-4:
+        return None
+    tangent_3d = tangent_3d / tn
+
+    handle_xy = (float(handle_center[0]), float(handle_center[1]))
+    handle_z = float(handle_center[2])
+    tangent_xy = (float(tangent_3d[0]), float(tangent_3d[1]))
+    return handle_xy, handle_z, tangent_xy
+
+
+def _poke_geometry_extra(env, obs) -> dict:
+    """scene.extra patch with the v1 poke geometry keys, or empty when the
+    mesh/axis path is unavailable. Shared by the runner, the render module,
+    and the Phase-3 diagnostic so all three feed the compiler identically."""
+    geo = _compute_poke_geometry(env, obs)
+    if geo is None:
+        return {}
+    handle_xy, handle_z, tangent_xy = geo
+    return {
+        "poke_handle_xy": handle_xy,
+        "poke_handle_z": handle_z,
+        "poke_tangent_xy": tangent_xy,
+    }
+
+
 def _prop_action(tcp_xyzw, target_xyz, gripper_cmd):
     pos_err = target_xyz - tcp_xyzw[0:3]
     action = np.zeros(7, dtype=np.float32)
@@ -179,17 +256,21 @@ class TurnFaucetEnvRunner:
         handle_xy = (float(handle_xyz[0]), float(handle_xyz[1]))
         handle_z = float(handle_xyz[2])
         axis_xy = (float(axis_xyz[0]), float(axis_xyz[1]))
+        extra = {
+            "handle_xy": handle_xy,
+            "handle_z": handle_z,
+            "target_joint_axis_xy": axis_xy,
+        }
+        # v1 poke geometry (OBB handle centre + true circular tangent). Used by
+        # the poke compiler when present; grasp mode keeps the obs-only handle.
+        extra.update(_poke_geometry_extra(self._env, obs))
         return SceneState(
             cube_xy=handle_xy,
             cube_z=handle_z,
             goal_xy=handle_xy,
             tcp_start_pose=tuple(float(v) for v in tcp),  # type: ignore[arg-type]
             blocked_sides=(),
-            extra={
-                "handle_xy": handle_xy,
-                "handle_z": handle_z,
-                "target_joint_axis_xy": axis_xy,
-            },
+            extra=extra,
         )
 
     def run(self, intent: Intent, scene: SceneState, *,
