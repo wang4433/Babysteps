@@ -73,8 +73,10 @@ def test_block_offsets():
 
 
 def test_predicate_one_hot_layout():
-    """Predicates are in sorted order; 'none' is included."""
-    assert af.PREDICATE_ORDER == tuple(sorted(FAILURE_PREDICATES))
+    """Predicates are in sorted order (pinned via FEATURE_FROZEN_EXCLUDE so the
+    feature vocab stays frozen as the schema grows); 'none' is included."""
+    assert af.PREDICATE_ORDER == tuple(
+        sorted(FAILURE_PREDICATES - af.FEATURE_FROZEN_EXCLUDE))
     assert "none" in af.PREDICATE_ORDER
 
 
@@ -82,14 +84,17 @@ def test_intent_one_hot_layout():
     """Intent factors appear in INTENT_FIELDS order."""
     sizes = [len(af.FACTOR_TOKEN_ORDER[f]) for f in INTENT_FIELDS]
     assert sum(sizes) == 30
-    # Per-factor sizes match the schema whitelists.
+    # Per-factor sizes match the schema whitelists, minus any tokens pinned out
+    # of the frozen feature vocab (FEATURE_FROZEN_EXCLUDE — keeps FEATURE_DIM
+    # stable as the schema grows).
+    excl = af.FEATURE_FROZEN_EXCLUDE
     expected = {
-        "goal_state": len(GOAL_STATES),
-        "object_motion": len(OBJECT_MOTIONS),
-        "contact_region": len(CONTACT_REGIONS),
-        "approach_direction": len(APPROACH_DIRECTIONS),
-        "constraint_region": len(CONSTRAINT_REGIONS),
-        "embodiment_mapping": len(EMBODIMENT_MAPPINGS),
+        "goal_state": len(GOAL_STATES - excl),
+        "object_motion": len(OBJECT_MOTIONS - excl),
+        "contact_region": len(CONTACT_REGIONS - excl),
+        "approach_direction": len(APPROACH_DIRECTIONS - excl),
+        "constraint_region": len(CONSTRAINT_REGIONS - excl),
+        "embodiment_mapping": len(EMBODIMENT_MAPPINGS - excl),
     }
     for f in INTENT_FIELDS:
         assert len(af.FACTOR_TOKEN_ORDER[f]) == expected[f]

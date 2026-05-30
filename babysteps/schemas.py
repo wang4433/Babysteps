@@ -45,8 +45,12 @@ EMBODIMENT_MAPPINGS: frozenset[str] = frozenset({
     "proxy_contact_to_franka_grasp",   # B: PickCube — parallel-jaw grasp
     "proxy_contact_to_franka_pick_and_place",  # C: StackCube — pick + place sequence
     "proxy_contact_to_franka_turn",    # D: deprecated, kept in whitelist
-    "proxy_contact_to_franka_grasp_turn",      # D: NEW — initial intent
-    "proxy_contact_to_franka_poke_turn",       # D: NEW — revised intent
+    "proxy_contact_to_franka_grasp_turn",      # D: initial intent (continuous grasp-turn)
+    "proxy_contact_to_franka_poke_turn",       # D: revised intent (poke; legacy P2/M3 target)
+    "proxy_contact_to_franka_regrasp_turn",    # D: revised intent — re-grasp ratchet (a
+                                               # continuous grasp-turn exceeds the Franka wrist
+                                               # range → release/rewind/regrip/spin). Kept out of
+                                               # the Stage-4 feature vocab (FEATURE_FROZEN_EXCLUDE).
 })
 GOAL_STATES: frozenset[str] = frozenset({
     "cube_at_target",
@@ -74,7 +78,10 @@ FAILURE_PREDICATES: frozenset[str] = frozenset({
     "goal_not_satisfied",
     "grasp_slip",                      # B: PickCube — grip lost during lift
     "constraint_violation",            # D: deprecated, kept in whitelist
-    "grasp_infeasible",                # D: NEW — handle too thick to close jaw
+    "grasp_infeasible",                # D: legacy — handle too thick to close jaw
+    "continuous_rotation_infeasible",  # D: grasp OK, but a continuous grasp-turn exceeds the
+                                       # Franka wrist (joint-7) range. Kept out of the Stage-4
+                                       # feature vocab (FEATURE_FROZEN_EXCLUDE).
 })
 REVISION_OPERATORS: frozenset[str] = frozenset({
     "approach_substitution",

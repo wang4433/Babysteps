@@ -28,13 +28,16 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from babysteps.schemas import FAILURE_PREDICATES, INTENT_FIELDS
+from babysteps.stage4.attribution_features import FEATURE_FROZEN_EXCLUDE
 
 _FACTOR_INDEX: dict[str, int] = {f: i for i, f in enumerate(INTENT_FIELDS)}
-_PREDICATE_ORDER: tuple[str, ...] = tuple(sorted(FAILURE_PREDICATES))
+# Pinned via FEATURE_FROZEN_EXCLUDE so schema growth (e.g. the D re-grasp
+# predicate) does not shift this vector or invalidate trained ReviseHead packs.
+_PREDICATE_ORDER: tuple[str, ...] = tuple(sorted(FAILURE_PREDICATES - FEATURE_FROZEN_EXCLUDE))
 _PREDICATE_INDEX: dict[str, int] = {p: i for i, p in enumerate(_PREDICATE_ORDER)}
 
 # Total failure-packet vector dim: F (=6) factor one-hot + |FP| (=9) predicate one-hot
-FP_VECTOR_DIM: int = len(INTENT_FIELDS) + len(FAILURE_PREDICATES)
+FP_VECTOR_DIM: int = len(INTENT_FIELDS) + len(_PREDICATE_ORDER)
 
 
 def vectorize_failure_packet(record: dict) -> np.ndarray:
@@ -52,7 +55,9 @@ def vectorize_failure_packet(record: dict) -> np.ndarray:
     factor = record["revision"]["factor"]
     predicate = record["failure_packet"]["failure_predicate"]
     v[_FACTOR_INDEX[factor]] = 1.0
-    v[len(INTENT_FIELDS) + _PREDICATE_INDEX[predicate]] = 1.0
+    if predicate in _PREDICATE_INDEX:
+        v[len(INTENT_FIELDS) + _PREDICATE_INDEX[predicate]] = 1.0
+    # else: predicate added after the vocab was frozen → zero predicate block
     return v
 
 

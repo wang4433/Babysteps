@@ -15,14 +15,15 @@ torch = pytest.importorskip("torch")
 # ---------- vectorize_failure_packet ------------------------------------- #
 
 def test_vectorize_failure_packet_one_hot_shape():
-    from babysteps.stage4.revise_head import vectorize_failure_packet
-    from babysteps.schemas import INTENT_FIELDS, FAILURE_PREDICATES
+    from babysteps.stage4.revise_head import vectorize_failure_packet, FP_VECTOR_DIM
     fake = {
         "revision": {"factor": "approach_direction"},
         "failure_packet": {"failure_predicate": "approach_blocked"},
     }
     v = vectorize_failure_packet(fake)
-    assert v.shape == (len(INTENT_FIELDS) + len(FAILURE_PREDICATES),)
+    # FP_VECTOR_DIM is pinned via FEATURE_FROZEN_EXCLUDE (predicate vocab frozen
+    # so schema growth doesn't shift the vector / invalidate trained packs).
+    assert v.shape == (FP_VECTOR_DIM,)
     assert v.dtype == np.float32
     assert v.sum() == pytest.approx(2.0)  # two one-hots
 

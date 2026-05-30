@@ -39,20 +39,32 @@ from babysteps.schemas import (
 
 # ---- Layout ---------------------------------------------------------- #
 
+# Schema tokens added AFTER the Stage-4 feature layout was frozen (2026-05-30,
+# Sub-project D re-grasp). They are valid Intent/predicate values but are kept
+# OUT of the learned-attribution feature vocab so FEATURE_DIM, block offsets,
+# and the trained model packs stay stable as the schema grows. The encoder maps
+# such tokens to an all-zero one-hot (see vectorize_attribution_input); the
+# rule-table and VLM attribution paths handle them instead.
+FEATURE_FROZEN_EXCLUDE: frozenset[str] = frozenset({
+    "proxy_contact_to_franka_regrasp_turn",
+    "continuous_rotation_infeasible",
+})
+
 # Predicate one-hot, sorted; "none" included so the encoder is
 # well-defined on success records too (the runtime caller guards
-# against running on success records upstream).
-_PREDICATE_ORDER: tuple[str, ...] = tuple(sorted(FAILURE_PREDICATES))
+# against running on success records upstream). Pinned via FEATURE_FROZEN_EXCLUDE.
+_PREDICATE_ORDER: tuple[str, ...] = tuple(sorted(FAILURE_PREDICATES - FEATURE_FROZEN_EXCLUDE))
 
 # Per-factor token orders. Tuple-of-sorted gives a stable layout across
-# Python versions (frozenset iteration order is not guaranteed).
+# Python versions (frozenset iteration order is not guaranteed); the
+# FEATURE_FROZEN_EXCLUDE subtraction keeps the layout pinned across schema growth.
 _FACTOR_TOKEN_ORDER: dict[str, tuple[str, ...]] = {
     "goal_state":         tuple(sorted(GOAL_STATES)),
     "object_motion":      tuple(sorted(OBJECT_MOTIONS)),
     "contact_region":     tuple(sorted(CONTACT_REGIONS)),
     "approach_direction": tuple(sorted(APPROACH_DIRECTIONS)),
     "constraint_region":  tuple(sorted(CONSTRAINT_REGIONS)),
-    "embodiment_mapping": tuple(sorted(EMBODIMENT_MAPPINGS)),
+    "embodiment_mapping": tuple(sorted(EMBODIMENT_MAPPINGS - FEATURE_FROZEN_EXCLUDE)),
 }
 
 # Execution-trace bool keys; same order the rule-based detector emits them.
@@ -120,9 +132,12 @@ def vectorize_attribution_input(
     out = np.zeros(FEATURE_DIM, dtype=np.float64)
 
     pred = _get(fp_fields, "failure_predicate")
-    if pred is None or pred not in _PREDICATE_ORDER:
+    if pred in _PREDICATE_ORDER:
+        out[PRED_OH_START + _PREDICATE_ORDER.index(pred)] = 1.0
+    elif pred in FAILURE_PREDICATES:
+        pass  # valid predicate added after the feature vocab was frozen → zero
+    else:
         raise ValueError(f"unknown failure_predicate {pred!r}")
-    out[PRED_OH_START + _PREDICATE_ORDER.index(pred)] = 1.0
 
     trace = _get(fp_fields, "execution_trace")
     for i, key in enumerate(_TRACE_KEYS):
@@ -148,10 +163,13 @@ def vectorize_attribution_input(
     for factor in INTENT_FIELDS:
         toks = _FACTOR_TOKEN_ORDER[factor]
         val = _get(intent, factor)
-        if val not in toks:
+        if val in toks:
+            out[cursor + toks.index(val)] = 1.0
+        elif factor == "embodiment_mapping" and val in EMBODIMENT_MAPPINGS:
+            pass  # token added after the feature vocab was frozen → zero one-hot
+        else:
             raise ValueError(
                 f"intent factor {factor!r} value {val!r} not in whitelist")
-        out[cursor + toks.index(val)] = 1.0
         cursor += len(toks)
 
     return out
