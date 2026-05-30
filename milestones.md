@@ -52,38 +52,22 @@ Deliverable:
 - MP4 examples for each task.
 - One summary report per task.
 
-## Milestone 3: Implement Baselines
+## Milestone 3: Implement Baselines — DONE (2026-05-26)
 
-This is probably the most important next step.
+All seven procedural baselines evaluated on 50 held-out seeds (100-149)
+across PushCube, PickCube, StackCube. Job 10826466.
 
-Baselines I would prioritize:
+| policy                    | PushCube | PickCube | StackCube |
+| ------------------------- | -------- | -------- | --------- |
+| `one_shot`                | 0.000    | 0.000    | 0.000     |
+| `same_intent_retry`       | 0.000    | 0.000    | 0.000     |
+| `random_factor_revision`  | 0.540    | 0.920    | 0.420     |
+| **`babysteps_selective`** | **0.980** | **0.920** | **0.700** |
+| `text_feedback_replan`    | 0.000    | 0.920    | 0.700     |
+| `full_replan_analogue`    | 0.000    | 0.920    | 0.820     |
+| `oracle_factor_revision`  | 0.980    | 0.920    | 0.820     |
 
-1. **One-shot**  
-   Execute initial inferred intent once.
-
-2. **Same-intent retry**  
-   Retry the same intent/action after failure.
-
-3. **Random retry**  
-   Change low-level parameters randomly, no diagnosis.
-
-4. **Random factor revision**  
-   Randomly choose an intent factor to revise.
-
-5. **Full intent replanning**  
-   Given demo + failure, regenerate the full intent JSON. All fields may change.
-
-6. **Text-feedback replanning**  
-   Inner-Monologue-style: convert failure packet into text and ask for a new plan.
-
-7. **BABYSTEPS no freezing**  
-   Uses failure signal but allows non-implicated factors to change.
-
-8. **BABYSTEPS selective**  
-   Ours: revise only implicated factor.
-
-9. **Oracle factor revision**  
-   Upper bound.
+Full data: `reports/stage5/m3_baselines/main_table.{md,json}`.
 
 For Diffusion Policy / VLA baselines, I’d include them as either:
 - real baselines if we can run them fairly, or

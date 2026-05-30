@@ -1,0 +1,29 @@
+{
+  "PickCube-v1": {
+    "babysteps_selective": 0.92,
+    "full_replan_analogue": 0.92,
+    "one_shot": 0.0,
+    "oracle_factor_revision": 0.92,
+    "random_factor_revision": 0.92,
+    "same_intent_retry": 0.0,
+    "text_feedback_replan": 0.92
+  },
+  "PushCube-v1": {
+    "babysteps_selective": 0.98,
+    "full_replan_analogue": 0.0,
+    "one_shot": 0.0,
+    "oracle_factor_revision": 0.98,
+    "random_factor_revision": 0.54,
+    "same_intent_retry": 0.0,
+    "text_feedback_replan": 0.0
+  },
+  "StackCube-v1": {
+    "babysteps_selective": 0.7,
+    "full_replan_analogue": 0.82,
+    "one_shot": 0.0,
+    "oracle_factor_revision": 0.82,
+    "random_factor_revision": 0.42,
+    "same_intent_retry": 0.0,
+    "text_feedback_replan": 0.7
+  }
+}
