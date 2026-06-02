@@ -28,8 +28,9 @@ The active development track is **Stage 5** (`goal.md` §"Stage 5"):
 
 1. **P1 — Vision encoder swap** (critical): frozen DINOv2/R3M on demo
    frames → IntentHead → vision-grounded slot intents.
-2. **P2 — VLM attribution**: GPT-4o/Gemini for failure diagnosis
-   (constrained to one factor name, never free-form replanning).
+2. **P2 — VLM attribution**: a VLM (InternVL3.5-8B; the step is
+   VLM-agnostic) for failure diagnosis (constrained to one factor name,
+   never free-form replanning).
 3. **P3 — World model counterfactual**: learned dynamics for G3
    selectivity certification.
 4. **P4 — Learned action decoder** (optional): replace skill compiler.
@@ -47,7 +48,8 @@ supervision and certification scaffold for Stage 5.
 
 ## Stage-0 intent schema (object-centric)
 
-Every task uses the same six factors — no task-specific fields:
+Every task uses the same six core factors (plus an additive seventh,
+`direction_grounding`, added for Sub-project E) — no task-specific fields:
 
 | Factor | Meaning |
 | --- | --- |

@@ -122,8 +122,8 @@ Deliverable:
 
 ### M5b: VLM Attribution Baseline (P2)
 
-**Goal:** Run GPT-4o / Gemini on failure packets, measure attribution
-accuracy. Compare VLM-diag + slot-edit vs. VLM free-form replan.
+**Goal:** Run a VLM (InternVL3.5-8B) on failure packets, measure
+attribution accuracy. Compare VLM-diag + slot-edit vs. VLM free-form replan.
 
 Deliverable:
 - VLM attribution accuracy on 50+ episodes per task.

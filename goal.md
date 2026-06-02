@@ -85,9 +85,9 @@ Use a compact object-centric intent representation for data preparation:
 ```json
 {
   "goal_state": "cube_at_target",
-  "object_motion": "translate_right",
-  "contact_region": "left_face",
-  "approach_direction": "from_left",
+  "object_motion": "translate_+x",
+  "contact_region": "minus_x_face",
+  "approach_direction": "from_minus_x",
   "constraint_region": "none",
   "embodiment_mapping": "proxy_contact_to_franka_push"
 }
@@ -148,9 +148,9 @@ The intent extraction target is structured data, not free-form text:
 ```json
 {
   "goal_state": "cube_at_target",
-  "object_motion": "translate_right",
-  "contact_region": "left_face",
-  "approach_direction": "from_left",
+  "object_motion": "translate_+x",
+  "contact_region": "minus_x_face",
+  "approach_direction": "from_minus_x",
   "constraint_region": "none",
   "embodiment_mapping": "proxy_contact_to_franka_push"
 }
@@ -208,9 +208,9 @@ Every failed attempt should produce a structured packet:
 {
   "chosen_intent": {
     "goal_state": "cube_at_target",
-    "object_motion": "translate_right",
-    "contact_region": "left_face",
-    "approach_direction": "from_left",
+    "object_motion": "translate_+x",
+    "contact_region": "minus_x_face",
+    "approach_direction": "from_minus_x",
     "constraint_region": "none",
     "embodiment_mapping": "proxy_contact_to_franka_push"
   },
@@ -245,8 +245,8 @@ Example:
 ```json
 {
   "operator": "approach_substitution",
-  "old_value": "from_left",
-  "new_value": "from_right",
+  "old_value": "from_minus_x",
+  "new_value": "from_plus_x",
   "frozen_factors": ["goal_state", "object_motion", "constraint_region"]
 }
 ```
@@ -325,7 +325,7 @@ Each Stage 0 episode should be serializable as JSON:
     "camera": "third_person",
     "rgbd_video": "data/demos/pushcube_blocked_approach_seed_0001/demo_rgbd.mp4",
     "object_trajectory": "data/demos/pushcube_blocked_approach_seed_0001/object_trajectory.json",
-    "contact_region_label": "left_face",
+    "contact_region_label": "minus_x_face",
     "final_state": "cube_at_target",
     "demonstrator_type": "proxy_oracle"
   },
@@ -334,9 +334,9 @@ Each Stage 0 episode should be serializable as JSON:
     "robot": "Franka",
     "initial_intent": {
       "goal_state": "cube_at_target",
-      "object_motion": "translate_right",
-      "contact_region": "left_face",
-      "approach_direction": "from_left",
+      "object_motion": "translate_+x",
+      "contact_region": "minus_x_face",
+      "approach_direction": "from_minus_x",
       "constraint_region": "none",
       "embodiment_mapping": "proxy_contact_to_franka_push"
     },
@@ -349,8 +349,8 @@ Each Stage 0 episode should be serializable as JSON:
   },
   "revision": {
     "operator": "approach_substitution",
-    "old_value": "from_left",
-    "new_value": "from_right",
+    "old_value": "from_minus_x",
+    "new_value": "from_plus_x",
     "frozen_factors": ["goal_state", "object_motion", "constraint_region", "embodiment_mapping"]
   },
   "retry": {
@@ -574,6 +574,25 @@ nothing that the discrete schema alone does not provide. An ICLR
 "latent intent" claim requires that the representation is grounded in
 raw observations, not hand-engineered inputs.
 
+### Framing: latent intent vs. the swappable diagnoser
+
+The load-bearing claim is **latent**: the vision-grounded slot intents
+$G$ *are* the latent intent, and the learned **ReviseHead editing one
+slot in that latent space** is the contribution. The attribution step
+("which slot failed?") is a **separate, swappable module** — rule-table →
+learned attribution head → VLM — that returns *a factor name, not a
+value*; it selects which slot the ReviseHead edits and never produces
+$\tilde{g}^i$. The VLM is therefore a plug-in diagnoser, not part of the
+latent edit, and cannot dilute the latent claim.
+
+**Honesty boundary:** the latent path is demonstrated **end-to-end only
+on PushCube** today (P1 G1 ≥ 90% there); the 5-task P2 table runs on the
+discrete Stage-0 schema + failure frames, not on latent $G$. Claim
+"latent" for the *representation and slot-local revision interface*
+(end-to-end on PushCube), with the symbolic schema as the
+supervision/certification scaffold — do not over-claim a 5-task latent
+result.
+
 ### Architecture (target)
 
 ```text
@@ -627,21 +646,25 @@ not memorized one-hot labels passed through a bottleneck.
 
 ### Priority 2 — VLM Attribution (diagnosis, not replanning)
 
-> **Status (2026-05-25):** P2 done on PushCube/PickCube/StackCube with
-> **InternVL3.5-8B** (BF16, A100-40GB), 50 held-out failure episodes
-> per task. C1 (constrained-diagnosis + slot-local revision) **matches
-> or beats** C2 (free-form replan) on final success everywhere (PushCube
-> tie 98%; PickCube **+90pp**; StackCube tie 0%) and on intent
-> preservation everywhere (StackCube **+62pp**). C1 attribution accuracy
-> matches the rule-table only on PushCube (visually-obvious blocked
-> approach); it underperforms on PickCube grasp_slip (96% vs 100%) and
-> fails on StackCube goal_not_satisfied (0% vs 86% — the VLM picks
-> `object_motion` 43/50, mistaking "cube did not end at goal" for a
-> motion error). The goal_state failure mode is the remaining open
-> problem for VLM attribution. See `reports/stage5/p2_vlm_attribution/`
-> and `slurm/CLAUDE.md` §"Stage-5 P2".
+> **Status (2026-06-01):** P2 **done on all five tasks** (PushCube,
+> PickCube, StackCube, TurnFaucet, CrossViewPush) with **InternVL3.5-8B**
+> (BF16, A100-40GB), 50 held-out failure episodes per task (seeds 100-149).
+> C1 (constrained-diagnosis + slot-local revision) **passes all three gates
+> on all five tasks** (attribution ≥ rule-table · preservation ≥ C2 ·
+> success within 5pp of C2). C1 attribution: PushCube 1.00, PickCube 1.00,
+> StackCube 0.86 (= rule-table), TurnFaucet 1.00 (vs rule 0.50),
+> CrossViewPush 1.00 (vs rule 0.00). C1 ≥ C2 on success and preservation
+> everywhere — strictly better on PickCube success (**+92pp**; C2 returns
+> the unchanged intent verbatim) and StackCube preservation (**+50pp**).
+> Task-aware prompts lifted StackCube attribution from 0/50 → 43/50; the 7
+> residual misses all land on `object_motion` (visually-ambiguous off-goal
+> cubes) — the remaining open problem for VLM goal_state attribution.
+> (TurnFaucet success stays low — an unreliable poke-turn skill primitive,
+> an execution issue, not an attribution one.) See
+> `reports/stage5/p2_vlm_attribution/` and `slurm/CLAUDE.md` §"Stage-5 P2".
 
-Use a VLM (GPT-4o / Gemini) for the failure attribution step.
+Use a VLM (we use **InternVL3.5-8B**; the step is VLM-agnostic — GPT-4o /
+Gemini are drop-in alternatives) for the failure attribution step.
 The VLM outputs **one factor name** from the fixed set — it never
 freely regenerates the entire intent.
 

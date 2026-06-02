@@ -305,6 +305,6 @@ an appendix. Increase seeds to **50 per task** with error bars.
 ### Priority order
 
 1. P1 — Vision encoder swap (DINOv2 on demo frames). Gate: G1 ≥ 90%.
-2. P2 — VLM attribution baseline (GPT-4o / Gemini). Gate: attr acc ≥ rule.
+2. P2 — VLM attribution baseline (InternVL3.5-8B). Gate: attr acc ≥ rule.
 3. P3 — World model counterfactual. Gate: G3 passes.
 4. P4 — Learned action decoder. Optional / deferrable.
