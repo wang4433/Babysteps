@@ -184,6 +184,83 @@ Headlines for the two new tasks:
 
 This completes the 5-task main table.
 
+### Stage-5 P2 — PushCube wrist multi-image A/B (job 10937552, 2026-06-01)
+
+InternVL3.5-8B (BF16) on A100-40GB. PushCube only, 50 held-out failures
+(seeds 100-149). New capability: `PushCubeEnvRunner(capture_wrist_rgb=True)`
+mounts the `panda_wristcam` `hand_camera` (512×512) as an execution
+observation; `stage5_p2_render_failure_frames.py` saves a terminal wrist PNG
+(`wrist_frame_path` in `episodes.jsonl`) and `stage5_p2_vlm_eval.py` feeds the
+VLM **third-person + wrist** via `_chat_multi`. `--no-wrist` re-runs the same
+frames single-image for the A/B. Out-dirs: `datasets/stage5/p2_vlm_wrist/`,
+`reports/stage5/p2_vlm_wrist{,_nowrist}/`. Both runs pass all gates.
+
+| condition       | C1 attr | C1 pres | C1 succ | C2 pres | C2 fixOracle | C2 succ |
+| --------------- | ------- | ------- | ------- | ------- | ------------ | ------- |
+| multi (wrist+TP)| 1.000   | 1.000   | 0.980   | 1.000   | 1.000        | 0.980   |
+| single (--no-wrist)| 1.000 | 1.000   | 0.980   | 1.000   | 0.920        | 0.880   |
+
+Headline: **C1 (ours) is byte-for-byte identical across both runs** (per-seed
+diff = 0 seeds). The wrist channel carries no extra signal for PushCube C1 —
+expected, since the failure (`approach_blocked`) is *symbolic* (obstacle never
+spawned; all 50 episodes are planner_failed, so the wrist frame is the
+post-reset scene and 0 rollout `.npz` are written). The only movement is the
+C2 free-form baseline: the wrist view *rescued* it on 4-5 seeds
+(102/112/113/129/143) where single-image C2 emitted an unchanged intent →
+fixed-oracle 0.92→1.00, succ 0.88→0.98. So multi-image **narrows** the C1−C2
+success gap (+10.0pp single → +0.0pp multi); for PushCube the wrist view is
+neutral-to-counterproductive for the paper framing. The interesting test
+(physically-visible failures) is PickCube/StackCube — not wired for the wrist
+view yet.
+
+Caveat: single-image C2 here (0.88) ≠ the historical 0.96 (job 10842893)
+because this run's third-person frames are rendered with the `panda_wristcam`
+arm (cosmetically different); greedy decoding is deterministic but
+input-sensitive, so a few C2 free-form outputs shifted. C1 is robust (1.000 /
+0.98 regardless). The change is opt-in (`capture_wrist_rgb` default False) so
+the data-collection path and the other four tasks are unaffected.
+
+### Stage-5 P2 — PickCube + StackCube wrist multi-image A/B (job 10937613, 2026-06-01)
+
+Extends the wrist multi-image probe to the two cube tasks that actually STEP
+the env (smoke job 10937594 confirmed `panda_wristcam` constructs + grasps for
+Pick/Stack; ~2.6 GB Pick + ~0.8 GB Stack per-step `wrist_rgb` .npz). Same
+held-out cut (seeds 100-149, 50/task). C1 = ours; both conditions run with and
+without the wrist frame (`--no-wrist`) on identical frames. All gates pass in
+every cell.
+
+| task      | condition  | C1 attr | C1 pres | C1 succ | C2 succ | C2 parse_fail |
+| --------- | ---------- | ------- | ------- | ------- | ------- | ------------- |
+| PickCube  | multi      | 1.000   | 1.000   | 0.920   | 0.000   | 0.000         |
+| PickCube  | --no-wrist | 1.000   | 1.000   | 0.920   | 0.000   | 0.000         |
+| StackCube | multi      | **0.880** | 1.000 | 0.720   | 0.340   | 0.620         |
+| StackCube | --no-wrist | 0.860   | 1.000   | 0.700   | 0.220   | 0.760         |
+
+Headline: **StackCube is the first task where the egocentric view moves *ours*
+(C1) in the right direction.** Exactly one seed flips — seed 133: with the
+wrist frame C1 picks `goal_state` (= oracle, correct); without it C1 picks
+`object_motion` (wrong, the canonical StackCube failure mode). That nudges C1
+attribution 0.860 → 0.880, so multi-image C1 now **strictly beats** the
+rule-table (0.86) on StackCube, whereas no-wrist only ties it. C1 success
+0.70 → 0.72. The wrist view also helps the C2 baseline (parse_fail 0.76→0.62,
+succ 0.22→0.34), but C2 is the baseline and stays far below C1.
+
+**PickCube: wrist inert** — C1 is byte-for-byte identical (0 seeds differ),
+attr 1.000 / succ 0.920 either way (C1 already at ceiling; grasp_slip is
+diagnosed from the third-person frame + predicate alone). C2 succ 0.000 both.
+
+Consistency check: the `--no-wrist` StackCube run reproduces the historical
+single-image numbers (job 10842893) *exactly* (attr 0.86 / succ 0.70 / C2 succ
+0.22 / C2 pres 0.50) even though frames are now rendered with the
+panda_wristcam arm — so the StackCube third-person view is robust to the
+cosmetic robot change (unlike PushCube, where C2 shifted 0.96→0.88). PickCube
+also matches history (1.000 / 0.920 / C2 0.000).
+
+Net across all three cube tasks: the wrist channel is inert where C1 is at
+ceiling (PushCube, PickCube) and gives a small real attribution gain where the
+failure is relationally visible (StackCube, +1 episode). Out-dirs:
+`{datasets,reports}/stage5/p2_vlm_wrist{,_nowrist}/{PickCube,StackCube}-v1`.
+
 ### Stage-5 M3 — Procedural baselines main table (job 10826466, 2026-05-26)
 
 A100-40GB, 50 held-out seeds (100-149), three tasks, all seven procedural

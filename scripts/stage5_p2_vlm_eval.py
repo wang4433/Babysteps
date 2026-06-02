@@ -175,6 +175,10 @@ def main(argv: list[str] | None = None) -> int:
                    help="Subset for debugging.")
     p.add_argument("--conditions", default="c1,c2",
                    help="Comma list: c1,c2 or just one.")
+    p.add_argument("--no-wrist", action="store_true",
+                   help="Ignore wrist_frame_path even when present (single "
+                        "third-person image, the original P2 setup). Use to "
+                        "A/B single- vs multi-image on identical frames.")
     args = p.parse_args(argv)
 
     episodes = _read_episodes(args.episodes)
@@ -218,6 +222,11 @@ def main(argv: list[str] | None = None) -> int:
             blocked_sides=adapter.default_blocked_factory(initial),
         )
 
+        # First-person wrist frame (PushCube only; None elsewhere or when
+        # --no-wrist). When present, both conditions diagnose from the
+        # third-person + wrist pair via the multi-image VLM path.
+        wrist_path = None if args.no_wrist else ep.get("wrist_frame_path")
+
         # ---------- C1: VLM constrained → discrete revision ---------- #
         if "c1" in conditions:
             vlm_factor = vlm.diagnose_constrained(
@@ -225,6 +234,7 @@ def main(argv: list[str] | None = None) -> int:
                 image_path=ep["frame_path"],
                 initial_intent=initial,
                 failure_predicate=ep["failure_predicate"],
+                wrist_image_path=wrist_path,
             )
             revised: Optional[Intent] = None
             retry_success: Optional[bool] = None
@@ -261,6 +271,7 @@ def main(argv: list[str] | None = None) -> int:
                 image_path=ep["frame_path"],
                 initial_intent=initial,
                 failure_predicate=ep["failure_predicate"],
+                wrist_image_path=wrist_path,
             )
             retry_success2: Optional[bool] = None
             if revised2 is not None:

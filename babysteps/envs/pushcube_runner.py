@@ -68,10 +68,16 @@ class PushCubeEnvRunner:
     seed before executing the compiled push.
     """
 
-    def __init__(self, render_mode: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        render_mode: Optional[str] = None,
+        *,
+        capture_wrist_rgb: bool = False,
+    ) -> None:
         import gymnasium as gym
         import mani_skill.envs  # noqa: F401 — registers PushCube-v1
 
+        self._capture_wrist_rgb = bool(capture_wrist_rgb)
         kwargs: dict = dict(
             obs_mode="state_dict",
             control_mode="pd_ee_delta_pose",
@@ -82,6 +88,18 @@ class PushCubeEnvRunner:
             # render camera. Default None preserves the data-collection
             # path byte-for-byte (matches all previously-collected runs).
             kwargs["render_mode"] = render_mode
+        if capture_wrist_rgb:
+            # First-person execution view: mount the panda_wristcam
+            # `hand_camera` sensor so render_wrist_frame() can read it.
+            # Kwargs copied from render_stage5_p1_iconic.py:149-157 (the
+            # canonical wrist recipe); obs_mode stays "state_dict" — the
+            # sensor is orthogonal to the obs dict, so the control loop and
+            # the demo->intent firewall are unaffected. EXECUTION-side only:
+            # these pixels are written to the rollout .npz, never fed to the
+            # demo->intent encoder. Default False preserves the
+            # data-collection path (plain `panda`) byte-for-byte.
+            kwargs["robot_uids"] = "panda_wristcam"
+            kwargs["sensor_configs"] = dict(width=512, height=512)
         self._env = gym.make("PushCube-v1", **kwargs)
         self._last_seed: Optional[int] = None
         self._pending_motion: Optional[str] = None
@@ -192,6 +210,17 @@ class PushCubeEnvRunner:
         reached_contact = False
         success = False
 
+        # First-person wrist-cam recording of the execution. Opt-in via
+        # capture_wrist_rgb at construction; only materialized when we have a
+        # .npz sink (the VLM/terminal-frame path reads the sensor directly, so
+        # gating on the path avoids building a 300-frame list nobody saves).
+        # render_wrist_frame imported lazily so common.py stays sim-free.
+        capture_wrist = self._capture_wrist_rgb and rollout_log_path is not None
+        wrist_frames: list[np.ndarray] = []
+        if capture_wrist:
+            from babysteps.render.common import render_wrist_frame
+            wrist_frames.append(render_wrist_frame(self._env))  # t0
+
         for _step in range(_MAX_CONTROL_STEPS):
             tcp, cube_xy, _, _ = _read_obs(obs)
             trajectory.append((float(cube_xy[0]), float(cube_xy[1])))
@@ -212,6 +241,8 @@ class PushCubeEnvRunner:
             trunc = bool(_to_np(truncated).item()) if hasattr(truncated, "cpu") else bool(truncated)
             succ_field = info.get("success", False) if hasattr(info, "get") else False
             success = bool(_to_np(succ_field).item()) if hasattr(succ_field, "cpu") else bool(succ_field)
+            if capture_wrist:
+                wrist_frames.append(render_wrist_frame(self._env))
             if success or term or trunc:
                 break
 
@@ -225,13 +256,19 @@ class PushCubeEnvRunner:
 
         if rollout_log_path is not None:
             rollout_log_path.parent.mkdir(parents=True, exist_ok=True)
-            np.savez(
-                rollout_log_path,
+            save_kwargs: dict = dict(
                 trajectory_xy=np.asarray(trajectory, dtype=np.float64),
                 initial_obj_xy=np.asarray(initial_obj_xy, dtype=np.float64),
                 final_obj_xy=np.asarray(final_obj_xy, dtype=np.float64),
                 goal_xy=np.asarray(scene.goal_xy, dtype=np.float64),
             )
+            if wrist_frames:
+                # (T, H, W, 3) uint8 first-person execution recording.
+                # Additive key — readers that don't request it are unaffected
+                # (np.load is key-addressed). Only present when capture_wrist
+                # was on AND a .npz sink was given.
+                save_kwargs["wrist_rgb"] = np.stack(wrist_frames).astype(np.uint8)
+            np.savez(rollout_log_path, **save_kwargs)
 
         return AttemptResult(
             initial_obj_xy=initial_obj_xy,

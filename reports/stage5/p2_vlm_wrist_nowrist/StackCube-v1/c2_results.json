@@ -1,0 +1,598 @@
+{
+  "n_episodes": 50,
+  "per_episode": [
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 100,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [
+        "goal_state",
+        "object_motion"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 101,
+      "unnecessary_change": true
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 102,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 103,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 104,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 105,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 106,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 107,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 108,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 109,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 110,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 111,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 112,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 113,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 114,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 115,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 116,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 117,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 118,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [
+        "goal_state",
+        "object_motion"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 119,
+      "unnecessary_change": true
+    },
+    {
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 120,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "goal_state",
+        "object_motion"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": false,
+      "seed": 121,
+      "unnecessary_change": true
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 122,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 123,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 124,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 125,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 126,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 127,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 128,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 129,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 130,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 131,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 132,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 133,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 134,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 135,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 136,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 137,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 138,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 139,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 140,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [
+        "goal_state",
+        "object_motion"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 141,
+      "unnecessary_change": true
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 142,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 143,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [
+        "goal_state",
+        "object_motion"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 144,
+      "unnecessary_change": true
+    },
+    {
+      "factors_changed": [
+        "goal_state",
+        "object_motion"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 145,
+      "unnecessary_change": true
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 146,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [
+        "goal_state"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": false,
+      "retry_success": true,
+      "seed": 147,
+      "unnecessary_change": false
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 148,
+      "unnecessary_change": null
+    },
+    {
+      "factors_changed": [],
+      "final_success": false,
+      "fixed_oracle_factor": null,
+      "frozen_factor_preserved": null,
+      "oracle_wrong_factor": "goal_state",
+      "parse_failed": true,
+      "retry_success": null,
+      "seed": 149,
+      "unnecessary_change": null
+    }
+  ],
+  "summary": {
+    "final_success_rate": 0.22,
+    "fixed_oracle_factor_rate": 1.0,
+    "frozen_factor_preserved_rate": 0.5,
+    "n_final_success": 50,
+    "n_fixed_oracle_factor": 12,
+    "n_frozen_factor_preserved": 12,
+    "n_parse_failed": 50,
+    "n_unnecessary_change": 12,
+    "parse_failed_rate": 0.76,
+    "unnecessary_change_rate": 0.5
+  },
+  "task": "StackCube-v1"
+}

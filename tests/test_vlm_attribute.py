@@ -243,6 +243,64 @@ def test_parse_constrained_respects_factor_menu():
     ) == "direction_grounding"
 
 
+# ---------- multi-image (wrist + third-person) prompts ------------------ #
+
+
+def test_constrained_prompt_single_view_has_one_image_placeholder():
+    """Default (single third-person view) keeps exactly one <image>."""
+    prompt = build_constrained_prompt(
+        task="PushCube-v1", initial_intent=SAMPLE_INTENT,
+        failure_predicate="approach_blocked",
+    )
+    assert prompt.count("<image>") == 1
+
+
+def test_constrained_prompt_wrist_view_has_two_labeled_placeholders():
+    """wrist_view=True emits two <image> placeholders, labeled third-person
+    then wrist — matching the [third_person, wrist] image order passed to
+    _chat_multi."""
+    prompt = build_constrained_prompt(
+        task="PushCube-v1", initial_intent=SAMPLE_INTENT,
+        failure_predicate="approach_blocked", wrist_view=True,
+    )
+    assert prompt.count("<image>") == 2
+    assert "third-person" in prompt
+    assert "wrist" in prompt
+    # Third-person label must precede the wrist label (image order matters).
+    assert prompt.index("third-person") < prompt.index("wrist")
+    # Still a valid C1 prompt: all factors + the failure observation present.
+    for f in INTENT_FIELDS:
+        assert f in prompt
+    assert "approach_blocked" in prompt
+
+
+def test_free_form_prompt_wrist_view_has_two_placeholders():
+    prompt = build_free_form_prompt(
+        task="PushCube-v1", initial_intent=SAMPLE_INTENT,
+        failure_predicate="approach_blocked", wrist_view=True,
+    )
+    assert prompt.count("<image>") == 2
+    assert "wrist" in prompt
+
+
+def test_mock_vlm_accepts_wrist_image_path():
+    """The mock client must accept wrist_image_path (uniform call site in the
+    eval driver) and still return its canned response."""
+    mock = MockVLMClient(constrained_response="contact_region")
+    factor = mock.diagnose_constrained(
+        task="PushCube-v1", image_path="tp.png",
+        initial_intent=SAMPLE_INTENT, failure_predicate="approach_blocked",
+        wrist_image_path="wrist.png",
+    )
+    assert factor == "contact_region"
+    intent = mock.diagnose_free_form(
+        task="PushCube-v1", image_path="tp.png",
+        initial_intent=SAMPLE_INTENT, failure_predicate="approach_blocked",
+        wrist_image_path="wrist.png",
+    )
+    assert intent is not None
+
+
 def test_parse_free_form_crossview_seven_field_json():
     """7-field JSON is required for CrossViewPush — 6-field must fail."""
     six_field = (

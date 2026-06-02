@@ -162,14 +162,37 @@ def _format_task_context(task: str) -> str:
 # ---------- prompt builders --------------------------------------------- #
 
 
+# Two-view image header. When the caller supplies a first-person wrist frame
+# alongside the third-person frame, the prompt opens with two labeled <image>
+# placeholders (one per image, in [third_person, wrist] order — matching the
+# image_paths list passed to _chat_multi). The wrist frame is the robot's
+# egocentric execution view; the third-person frame is the overhead scene view.
+_MULTI_VIEW_HEADER = (
+    "Image-1 (overhead third-person view of the scene): <image>\n"
+    "Image-2 (robot wrist camera, first-person execution view): <image>\n"
+)
+_SINGLE_VIEW_HEADER = "<image>\n"
+
+
+def _image_header(wrist_view: bool) -> str:
+    return _MULTI_VIEW_HEADER if wrist_view else _SINGLE_VIEW_HEADER
+
+
 def build_constrained_prompt(
     *, task: str, initial_intent: Intent, failure_predicate: str,
+    wrist_view: bool = False,
 ) -> str:
-    """C1 prompt: pick ONE factor name from the per-task factor menu."""
+    """C1 prompt: pick ONE factor name from the per-task factor menu.
+
+    ``wrist_view`` switches the image header to two labeled placeholders
+    (third-person + first-person wrist); the caller routes both frames through
+    :meth:`InternVLClient._chat_multi`. Default (single view) is byte-for-byte
+    the original prompt.
+    """
     factor_list = ", ".join(get_factor_menu(task))
     intent_json = json.dumps(initial_intent.to_dict(), sort_keys=True)
     return (
-        "<image>\n"
+        f"{_image_header(wrist_view)}"
         "You are diagnosing a robot manipulation failure.\n"
         f"{_format_task_context(task)}\n"
         f"The robot attempted: {intent_json}\n"
@@ -182,13 +205,15 @@ def build_constrained_prompt(
 
 def build_free_form_prompt(
     *, task: str, initial_intent: Intent, failure_predicate: str,
+    wrist_view: bool = False,
 ) -> str:
     """C2 prompt: emit the full corrected intent as JSON with the per-task
-    factor menu as required keys."""
+    factor menu as required keys. ``wrist_view`` adds the first-person wrist
+    placeholder (see :func:`build_constrained_prompt`)."""
     factor_list = ", ".join(get_factor_menu(task))
     intent_json = json.dumps(initial_intent.to_dict(), sort_keys=True)
     return (
-        "<image>\n"
+        f"{_image_header(wrist_view)}"
         "You are a robot manipulation planner.\n"
         f"{_format_task_context(task)}\n"
         f"The robot attempted: {intent_json}\n"
@@ -428,12 +453,14 @@ class MockVLMClient:
 
     def diagnose_constrained(
         self, *, task: str, image_path: str | Path, initial_intent: Intent,
-        failure_predicate: str,
+        failure_predicate: str, wrist_image_path: str | Path | None = None,
     ) -> Optional[str]:
-        # Build/parse exercised for realism even in mock mode.
+        # Build/parse exercised for realism even in mock mode (including the
+        # two-view header when a wrist frame is supplied). Image is ignored.
         _ = build_constrained_prompt(
             task=task, initial_intent=initial_intent,
             failure_predicate=failure_predicate,
+            wrist_view=wrist_image_path is not None,
         )
         return parse_constrained_output(
             self.constrained_response, factor_menu=get_factor_menu(task),
@@ -441,11 +468,12 @@ class MockVLMClient:
 
     def diagnose_free_form(
         self, *, task: str, image_path: str | Path, initial_intent: Intent,
-        failure_predicate: str,
+        failure_predicate: str, wrist_image_path: str | Path | None = None,
     ) -> Optional[Intent]:
         _ = build_free_form_prompt(
             task=task, initial_intent=initial_intent,
             failure_predicate=failure_predicate,
+            wrist_view=wrist_image_path is not None,
         )
         return parse_free_form_output(
             self.free_form_response, factor_menu=get_factor_menu(task),
@@ -512,30 +540,44 @@ class InternVLClient:
 
     def diagnose_constrained(
         self, *, task: str, image_path: str | Path, initial_intent: Intent,
-        failure_predicate: str,
+        failure_predicate: str, wrist_image_path: str | Path | None = None,
     ) -> Optional[str]:
         prompt = build_constrained_prompt(
             task=task, initial_intent=initial_intent,
             failure_predicate=failure_predicate,
+            wrist_view=wrist_image_path is not None,
         )
-        raw = self._chat(
-            image_path=image_path, question=prompt,
-            max_new_tokens=self.max_new_tokens_constrained,
-        )
+        if wrist_image_path is not None:
+            raw = self._chat_multi(
+                image_paths=[image_path, wrist_image_path], question=prompt,
+                max_new_tokens=self.max_new_tokens_constrained,
+            )
+        else:
+            raw = self._chat(
+                image_path=image_path, question=prompt,
+                max_new_tokens=self.max_new_tokens_constrained,
+            )
         return parse_constrained_output(raw, factor_menu=get_factor_menu(task))
 
     def diagnose_free_form(
         self, *, task: str, image_path: str | Path, initial_intent: Intent,
-        failure_predicate: str,
+        failure_predicate: str, wrist_image_path: str | Path | None = None,
     ) -> Optional[Intent]:
         prompt = build_free_form_prompt(
             task=task, initial_intent=initial_intent,
             failure_predicate=failure_predicate,
+            wrist_view=wrist_image_path is not None,
         )
-        raw = self._chat(
-            image_path=image_path, question=prompt,
-            max_new_tokens=self.max_new_tokens_free_form,
-        )
+        if wrist_image_path is not None:
+            raw = self._chat_multi(
+                image_paths=[image_path, wrist_image_path], question=prompt,
+                max_new_tokens=self.max_new_tokens_free_form,
+            )
+        else:
+            raw = self._chat(
+                image_path=image_path, question=prompt,
+                max_new_tokens=self.max_new_tokens_free_form,
+            )
         return parse_free_form_output(raw, factor_menu=get_factor_menu(task))
 
     def read_object_motion(

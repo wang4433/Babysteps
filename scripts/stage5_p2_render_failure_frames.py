@@ -10,8 +10,17 @@ so the visual carries no obstacle; the VLM gets its blocked-ness signal from
 the failure_predicate string instead.
 
 Output:
-    <out-dir>/frames/seed_NNNN_attempt.png   (one per seed)
-    <out-dir>/episodes.jsonl                 (one row per seed)
+    <out-dir>/frames/seed_NNNN_attempt.png        (third-person, one per seed)
+    <out-dir>/episodes.jsonl                      (one row per seed)
+    Cube tasks (PushCube/PickCube/StackCube — panda_wristcam first-person view):
+    <out-dir>/frames/seed_NNNN_attempt_wrist.png  (terminal wrist frame, fed
+                                                   to the multi-image VLM)
+    <out-dir>/rollouts/seed_NNNN.npz              (full per-step wrist_rgb
+                                                   recording of the attempt;
+                                                   present only when the env
+                                                   actually steps — Pick/Stack
+                                                   always, PushCube never since
+                                                   its failures are planner_failed)
 
 The JSONL row mirrors the per-seed EpisodeRecord needed by the eval driver:
 failure_packet, initial_intent, oracle_wrong_factor, rule_table_wrong_factor.
@@ -42,7 +51,7 @@ if str(_ROOT) not in sys.path:
 from babysteps.episode import generate_proxy_demo  # noqa: E402
 from babysteps.envs.task_registry import get_task_entry  # noqa: E402
 from babysteps.failure import attribute_failure  # noqa: E402
-from babysteps.render.common import render_frame  # noqa: E402
+from babysteps.render.common import render_frame, render_wrist_frame  # noqa: E402
 
 
 def _parse_seed_range(s: str) -> list[int]:
@@ -68,13 +77,17 @@ def _make_render_runner(task: str):
     """
     if task == "PushCube-v1":
         from babysteps.envs.pushcube_runner import PushCubeEnvRunner
-        return PushCubeEnvRunner(render_mode="rgb_array")
+        # capture_wrist_rgb mounts the panda_wristcam hand_camera so we can
+        # ALSO grab the first-person execution frame for the multi-image VLM
+        # (and persist the full per-step wrist recording to the rollout .npz).
+        # PushCube is the only task wired for the wrist view.
+        return PushCubeEnvRunner(render_mode="rgb_array", capture_wrist_rgb=True)
     if task == "PickCube-v1":
         from babysteps.envs.pickcube_runner import PickCubeEnvRunner
-        return PickCubeEnvRunner(render_mode="rgb_array")
+        return PickCubeEnvRunner(render_mode="rgb_array", capture_wrist_rgb=True)
     if task == "StackCube-v1":
         from babysteps.envs.stackcube_runner import StackCubeEnvRunner
-        return StackCubeEnvRunner(render_mode="rgb_array")
+        return StackCubeEnvRunner(render_mode="rgb_array", capture_wrist_rgb=True)
     if task == "TurnFaucet-v1":
         from babysteps.envs.turnfaucet_runner import TurnFaucetEnvRunner
         return TurnFaucetEnvRunner(render_mode="rgb_array")
@@ -99,6 +112,9 @@ def main(argv: list[str] | None = None) -> int:
     adapter = entry.adapter_cls()
     # Use a render-enabled runner directly (NOT adapter.env_runner()).
     env_runner = _make_render_runner(args.task)
+    # The three cube tasks carry the panda_wristcam first-person view.
+    # (TurnFaucet/CrossViewPush runners are not wired for it.)
+    wrist_task = args.task in {"PushCube-v1", "PickCube-v1", "StackCube-v1"}
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
     episodes_path = args.out_dir / "episodes.jsonl"
@@ -125,9 +141,22 @@ def main(argv: list[str] | None = None) -> int:
                 # or returns planner_failed without stepping (PushCube
                 # approach_blocked). Either way, env_runner._env's state
                 # after this call is the right thing to render.
-                attempt = env_runner.run(initial_intent, scene_executor)
+                # For the wrist task we hand run() a .npz sink so the full
+                # per-step first-person execution recording is persisted.
+                rollout_path = (
+                    args.out_dir / "rollouts" / f"seed_{seed:04d}.npz"
+                    if wrist_task else None
+                )
+                attempt = env_runner.run(
+                    initial_intent, scene_executor,
+                    rollout_log_path=rollout_path,
+                )
                 env = env_runner._env  # noqa: SLF001 — intentional script-only access
                 frame = render_frame(env)
+                # First-person terminal frame for the multi-image VLM. On the
+                # planner_failed (approach_blocked) path run() never steps, so
+                # this is the post-reset scene — same convention as `frame`.
+                wrist_frame = render_wrist_frame(env) if wrist_task else None
             except Exception as exc:
                 print(f"WARN: seed {seed} failed pipeline: {exc}",
                       file=sys.stderr)
@@ -135,6 +164,12 @@ def main(argv: list[str] | None = None) -> int:
 
             frame_path = args.out_dir / "frames" / f"seed_{seed:04d}_attempt.png"
             _save_png(frame_path, frame)
+            wrist_frame_path = None
+            if wrist_frame is not None:
+                wrist_frame_path = (
+                    args.out_dir / "frames" / f"seed_{seed:04d}_attempt_wrist.png"
+                )
+                _save_png(wrist_frame_path, wrist_frame)
             n_saved += 1
 
             # Build episode record (failure packet + oracle wrong factor).
@@ -156,6 +191,8 @@ def main(argv: list[str] | None = None) -> int:
                 "seed": seed,
                 "task": args.task,
                 "frame_path": str(frame_path),
+                "wrist_frame_path": (str(wrist_frame_path)
+                                     if wrist_frame_path is not None else None),
                 "initial_intent": initial_intent.to_dict(),
                 "failure_predicate": failure_packet.failure_predicate,
                 "oracle_wrong_factor": oracle,

@@ -89,10 +89,16 @@ class PickCubeEnvRunner:
     the captured seed before executing the compiled pick.
     """
 
-    def __init__(self, render_mode: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        render_mode: Optional[str] = None,
+        *,
+        capture_wrist_rgb: bool = False,
+    ) -> None:
         import gymnasium as gym
         import mani_skill.envs  # noqa: F401 — registers PickCube-v1
 
+        self._capture_wrist_rgb = bool(capture_wrist_rgb)
         kwargs: dict = dict(
             obs_mode="state_dict",
             control_mode="pd_ee_delta_pose",
@@ -101,6 +107,15 @@ class PickCubeEnvRunner:
         )
         if render_mode is not None:
             kwargs["render_mode"] = render_mode
+        if capture_wrist_rgb:
+            # First-person execution view (panda_wristcam hand_camera, 512x512).
+            # See PushCubeEnvRunner for the rationale + firewall note. obs_mode
+            # stays state_dict; the camera link is massless so the grasp
+            # dynamics are unchanged. EXECUTION-side only — never fed to the
+            # demo->intent encoder. Default False keeps collection on plain
+            # panda (matches all previously-collected runs).
+            kwargs["robot_uids"] = "panda_wristcam"
+            kwargs["sensor_configs"] = dict(width=512, height=512)
         self._env = gym.make("PickCube-v1", **kwargs)
         self._last_seed: Optional[int] = None
 
@@ -168,6 +183,15 @@ class PickCubeEnvRunner:
         reached_contact = False
         success = False
 
+        # First-person wrist-cam recording (opt-in; only materialized with a
+        # .npz sink). render_wrist_frame imported lazily so common.py stays
+        # sim-free. See PushCubeEnvRunner for the full rationale.
+        capture_wrist = self._capture_wrist_rgb and rollout_log_path is not None
+        wrist_frames: list[np.ndarray] = []
+        if capture_wrist:
+            from babysteps.render.common import render_wrist_frame
+            wrist_frames.append(render_wrist_frame(self._env))  # t0
+
         for _step in range(_MAX_CONTROL_STEPS):
             tcp, cube_xy, _, cube_z_now = _read_obs(obs)
             trajectory.append((float(cube_xy[0]), float(cube_xy[1])))
@@ -192,6 +216,8 @@ class PickCubeEnvRunner:
             trunc = bool(_to_np(truncated).item()) if hasattr(truncated, "cpu") else bool(truncated)
             succ_field = info.get("success", False) if hasattr(info, "get") else False
             success = bool(_to_np(succ_field).item()) if hasattr(succ_field, "cpu") else bool(succ_field)
+            if capture_wrist:
+                wrist_frames.append(render_wrist_frame(self._env))
             if dwelling:
                 dwell_remaining -= 1
                 if dwell_remaining <= 0:
@@ -221,13 +247,17 @@ class PickCubeEnvRunner:
 
         if rollout_log_path is not None:
             rollout_log_path.parent.mkdir(parents=True, exist_ok=True)
-            np.savez(
-                rollout_log_path,
+            save_kwargs: dict = dict(
                 trajectory_xy=np.asarray(trajectory, dtype=np.float64),
                 initial_obj_xy=np.asarray(initial_obj_xy, dtype=np.float64),
                 final_obj_xy=np.asarray(final_obj_xy, dtype=np.float64),
                 goal_xy=np.asarray(scene.goal_xy, dtype=np.float64),
             )
+            if wrist_frames:
+                # (T, H, W, 3) uint8 first-person execution recording. Additive
+                # key; only present when capture_wrist was on AND a sink given.
+                save_kwargs["wrist_rgb"] = np.stack(wrist_frames).astype(np.uint8)
+            np.savez(rollout_log_path, **save_kwargs)
 
         return AttemptResult(
             initial_obj_xy=initial_obj_xy,
