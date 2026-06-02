@@ -1,0 +1,88 @@
+{
+  "by_task": {
+    "StackCube-v1": {
+      "goal_state": {
+        "n_episodes": 40,
+        "n_unique_labels": 1,
+        "majority_class_acc": 1.0,
+        "shuffled_features_acc": 1.0,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "trivially_constant": true,
+        "cell_class": "trivially_constant",
+        "gate": "trivial"
+      },
+      "object_motion": {
+        "n_episodes": 40,
+        "n_unique_labels": 4,
+        "majority_class_acc": 0.25,
+        "shuffled_features_acc": 0.275,
+        "probe_acc_mean": 0.425,
+        "probe_acc_std": 0.1,
+        "trivially_constant": false,
+        "cell_class": "geometric",
+        "gate": "FAIL"
+      },
+      "contact_region": {
+        "n_episodes": 40,
+        "n_unique_labels": 1,
+        "majority_class_acc": 1.0,
+        "shuffled_features_acc": 1.0,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "trivially_constant": true,
+        "cell_class": "trivially_constant",
+        "gate": "trivial"
+      },
+      "approach_direction": {
+        "n_episodes": 40,
+        "n_unique_labels": 1,
+        "majority_class_acc": 1.0,
+        "shuffled_features_acc": 1.0,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "trivially_constant": true,
+        "cell_class": "trivially_constant",
+        "gate": "trivial"
+      },
+      "constraint_region": {
+        "n_episodes": 40,
+        "n_unique_labels": 1,
+        "majority_class_acc": 1.0,
+        "shuffled_features_acc": 1.0,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "trivially_constant": true,
+        "cell_class": "trivially_constant",
+        "gate": "trivial"
+      },
+      "embodiment_mapping": {
+        "n_episodes": 40,
+        "n_unique_labels": 1,
+        "majority_class_acc": 1.0,
+        "shuffled_features_acc": 1.0,
+        "probe_acc_mean": 1.0,
+        "probe_acc_std": 0.0,
+        "trivially_constant": true,
+        "cell_class": "trivially_constant",
+        "gate": "trivial"
+      }
+    }
+  },
+  "gate": {
+    "threshold": 0.9,
+    "margin": 0.1,
+    "n_total": 6,
+    "n_trivial": 5,
+    "n_label_identity": 0,
+    "n_geometric": 1,
+    "n_passing": 0,
+    "n_failing": 1,
+    "failing_cells": [
+      [
+        "StackCube-v1",
+        "object_motion"
+      ]
+    ]
+  }
+}

@@ -199,6 +199,138 @@ def build_free_form_prompt(
     )
 
 
+# ---------- demo intent-READ (Stage-5 option-3 de-risking probe) -------- #
+#
+# Distinct from C1/C2 (which diagnose a *failure*). Here the VLM READS the
+# `object_motion` factor straight off a third-person DEMO strip (start /
+# middle / end panels), to measure VLM-vs-oracle agreement as a candidate
+# distillation supervision signal. The varied-intent cuts only vary
+# object_motion, so it is the single decisive factor to read.
+
+# The four lateral directions PushCube / StackCube object_motion ranges over.
+OBJECT_MOTION_MENU_4: tuple[str, ...] = (
+    "translate_+x", "translate_-x", "translate_+y", "translate_-y",
+)
+
+# Camera-calibrated world-axis -> image-direction convention. Derived from a
+# blob-displacement calibration over the labeled varied-intent seeds against
+# the FIXED `render_camera` shared by the cube tasks (PushCube +x demos move
+# the cube lower-left; StackCube +y demos move red lower-right, etc.). The
+# VLM cannot guess a world-frame convention from pixels, so we state it — the
+# same mapping the DINOv2 linear probe gets to *learn* from its folds.
+_AXIS_CONVENTION = (
+    "In this fixed camera view the world axes project onto the image as: "
+    "+x points toward the LOWER-LEFT, -x toward the UPPER-RIGHT, "
+    "+y toward the LOWER-RIGHT, -y toward the UPPER-LEFT."
+)
+
+# What "object_motion" denotes per task (object evidence, not a motor program).
+_OBJECT_MOTION_QUESTION: dict[str, str] = {
+    "PushCube-v1": (
+        "the direction the blue cube is pushed across the table"
+    ),
+    "StackCube-v1": (
+        "the direction the red cube (cubeA) must travel to be placed on top "
+        "of the green cube (cubeB)"
+    ),
+}
+
+
+def object_motion_question(task: str) -> str:
+    if task not in _OBJECT_MOTION_QUESTION:
+        known = sorted(_OBJECT_MOTION_QUESTION)
+        raise KeyError(f"no object_motion question for {task!r}; known: {known}")
+    return _OBJECT_MOTION_QUESTION[task]
+
+
+def build_intent_read_prompt(*, task: str, n_panels: int = 3) -> str:
+    """Demo-read prompt: name the `object_motion` token from a demo strip."""
+    menu = ", ".join(OBJECT_MOTION_MENU_4)
+    what = object_motion_question(task)
+    return (
+        "<image>\n"
+        f"The image shows {n_panels} panels left-to-right: the START, "
+        "MIDDLE, and END of a robot demonstration filmed third-person.\n"
+        f"{_format_task_context(task)}\n"
+        f"{_AXIS_CONVENTION}\n"
+        f"Identify {what}.\n"
+        f"Output ONLY one token from: [{menu}], nothing else."
+    )
+
+
+def parse_object_motion_output(
+    raw: str, *, menu: tuple[str, ...] = OBJECT_MOTION_MENU_4,
+) -> Optional[str]:
+    """Return the first `menu` token in `raw`, else None.
+
+    Tolerant of whitespace, quotes, and a prose preamble. Tokens contain
+    ``+``/``-`` (not ``\\b``-friendly), so this scans by substring; the four
+    tokens are mutually non-substring so order is unambiguous.
+    """
+    if not raw:
+        return None
+    stripped = raw.strip().strip('"').strip("'").strip()
+    if stripped in menu:
+        return stripped
+    for tok in menu:
+        if tok in raw:
+            return tok
+    return None
+
+
+# ---------- before/after MULTI-IMAGE motion read ----------------------- #
+#
+# Diagnostic run #1 showed a single 3-panel strip makes the VLM report
+# "moves left-to-right across the panels" (reads layout, not physics).
+# Feeding START and END as SEPARATE images (a before/after comparison) and
+# asking for an IMAGE-RELATIVE direction fixes it — the caller maps that
+# image direction to the world `object_motion` token via a fixed,
+# camera-calibrated lookup (perception by the VLM; bookkeeping in code).
+
+MOTION_DIRECTION_MENU: tuple[str, ...] = ("left", "right", "up", "down", "none")
+
+_BEFORE_AFTER_FOCUS: dict[str, str] = {
+    "PushCube-v1": "the small BLUE cube on the table",
+    "StackCube-v1": "the RED cube",
+}
+
+
+def before_after_focus(task: str) -> str:
+    if task not in _BEFORE_AFTER_FOCUS:
+        known = sorted(_BEFORE_AFTER_FOCUS)
+        raise KeyError(f"no before/after focus for {task!r}; known: {known}")
+    return _BEFORE_AFTER_FOCUS[task]
+
+
+def build_before_after_prompt(*, task: str) -> str:
+    """Two-image prompt: image-relative direction the focus object moved."""
+    focus = before_after_focus(task)
+    return (
+        "Image-1: <image>\nImage-2: <image>\n"
+        "Image-1 is the START and Image-2 is the END of a robot demonstration, "
+        "filmed from the SAME fixed third-person camera.\n"
+        f"Focus ONLY on {focus}. Comparing its position in Image-1 versus "
+        "Image-2, which way did it move across the table surface?\n"
+        "Answer with exactly one word: left, right, up, down, or none."
+    )
+
+
+def parse_motion_direction(
+    raw: str, *, menu: tuple[str, ...] = MOTION_DIRECTION_MENU,
+) -> Optional[str]:
+    """Return the image-relative direction word in `raw`, else None."""
+    if not raw:
+        return None
+    s = raw.strip().strip('".').strip("'").strip().lower()
+    if s in menu:
+        return s
+    low = raw.lower()
+    for w in menu:
+        if re.search(rf"\b{w}\b", low):
+            return w
+    return None
+
+
 # ---------- output parsers ---------------------------------------------- #
 
 
@@ -278,6 +410,21 @@ class MockVLMClient:
         '"contact_region":"plus_x_face","approach_direction":"from_plus_x",'
         '"constraint_region":"none","embodiment_mapping":"proxy_contact_to_franka_push"}'
     )
+    object_motion_response: str = "translate_+x"
+    motion_direction_response: str = "left"
+
+    def read_object_motion(
+        self, *, task: str, image_path: str | Path,
+    ) -> Optional[str]:
+        # Build exercised for realism even in mock mode.
+        _ = build_intent_read_prompt(task=task)
+        return parse_object_motion_output(self.object_motion_response)
+
+    def read_motion_direction(
+        self, *, task: str, start_path: str | Path, end_path: str | Path,
+    ) -> Optional[str]:
+        _ = build_before_after_prompt(task=task)
+        return parse_motion_direction(self.motion_direction_response)
 
     def diagnose_constrained(
         self, *, task: str, image_path: str | Path, initial_intent: Intent,
@@ -390,6 +537,45 @@ class InternVLClient:
             max_new_tokens=self.max_new_tokens_free_form,
         )
         return parse_free_form_output(raw, factor_menu=get_factor_menu(task))
+
+    def read_object_motion(
+        self, *, task: str, image_path: str | Path,
+    ) -> Optional[str]:
+        prompt = build_intent_read_prompt(task=task)
+        raw = self._chat(
+            image_path=image_path, question=prompt,
+            max_new_tokens=self.max_new_tokens_constrained,
+        )
+        return parse_object_motion_output(raw)
+
+    def _chat_multi(self, *, image_paths, question: str,
+                    max_new_tokens: int) -> str:
+        """InternVL multi-image chat (one <image> placeholder per path)."""
+        import torch
+        if self._model is None:
+            self.load()
+        pvs = [
+            self._load_image(str(p), max_num=self.max_num_tiles)
+            .to(torch.bfloat16).cuda()
+            for p in image_paths
+        ]
+        num_patches_list = [pv.size(0) for pv in pvs]
+        pixel_values = torch.cat(pvs, dim=0)
+        gen_kwargs = dict(max_new_tokens=max_new_tokens, do_sample=False)
+        return self._model.chat(
+            self._tokenizer, pixel_values, question, gen_kwargs,
+            num_patches_list=num_patches_list,
+        )
+
+    def read_motion_direction(
+        self, *, task: str, start_path: str | Path, end_path: str | Path,
+    ) -> Optional[str]:
+        prompt = build_before_after_prompt(task=task)
+        raw = self._chat_multi(
+            image_paths=[start_path, end_path], question=prompt,
+            max_new_tokens=self.max_new_tokens_constrained,
+        )
+        return parse_motion_direction(raw)
 
 
 # ---------- model-card load_image helper -------------------------------- #

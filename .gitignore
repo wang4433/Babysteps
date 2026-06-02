@@ -31,3 +31,12 @@ models/
 # ≈ 2 GB; large binary artifacts derived from the committed varied_intent cut.
 # Reproduce: python scripts/stage5_render_demo_frames.py --jsonl <samples> --out-dir <here>
 datasets/stage5/
+
+# Report binary intermediates — the rendered demo strips / before-after frames
+# the VLM probes write next to their report.{json,md}. Large, reproducible from
+# the gitignored datasets/stage5 cache; only the report.{json,md} are tracked.
+reports/**/strips/
+reports/**/frames/
+
+# Local Claude Code harness state (scheduled-task lock etc.), not project code.
+.claude/

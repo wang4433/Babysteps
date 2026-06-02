@@ -297,12 +297,41 @@ def _capture_stackcube_demo(env, adapter, seed: int) -> np.ndarray:
 # ---------- env construction ------------------------------------------- #
 
 
-def _make_env(task: str):
+def _topdown_camera_configs():
+    """Overhead `render_camera` override: eye above table center, looking down.
+
+    A true top-down view maps world +x/+y to ORTHOGONAL image axes (vs the
+    default oblique third-person camera, where ±x/±y all project to
+    "rightish" and entangle — the Stage-5 viewpoint hypothesis). `up=(1,0,0)`
+    avoids the degenerate up∥view-dir at straight-down. The exact image→world
+    axis mapping is re-derived by blob calibration on the rendered frames.
+
+    ManiSkill `human_render_camera_configs` overrides are a {uid: {field:
+    value}} dict; for gym.make the pose must be a JSON-friendly 7-list
+    [x,y,z,qw,qx,qy,qz] (the env rebuilds the Pose). See
+    mani_skill/sensors/camera.py::update_camera_configs_from_dict.
+    """
+    from mani_skill.utils import sapien_utils
+
+    pose = sapien_utils.look_at(eye=[0.0, 0.0, 0.65], target=[0.0, 0.0, 0.0],
+                                up=(1, 0, 0))
+    raw = pose.raw_pose
+    raw = raw[0] if getattr(raw, "ndim", 1) == 2 else raw
+    pose_list = [float(v) for v in (
+        raw.cpu().numpy() if hasattr(raw, "cpu") else np.asarray(raw)
+    )]
+    return {"render_camera": {"pose": pose_list}}
+
+
+def _make_env(task: str, *, topdown: bool = False):
     """Build a ManiSkill env in render mode for `task`.
 
     Matches scripts/render_stage0_maniskill.py's setup: state_dict obs,
     pd_ee_delta_pose control, cpu backend, rgb_array render. No
     panda_wristcam — the demo phase only needs the third-person view.
+
+    `topdown=True` overrides the human render camera with an overhead view
+    (Stage-5 viewpoint experiment) while leaving physics/labels untouched.
     """
     import gymnasium as gym
     import mani_skill.envs  # noqa: F401 — registers tasks
@@ -315,6 +344,8 @@ def _make_env(task: str):
     )
     if task == "StackCube-v1":
         kwargs["max_episode_steps"] = _STACKCUBE_MAX_EPISODE_STEPS
+    if topdown:
+        kwargs["human_render_camera_configs"] = _topdown_camera_configs()
     return gym.make(task, **kwargs)
 
 
@@ -403,6 +434,9 @@ def main(argv=None) -> int:
     p.add_argument("--task", type=str, default="PushCube-v1",
                    help="Task id (only used by --seed-range; --jsonl derives "
                         "task from records).")
+    p.add_argument("--topdown", action="store_true",
+                   help="Render from an overhead top-down camera instead of "
+                        "the default third-person view (Stage-5 viewpoint test).")
     args = p.parse_args(argv)
 
     if args.jsonl is not None:
@@ -420,7 +454,7 @@ def main(argv=None) -> int:
         adapter = entry.adapter_cls()
         args.out_dir.mkdir(parents=True, exist_ok=True)
 
-        env = _make_env(task)
+        env = _make_env(task, topdown=args.topdown)
         try:
             for rec in records:
                 seed, frames = _capture_one(env, adapter, task, rec)
@@ -454,7 +488,7 @@ def main(argv=None) -> int:
     adapter = entry.adapter_cls()
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
-    env = _make_env(task)
+    env = _make_env(task, topdown=args.topdown)
     try:
         for seed in seeds:
             seed_out, frames = _capture_one_native(env, adapter, task, seed)

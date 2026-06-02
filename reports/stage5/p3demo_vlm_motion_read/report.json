@@ -1,0 +1,394 @@
+[
+  {
+    "task": "PushCube-v1",
+    "n": 20,
+    "mode": "mapped",
+    "ref": {
+      "dinov2_probe": 0.95,
+      "learned_slot": 0.95
+    },
+    "gate": 0.9,
+    "rows": [
+      {
+        "seed": 0,
+        "gt": "translate_+x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": false
+      },
+      {
+        "seed": 1,
+        "gt": "translate_-x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": true
+      },
+      {
+        "seed": 2,
+        "gt": "translate_+x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": false
+      },
+      {
+        "seed": 3,
+        "gt": "translate_-x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": true
+      },
+      {
+        "seed": 4,
+        "gt": "translate_+x",
+        "vlm_direction": "left",
+        "pred_world": "translate_+x",
+        "correct": true
+      },
+      {
+        "seed": 5,
+        "gt": "translate_-x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": true
+      },
+      {
+        "seed": 6,
+        "gt": "translate_+x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": false
+      },
+      {
+        "seed": 7,
+        "gt": "translate_-x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": true
+      },
+      {
+        "seed": 8,
+        "gt": "translate_+x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": false
+      },
+      {
+        "seed": 9,
+        "gt": "translate_-x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": true
+      },
+      {
+        "seed": 10,
+        "gt": "translate_+x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": false
+      },
+      {
+        "seed": 11,
+        "gt": "translate_-x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": true
+      },
+      {
+        "seed": 12,
+        "gt": "translate_+x",
+        "vlm_direction": "left",
+        "pred_world": "translate_+x",
+        "correct": true
+      },
+      {
+        "seed": 13,
+        "gt": "translate_-x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": true
+      },
+      {
+        "seed": 14,
+        "gt": "translate_+x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": false
+      },
+      {
+        "seed": 15,
+        "gt": "translate_-x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": true
+      },
+      {
+        "seed": 16,
+        "gt": "translate_+x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": false
+      },
+      {
+        "seed": 17,
+        "gt": "translate_-x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": true
+      },
+      {
+        "seed": 18,
+        "gt": "translate_+x",
+        "vlm_direction": "right",
+        "pred_world": "translate_-x",
+        "correct": false
+      },
+      {
+        "seed": 19,
+        "gt": "translate_-y",
+        "vlm_direction": "none",
+        "pred_world": null,
+        "correct": false
+      }
+    ],
+    "accuracy": 0.55,
+    "majority_baseline": 0.5,
+    "passes_gate": false
+  },
+  {
+    "task": "StackCube-v1",
+    "n": 40,
+    "mode": "crosstab",
+    "ref": {
+      "dinov2_probe": 0.42,
+      "learned_slot": 0.95
+    },
+    "gate": 0.9,
+    "rows": [
+      {
+        "seed": 0,
+        "gt": "translate_+y",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 1,
+        "gt": "translate_-x",
+        "vlm_direction": "left"
+      },
+      {
+        "seed": 2,
+        "gt": "translate_+y",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 3,
+        "gt": "translate_+y",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 4,
+        "gt": "translate_-y",
+        "vlm_direction": "left"
+      },
+      {
+        "seed": 5,
+        "gt": "translate_-y",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 6,
+        "gt": "translate_-x",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 7,
+        "gt": "translate_-y",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 8,
+        "gt": "translate_+y",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 9,
+        "gt": "translate_+x",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 10,
+        "gt": "translate_-y",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 11,
+        "gt": "translate_+y",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 12,
+        "gt": "translate_-y",
+        "vlm_direction": "left"
+      },
+      {
+        "seed": 13,
+        "gt": "translate_+y",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 14,
+        "gt": "translate_-y",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 15,
+        "gt": "translate_+y",
+        "vlm_direction": "left"
+      },
+      {
+        "seed": 16,
+        "gt": "translate_-y",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 17,
+        "gt": "translate_+y",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 18,
+        "gt": "translate_+x",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 19,
+        "gt": "translate_-y",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 20,
+        "gt": "translate_+y",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 21,
+        "gt": "translate_+x",
+        "vlm_direction": "none"
+      },
+      {
+        "seed": 22,
+        "gt": "translate_+y",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 23,
+        "gt": "translate_+x",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 24,
+        "gt": "translate_+x",
+        "vlm_direction": "left"
+      },
+      {
+        "seed": 25,
+        "gt": "translate_-y",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 26,
+        "gt": "translate_-y",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 30,
+        "gt": "translate_+x",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 31,
+        "gt": "translate_+x",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 35,
+        "gt": "translate_-x",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 38,
+        "gt": "translate_+x",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 40,
+        "gt": "translate_+x",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 43,
+        "gt": "translate_-x",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 51,
+        "gt": "translate_+x",
+        "vlm_direction": "none"
+      },
+      {
+        "seed": 54,
+        "gt": "translate_-x",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 55,
+        "gt": "translate_-x",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 73,
+        "gt": "translate_-x",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 75,
+        "gt": "translate_-x",
+        "vlm_direction": "right"
+      },
+      {
+        "seed": 79,
+        "gt": "translate_-x",
+        "vlm_direction": "up"
+      },
+      {
+        "seed": 84,
+        "gt": "translate_-x",
+        "vlm_direction": "right"
+      }
+    ],
+    "crosstab": {
+      "translate_+y": {
+        "right": 5,
+        "up": 4,
+        "left": 1
+      },
+      "translate_-x": {
+        "left": 1,
+        "up": 4,
+        "right": 5
+      },
+      "translate_-y": {
+        "left": 2,
+        "right": 4,
+        "up": 4
+      },
+      "translate_+x": {
+        "up": 4,
+        "right": 3,
+        "none": 2,
+        "left": 1
+      }
+    },
+    "best_case_mapped_accuracy": 0.325,
+    "majority_baseline": 0.25
+  }
+]
