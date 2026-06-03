@@ -1,0 +1,2201 @@
+{
+  "n_episodes": 50,
+  "per_episode": [
+    {
+      "factors_changed": [
+        "constraint_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"faucet_base_static\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "faucet_base_static",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 100,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 101,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 102,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 103,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 104,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 105,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 106,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 107,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 108,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 109,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 110,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 111,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 112,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 113,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 114,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 115,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 116,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 117,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 118,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 119,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 120,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 121,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 122,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 123,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 124,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 125,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 126,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 127,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 128,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 129,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 130,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 131,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 132,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 133,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 134,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 135,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 136,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "constraint_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"faucet_base_static\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "faucet_base_static",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 137,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 138,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 139,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 140,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 141,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 142,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "constraint_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"faucet_base_static\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "faucet_base_static",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 143,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 144,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 145,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 146,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 147,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"handle_grip\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 148,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "handle_grip",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "oracle_wrong_factor": "embodiment_mapping",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"faucet_turned\",\n  \"object_motion\": \"turn\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_poke_turn\"\n}\n```",
+      "retry_success": null,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_poke_turn",
+        "goal_state": "faucet_turned",
+        "object_motion": "turn"
+      },
+      "seed": 149,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    }
+  ],
+  "summary": {
+    "final_success_rate": 0.02,
+    "fixed_oracle_factor_rate": 1.0,
+    "frozen_factor_preserved_rate": 0.44,
+    "harmful_changes_count_mean": 0.56,
+    "harmful_changes_rate_mean": 0.09333333333333332,
+    "n_final_success": 50,
+    "n_fixed_oracle_factor": 50,
+    "n_frozen_factor_preserved": 50,
+    "n_parse_failed": 50,
+    "n_unnecessary_change": 50,
+    "parse_failed_rate": 0.0,
+    "preservation_mean": 0.8879999999999997,
+    "unnecessary_change_rate": 0.56,
+    "unnecessary_changes_count_mean": 0.56,
+    "unnecessary_changes_rate_mean": 0.11200000000000004
+  },
+  "task": "TurnFaucet-v1"
+}

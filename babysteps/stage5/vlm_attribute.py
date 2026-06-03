@@ -203,13 +203,48 @@ def build_constrained_prompt(
     )
 
 
+def _format_allowed_values_menu(task: str) -> str:
+    """Per-factor allowed-VALUE menu for the C2 free-form prompt.
+
+    C2 is told the same value vocabulary that C1 effectively gets via the
+    constrained menu + the per-task expected_tokens hints. Without this, C2 is
+    a parser straw-man (it is asked for JSON keys but never told the legal
+    values, so it invents prose values that the strict parser rejects). Pulls
+    directly from :data:`_FACTOR_TOKENS` for the per-task factor menu — no
+    task-specific synonyms, just the schema whitelist. Values are sorted for a
+    deterministic, snapshot-stable prompt.
+    """
+    lines = []
+    for field in get_factor_menu(task):
+        vals = ", ".join(sorted(_FACTOR_TOKENS[field]))
+        lines.append(f"- {field}: one of [{vals}]")
+    return "\n".join(lines)
+
+
 def build_free_form_prompt(
     *, task: str, initial_intent: Intent, failure_predicate: str,
     wrist_view: bool = False,
 ) -> str:
     """C2 prompt: emit the full corrected intent as JSON with the per-task
     factor menu as required keys. ``wrist_view`` adds the first-person wrist
-    placeholder (see :func:`build_constrained_prompt`)."""
+    placeholder (see :func:`build_constrained_prompt`).
+
+    Fair-baseline design (validated on real InternVL, 2026-06-03). TWO halves,
+    both required:
+      1. Enumerate the allowed VALUES per factor, so C2 emits executable, in-
+         schema intents. Without it StackCube C2 invents physically-sensible but
+         out-of-vocab tokens (e.g. object_motion='translate_+z' for stacking) and
+         parse-fails (0.30); the format-repair retry does NOT rescue them because
+         the model anchors on its own first out-of-vocab guess.
+      2. State the attempt FAILED and must be changed, so the model does not just
+         echo the already-valid current intent when the failure is not visible in
+         the frame. Without it PushCube C2 echoes and success collapses 0.96->0.12.
+    Menu-alone anchors PushCube into echoing; corrective-alone lets StackCube
+    anchor on its out-of-vocab first guess — only the combination is strong on
+    both. The format-repair re-prompt (:func:`build_free_form_repair_prompt`) is a
+    third safety net. The instruction is neutral on selectivity: C2 is free to
+    change any/all factors, it is only told the attempt failed and must change.
+    """
     factor_list = ", ".join(get_factor_menu(task))
     intent_json = json.dumps(initial_intent.to_dict(), sort_keys=True)
     return (
@@ -218,8 +253,42 @@ def build_free_form_prompt(
         f"{_format_task_context(task)}\n"
         f"The robot attempted: {intent_json}\n"
         f"Failure observation: {failure_predicate}\n"
-        "Output the corrected full intent as JSON with these exact keys:\n"
+        "This attempt FAILED. Output a corrected full intent that fixes the\n"
+        "failure; it must not be identical to the attempted intent above.\n"
+        "Use these exact keys:\n"
         f"{factor_list}.\n"
+        "Each value MUST be chosen ONLY from the allowed values for that key:\n"
+        f"{_format_allowed_values_menu(task)}\n"
+        "Output ONLY the JSON object, nothing else."
+    )
+
+
+def build_free_form_repair_prompt(
+    *, task: str, initial_intent: Intent, failure_predicate: str,
+    prior_output: str, wrist_view: bool = False,
+) -> str:
+    """C2 format-repair re-prompt (one retry after a parse failure).
+
+    Re-states the request with the explicit per-factor allowed-value menu
+    inlined and shows the model its own un-parseable prior output, so the
+    repair is a FORMAT fix (valid JSON / in-vocab tokens), not a second
+    free-form guess. Stays neutral: it does not tell the model which value to
+    pick, only which values are legal.
+    """
+    factor_list = ", ".join(get_factor_menu(task))
+    intent_json = json.dumps(initial_intent.to_dict(), sort_keys=True)
+    return (
+        f"{_image_header(wrist_view)}"
+        "You are a robot manipulation planner.\n"
+        f"{_format_task_context(task)}\n"
+        f"The robot attempted: {intent_json}\n"
+        f"Failure observation: {failure_predicate}\n"
+        "Your previous answer could not be parsed:\n"
+        f"{prior_output.strip()}\n"
+        "Re-output the corrected full intent as a single JSON object with "
+        f"these exact keys: {factor_list}.\n"
+        "Choose each value ONLY from:\n"
+        f"{_format_allowed_values_menu(task)}\n"
         "Output ONLY the JSON object, nothing else."
     )
 
@@ -384,6 +453,30 @@ def parse_constrained_output(
     return None
 
 
+def _normalize_token_value(raw_value: object, allowed: frozenset[str]) -> Optional[str]:
+    """NEUTRAL normalization of a single C2 factor value against ``allowed``.
+
+    Strips surrounding whitespace/quotes and does a case-insensitive exact
+    match against the schema whitelist for that factor. Returns the CANONICAL
+    token (the one in ``allowed``) on match, else None.
+
+    Deliberately NOT a synonym dictionary: it never decides what the VLM
+    "meant" — it only forgives casing/quoting/whitespace differences on an
+    otherwise-exact token. Anything genuinely out-of-vocab (prose, a paraphrase)
+    returns None so the caller can signal parse-fail and retry.
+    """
+    if not isinstance(raw_value, str):
+        return None
+    cleaned = raw_value.strip().strip('"').strip("'").strip()
+    if cleaned in allowed:
+        return cleaned
+    lowered = cleaned.lower()
+    for tok in allowed:
+        if tok.lower() == lowered:
+            return tok
+    return None
+
+
 def parse_free_form_output(
     raw: str, *, factor_menu: tuple[str, ...] = INTENT_FACTOR_NAMES,
 ) -> Optional[Intent]:
@@ -392,6 +485,11 @@ def parse_free_form_output(
 
     ``factor_menu`` lists the JSON keys that MUST be present in the parsed
     object. Defaults to the 6-factor schema.
+
+    Values pass through NEUTRAL normalization (case-insensitive + whitespace/
+    quote-stripped exact match against the schema whitelist) so a fair C2
+    baseline isn't penalised for casing/quoting — see
+    :func:`_normalize_token_value`. No task-specific synonyms.
     """
     if not raw:
         return None
@@ -411,14 +509,17 @@ def parse_free_form_output(
         return None
     if not isinstance(obj, dict):
         return None
-    # Strict key/token check over the per-task menu.
+    # Strict key check + NEUTRAL value normalization over the per-task menu.
+    normalized: dict[str, str] = {}
     for field in factor_menu:
         if field not in obj:
             return None
-        if obj[field] not in _FACTOR_TOKENS[field]:
+        canonical = _normalize_token_value(obj[field], _FACTOR_TOKENS[field])
+        if canonical is None:
             return None
+        normalized[field] = canonical
     try:
-        return Intent.from_dict({field: obj[field] for field in factor_menu})
+        return Intent.from_dict(normalized)
     except (TypeError, ValueError, KeyError):
         return None
 
@@ -428,13 +529,20 @@ def parse_free_form_output(
 
 @dataclass
 class MockVLMClient:
-    """Sim-free stand-in. Returns canned responses; ignores the image."""
+    """Sim-free stand-in. Returns canned responses; ignores the image.
+
+    ``free_form_repair_response`` is the canned reply to the ONE format-repair
+    re-prompt. It defaults to ``None`` meaning "repeat ``free_form_response``";
+    set it to a valid-JSON string (with ``free_form_response`` set to prose) to
+    exercise the prose-then-repair path in tests.
+    """
     constrained_response: str = "approach_direction"
     free_form_response: str = (
         '{"goal_state":"cube_at_target","object_motion":"translate_+x",'
         '"contact_region":"plus_x_face","approach_direction":"from_plus_x",'
         '"constraint_region":"none","embodiment_mapping":"proxy_contact_to_franka_push"}'
     )
+    free_form_repair_response: Optional[str] = None
     object_motion_response: str = "translate_+x"
     motion_direction_response: str = "left"
 
@@ -470,14 +578,45 @@ class MockVLMClient:
         self, *, task: str, image_path: str | Path, initial_intent: Intent,
         failure_predicate: str, wrist_image_path: str | Path | None = None,
     ) -> Optional[Intent]:
+        intent, _raw = self.diagnose_free_form_verbose(
+            task=task, image_path=image_path, initial_intent=initial_intent,
+            failure_predicate=failure_predicate,
+            wrist_image_path=wrist_image_path,
+        )
+        return intent
+
+    def diagnose_free_form_verbose(
+        self, *, task: str, image_path: str | Path, initial_intent: Intent,
+        failure_predicate: str, wrist_image_path: str | Path | None = None,
+    ) -> tuple[Optional[Intent], str]:
+        """Like :meth:`diagnose_free_form` but also returns the raw VLM text
+        (the repair reply if a repair happened, else the first reply) so the
+        eval loop can persist ``raw_vlm_text``. Exercises the ONE format-repair
+        retry: if ``free_form_response`` fails to parse, retry with
+        ``free_form_repair_response`` (defaults to ``free_form_response``)."""
+        menu = get_factor_menu(task)
         _ = build_free_form_prompt(
             task=task, initial_intent=initial_intent,
             failure_predicate=failure_predicate,
             wrist_view=wrist_image_path is not None,
         )
-        return parse_free_form_output(
-            self.free_form_response, factor_menu=get_factor_menu(task),
+        raw = self.free_form_response
+        intent = parse_free_form_output(raw, factor_menu=menu)
+        if intent is not None:
+            return intent, raw
+        # ONE format-repair retry.
+        repair_raw = (
+            self.free_form_repair_response
+            if self.free_form_repair_response is not None
+            else self.free_form_response
         )
+        _ = build_free_form_repair_prompt(
+            task=task, initial_intent=initial_intent,
+            failure_predicate=failure_predicate, prior_output=raw,
+            wrist_view=wrist_image_path is not None,
+        )
+        intent = parse_free_form_output(repair_raw, factor_menu=menu)
+        return intent, repair_raw
 
 
 class InternVLClient:
@@ -563,22 +702,63 @@ class InternVLClient:
         self, *, task: str, image_path: str | Path, initial_intent: Intent,
         failure_predicate: str, wrist_image_path: str | Path | None = None,
     ) -> Optional[Intent]:
+        intent, _raw = self.diagnose_free_form_verbose(
+            task=task, image_path=image_path, initial_intent=initial_intent,
+            failure_predicate=failure_predicate,
+            wrist_image_path=wrist_image_path,
+        )
+        return intent
+
+    def _chat_one(self, *, image_path, wrist_image_path, question: str) -> str:
+        """Route a single C2 turn through the single- or multi-image path."""
+        if wrist_image_path is not None:
+            return self._chat_multi(
+                image_paths=[image_path, wrist_image_path], question=question,
+                max_new_tokens=self.max_new_tokens_free_form,
+            )
+        return self._chat(
+            image_path=image_path, question=question,
+            max_new_tokens=self.max_new_tokens_free_form,
+        )
+
+    def diagnose_free_form_verbose(
+        self, *, task: str, image_path: str | Path, initial_intent: Intent,
+        failure_predicate: str, wrist_image_path: str | Path | None = None,
+    ) -> tuple[Optional[Intent], str]:
+        """C2 free-form replan with ONE format-repair retry.
+
+        Returns ``(intent_or_None, raw_vlm_text)``. If the first reply fails to
+        parse, re-prompt ONCE with the explicit per-factor allowed-value menu
+        inlined (:func:`build_free_form_repair_prompt`) and parse again. If the
+        repair reply also fails, returns ``(None, repair_raw)``. The returned
+        raw text is whichever reply was parsed last (repair reply if a repair
+        happened), so the caller can persist it for parse debugging.
+        """
+        menu = get_factor_menu(task)
         prompt = build_free_form_prompt(
             task=task, initial_intent=initial_intent,
             failure_predicate=failure_predicate,
             wrist_view=wrist_image_path is not None,
         )
-        if wrist_image_path is not None:
-            raw = self._chat_multi(
-                image_paths=[image_path, wrist_image_path], question=prompt,
-                max_new_tokens=self.max_new_tokens_free_form,
-            )
-        else:
-            raw = self._chat(
-                image_path=image_path, question=prompt,
-                max_new_tokens=self.max_new_tokens_free_form,
-            )
-        return parse_free_form_output(raw, factor_menu=get_factor_menu(task))
+        raw = self._chat_one(
+            image_path=image_path, wrist_image_path=wrist_image_path,
+            question=prompt,
+        )
+        intent = parse_free_form_output(raw, factor_menu=menu)
+        if intent is not None:
+            return intent, raw
+        # ONE format-repair retry with the explicit allowed-value menu inlined.
+        repair_prompt = build_free_form_repair_prompt(
+            task=task, initial_intent=initial_intent,
+            failure_predicate=failure_predicate, prior_output=raw,
+            wrist_view=wrist_image_path is not None,
+        )
+        repair_raw = self._chat_one(
+            image_path=image_path, wrist_image_path=wrist_image_path,
+            question=repair_prompt,
+        )
+        intent = parse_free_form_output(repair_raw, factor_menu=menu)
+        return intent, repair_raw
 
     def read_object_motion(
         self, *, task: str, image_path: str | Path,

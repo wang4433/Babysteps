@@ -42,6 +42,7 @@ if str(_ROOT) not in sys.path:
 from babysteps.envs.task_registry import get_task_entry  # noqa: E402
 from babysteps.failure import Attribution  # noqa: E402
 from babysteps.schemas import INTENT_FIELDS, Intent  # noqa: E402
+from babysteps.stage5.selectivity import selectivity_metrics  # noqa: E402
 from babysteps.stage5.vlm_attribute import (  # noqa: E402
     InternVLClient, MockVLMClient, get_factor_menu,
 )
@@ -76,9 +77,21 @@ def _per_episode_c1(
     *, vlm_factor: Optional[str], oracle_factor: str,
     initial_intent: Intent, revised_intent: Optional[Intent],
     retry_success: Optional[bool], initial_success: bool,
+    gt_intent: Intent,
     factor_menu: tuple[str, ...] = INTENT_FIELDS,
 ) -> dict:
-    """Compute C1 metrics for one episode."""
+    """Compute C1 metrics for one episode.
+
+    Selectivity metrics (preservation / unnecessary / harmful) are measured
+    against ``implicated_factor = oracle_factor`` for BOTH C1 and C2 so the two
+    conditions are directly comparable (see babysteps.stage5.selectivity).
+    """
+    # Selectivity is measured against the ORACLE wrong factor for both
+    # conditions (revised=None → preservation 0.0; see selectivity_metrics).
+    sel = selectivity_metrics(
+        initial=initial_intent, revised=revised_intent, gt=gt_intent,
+        implicated_factor=oracle_factor, factor_menu=factor_menu,
+    )
     if vlm_factor is None:
         return {
             "vlm_factor": None,
@@ -89,6 +102,7 @@ def _per_episode_c1(
             "unnecessary_change": None,
             "final_success": bool(initial_success),
             "retry_success": None,
+            **sel,
         }
     factors_changed = (_factors_changed(initial_intent, revised_intent, factor_menu)
                        if revised_intent is not None else ())
@@ -108,17 +122,27 @@ def _per_episode_c1(
         "unnecessary_change": unnecessary,
         "final_success": final,
         "retry_success": retry_success,
+        **sel,
     }
 
 
 def _per_episode_c2(
     *, revised_intent: Optional[Intent], oracle_factor: str,
     initial_intent: Intent, retry_success: Optional[bool],
-    initial_success: bool, factor_menu: tuple[str, ...] = INTENT_FIELDS,
+    initial_success: bool, gt_intent: Intent,
+    factor_menu: tuple[str, ...] = INTENT_FIELDS,
 ) -> dict:
     """Compute C2 metrics. For C2 there is no 'predicted factor' — instead
     we measure which factors changed vs the oracle-frozen set (all but the
-    true wrong factor)."""
+    true wrong factor).
+
+    Selectivity metrics use the SAME ``implicated_factor = oracle_factor`` as
+    C1, so C1/C2 preservation / unnecessary / harmful are directly comparable.
+    """
+    sel = selectivity_metrics(
+        initial=initial_intent, revised=revised_intent, gt=gt_intent,
+        implicated_factor=oracle_factor, factor_menu=factor_menu,
+    )
     if revised_intent is None:
         return {
             "parse_failed": True,
@@ -128,6 +152,7 @@ def _per_episode_c2(
             "fixed_oracle_factor": None,
             "final_success": bool(initial_success),
             "retry_success": None,
+            **sel,
         }
     factors_changed = _factors_changed(initial_intent, revised_intent, factor_menu)
     # Frozen-preserved (C2 sense): no factor OTHER than oracle_factor changed.
@@ -147,17 +172,33 @@ def _per_episode_c2(
         "fixed_oracle_factor": fixed_oracle,
         "final_success": final,
         "retry_success": retry_success,
+        **sel,
     }
 
 
+# Numeric selectivity keys present on every row (C1 + C2). These are MEANS,
+# not boolean rates — aggregated over ALL rows (parse-fail rows carry the
+# revised=None values: preservation 0.0, unnecessary/harmful 0). They are
+# directly comparable across C1 and C2 (same implicated_factor = oracle).
+_SELECTIVITY_MEAN_KEYS: tuple[str, ...] = (
+    "preservation",
+    "unnecessary_changes_count", "unnecessary_changes_rate",
+    "harmful_changes_count", "harmful_changes_rate",
+)
+
+
 def _aggregate(rows: list[dict], keys: list[str]) -> dict:
-    """Rate of each key, ignoring None entries."""
+    """Rate of each boolean key, ignoring None entries; plus the mean of each
+    numeric selectivity key (over ALL rows — None-free by construction)."""
     out: dict = {}
     for k in keys:
         vals = [r[k] for r in rows if r.get(k) is not None]
         out[k + "_rate"] = (sum(bool(v) for v in vals) / len(vals)
                             if vals else None)
         out["n_" + k] = len(vals)
+    for k in _SELECTIVITY_MEAN_KEYS:
+        vals = [r[k] for r in rows if r.get(k) is not None]
+        out[k + "_mean"] = (sum(vals) / len(vals)) if vals else None
     return out
 
 
@@ -221,6 +262,9 @@ def main(argv: list[str] | None = None) -> int:
             scene_initial,
             blocked_sides=adapter.default_blocked_factory(initial),
         )
+        # Ground-truth correct intent for this scene — the selectivity
+        # reference for BOTH C1 and C2 (harmful_changes is measured against it).
+        gt_intent = adapter.oracle_correct_intent(scene_executor)
 
         # First-person wrist frame (PushCube only; None elsewhere or when
         # --no-wrist). When present, both conditions diagnose from the
@@ -256,9 +300,15 @@ def main(argv: list[str] | None = None) -> int:
                 initial_intent=initial, revised_intent=revised,
                 retry_success=retry_success,
                 initial_success=ep["initial_success"],
+                gt_intent=gt_intent,
                 factor_menu=factor_menu,
             )
-            row.update({"seed": seed, "oracle_wrong_factor": oracle_factor})
+            row.update({
+                "seed": seed, "oracle_wrong_factor": oracle_factor,
+                "initial_intent": initial.to_dict(),
+                "revised_intent": revised.to_dict() if revised is not None else None,
+                "gt_intent": gt_intent.to_dict(),
+            })
             c1_rows.append(row)
             print(f"  C1 seed={seed} vlm={vlm_factor!r:>22} "
                   f"oracle={oracle_factor!r:>22} "
@@ -266,7 +316,10 @@ def main(argv: list[str] | None = None) -> int:
 
         # ---------- C2: VLM free-form → verbatim retry ---------- #
         if "c2" in conditions:
-            revised2 = vlm.diagnose_free_form(
+            # diagnose_free_form_verbose returns (intent_or_None, raw_vlm_text)
+            # and runs the ONE format-repair retry internally; we persist the
+            # raw text so future parse debugging needs no re-run.
+            revised2, raw_vlm_text = vlm.diagnose_free_form_verbose(
                 task=args.task,
                 image_path=ep["frame_path"],
                 initial_intent=initial,
@@ -287,9 +340,16 @@ def main(argv: list[str] | None = None) -> int:
                 revised_intent=revised2, oracle_factor=oracle_factor,
                 initial_intent=initial, retry_success=retry_success2,
                 initial_success=ep["initial_success"],
+                gt_intent=gt_intent,
                 factor_menu=factor_menu,
             )
-            row2.update({"seed": seed, "oracle_wrong_factor": oracle_factor})
+            row2.update({
+                "seed": seed, "oracle_wrong_factor": oracle_factor,
+                "raw_vlm_text": raw_vlm_text,
+                "initial_intent": initial.to_dict(),
+                "revised_intent": revised2.to_dict() if revised2 is not None else None,
+                "gt_intent": gt_intent.to_dict(),
+            })
             c2_rows.append(row2)
             print(f"  C2 seed={seed} revised={revised2 is not None} "
                   f"retry_success={retry_success2}")
@@ -359,6 +419,10 @@ def _write_report_md(
         return (sum(bool(v) for v in vals) / len(vals)
                 if vals else float("nan"))
 
+    def mean(rows, key):
+        vals = [r[key] for r in rows if r.get(key) is not None]
+        return (sum(vals) / len(vals)) if vals else float("nan")
+
     lines = [f"# Stage-5 P2 VLM attribution — {task}", ""]
     if rule_acc is not None:
         lines.append(
@@ -375,6 +439,12 @@ def _write_report_md(
             f"- unnecessary_factor_change: **{rate(c1_rows, 'unnecessary_change'):.3f}**",
             f"- final_success_rate: **{rate(c1_rows, 'final_success'):.3f}**",
             f"- parse_failure_rate: {rate(c1_rows, 'parse_failed'):.3f}",
+            f"- preservation (mean over non-implicated factors): "
+            f"**{mean(c1_rows, 'preservation'):.3f}**",
+            f"- unnecessary_changes_rate (mean): "
+            f"{mean(c1_rows, 'unnecessary_changes_rate'):.3f}",
+            f"- harmful_changes_rate (mean): "
+            f"{mean(c1_rows, 'harmful_changes_rate'):.3f}",
             "",
         ])
     if c2_rows is not None:
@@ -387,6 +457,12 @@ def _write_report_md(
             f"- fixed_oracle_factor_rate: {rate(c2_rows, 'fixed_oracle_factor'):.3f}",
             f"- final_success_rate: **{rate(c2_rows, 'final_success'):.3f}**",
             f"- parse_failure_rate: {rate(c2_rows, 'parse_failed'):.3f}",
+            f"- preservation (mean over non-implicated factors): "
+            f"**{mean(c2_rows, 'preservation'):.3f}**",
+            f"- unnecessary_changes_rate (mean): "
+            f"{mean(c2_rows, 'unnecessary_changes_rate'):.3f}",
+            f"- harmful_changes_rate (mean): "
+            f"{mean(c2_rows, 'harmful_changes_rate'):.3f}",
             "",
         ])
     if c1_rows is not None and c2_rows is not None:
@@ -405,6 +481,14 @@ def _write_report_md(
             f"(Δ = {d_pres:+.1f}pp; PASS if Δ ≥ 0)",
             f"- **C1 success ≥ C2 success within 5pp** "
             f"(Δ = {d_succ:+.1f}pp; PASS if Δ ≥ -5)",
+            f"- **C1 selectivity-preservation ≥ C2** "
+            f"(mean preservation Δ = "
+            f"{(mean(c1_rows, 'preservation') - mean(c2_rows, 'preservation')) * 100:+.1f}pp; "
+            f"PASS if Δ ≥ 0)",
+            f"- **C1 harmful-changes ≤ C2** "
+            f"(mean harmful_changes_rate Δ = "
+            f"{(mean(c1_rows, 'harmful_changes_rate') - mean(c2_rows, 'harmful_changes_rate')) * 100:+.1f}pp; "
+            f"PASS if Δ ≤ 0)",
             "",
         ])
     out_path.write_text("\n".join(lines) + "\n")

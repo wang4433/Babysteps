@@ -1,0 +1,2323 @@
+{
+  "n_episodes": 50,
+  "per_episode": [
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 100,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 101,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 102,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 103,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 104,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 105,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 106,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 107,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 108,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 109,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 110,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 111,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 112,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 113,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 114,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 115,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 116,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 117,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 118,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 119,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 120,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 121,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 122,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 123,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 124,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 125,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 126,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 127,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 128,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 129,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 130,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 131,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 132,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 133,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 134,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 135,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 136,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 137,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 138,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 139,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 140,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 141,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 142,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 143,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 144,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 145,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 146,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-y\",\n  \"contact_region\": \"plus_y_face\",\n  \"approach_direction\": \"from_plus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_y",
+        "constraint_region": "none",
+        "contact_region": "plus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-y"
+      },
+      "seed": 147,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_-x\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_plus_x\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_plus_x",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_-x"
+      },
+      "seed": 148,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    },
+    {
+      "factors_changed": [
+        "direction_grounding"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": true,
+      "gt_intent": {
+        "approach_direction": "from_minus_x",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+x"
+      },
+      "harmful_changes_count": 0,
+      "harmful_changes_rate": 0.0,
+      "initial_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "actor_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "oracle_wrong_factor": "direction_grounding",
+      "parse_failed": false,
+      "preservation": 1.0,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_at_target\",\n  \"object_motion\": \"translate_+y\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_minus_y\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_push\",\n  \"direction_grounding\": \"observer_frame\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_minus_y",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "direction_grounding": "observer_frame",
+        "embodiment_mapping": "proxy_contact_to_franka_push",
+        "goal_state": "cube_at_target",
+        "object_motion": "translate_+y"
+      },
+      "seed": 149,
+      "unnecessary_change": false,
+      "unnecessary_changes_count": 0,
+      "unnecessary_changes_rate": 0.0
+    }
+  ],
+  "summary": {
+    "final_success_rate": 1.0,
+    "fixed_oracle_factor_rate": 1.0,
+    "frozen_factor_preserved_rate": 1.0,
+    "harmful_changes_count_mean": 0.0,
+    "harmful_changes_rate_mean": 0.0,
+    "n_final_success": 50,
+    "n_fixed_oracle_factor": 50,
+    "n_frozen_factor_preserved": 50,
+    "n_parse_failed": 50,
+    "n_unnecessary_change": 50,
+    "parse_failed_rate": 0.0,
+    "preservation_mean": 1.0,
+    "unnecessary_change_rate": 0.0,
+    "unnecessary_changes_count_mean": 0.0,
+    "unnecessary_changes_rate_mean": 0.0
+  },
+  "task": "CrossViewPush-v1"
+}

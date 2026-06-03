@@ -1,0 +1,2223 @@
+{
+  "n_episodes": 50,
+  "per_episode": [
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 100,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 101,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 102,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 103,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 104,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 105,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 106,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 107,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 108,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 109,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 110,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 111,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 112,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 113,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 114,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 115,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 116,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 117,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 118,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 119,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 120,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 121,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 122,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 123,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 124,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 125,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 126,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 127,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 128,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 129,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 130,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 131,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": false,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": false,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 132,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 133,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 134,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 135,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 136,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 137,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 138,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 139,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 140,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 141,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 142,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 143,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 144,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 145,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 146,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"minus_y_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_y_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 147,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 148,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    },
+    {
+      "factors_changed": [
+        "contact_region",
+        "embodiment_mapping"
+      ],
+      "final_success": true,
+      "fixed_oracle_factor": true,
+      "frozen_factor_preserved": false,
+      "gt_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "harmful_changes_count": 1,
+      "harmful_changes_rate": 0.16666666666666666,
+      "initial_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "minus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_grasp",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "oracle_wrong_factor": "contact_region",
+      "parse_failed": false,
+      "preservation": 0.8,
+      "raw_vlm_text": "```json\n{\n  \"goal_state\": \"cube_lifted_at_target\",\n  \"object_motion\": \"lift_up\",\n  \"contact_region\": \"plus_x_face\",\n  \"approach_direction\": \"from_above\",\n  \"constraint_region\": \"none\",\n  \"embodiment_mapping\": \"proxy_contact_to_franka_pick_and_place\"\n}\n```",
+      "retry_success": true,
+      "revised_intent": {
+        "approach_direction": "from_above",
+        "constraint_region": "none",
+        "contact_region": "plus_x_face",
+        "embodiment_mapping": "proxy_contact_to_franka_pick_and_place",
+        "goal_state": "cube_lifted_at_target",
+        "object_motion": "lift_up"
+      },
+      "seed": 149,
+      "unnecessary_change": true,
+      "unnecessary_changes_count": 1,
+      "unnecessary_changes_rate": 0.2
+    }
+  ],
+  "summary": {
+    "final_success_rate": 0.9,
+    "fixed_oracle_factor_rate": 1.0,
+    "frozen_factor_preserved_rate": 0.0,
+    "harmful_changes_count_mean": 1.0,
+    "harmful_changes_rate_mean": 0.16666666666666674,
+    "n_final_success": 50,
+    "n_fixed_oracle_factor": 50,
+    "n_frozen_factor_preserved": 50,
+    "n_parse_failed": 50,
+    "n_unnecessary_change": 50,
+    "parse_failed_rate": 0.0,
+    "preservation_mean": 0.7999999999999997,
+    "unnecessary_change_rate": 1.0,
+    "unnecessary_changes_count_mean": 1.0,
+    "unnecessary_changes_rate_mean": 0.19999999999999993
+  },
+  "task": "PickCube-v1"
+}
