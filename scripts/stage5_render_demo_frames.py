@@ -117,6 +117,16 @@ def _seed_from_record(rec: dict) -> int:
     return int(rec["episode_id"].split("_")[-1])
 
 
+def _already_rendered(out_dir: Path, seed: int) -> bool:
+    """True if ``seed_NNNN.npz`` already exists (for --skip-existing / resume).
+
+    Lets a preempted standby render resume where it left off instead of
+    re-rendering every demo. Frames are deterministic per seed, so skipping an
+    existing file is safe.
+    """
+    return (out_dir / f"seed_{seed:04d}.npz").exists()
+
+
 def _read_stackcube_obs(obs):
     """(tcp_xyzw, cubeA_xy, cubeA_z, cubeB_xy, cubeB_z) from a StackCube obs."""
     raw = to_np(obs["extra"]["tcp_pose"])
@@ -437,6 +447,10 @@ def main(argv=None) -> int:
     p.add_argument("--topdown", action="store_true",
                    help="Render from an overhead top-down camera instead of "
                         "the default third-person view (Stage-5 viewpoint test).")
+    p.add_argument("--skip-existing", action="store_true",
+                   help="Skip seeds whose seed_NNNN.npz already exists in "
+                        "--out-dir (resume a preempted/standby render). Frames "
+                        "are deterministic per seed, so this is safe.")
     args = p.parse_args(argv)
 
     if args.jsonl is not None:
@@ -457,6 +471,11 @@ def main(argv=None) -> int:
         env = _make_env(task, topdown=args.topdown)
         try:
             for rec in records:
+                seed = _seed_from_record(rec)
+                out = args.out_dir / f"seed_{seed:04d}.npz"
+                if args.skip_existing and _already_rendered(args.out_dir, seed):
+                    print(f"skip seed {seed:04d} (exists)", flush=True)
+                    continue
                 seed, frames = _capture_one(env, adapter, task, rec)
                 out = args.out_dir / f"seed_{seed:04d}.npz"
                 np.savez_compressed(out, frames=frames)
@@ -491,6 +510,9 @@ def main(argv=None) -> int:
     env = _make_env(task, topdown=args.topdown)
     try:
         for seed in seeds:
+            if args.skip_existing and _already_rendered(args.out_dir, seed):
+                print(f"skip seed {seed:04d} (exists)", flush=True)
+                continue
             seed_out, frames = _capture_one_native(env, adapter, task, seed)
             out = args.out_dir / f"seed_{seed_out:04d}.npz"
             np.savez_compressed(out, frames=frames)

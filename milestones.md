@@ -111,6 +111,18 @@ learned-repair split**:
 
 ### M5a: Vision Encoder Swap (P1 — critical first step)
 
+> **Status (2026-06-03): PARTIAL PASS — PushCube only.** Frozen DINOv2
+> ViT-B/14 (spatial_mean) → IntentHead. PushCube end-to-end passes: G1
+> `object_motion` 0.95 (n=20, thin — labels collapse to near-binary +x/−x),
+> G4 latent vs `same_intent_retry` +96pp, G5 latent vs oracle −2pp (96% vs
+> 98%, within the −5pp tolerance). StackCube `object_motion` FAILS G1: 0.42
+> (n=40) → 0.68 (n=200), still below the 0.90 gate — a relational
+> two-object-direction bottleneck. Object-LOCAL DINO pooling gives NO lift
+> over global (falsified at n=200, `reports/stage5/object_relation_probe_n200`);
+> the ~0.95 position oracle is tautological by construction. R3M / encoder-swap
+> ablations not pursued. **Scope locked to PushCube for the end-to-end latent
+> claim.**
+
 **Goal:** Replace handcrafted 20-dim Z with frozen DINOv2 features on
 demo RGB frames. Retrain IntentHead. Gate: G1 probe ≥ 90%.
 
@@ -122,6 +134,19 @@ Deliverable:
 
 ### M5b: VLM Attribution Baseline (P2)
 
+> **Status (2026-06-03): DONE — validated.** InternVL3.5-8B attribution
+> passes the gate on all 5 tasks (≥ rule-table). C1 (VLM-diagnosis +
+> slot-local edit) beats C2 (VLM free-replan) on selectivity on every task:
+> C1 frozen-factor preservation 1.000 and harmful-change rate 0.000
+> everywhere. The fair free-replan baseline was re-run (2026-06-03) with the
+> parse-failure straw-man fixed (StackCube C2 parse-fail 0.76 → 0.00); C1
+> reuses the prior rollout byte-for-byte, only C2 was re-run. Headlines:
+> PushCube C1 98% vs C2 70% success (dual win); PickCube 92% vs 90% but C2
+> flips `embodiment_mapping` in 50/50 episodes; StackCube C2 wins raw success
+> (82% vs 70%) yet C1 preserves 100% vs 2%; TurnFaucet attr 1.0 vs rule 0.5;
+> CrossViewPush attr 1.0 vs rule 0.0. Rule-table still ties C1 on StackCube
+> `goal_state` attribution (0.86). Reports: `reports/stage5/p2_vlm_fair`.
+
 **Goal:** Run a VLM (InternVL3.5-8B) on failure packets, measure
 attribution accuracy. Compare VLM-diag + slot-edit vs. VLM free-form replan.
 
@@ -132,6 +157,15 @@ Deliverable:
 
 ### M5c: World Model Counterfactual (P3)
 
+> **Status (2026-06-03): NOT STARTED — de-risking falsified.** No world-model
+> code/data/eval exists yet. The P3 de-risking probes were all falsified: VLM
+> demo-read (PushCube 0.0, StackCube 0.25) and top-down / oblique viewpoint do
+> not recover `object_motion` above the gate. Separately, the TurnFaucet
+> (Sub-project D) re-grasp oracle is feasible (28–32% vs 4% poke baseline;
+> vertical-axis subset clears the 30% gate) but productionization is pending a
+> Stage-4 feature-dim decision. Go/no-go for P3 before the ICLR deadline is
+> open — fallback is mechanical G2 bit-identity certification.
+
 **Goal:** Train a latent dynamics model on ManiSkill rollouts. Use it
 for G3 selectivity certification (counterfactual slot-drift test).
 
@@ -141,6 +175,8 @@ Deliverable:
 - Revision-ranking ablation (world-model-guided edit selection).
 
 ### M5d: Learned Action Decoder (P4 — optional)
+
+> **Status (2026-06-03): NOT STARTED — deferred (optional).**
 
 **Goal:** Replace skill compiler with a small policy conditioned on G.
 Deferrable; the paper is strong with M5a–M5c and existing compilers.
@@ -163,33 +199,42 @@ This distinction needs to appear in the intro, method, and experiments.
 
 ICLR deadlines are usually around September/October.
 
-**Revised schedule (as of 2026-05-24):**
+**Revised schedule (as of 2026-06-03):**
 
-**Late May – mid June:**
-M5a — Vision encoder swap. G1 probe on DINOv2 features. This is the
-go/no-go gate for Framing B. If G1 fails, diagnose and fix (spatial
-pooling, R3M, fine-tuning) before proceeding.
+**Done (ahead of schedule):**
+- M5b (P2 VLM attribution) — complete and validated: all 5 tasks, C1 > C2
+  on selectivity, fair free-replan baseline locked.
+- M5a (P1 vision encoder) — PushCube end-to-end PASS; StackCube relational
+  bottleneck diagnosed (object-local pooling falsified at n=200); scope
+  locked to PushCube.
 
-**Mid June – early July:**
-M5b — VLM attribution experiments. Build the `vlm_free_replan` baseline.
-Generate the Stage 5 comparison table.
+**June (now):**
+- **P3 go/no-go decision** (the critical open call): train a latent dynamics
+  model for G3 counterfactual selectivity, or fall back to mechanical G2
+  bit-identity certification as the paper version.
+- Resolve TurnFaucet (Sub-project D) productionization (Stage-4 feature-dim
+  decision) — or move it to the appendix as attribution-only.
+- Commit the outstanding object-relation diagnostics + n=200 reports.
 
 **July:**
-M5c — World model training + G3 counterfactual. Run 5-task × 50-seed
-full evaluation. Ablations (pooling, encoder, slot dim, multi-retry).
+- If P3 greenlit: forward model + G3 counterfactual report. Otherwise
+  consolidate the 5-task P2 main table + PushCube end-to-end latent story.
+- Run the final 5-task × 50-seed evaluation; ablations (slot dim, multi-retry).
 
 **August:**
-Write full paper draft, figures, method diagram. Promote TurnFaucet
-and CrossViewPush to the main table (5 tasks total).
+Write full paper draft, figures, method diagram. TurnFaucet and
+CrossViewPush in the main table (5 tasks total).
 
 **Early September:**
 Polish, rerun final experiments, write rebuttal-ready limitations.
 
-## Priorities (updated 2026-05-24)
+## Priorities (updated 2026-06-03)
 
-The immediate next step is **M5a** (vision encoder swap):
+M5a (P1) and M5b (P2) are done. The immediate next step is the **P3
+go/no-go decision**:
 
-> Implement `vision_features.py`, re-render episodes with frame capture,
-> train IntentHead on DINOv2 features, run G1 probe. This is the
-> critical gate — without vision-grounded features, the "latent" claim
-> doesn't land.
+> Either train a latent dynamics model for G3 counterfactual selectivity,
+> or accept mechanical G2 bit-identity certification as the paper version
+> and consolidate the P2 main table + PushCube end-to-end latent story.
+> In parallel: resolve TurnFaucet productionization (or appendix it) and
+> commit the outstanding object-relation diagnostics.

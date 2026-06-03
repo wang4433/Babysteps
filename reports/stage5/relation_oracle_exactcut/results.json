@@ -1,0 +1,137 @@
+{
+  "dinov2_reference": 0.42,
+  "label_dist": {
+    "translate_+x": 10,
+    "translate_+y": 10,
+    "translate_-x": 10,
+    "translate_-y": 10
+  },
+  "n": 40,
+  "results": {
+    "A0 (cubeA start)": {
+      "dim": 2,
+      "direct": {
+        "majority_class_acc": 0.25,
+        "n_episodes": 40,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.4,
+        "probe_acc_std": 0.1457737973711325,
+        "shuffled_features_acc": 0.275
+      },
+      "intent": {
+        "majority_class_acc": 0.25,
+        "n_episodes": 40,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.35,
+        "probe_acc_std": 0.1457737973711325,
+        "shuffled_features_acc": 0.35,
+        "trivially_constant": false
+      }
+    },
+    "B (cubeB)": {
+      "dim": 2,
+      "direct": {
+        "majority_class_acc": 0.25,
+        "n_episodes": 40,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.5,
+        "probe_acc_std": 0.2091650066335189,
+        "shuffled_features_acc": 0.25
+      },
+      "intent": {
+        "majority_class_acc": 0.25,
+        "n_episodes": 40,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.525,
+        "probe_acc_std": 0.24238399287081647,
+        "shuffled_features_acc": 0.375,
+        "trivially_constant": false
+      }
+    },
+    "B-A0 (relative)": {
+      "dim": 2,
+      "direct": {
+        "majority_class_acc": 0.25,
+        "n_episodes": 40,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.95,
+        "probe_acc_std": 0.06123724356957946,
+        "shuffled_features_acc": 0.325
+      },
+      "intent": {
+        "majority_class_acc": 0.25,
+        "n_episodes": 40,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.95,
+        "probe_acc_std": 0.06123724356957946,
+        "shuffled_features_acc": 0.35,
+        "trivially_constant": false
+      }
+    },
+    "[A0;B] (concat)": {
+      "dim": 4,
+      "direct": {
+        "majority_class_acc": 0.25,
+        "n_episodes": 40,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.8,
+        "probe_acc_std": 0.1,
+        "shuffled_features_acc": 0.35
+      },
+      "intent": {
+        "majority_class_acc": 0.25,
+        "n_episodes": 40,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.9,
+        "probe_acc_std": 0.049999999999999996,
+        "shuffled_features_acc": 0.35,
+        "trivially_constant": false
+      }
+    }
+  },
+  "rule_accuracy": 1.0,
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    30,
+    31,
+    35,
+    38,
+    40,
+    43,
+    51,
+    54,
+    55,
+    73,
+    75,
+    79,
+    84
+  ],
+  "source": "datasets/stage5/relation_oracle/StackCube-v1 (cubeA_xy0, cubeB_xy) + datasets/stage4/varied_intent/StackCube-v1/samples.jsonl",
+  "task": "StackCube-v1"
+}

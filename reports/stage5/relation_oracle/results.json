@@ -1,0 +1,147 @@
+{
+  "dinov2_reference": 0.42,
+  "label_dist": {
+    "translate_+x": 5,
+    "translate_+y": 17,
+    "translate_-x": 17,
+    "translate_-y": 11
+  },
+  "n": 50,
+  "results": {
+    "A0 (cubeA start)": {
+      "dim": 2,
+      "direct": {
+        "majority_class_acc": 0.34,
+        "n_episodes": 50,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.54,
+        "probe_acc_std": 0.04898979485566355,
+        "shuffled_features_acc": 0.27999999999999997
+      },
+      "intent": {
+        "majority_class_acc": 0.34,
+        "n_episodes": 50,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.5,
+        "probe_acc_std": 0.06324555320336757,
+        "shuffled_features_acc": 0.36,
+        "trivially_constant": false
+      }
+    },
+    "B (cubeB)": {
+      "dim": 2,
+      "direct": {
+        "majority_class_acc": 0.34,
+        "n_episodes": 50,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.56,
+        "probe_acc_std": 0.16248076809271922,
+        "shuffled_features_acc": 0.33999999999999997
+      },
+      "intent": {
+        "majority_class_acc": 0.34,
+        "n_episodes": 50,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.52,
+        "probe_acc_std": 0.116619037896906,
+        "shuffled_features_acc": 0.3,
+        "trivially_constant": false
+      }
+    },
+    "B-A0 (relative)": {
+      "dim": 2,
+      "direct": {
+        "majority_class_acc": 0.34,
+        "n_episodes": 50,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.9800000000000001,
+        "probe_acc_std": 0.03999999999999999,
+        "shuffled_features_acc": 0.36
+      },
+      "intent": {
+        "majority_class_acc": 0.34,
+        "n_episodes": 50,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.9399999999999998,
+        "probe_acc_std": 0.04898979485566355,
+        "shuffled_features_acc": 0.36,
+        "trivially_constant": false
+      }
+    },
+    "[A0;B] (concat)": {
+      "dim": 4,
+      "direct": {
+        "majority_class_acc": 0.34,
+        "n_episodes": 50,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.86,
+        "probe_acc_std": 0.12000000000000001,
+        "shuffled_features_acc": 0.32
+      },
+      "intent": {
+        "majority_class_acc": 0.34,
+        "n_episodes": 50,
+        "n_unique_labels": 4,
+        "probe_acc_mean": 0.9400000000000001,
+        "probe_acc_std": 0.04898979485566354,
+        "shuffled_features_acc": 0.36,
+        "trivially_constant": false
+      }
+    }
+  },
+  "rule_accuracy": 0.94,
+  "seeds": [
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127,
+    128,
+    129,
+    130,
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140,
+    141,
+    142,
+    143,
+    144,
+    145,
+    146,
+    147,
+    148,
+    149
+  ],
+  "source": "p2_vlm_wrist/StackCube-v1 rollouts (initial_obj_xy, goal_xy) + episodes.jsonl",
+  "task": "StackCube-v1"
+}

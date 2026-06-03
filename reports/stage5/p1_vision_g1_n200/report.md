@@ -1,46 +1,35 @@
 # Stage-5 P1 — Vision-grounded G1 (DINOv2 ViT-B/14)
 
-> **SUPERSEDED IN PART — n=200 re-check (2026-06-02).** The headline FAIL cell
-> StackCube `object_motion` = **0.42 ± 0.10** here is **n=40**. Re-run at
-> **n=200** (`reports/stage5/p1_vision_g1_n200`) gives **0.68 ± 0.10**: the "0.42
-> representation bottleneck" was substantially a small-sample / underpowered-probe
-> effect, not a pure representation failure. A real but smaller gap to the ~0.95
-> position oracle remains, and object-LOCAL DINO pooling does NOT close it
-> (`reports/stage5/object_relation_probe_n200`: object-local ≈ global; the B−A
-> relation is *worse*). So the "object-centric relational representation
-> bottleneck" framing (Interpretation / Implications below) is overstated —
-> treat all n=40 gate numbers here as underpowered.
+> **n=200 RE-CHECK (2026-06-02).** StackCube `object_motion` in the table below
+> is **0.68 ± 0.10 at n=200**, vs 0.42 ± 0.10 at n=40
+> (`reports/stage5/p1_vision_g1`). The "0.42" was largely an underpowered-probe /
+> small-sample effect (the original report itself hedged "possibly compounded by
+> data scale"). Still below the 0.90 gate, but the deficit is ~half what 0.42
+> implied. **CAVEAT: only the StackCube table above is n=200.** The Falsification
+> log / Interpretation / Implications prose below is inherited **n=40 boilerplate**
+> from the cert report-writer and is STALE (it still says "0.42", "n=40",
+> "scope narrows to PushCube"). Object-local pooling does not lift this
+> (`reports/stage5/object_relation_probe_n200`).
 
 Input Z: 768-dim DINOv2 ViT-B/14 features (spatial_mean pool over demo frames).
 IntentHead: F=6, d_slot=32, hidden=256, n_epochs=300, lr=0.01.
 Outer CV: per-fold IntentHead training; frozen LogisticRegression on G_train, evaluated on G_test.
 
-### PushCube-v1
-
-| factor | class | n_unique | n_episodes | majority | shuffled | probe ± std | gate |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| approach_direction | label_identity | 2 | 20 | 0.50 | 0.50 | 1.00 ± 0.00 | label_identity |
-| constraint_region | trivially_constant | 1 | 20 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
-| contact_region | label_identity | 2 | 20 | 0.50 | 0.50 | 1.00 ± 0.00 | label_identity |
-| embodiment_mapping | trivially_constant | 1 | 20 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
-| goal_state | trivially_constant | 1 | 20 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
-| object_motion | geometric | 3 | 20 | 0.50 | 0.40 | 0.95 ± 0.22 | PASS |
-
 ### StackCube-v1
 
 | factor | class | n_unique | n_episodes | majority | shuffled | probe ± std | gate |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| approach_direction | trivially_constant | 1 | 40 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
-| constraint_region | trivially_constant | 1 | 40 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
-| contact_region | trivially_constant | 1 | 40 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
-| embodiment_mapping | trivially_constant | 1 | 40 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
-| goal_state | trivially_constant | 1 | 40 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
-| object_motion | geometric | 4 | 40 | 0.25 | 0.28 | 0.42 ± 0.10 | FAIL |
+| approach_direction | trivially_constant | 1 | 200 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
+| constraint_region | trivially_constant | 1 | 200 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
+| contact_region | trivially_constant | 1 | 200 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
+| embodiment_mapping | trivially_constant | 1 | 200 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
+| goal_state | trivially_constant | 1 | 200 | 1.00 | 1.00 | 1.00 ± 0.00 | trivial |
+| object_motion | geometric | 4 | 200 | 0.27 | 0.23 | 0.68 ± 0.10 | FAIL |
 
 
 **Gate:** all geometric cells >= 90% (margin 10% over majority & shuffled) -> **FAIL**
 
-Cells: 12 total | 2 geometric (1 pass / 1 fail) | 2 label-identity | 8 trivially constant.
+Cells: 6 total | 1 geometric (0 pass / 1 fail) | 0 label-identity | 5 trivially constant.
 
 ## Falsification log
 

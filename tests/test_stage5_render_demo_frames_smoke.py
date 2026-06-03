@@ -123,6 +123,28 @@ def test_main_accepts_seed_range_without_jsonl():
     )
 
 
+def test_already_rendered_and_skip_existing_flag(tmp_path: Path):
+    """--skip-existing resumes a preempted/standby render via a per-seed file check."""
+    import inspect
+
+    import scripts.stage5_render_demo_frames as mod
+
+    out = tmp_path / "frames"
+    out.mkdir()
+    assert mod._already_rendered(out, 7) is False
+    (out / "seed_0007.npz").write_bytes(b"")          # 4-wide zero-padded name
+    assert mod._already_rendered(out, 7) is True
+    assert mod._already_rendered(out, 8) is False
+
+    # The CLI exposes the resume flag and BOTH render loops (jsonl + seed-range)
+    # consult it — otherwise a preempted run would re-render done seeds.
+    src = inspect.getsource(mod.main)
+    assert "--skip-existing" in src, "main() must register --skip-existing"
+    assert src.count("_already_rendered") >= 2, (
+        "both the --jsonl and --seed-range render loops must honor --skip-existing"
+    )
+
+
 def test_seed_range_and_jsonl_are_mutually_exclusive():
     """argparse must reject specifying both --jsonl and --seed-range, AND
     must require at least one (the SystemExit path)."""
