@@ -308,3 +308,61 @@ an appendix. Increase seeds to **50 per task** with error bars.
 2. P2 — VLM attribution baseline (InternVL3.5-8B). Gate: attr acc ≥ rule.
 3. P3 — World model counterfactual. Gate: G3 passes.
 4. P4 — Learned action decoder. Optional / deferrable.
+
+### Groundability scope — the latent claim, written narrow-but-hard
+
+> Added 2026-06-04. Synthesizes the latent-intent pivot + the encoder-swap
+> control. Artifacts: `reports/stage5/dinov3_encoder_swap/SUMMARY.md`,
+> `reports/stage5/latent_decode_check/`, `reports/stage5/p2_vlm_latent/`,
+> `reports/stage5/goal_state_probe*`, `reports/stage5/plugcharger_probe*`.
+
+The latent claim is scoped **narrowly** so it is **hard**: the
+vision-grounded latent pipeline (frozen DINOv2 demo frames → trained
+IntentHead → per-factor nearest-centroid codebook) is demonstrated
+**end-to-end on PushCube** and only PushCube. There, vision-decoded intent
+reproduces the oracle JSON **49/50** per factor; the fully-latent loop (latent
+input + learned slot-local ReviseHead) matches the discrete fair run
+(frozen-preservation **1.00**, success **0.96**) and crushes VLM free-replan
+(0.70 / 0.68), with recovery **G4 = +96pp / G5 = +0pp = oracle exactly**. So
+replacing the hand-authored JSON method input — and the discrete operator — with
+vision costs nothing on the one task where the factors are visible. This answers
+the "JSON intent is privileged input" reviewer attack on a real end-to-end task.
+
+**Why only PushCube — the groundability map.** A frozen encoder can ground a
+latent factor only when the discriminating evidence is present in the deployed
+third-person pixels. We certify this per (task, factor) with the G1 probe
+(IntentHead-CV, gate 0.90), and the map is itself a result:
+
+| task · factor | groundable? | why |
+| --- | --- | --- |
+| PushCube · object_motion / contact_region / approach_direction | **✅ 0.98** | plainly visible in the demo frame |
+| PickCube · contact_region | ❌ | symbolic-only: grasp geometry is identical across faces (zero pixel signature) — a *task* limit, encoder-agnostic |
+| StackCube · object_motion | ❌ ~0.68 | representation-blocked; object-local pooling gives no lift |
+| StackCube · goal_state | ❌ | clean **config 0.99** but real-clip ceiling **~0.82**: the demo hides the vertical stack-vs-place motion (information loss) |
+| PlugCharger · charger_yaw (orientation) | ❌ ~0.85 | sub-resolution asymmetric base (~1–3 patches) |
+| PlugCharger · charger_xy (position) | ✅-but-trivial | the "where is the object" localization factor, not a manipulation intent |
+
+**The encoder-swap control (the hard part).** A reviewer will ask whether the
+negatives are just "DINOv2 wasn't strong enough." We answer with a controlled
+swap to **DINOv3** (ViT-L/16 and B/16, incl. res 512) under *identical* labels,
+probe, and gate — only the encoder changes (each at its native resize so neither
+is handicapped). Result (`SUMMARY.md`):
+
+- the **blocked factors stay blocked**: goal_state real-clip ceiling is
+  **identical at ~0.82** across every encoder and resolution; charger
+  orientation stays **~0.78–0.86** — both FAIL;
+- yet on a factor DINOv2 could *not* ground at deployed resolution — charger
+  **position** — DINOv3 crosses the gate (**0.84 → 0.90–0.95**).
+
+DINOv3 helps *exactly* where the information is in the pixels and *not* where it
+isn't. This certifies the negative ladder is a **factor-observability** property,
+not an encoder-capacity artifact — the sharp, defensible form of the limitation.
+
+**Paper consequence.** The end-to-end *latent* claim is PushCube (clean, proven);
+the **5-task discrete framework** carries the structured-breadth claim
+(single-factor VLM-diagnosis + slot-local repair vs free-replan); the
+groundability map + encoder-swap is an honest **scope/limitation** section, not a
+weakness. Next encoder lever is **V-JEPA** (a video/world-model encoder) on the
+*temporal* cells — `object_motion`, and `goal_state` whose blocker is precisely
+temporal information loss — which a frozen *image* encoder cannot address by
+construction.
