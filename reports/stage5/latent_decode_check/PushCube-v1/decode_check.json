@@ -1,0 +1,1089 @@
+{
+  "per_episode": [
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 100
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 101
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 102
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 103
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 104
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 105
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 106
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 107
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 108
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 109
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 110
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 111
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 112
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 113
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 114
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 115
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 116
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 117
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 118
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 119
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 120
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 121
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 122
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 123
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 124
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 125
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 126
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 127
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 128
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 129
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 130
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 131
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 132
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 133
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 134
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 135
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 136
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 137
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 138
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 139
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 140
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 141
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 142
+    },
+    {
+      "all_decodable_agree": false,
+      "per_factor": {
+        "approach_direction": {
+          "agree": false,
+          "decoded": "from_plus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": false,
+          "decoded": "plus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": false,
+          "decoded": "translate_-x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 143
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 144
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 145
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 146
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 147
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 148
+    },
+    {
+      "all_decodable_agree": true,
+      "per_factor": {
+        "approach_direction": {
+          "agree": true,
+          "decoded": "from_minus_x",
+          "stored": "from_minus_x"
+        },
+        "contact_region": {
+          "agree": true,
+          "decoded": "minus_x_face",
+          "stored": "minus_x_face"
+        },
+        "object_motion": {
+          "agree": true,
+          "decoded": "translate_+x",
+          "stored": "translate_+x"
+        }
+      },
+      "seed": 149
+    }
+  ],
+  "summary": {
+    "all_decodable_agree_rate": 0.98,
+    "confusion_decoded_to_stored": {
+      "approach_direction": {
+        "from_minus_x->from_minus_x": 49,
+        "from_plus_x->from_minus_x": 1
+      },
+      "contact_region": {
+        "minus_x_face->minus_x_face": 49,
+        "plus_x_face->minus_x_face": 1
+      },
+      "object_motion": {
+        "translate_+x->translate_+x": 49,
+        "translate_-x->translate_+x": 1
+      }
+    },
+    "constant_factors_filled_from_base": [
+      "goal_state",
+      "constraint_region",
+      "embodiment_mapping"
+    ],
+    "decodable_factors": [
+      "object_motion",
+      "contact_region",
+      "approach_direction"
+    ],
+    "n_missing_feature": 0,
+    "n_scored": 50,
+    "per_factor_agreement": {
+      "approach_direction": 0.98,
+      "contact_region": 0.98,
+      "object_motion": 0.98
+    },
+    "task": "PushCube-v1"
+  }
+}

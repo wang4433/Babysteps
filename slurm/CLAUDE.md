@@ -261,6 +261,38 @@ ceiling (PushCube, PickCube) and gives a small real attribution gain where the
 failure is relationally visible (StackCube, +1 episode). Out-dirs:
 `{datasets,reports}/stage5/p2_vlm_wrist{,_nowrist}/{PickCube,StackCube}-v1`.
 
+### Stage-5 — LATENT-INPUT P2 on PushCube (job 10951957, 2026-06-03)
+
+The latent-intent pivot: the method INPUT is decoded from vision (frozen
+DINOv2 → trained IntentHead → per-factor nearest-centroid codebook) instead
+of the hand-authored JSON intent, AND C1's repair is the learned slot-local
+ReviseHead (not the discrete operator). JSON factors are used only for
+supervision (centroid training) + oracle eval. `stage5_p2_vlm_eval.py --latent`
+on PushCube, real InternVL3.5-8B (BF16) A100-40gb, same 50 held-out seeds
+(100-149). Wall 3:54.
+
+Pre-flight (GPU-free, `reports/stage5/latent_decode_check/PushCube-v1`):
+vision-decoded initial intent reproduces the JSON intent **49/50 (0.98)** per
+factor (object_motion/contact_region/approach_direction) — so the cached
+failure frames + oracle labels stay valid; `n_latent_mismatch=1`.
+
+| condition | attr | frozen-pres | unnec | harmful(mean) | success |
+| --------- | ---- | ----------- | ----- | ------------- | ------- |
+| **C1 latent (ours)** | 1.000 | **1.000** | 0.000 | 0.000 | **0.960** |
+| C2 free-replan | — | 0.700 | 0.300 | 0.047 | 0.680 |
+
+Gates: attr ≥ rule (1.000=1.000) PASS · pres ≥ C2 (+30pp) PASS · succ within
+5pp (+28pp) PASS · selectivity-pres (+6pp) PASS · harmful ≤ C2 (−4.7pp) PASS.
+
+Headline: **statistically identical to the discrete fair run** (C1 1.000/0.98
+vs C2 0.72/0.70) — replacing the JSON method input with vision-decoded latent
+intent AND the discrete operator with the learned slot-local ReviseHead costs
+nothing. Answers the "JSON intent is privileged input" reviewer attack on
+PushCube end-to-end. PushCube is the consolidated latent task; PickCube is
+representation-blocked (contact_region has zero pixel signature) and StackCube
+is descoped (goal_state constant in its cut). Out:
+`reports/stage5/p2_vlm_latent/PushCube-v1/`.
+
 ### Stage-5 M3 — Procedural baselines main table (job 10826466, 2026-05-26)
 
 A100-40GB, 50 held-out seeds (100-149), three tasks, all seven procedural

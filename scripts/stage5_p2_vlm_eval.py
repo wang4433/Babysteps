@@ -35,6 +35,8 @@ from dataclasses import replace
 from pathlib import Path
 from typing import Optional
 
+import numpy as np
+
 _ROOT = Path(__file__).resolve().parent.parent
 if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
@@ -42,10 +44,64 @@ if str(_ROOT) not in sys.path:
 from babysteps.envs.task_registry import get_task_entry  # noqa: E402
 from babysteps.failure import Attribution  # noqa: E402
 from babysteps.schemas import INTENT_FIELDS, Intent  # noqa: E402
+from babysteps.stage4.latent_policy import load_latent_pack  # noqa: E402
+from babysteps.stage5.latent_intent import (  # noqa: E402
+    build_latent_intent, latent_factor_names, latent_slot_edit,
+)
 from babysteps.stage5.selectivity import selectivity_metrics  # noqa: E402
 from babysteps.stage5.vlm_attribute import (  # noqa: E402
     InternVLClient, MockVLMClient, get_factor_menu,
 )
+
+
+def _make_vision_provider(features_dir: Path):
+    """Return ``provider(seed) -> Z`` loading cached DINOv2 features."""
+    features_dir = Path(features_dir)
+
+    def _provider(seed: int) -> np.ndarray:
+        return np.load(
+            features_dir / f"seed_{seed:04d}_dinov2.npy"
+        ).astype(np.float32)
+
+    return _provider
+
+
+def _make_fake_adapter(task: str):
+    """Stub adapter with a sim-free FakeEnvRunner (login-node smoke).
+
+    Success bits from the fake runner are NOT meaningful — this exists to
+    exercise the C1/C2 plumbing (including the latent path) without GPU.
+    """
+    from tests.conftest import (
+        FakeEnvRunner, FakePickEnvRunner, FakeStackCubeEnvRunner,
+    )
+    fakes = {
+        "PushCube-v1": FakeEnvRunner,
+        "PickCube-v1": FakePickEnvRunner,
+        "StackCube-v1": FakeStackCubeEnvRunner,
+    }
+    base_cls = get_task_entry(task).adapter_cls
+    fake_runner = fakes[task]()
+
+    class _StubAdapter(base_cls):
+        def make_env_runner(self):
+            return fake_runner
+
+    return _StubAdapter()
+
+
+def _base_intent_from_jsonl(path: Path) -> Intent:
+    """Base intent for the constant (non-decoded) factors, from the TRAIN cut.
+
+    The latent decode overwrites every factor that varies in the cut; only
+    the trivially-constant factors of this base survive, and those are task
+    constants sourced from SUPERVISION data — never from an eval episode.
+    """
+    for line in Path(path).read_text().splitlines():
+        if line.strip():
+            rec = json.loads(line)
+            return Intent.from_dict(rec["execution"]["initial_intent"])
+    raise ValueError(f"no records in {path}")
 
 
 def _read_episodes(path: Path) -> list[dict]:
@@ -220,6 +276,25 @@ def main(argv: list[str] | None = None) -> int:
                    help="Ignore wrist_frame_path even when present (single "
                         "third-person image, the original P2 setup). Use to "
                         "A/B single- vs multi-image on identical frames.")
+    p.add_argument("--latent", action="store_true",
+                   help="Latent-input mode: derive the initial intent from "
+                        "vision (DINOv2->IntentHead->nearest-centroid) and "
+                        "repair C1 via the learned slot-local ReviseHead, "
+                        "instead of the JSON intent + discrete operator. The "
+                        "JSON factors are then used only for supervision + "
+                        "eval. Requires --pack-dir, --features-dir, "
+                        "--train-jsonl.")
+    p.add_argument("--pack-dir", type=Path, default=None,
+                   help="LatentPack dir (required with --latent).")
+    p.add_argument("--features-dir", type=Path, default=None,
+                   help="Cached DINOv2 features dir (required with --latent).")
+    p.add_argument("--train-jsonl", type=Path, default=None,
+                   help="Training samples.jsonl; sources the constant (non-"
+                        "decoded) factors of the base intent (required with "
+                        "--latent).")
+    p.add_argument("--fake", action="store_true",
+                   help="Use a sim-free FakeEnvRunner (login-node smoke; "
+                        "success bits are not meaningful).")
     args = p.parse_args(argv)
 
     episodes = _read_episodes(args.episodes)
@@ -228,8 +303,21 @@ def main(argv: list[str] | None = None) -> int:
     print(f"loaded {len(episodes)} failure episodes for {args.task}")
 
     entry = get_task_entry(args.task)
-    adapter = entry.adapter_cls()
+    adapter = _make_fake_adapter(args.task) if args.fake else entry.adapter_cls()
     factor_menu = get_factor_menu(args.task)
+
+    # ---- Latent-input mode setup (Sever A + Sever B) ---- #
+    pack = None
+    vision_provider = None
+    base_intent = None
+    if args.latent:
+        if not (args.pack_dir and args.features_dir and args.train_jsonl):
+            p.error("--latent requires --pack-dir, --features-dir, --train-jsonl")
+        pack = load_latent_pack(args.pack_dir)
+        vision_provider = _make_vision_provider(args.features_dir)
+        base_intent = _base_intent_from_jsonl(args.train_jsonl)
+        print(f"LATENT mode: pack decodes {latent_factor_names(pack)} from "
+              f"vision; constant factors from {args.train_jsonl}")
 
     vlm: MockVLMClient | InternVLClient
     if args.mock:
@@ -247,7 +335,18 @@ def main(argv: list[str] | None = None) -> int:
 
     for ep in episodes:
         seed = ep["seed"]
-        initial = Intent.from_dict(ep["initial_intent"])
+        # Sever A — the method input. In latent mode the initial intent is
+        # decoded from vision (DINOv2->IntentHead->nearest-centroid); the
+        # stored JSON is used only to (a) source constant factors via the
+        # train cut and (b) audit faithfulness. Default mode reads the JSON.
+        if args.latent:
+            z = vision_provider(seed)
+            initial = build_latent_intent(pack, z, base_intent)
+            latent_matches_stored = (initial.to_dict() == ep["initial_intent"])
+        else:
+            z = None
+            initial = Intent.from_dict(ep["initial_intent"])
+            latent_matches_stored = None
         oracle_factor = ep["oracle_wrong_factor"]
         rule_factor = ep["rule_table_wrong_factor"]
         if rule_factor is not None:
@@ -265,6 +364,12 @@ def main(argv: list[str] | None = None) -> int:
         # Ground-truth correct intent for this scene — the selectivity
         # reference for BOTH C1 and C2 (harmful_changes is measured against it).
         gt_intent = adapter.oracle_correct_intent(scene_executor)
+        # In latent mode the initial intent is vision-derived, so recompute
+        # the oracle wrong factor from THAT intent for self-consistency
+        # (PushCube: still "approach_direction" whenever the demonstrated
+        # approach is blocked — matches the stored label for 49/50 seeds).
+        if args.latent:
+            oracle_factor = adapter.oracle_wrong_factor(initial, scene_executor)
 
         # First-person wrist frame (PushCube only; None elsewhere or when
         # --no-wrist). When present, both conditions diagnose from the
@@ -284,10 +389,19 @@ def main(argv: list[str] | None = None) -> int:
             retry_success: Optional[bool] = None
             if vlm_factor is not None:
                 try:
-                    attribution = _make_vlm_attribution(vlm_factor, factor_menu)
-                    revised, _rev = adapter.revise_intent(
-                        initial, attribution, scene_executor,
-                    )
+                    # Sever B — the repair. Latent mode edits the implicated
+                    # slot via the learned ReviseHead (decode back to a
+                    # token); default mode applies the discrete operator.
+                    if args.latent:
+                        revised = latent_slot_edit(
+                            pack, z, initial, vlm_factor,
+                            ep["failure_predicate"],
+                        )
+                    else:
+                        attribution = _make_vlm_attribution(vlm_factor, factor_menu)
+                        revised, _rev = adapter.revise_intent(
+                            initial, attribution, scene_executor,
+                        )
                     env_runner.reset(seed)
                     attempt = env_runner.run(revised, scene_executor)
                     retry_success = bool(attempt.success)
@@ -308,6 +422,7 @@ def main(argv: list[str] | None = None) -> int:
                 "initial_intent": initial.to_dict(),
                 "revised_intent": revised.to_dict() if revised is not None else None,
                 "gt_intent": gt_intent.to_dict(),
+                "latent_matches_stored": latent_matches_stored,
             })
             c1_rows.append(row)
             print(f"  C1 seed={seed} vlm={vlm_factor!r:>22} "
@@ -349,6 +464,7 @@ def main(argv: list[str] | None = None) -> int:
                 "initial_intent": initial.to_dict(),
                 "revised_intent": revised2.to_dict() if revised2 is not None else None,
                 "gt_intent": gt_intent.to_dict(),
+                "latent_matches_stored": latent_matches_stored,
             })
             c2_rows.append(row2)
             print(f"  C2 seed={seed} revised={revised2 is not None} "
@@ -366,6 +482,9 @@ def main(argv: list[str] | None = None) -> int:
         ])
         (args.out_dir / "c1_results.json").write_text(json.dumps({
             "task": args.task,
+            "latent_mode": bool(args.latent),
+            "n_latent_mismatch": sum(
+                1 for r in c1_rows if r.get("latent_matches_stored") is False),
             "rule_table_accuracy": rule_acc,
             "n_episodes": len(c1_rows),
             "summary": c1_summary,
@@ -380,6 +499,9 @@ def main(argv: list[str] | None = None) -> int:
         ])
         (args.out_dir / "c2_results.json").write_text(json.dumps({
             "task": args.task,
+            "latent_mode": bool(args.latent),
+            "n_latent_mismatch": sum(
+                1 for r in c2_rows if r.get("latent_matches_stored") is False),
             "n_episodes": len(c2_rows),
             "summary": c2_summary,
             "per_episode": c2_rows,

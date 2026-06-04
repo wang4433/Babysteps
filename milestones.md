@@ -122,6 +122,27 @@ learned-repair split**:
 > the ~0.95 position oracle is tautological by construction. R3M / encoder-swap
 > ablations not pursued. **Scope locked to PushCube for the end-to-end latent
 > claim.**
+>
+> **LATENT-INPUT PIVOT (2026-06-03): PushCube end-to-end on latent intent —
+> DONE.** The method INPUT is now decoded from vision (DINOv2 → IntentHead →
+> nearest-centroid), severing the hand-authored JSON intent; JSON factors are
+> used only for supervision (centroid codebook) + oracle eval. Pre-flight
+> (GPU-free): vision-decoded initial intent reproduces the JSON intent **49/50
+> (0.98)** on the P2 seeds (`reports/stage5/latent_decode_check/PushCube-v1`).
+> Full latent P2 run (job 10951957, `--latent`, real InternVL3.5-8B + sim,
+> `reports/stage5/p2_vlm_latent/PushCube-v1`): **C1 (latent input + latent
+> slot-local ReviseHead) preservation 1.000 / harmful 0.000 / success 0.960
+> vs C2 free-replan 0.700 / 0.047 / 0.680 — preservation +30pp, success
+> +28pp, all gates PASS** (`n_latent_mismatch=1`). Statistically identical to
+> the discrete fair run → the latent input + latent edit cost nothing. This is
+> the reviewer-defense: "JSON factors are used for evaluation, not as
+> privileged method input." Code: `babysteps/stage5/latent_intent.py`
+> (`build_latent_intent` = Sever A, `latent_slot_edit` = Sever B);
+> `scripts/stage5_p2_vlm_eval.py --latent`; sim-free tests in
+> `tests/test_stage5_latent_intent.py`. **PickCube latent is representation-
+> blocked** (its `contact_region` factor has zero pixel signature — the runner
+> never sets gripper yaw; collecting data won't help). StackCube descoped
+> (goal_state constant in cut). PushCube is the consolidated latent task.
 
 **Goal:** Replace handcrafted 20-dim Z with frozen DINOv2 features on
 demo RGB frames. Retrain IntentHead. Gate: G1 probe ≥ 90%.
