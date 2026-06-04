@@ -1,0 +1,35 @@
+{
+  "d_slot": 32,
+  "encoder": "dinov2_vitb14",
+  "gate": "FAIL",
+  "label_dist": {
+    "cubeA_on_cubeB": 60,
+    "cube_at_target": 60
+  },
+  "mode": "clip",
+  "n": 120,
+  "n_epochs": 300,
+  "n_seeds": 60,
+  "near_offset": 0.08,
+  "result": {
+    "dim": 768,
+    "direct": {
+      "majority_class_acc": 0.5,
+      "n_episodes": 120,
+      "n_unique_labels": 2,
+      "probe_acc_mean": 0.7333333333333333,
+      "probe_acc_std": 0.03333333333333335,
+      "shuffled_features_acc": 0.425
+    },
+    "intent": {
+      "majority_class_acc": 0.5,
+      "n_episodes": 120,
+      "n_unique_labels": 2,
+      "probe_acc_mean": 0.65,
+      "probe_acc_std": 0.07728015412913088,
+      "shuffled_features_acc": 0.575,
+      "trivially_constant": false
+    }
+  },
+  "task": "StackCube-v1"
+}

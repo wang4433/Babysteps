@@ -124,9 +124,11 @@ learned-repair split**:
 > claim.**
 >
 > **LATENT-INPUT PIVOT (2026-06-03): PushCube end-to-end on latent intent —
-> DONE.** The method INPUT is now decoded from vision (DINOv2 → IntentHead →
-> nearest-centroid), severing the hand-authored JSON intent; JSON factors are
-> used only for supervision (centroid codebook) + oracle eval. Pre-flight
+> DONE.** The method INPUT is now decoded from third-person demo-view vision
+> (DINOv2 → IntentHead → nearest-centroid), severing the hand-authored JSON
+> intent; JSON factors are used only for supervision (centroid codebook) +
+> oracle eval. The VLM is only the failed-slot diagnoser; it does not extract
+> latent intent or write the repair value. Pre-flight
 > (GPU-free): vision-decoded initial intent reproduces the JSON intent **49/50
 > (0.98)** on the P2 seeds (`reports/stage5/latent_decode_check/PushCube-v1`).
 > Full latent P2 run (job 10951957, `--latent`, real InternVL3.5-8B + sim,
@@ -145,13 +147,40 @@ learned-repair split**:
 > (goal_state constant in cut). PushCube is the consolidated latent task.
 >
 > **Fully-latent G4/G5 (job 10954435):** `stage5_p1_run_eval.py
-> --latent-initial` decodes attempt-1 from vision for ALL policies (Sever A in
-> the recovery harness via the new `episode.py initial_intent_provider` hook)
+> --latent-initial` decodes attempt-1 from demo-view vision for ALL policies
+> (Sever A in the recovery harness via the new `episode.py
+> initial_intent_provider` hook)
 > + latent revision. latent final 0.960 = oracle 0.960; same_intent_retry
 > 0.000 → **G4 +96.0pp PASS, G5 +0.0pp PASS** (latent = oracle exactly).
 > Identical to the scripted-attempt-1 run → the whole PushCube loop is now
 > latent-input end-to-end (input + revision), at parity with discrete/oracle.
 > `reports/stage5/p1_vision_g4_g5_latent/PushCube-v1/`.
+>
+> **LATENT CONSOLIDATION + FACTOR-GROUNDABILITY MAP (2026-06-03, LOCKED).**
+> PushCube is the single CLEAN end-to-end latent task; the latent claim is
+> written narrow-but-hard. Accurate statement: *we demonstrate the full
+> third-person demo vision → latent intent → first-person BABYSTEPS repair loop
+> on PushCube; the 5-task table evaluates selectivity under the audited
+> structured schema; the groundability probes explain why the current frozen
+> DINOv2 RGB-only interface does not cleanly extend to PickCube/StackCube
+> factors.* Which factors a frozen-DINOv2 RGB demo can ground:
+>
+> | task · factor | latent-groundable? | evidence |
+> |---|---|---|
+> | PushCube · contact/approach/motion | ✅ clean, proven | faithful 49/50; latent C1 1.00/0.96 ≫ C2; G4 +96 / G5 +0 |
+> | PickCube · contact_region | ❌ invisible | symbolic-only; runner never sets gripper yaw |
+> | StackCube · object_motion | ❌ representation-blocked | DINOv2 0.68 (<0.90); object-local pooling doesn't help |
+> | StackCube · goal_state | ❌ partial | clean config 0.99 but real demo CLIP caps at 0.82 (best pooling) < 0.90 |
+>
+> goal_state probe ladder (`scripts/stage5_goal_state_probe.py`, 3 modes,
+> 8 sim-free tests; `reports/stage5/goal_state_probe{,_clip,_clip_pool}`):
+> static pose-injected config **0.992** PASS, but the deployed
+> spatial_mean-over-clip pooling falls to **0.650**, and NO temporal pooling on
+> real clips clears the gate (last5 0.82 / final_frame 0.79 / first_last 0.71) —
+> goal_state's signal is real but final-state-concentrated and washed out by
+> arm-clutter + placement noise on execution clips. A genuine 2nd latent task
+> would need a NEW task whose revised factor is plainly visible in a
+> third-person RGB clip — NOT forcing an invisible/relational factor into DINOv2.
 
 **Goal:** Replace handcrafted 20-dim Z with frozen DINOv2 features on
 demo RGB frames. Retrain IntentHead. Gate: G1 probe ≥ 90%.
