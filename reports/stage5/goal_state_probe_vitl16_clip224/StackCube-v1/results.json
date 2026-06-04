@@ -1,0 +1,99 @@
+{
+  "best_alt_intent_acc": 0.8,
+  "best_alt_pooling": "last5_mean",
+  "d_slot": 32,
+  "deployed_intent_acc": 0.6916666666666667,
+  "encoder": "dinov3_vitl16",
+  "label_dist": {
+    "cubeA_on_cubeB": 60,
+    "cube_at_target": 60
+  },
+  "mode": "clip-pool",
+  "n": 120,
+  "n_epochs": 300,
+  "n_seeds": 60,
+  "near_offset": 0.06,
+  "results_by_pool": {
+    "final_frame": {
+      "dim": 1024,
+      "direct": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 120,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.7499999999999999,
+        "probe_acc_std": 0.0790569415042095,
+        "shuffled_features_acc": 0.475
+      },
+      "intent": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 120,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.7666666666666666,
+        "probe_acc_std": 0.07264831572567788,
+        "shuffled_features_acc": 0.675,
+        "trivially_constant": false
+      }
+    },
+    "first_last": {
+      "dim": 1024,
+      "direct": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 120,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.75,
+        "probe_acc_std": 0.08740073734751265,
+        "shuffled_features_acc": 0.475
+      },
+      "intent": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 120,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.7166666666666666,
+        "probe_acc_std": 0.1,
+        "shuffled_features_acc": 0.6499999999999999,
+        "trivially_constant": false
+      }
+    },
+    "last5_mean": {
+      "dim": 1024,
+      "direct": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 120,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.825,
+        "probe_acc_std": 0.08079466429027214,
+        "shuffled_features_acc": 0.4833333333333333
+      },
+      "intent": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 120,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.8,
+        "probe_acc_std": 0.06123724356957945,
+        "shuffled_features_acc": 0.6333333333333332,
+        "trivially_constant": false
+      }
+    },
+    "spatial_mean (all)": {
+      "dim": 1024,
+      "direct": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 120,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.7166666666666667,
+        "probe_acc_std": 0.07168604389202186,
+        "shuffled_features_acc": 0.4833333333333333
+      },
+      "intent": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 120,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.6916666666666667,
+        "probe_acc_std": 0.09354143466934854,
+        "shuffled_features_acc": 0.6083333333333334,
+        "trivially_constant": false
+      }
+    }
+  },
+  "task": "StackCube-v1"
+}
