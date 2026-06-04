@@ -8,7 +8,7 @@ The goal is to prove the smallest honest version of the system:
 
 ```text
 third-person demonstration proxy
--> structured intent factors
+-> structured / latent intent
 -> Franka first-person execution
 -> structured failure packet
 -> selective intent-factor revision
@@ -37,6 +37,12 @@ the demonstration and the execution:
 There is no human demonstrator anywhere in Stage 0. The arm is always a
 Franka; the cross-view stressor is *demo camera ≠ execution camera*, not
 *demo embodiment ≠ execution embodiment*.
+
+Do not describe this as the robot "moving to the demo camera position."
+The execution starts from the corresponding task state and uses the
+executing robot's first-person observation stream. The camera role changes
+(third-person demo evidence → first-person execution/failure evidence);
+the robot embodiment does not.
 
 Use this wording:
 
@@ -593,6 +599,28 @@ discrete Stage-0 schema + failure frames, not on latent $G$. Claim
 supervision/certification scaffold — do not over-claim a 5-task latent
 result.
 
+### Operational setup for latent intent
+
+The intended loop is:
+
+```text
+third-person demo frames
+  -> frozen vision encoder + IntentHead
+  -> latent intent G_demo
+  -> first-person execution attempt
+  -> failure evidence
+  -> VLM / diagnoser outputs one failed slot name
+  -> ReviseHead edits only that slot in G_demo
+  -> retry from the executing robot's first-person view
+```
+
+The VLM does **not** extract the latent intent and does **not** write a
+replacement intent. The latent intent comes from demo-view visual evidence
+through the frozen encoder + IntentHead. The first-person failure evidence
+is used for diagnosis: which slot should be edited. The discrete schema is
+used for supervision, nearest-centroid certification, compilation, and
+oracle evaluation.
+
 ### Architecture (target)
 
 ```text
@@ -671,15 +699,21 @@ freely regenerates the entire intent.
 ```text
 Prompt template:
   You are diagnosing a robot manipulation failure.
-  The robot attempted: {initial_intent as JSON}
+  The robot attempted: {audited factor view of the current intent}
   Failure observation: {failure trace / first-person frames}
 
   Which ONE intent factor was wrong? Choose exactly one:
   [goal_state, object_motion, contact_region,
    approach_direction, constraint_region, embodiment_mapping]
 
-  Output ONLY the factor name.
+Output ONLY the factor name.
 ```
+
+In the discrete P2 table, the audited factor view is literally the stored
+Stage-0 JSON intent. In latent-input runs, it is the nearest-centroid
+decode of $G_{\text{demo}}$ used only to make the diagnoser prompt and
+the evaluation human-readable; it is not the method input that produced
+the attempt.
 
 **Comparison:** VLM-constrained-attribution + slot-local revision
 vs. VLM free-form replanning (the VLM regenerates the entire intent

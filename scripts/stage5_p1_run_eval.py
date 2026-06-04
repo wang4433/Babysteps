@@ -144,7 +144,8 @@ def main(argv=None) -> int:
     p.add_argument("--pack-dir", type=Path, required=True,
                    help="Vision-grounded LatentPack directory (S5 Half A output).")
     p.add_argument("--features-dir", type=Path, required=True,
-                   help="Directory of cached seed_NNNN_dinov2.npy files (S5 S3 output).")
+                   help="Directory of cached demo-view seed_NNNN_dinov2.npy "
+                        "files (S5 S3 output).")
     p.add_argument("--out-dir", type=Path, required=True)
     p.add_argument("--eval-seeds", required=True,
                    help="Seed range A-B (inclusive) or single int.")
@@ -154,7 +155,7 @@ def main(argv=None) -> int:
                    default="latent,babysteps_selective,same_intent_retry,oracle_factor_revision",
                    help="Comma-separated list to evaluate.")
     p.add_argument("--latent-initial", action="store_true",
-                   help="Sever A: decode attempt-1 intent from vision "
+                   help="Sever A: decode attempt-1 intent from demo-view vision "
                         "(DINOv2->IntentHead->nearest-centroid) for ALL "
                         "policies, instead of the scripted demo->intent. "
                         "Makes the whole loop latent-input, not just the "
@@ -168,7 +169,8 @@ def main(argv=None) -> int:
     vision_provider = _make_vision_provider(args.features_dir)
     print(f"vision provider: {args.features_dir}")
 
-    # Sever A — latent attempt-1 intent for ALL policies (whole loop latent).
+    # Sever A — latent attempt-1 intent from demo-view features for ALL
+    # policies (whole loop latent).
     initial_provider = None
     if args.latent_initial:
         def initial_provider(seed, scripted):  # type: ignore[misc]
@@ -176,7 +178,7 @@ def main(argv=None) -> int:
                 return build_latent_intent(pack, vision_provider(seed), scripted)
             except Exception:
                 return scripted
-        print("latent-initial ON: attempt-1 intent decoded from vision (Sever A)")
+        print("latent-initial ON: attempt-1 intent decoded from demo-view vision (Sever A)")
 
     # Only the latent policy needs the vision-grounded Z; the
     # baselines (babysteps_selective, same_intent_retry,

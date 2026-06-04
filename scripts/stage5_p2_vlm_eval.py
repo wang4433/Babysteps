@@ -278,12 +278,14 @@ def main(argv: list[str] | None = None) -> int:
                         "A/B single- vs multi-image on identical frames.")
     p.add_argument("--latent", action="store_true",
                    help="Latent-input mode: derive the initial intent from "
-                        "vision (DINOv2->IntentHead->nearest-centroid) and "
-                        "repair C1 via the learned slot-local ReviseHead, "
-                        "instead of the JSON intent + discrete operator. The "
-                        "JSON factors are then used only for supervision + "
-                        "eval. Requires --pack-dir, --features-dir, "
-                        "--train-jsonl.")
+                        "demo-view vision "
+                        "(DINOv2->IntentHead->nearest-centroid) and repair C1 "
+                        "via the learned slot-local ReviseHead, instead of "
+                        "the JSON intent + discrete operator. The VLM still "
+                        "only diagnoses a failed factor name; it does not "
+                        "extract G or write the repaired value. JSON factors "
+                        "are then used only for supervision + eval. Requires "
+                        "--pack-dir, --features-dir, --train-jsonl.")
     p.add_argument("--pack-dir", type=Path, default=None,
                    help="LatentPack dir (required with --latent).")
     p.add_argument("--features-dir", type=Path, default=None,
@@ -317,7 +319,7 @@ def main(argv: list[str] | None = None) -> int:
         vision_provider = _make_vision_provider(args.features_dir)
         base_intent = _base_intent_from_jsonl(args.train_jsonl)
         print(f"LATENT mode: pack decodes {latent_factor_names(pack)} from "
-              f"vision; constant factors from {args.train_jsonl}")
+              f"demo-view vision; constant factors from {args.train_jsonl}")
 
     vlm: MockVLMClient | InternVLClient
     if args.mock:
@@ -336,7 +338,8 @@ def main(argv: list[str] | None = None) -> int:
     for ep in episodes:
         seed = ep["seed"]
         # Sever A — the method input. In latent mode the initial intent is
-        # decoded from vision (DINOv2->IntentHead->nearest-centroid); the
+        # decoded from demo-view vision
+        # (DINOv2->IntentHead->nearest-centroid); the
         # stored JSON is used only to (a) source constant factors via the
         # train cut and (b) audit faithfulness. Default mode reads the JSON.
         if args.latent:

@@ -263,11 +263,13 @@ failure is relationally visible (StackCube, +1 episode). Out-dirs:
 
 ### Stage-5 — LATENT-INPUT P2 on PushCube (job 10951957, 2026-06-03)
 
-The latent-intent pivot: the method INPUT is decoded from vision (frozen
-DINOv2 → trained IntentHead → per-factor nearest-centroid codebook) instead
-of the hand-authored JSON intent, AND C1's repair is the learned slot-local
-ReviseHead (not the discrete operator). JSON factors are used only for
-supervision (centroid training) + oracle eval. `stage5_p2_vlm_eval.py --latent`
+The latent-intent pivot: the method INPUT is decoded from third-person
+demo-view vision (frozen DINOv2 → trained IntentHead → per-factor
+nearest-centroid codebook) instead of the hand-authored JSON intent, AND
+C1's repair is the learned slot-local ReviseHead (not the discrete operator).
+The VLM diagnoses only the failed slot from the attempt/failure evidence; it
+does not extract latent intent or choose the repaired value. JSON factors are
+used only for supervision (centroid training) + oracle eval. `stage5_p2_vlm_eval.py --latent`
 on PushCube, real InternVL3.5-8B (BF16) A100-40gb, same 50 held-out seeds
 (100-149). Wall 3:54.
 
@@ -294,7 +296,7 @@ is descoped (goal_state constant in its cut). Out:
 `reports/stage5/p2_vlm_latent/PushCube-v1/`.
 
 **Fully-latent G4/G5 (job 10954435, 2026-06-03).** `stage5_p1_run_eval.py
---latent-initial`: attempt-1 intent decoded from vision for ALL policies
+--latent-initial`: attempt-1 intent decoded from demo-view vision for ALL policies
 (Sever A) + latent revision, real PushCube sim, seeds 100-149, no VLM. Wall
 0:45. latent final **0.960** = oracle 0.960 = babysteps_selective 0.960;
 same_intent_retry 0.000. **G4 = +96.0pp PASS, G5 = +0.0pp PASS** (latent =
@@ -338,4 +340,3 @@ factors" is harmless when there's nothing else to break.
 - Job logs are artifacts — fine to prune old ones; the gate *numbers* live in
 this file and in each sub-project's spec, not only in the logs.
 - A new GPU gate result gets a row/section here when it lands.
-

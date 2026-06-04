@@ -1,13 +1,17 @@
 """Stage-5 — latent intent decoding (the "latent input" sever).
 
 Instead of reading the hand-authored discrete intent JSON, the initial
-intent is *decoded from vision*: frozen DINOv2 features Z -> trained
-IntentHead -> latent slot tensor G -> per-factor nearest-centroid
-codebook -> discrete tokens. This is the same decode path the latent
-ReviseHead uses at retry time (`babysteps.stage4.slot_decode.decode_G`),
-applied to the *initial* intent so that the JSON factors are used only
-for supervision (centroid training) and evaluation, never as privileged
-method input.
+intent is *decoded from demo-view vision*: third-person demo features Z
+-> trained IntentHead -> latent slot tensor G -> per-factor
+nearest-centroid codebook -> discrete tokens. This is the same decode
+path the latent ReviseHead uses at retry time
+(`babysteps.stage4.slot_decode.decode_G`), applied to the *initial*
+intent so that the JSON factors are used only for supervision
+(centroid training) and evaluation, never as privileged method input.
+
+The VLM/diagnoser is deliberately outside this module: it may choose the
+failed slot name after first-person execution/failure evidence, but it
+does not create G and does not choose the repaired value.
 
 Honesty boundary
 ----------------
@@ -39,7 +43,7 @@ from babysteps.stage4.slot_decode import decode_G, decode_slot
 
 
 def encode_G(pack: LatentPack, z: np.ndarray) -> np.ndarray:
-    """Frozen-encoder features Z -> latent slot tensor G of shape (1, F, d_slot)."""
+    """Demo-view frozen-encoder features Z -> G of shape (1, F, d_slot)."""
     z_arr = np.asarray(z, dtype=np.float32).reshape(1, -1)
     with torch.no_grad():
         G = pack.intent_head(torch.from_numpy(z_arr))

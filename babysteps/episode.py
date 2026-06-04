@@ -205,9 +205,11 @@ def run_episode(
     `initial_intent_provider`, when given, is a callable
     ``provider(seed: int, scripted_intent: Intent) -> Intent`` that
     REPLACES the scripted/demo-derived attempt-1 intent with one decoded
-    from vision (Stage-5 latent-input sever, "Sever A"). The scripted
-    intent is passed as the base so trivially-constant factors are
-    preserved; the provider overwrites only the factors it can ground.
+    from demo-view vision (Stage-5 latent-input sever, "Sever A"). The
+    scripted intent is passed as the base so trivially-constant factors are
+    preserved; the provider overwrites only the factors it can ground. This
+    hook changes the attempt-1 intent source, not the execution camera: the
+    retry loop still runs from the executing robot's first-person evidence.
     The default `None` keeps the scripted path (snapshot byte-equality).
     """
     env_runner = adapter.env_runner()      # cached on the adapter
