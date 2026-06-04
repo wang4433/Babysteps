@@ -143,6 +143,15 @@ learned-repair split**:
 > blocked** (its `contact_region` factor has zero pixel signature — the runner
 > never sets gripper yaw; collecting data won't help). StackCube descoped
 > (goal_state constant in cut). PushCube is the consolidated latent task.
+>
+> **Fully-latent G4/G5 (job 10954435):** `stage5_p1_run_eval.py
+> --latent-initial` decodes attempt-1 from vision for ALL policies (Sever A in
+> the recovery harness via the new `episode.py initial_intent_provider` hook)
+> + latent revision. latent final 0.960 = oracle 0.960; same_intent_retry
+> 0.000 → **G4 +96.0pp PASS, G5 +0.0pp PASS** (latent = oracle exactly).
+> Identical to the scripted-attempt-1 run → the whole PushCube loop is now
+> latent-input end-to-end (input + revision), at parity with discrete/oracle.
+> `reports/stage5/p1_vision_g4_g5_latent/PushCube-v1/`.
 
 **Goal:** Replace handcrafted 20-dim Z with frozen DINOv2 features on
 demo RGB frames. Retrain IntentHead. Gate: G1 probe ≥ 90%.

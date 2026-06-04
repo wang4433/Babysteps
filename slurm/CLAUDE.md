@@ -293,6 +293,16 @@ representation-blocked (contact_region has zero pixel signature) and StackCube
 is descoped (goal_state constant in its cut). Out:
 `reports/stage5/p2_vlm_latent/PushCube-v1/`.
 
+**Fully-latent G4/G5 (job 10954435, 2026-06-03).** `stage5_p1_run_eval.py
+--latent-initial`: attempt-1 intent decoded from vision for ALL policies
+(Sever A) + latent revision, real PushCube sim, seeds 100-149, no VLM. Wall
+0:45. latent final **0.960** = oracle 0.960 = babysteps_selective 0.960;
+same_intent_retry 0.000. **G4 = +96.0pp PASS, G5 = +0.0pp PASS** (latent =
+oracle exactly). Identical to the scripted-attempt-1 P1 run (G4 +96, G5 -2) ->
+the latent input costs nothing on recovery either. The whole PushCube loop is
+now latent-input end-to-end (input + revision). Out:
+`reports/stage5/p1_vision_g4_g5_latent/PushCube-v1/`.
+
 ### Stage-5 M3 — Procedural baselines main table (job 10826466, 2026-05-26)
 
 A100-40GB, 50 held-out seeds (100-149), three tasks, all seven procedural

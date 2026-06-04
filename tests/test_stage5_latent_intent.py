@@ -158,3 +158,64 @@ def test_latent_slot_edit_is_deterministic():
     a = latent_slot_edit(pack, z_b, _BASE, "object_motion", "approach_blocked")
     b = latent_slot_edit(pack, z_b, _BASE, "object_motion", "approach_blocked")
     assert a == b
+
+
+def test_run_episode_honors_initial_intent_provider():
+    """Sever A in the recovery-gate harness: run_episode uses the provider's
+    intent for attempt-1 instead of the scripted/demo-derived one."""
+    from dataclasses import replace as dc_replace
+
+    from babysteps.episode import run_episode
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+    from tests.conftest import FakeEnvRunner
+
+    fake = FakeEnvRunner()
+
+    class _StubAdapter(PushCubeAdapter):
+        def make_env_runner(self):
+            return fake
+
+    captured: dict = {}
+
+    def provider(seed: int, scripted: Intent) -> Intent:
+        captured["scripted"] = scripted
+        captured["seed"] = seed
+        return dc_replace(scripted, approach_direction="from_plus_x")
+
+    adapter = _StubAdapter()
+    try:
+        rec = run_episode(
+            episode_id="t", seed=1, adapter=adapter,
+            initial_intent_provider=provider,
+        )
+    finally:
+        adapter.close()
+
+    # The provider was called with (seed, full scripted Intent), and the
+    # recorded attempt-1 intent reflects the provider's output.
+    assert captured["seed"] == 1
+    assert isinstance(captured["scripted"], Intent)
+    assert rec.execution["initial_intent"]["approach_direction"] == "from_plus_x"
+
+
+def test_run_episode_default_ignores_provider_path():
+    """Default (no provider) leaves attempt-1 as the scripted intent — guards
+    the byte-identical default path."""
+    from babysteps.episode import run_episode
+    from babysteps.envs.pushcube_adapter import PushCubeAdapter
+    from tests.conftest import FakeEnvRunner
+
+    fake = FakeEnvRunner()
+
+    class _StubAdapter(PushCubeAdapter):
+        def make_env_runner(self):
+            return fake
+
+    adapter = _StubAdapter()
+    try:
+        rec = run_episode(episode_id="t", seed=1, adapter=adapter)
+    finally:
+        adapter.close()
+    # Scripted PushCube intent always has these constant factors; the point is
+    # the episode ran without a provider and produced a normal record.
+    assert rec.execution["initial_intent"]["goal_state"] == "cube_at_target"

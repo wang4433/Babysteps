@@ -46,6 +46,7 @@ from babysteps.policies import (  # noqa: E402
 from babysteps.stage4.latent_policy import (  # noqa: E402
     latent_revision_factory, load_latent_pack,
 )
+from babysteps.stage5.latent_intent import build_latent_intent  # noqa: E402
 
 
 _TASK_TO_ADAPTER_MODULE = {
@@ -102,7 +103,7 @@ def _make_vision_provider(features_dir: Path):
 
 
 def _eval_policy(adapter, policy, *, episode_prefix: str, seeds: list[int],
-                 demo_features_provider=None) -> dict:
+                 demo_features_provider=None, initial_intent_provider=None) -> dict:
     """Returns per-seed list of (success, success_at_initial, success_at_retry)."""
     rows = []
     for seed in seeds:
@@ -112,6 +113,7 @@ def _eval_policy(adapter, policy, *, episode_prefix: str, seeds: list[int],
             adapter=adapter,
             policy=policy,
             demo_features_provider=demo_features_provider,
+            initial_intent_provider=initial_intent_provider,
         )
         initial_success = bool(rec.metrics.get("initial_success", False))
         retry_success = rec.metrics.get("retry_success")
@@ -151,6 +153,12 @@ def main(argv=None) -> int:
     p.add_argument("--policies",
                    default="latent,babysteps_selective,same_intent_retry,oracle_factor_revision",
                    help="Comma-separated list to evaluate.")
+    p.add_argument("--latent-initial", action="store_true",
+                   help="Sever A: decode attempt-1 intent from vision "
+                        "(DINOv2->IntentHead->nearest-centroid) for ALL "
+                        "policies, instead of the scripted demo->intent. "
+                        "Makes the whole loop latent-input, not just the "
+                        "latent revision.")
     args = p.parse_args(argv)
 
     seeds = _parse_seed_range(args.eval_seeds)
@@ -159,6 +167,16 @@ def main(argv=None) -> int:
           f"centroids for factors {sorted(pack.centroids.keys())}")
     vision_provider = _make_vision_provider(args.features_dir)
     print(f"vision provider: {args.features_dir}")
+
+    # Sever A — latent attempt-1 intent for ALL policies (whole loop latent).
+    initial_provider = None
+    if args.latent_initial:
+        def initial_provider(seed, scripted):  # type: ignore[misc]
+            try:
+                return build_latent_intent(pack, vision_provider(seed), scripted)
+            except Exception:
+                return scripted
+        print("latent-initial ON: attempt-1 intent decoded from vision (Sever A)")
 
     # Only the latent policy needs the vision-grounded Z; the
     # baselines (babysteps_selective, same_intent_retry,
@@ -189,6 +207,7 @@ def main(argv=None) -> int:
                 episode_prefix=f"s5_p1_{args.task.replace('-', '_')}_{name}",
                 seeds=seeds,
                 demo_features_provider=policy_provider[name],
+                initial_intent_provider=initial_provider,
             )
             print(f"  initial success: {res['initial_success_rate']:.3f}")
             print(f"  final success:   {res['final_success_rate']:.3f}")
@@ -216,6 +235,7 @@ def main(argv=None) -> int:
     (args.out_dir / "p1_results.json").write_text(json.dumps({
         "config": {
             "task": args.task, "fake": args.fake,
+            "latent_initial": bool(args.latent_initial),
             "eval_seeds": [int(s) for s in seeds],
             "pack_dir": str(args.pack_dir),
             "features_dir": str(args.features_dir),

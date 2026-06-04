@@ -177,6 +177,7 @@ def run_episode(
     policy: RetryPolicy = babysteps_selective,
     record_baseline_metrics: bool = False,
     demo_features_provider: Optional[Callable[[int], Any]] = None,
+    initial_intent_provider: Optional[Callable[[int, Intent], Intent]] = None,
 ) -> EpisodeRecord:
     """One Stage-0 blocked-approach episode for the adapter's task.
 
@@ -200,11 +201,21 @@ def run_episode(
     vector consumed by latent revision policies. It overrides the
     default handcrafted `extract_episode_features` path (M2a behavior).
     The default `None` preserves the M2a / Stage-4 byte-for-byte path.
+
+    `initial_intent_provider`, when given, is a callable
+    ``provider(seed: int, scripted_intent: Intent) -> Intent`` that
+    REPLACES the scripted/demo-derived attempt-1 intent with one decoded
+    from vision (Stage-5 latent-input sever, "Sever A"). The scripted
+    intent is passed as the base so trivially-constant factors are
+    preserved; the provider overwrites only the factors it can ground.
+    The default `None` keeps the scripted path (snapshot byte-equality).
     """
     env_runner = adapter.env_runner()      # cached on the adapter
     scene_initial = env_runner.reset(seed)
     demo_evidence = generate_proxy_demo(env_runner, scene_initial, adapter)
     initial_intent = adapter.scripted_demo_to_intent(demo_evidence)
+    if initial_intent_provider is not None:
+        initial_intent = initial_intent_provider(seed, initial_intent)
     scene_executor = replace(
         scene_initial,
         blocked_sides=adapter.default_blocked_factory(initial_intent),
