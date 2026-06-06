@@ -1,0 +1,99 @@
+{
+  "best_alt_intent_acc": 0.8699999999999999,
+  "best_alt_pooling": "last5_mean",
+  "d_slot": 32,
+  "deployed_intent_acc": 0.5700000000000001,
+  "encoder": "dinov2_vitb14",
+  "label_dist": {
+    "cubeA_on_cubeB": 50,
+    "cube_at_target": 50
+  },
+  "mode": "clip-pool",
+  "n": 100,
+  "n_epochs": 300,
+  "n_seeds": 50,
+  "near_offset": 0.06,
+  "results_by_pool": {
+    "final_frame": {
+      "dim": 768,
+      "direct": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 100,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.82,
+        "probe_acc_std": 0.0678232998312527,
+        "shuffled_features_acc": 0.47000000000000003
+      },
+      "intent": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 100,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.8099999999999999,
+        "probe_acc_std": 0.05830951894845301,
+        "shuffled_features_acc": 0.49000000000000005,
+        "trivially_constant": false
+      }
+    },
+    "first_last": {
+      "dim": 768,
+      "direct": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 100,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.77,
+        "probe_acc_std": 0.039999999999999994,
+        "shuffled_features_acc": 0.5
+      },
+      "intent": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 100,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.71,
+        "probe_acc_std": 0.07999999999999999,
+        "shuffled_features_acc": 0.5,
+        "trivially_constant": false
+      }
+    },
+    "last5_mean": {
+      "dim": 768,
+      "direct": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 100,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.8899999999999999,
+        "probe_acc_std": 0.066332495807108,
+        "shuffled_features_acc": 0.45
+      },
+      "intent": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 100,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.8699999999999999,
+        "probe_acc_std": 0.08717797887081347,
+        "shuffled_features_acc": 0.44000000000000006,
+        "trivially_constant": false
+      }
+    },
+    "spatial_mean (all)": {
+      "dim": 768,
+      "direct": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 100,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.7299999999999999,
+        "probe_acc_std": 0.11224972160321822,
+        "shuffled_features_acc": 0.45999999999999996
+      },
+      "intent": {
+        "majority_class_acc": 0.5,
+        "n_episodes": 100,
+        "n_unique_labels": 2,
+        "probe_acc_mean": 0.5700000000000001,
+        "probe_acc_std": 0.08717797887081345,
+        "shuffled_features_acc": 0.55,
+        "trivially_constant": false
+      }
+    }
+  },
+  "task": "StackCube-v1"
+}

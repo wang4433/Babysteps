@@ -86,6 +86,56 @@ _NEAR_DIRS = ((1.0, 0.0), (-1.0, 0.0), (0.0, 1.0), (0.0, -1.0))
 _STACK_TOKEN = "cubeA_on_cubeB"
 _NEAR_TOKEN = "cube_at_target"
 
+# Stage-5 dual-camera — high-oblique render_camera presets for the goal_state
+# viewpoint experiment. The CLIP block (config 0.99 -> clip 0.72-0.82) is the
+# gripper/arm occluding the final placement, NOT the camera angle (the default
+# oblique already separates stack-vs-near at 0.99 on the armless static config).
+# These elevate the view to look OVER the descending gripper at placement while
+# KEEPING world-z as image-up (up=(0,0,1)), so a stacked tower reads as vertical
+# extent (the stack-vs-near cue). They are deliberately NOT nadir: pure top-down
+# (the existing _topdown_camera_configs, eye=[0,0,0.65]) collapses the height
+# that DEFINES stacking, leaving only XY-footprint coincidence (a near-tautology
+# with the success label — the reviewer trap). eye/target in world meters.
+_CAMERA_PRESETS: dict[str, tuple | None] = {
+    "default": None,  # ManiSkill render_camera (eye=[0.6,0.7,0.6], low oblique ~33deg)
+    "oblique_high": ((0.45, 0.0, 0.60), (0.0, 0.0, 0.05)),     # front-elevated ~51deg
+    "oblique_higher": ((0.25, 0.0, 0.70), (0.0, 0.0, 0.05)),   # steep front ~69deg (NOT nadir)
+    "oblique_corner": ((0.40, 0.40, 0.70), (0.0, 0.0, 0.05)),  # corner-elevated (like default but higher)
+}
+
+
+def _camera_elevation_deg(eye, target) -> float:
+    """Elevation angle (deg above the table plane) of an eye->target view.
+
+    Pure geometry (sim-free, tested): 90deg = straight-down nadir, 0deg =
+    horizontal. Used to guard that the high-oblique presets are NOT nadir (so
+    they preserve the vertical stack cue) and ARE higher than the default view.
+    """
+    e = np.asarray(eye, dtype=np.float64)
+    t = np.asarray(target, dtype=np.float64)
+    d = e - t
+    horiz = float(np.hypot(d[0], d[1]))
+    return float(np.degrees(np.arctan2(abs(d[2]), horiz))) if horiz > 1e-9 else 90.0
+
+
+def _oblique_camera_configs(eye, target):
+    """render_camera override at (eye -> target), high-oblique (NOT nadir).
+
+    Parameterized sibling of stage5_render_demo_frames._topdown_camera_configs,
+    but with the standard up=(0,0,1) (no straight-down degeneracy), so world-z
+    maps to image-up. Returns the ManiSkill human_render_camera_configs override
+    {uid: {field: value}}; the pose is the JSON-friendly 7-list gym.make rebuilds.
+    """
+    from mani_skill.utils import sapien_utils
+
+    pose = sapien_utils.look_at(eye=list(eye), target=list(target))
+    raw = pose.raw_pose
+    raw = raw[0] if getattr(raw, "ndim", 1) == 2 else raw
+    pose_list = [float(v) for v in (
+        raw.cpu().numpy() if hasattr(raw, "cpu") else np.asarray(raw)
+    )]
+    return {"render_camera": {"pose": pose_list}}
+
 
 # --------------------------------------------------------------------------- #
 # Pure geometry (sim-free, tested)
@@ -315,9 +365,18 @@ def _write_report(
 # --------------------------------------------------------------------------- #
 
 
-def _make_env(task: str):
+def _make_env(task: str, *, camera: str = "default", cam_eye=None, cam_target=None,
+              max_episode_steps: int | None = None):
     """ManiSkill render env, matching scripts/stage5_render_demo_frames._make_env
-    (state_dict obs, pd_ee_delta_pose, cpu backend, rgb_array render)."""
+    (state_dict obs, pd_ee_delta_pose, cpu backend, rgb_array render).
+
+    `camera` selects a high-oblique render_camera preset (_CAMERA_PRESETS) for
+    the Stage-5 dual-camera goal_state viewpoint experiment; "default" leaves
+    the ManiSkill render_camera untouched (committed numbers reproduce). An
+    explicit `cam_eye`/`cam_target` pair overrides the preset for pose sweeps.
+    `max_episode_steps` overrides the StackCube TimeLimit (the --retract path
+    bumps it so the post-place retract+dwell fits within the episode).
+    """
     import gymnasium as gym
     import mani_skill.envs  # noqa: F401 — registers tasks
 
@@ -328,7 +387,17 @@ def _make_env(task: str):
         render_mode="rgb_array",
     )
     if task == "StackCube-v1":
-        kwargs["max_episode_steps"] = 200
+        kwargs["max_episode_steps"] = (
+            max_episode_steps if max_episode_steps is not None else 200)
+    cfg = None
+    if cam_eye is not None and cam_target is not None:
+        cfg = _oblique_camera_configs(cam_eye, cam_target)
+    elif camera and camera != "default":
+        if camera not in _CAMERA_PRESETS or _CAMERA_PRESETS[camera] is None:
+            raise ValueError(f"unknown/None camera preset {camera!r}")
+        cfg = _oblique_camera_configs(*_CAMERA_PRESETS[camera])
+    if cfg is not None:
+        kwargs["human_render_camera_configs"] = cfg
     return gym.make(task, **kwargs)
 
 
@@ -348,6 +417,7 @@ def _collect_features(
     task: str, seeds: list[int], *, offset: float, encoder: str, device: str,
     resolution: int = 224,
     save_frames_dir: Path | None = None,
+    camera: str = "default", cam_eye=None, cam_target=None,
 ) -> tuple[np.ndarray, list[str]]:
     """Render the two goal configs per seed and DINOv2-encode each.
 
@@ -358,7 +428,7 @@ def _collect_features(
     from babysteps.render.common import to_np
     from babysteps.stage4.vision_features import extract_vision_features
 
-    env = _make_env(task)
+    env = _make_env(task, camera=camera, cam_eye=cam_eye, cam_target=cam_target)
     Z: list[np.ndarray] = []
     y: list[str] = []
     try:
@@ -405,6 +475,7 @@ def _collect_features_clip(
     task: str, seeds: list[int], *, offset: float, encoder: str, device: str,
     resolution: int = 224,
     save_frames_dir: Path | None = None,
+    camera: str = "default", cam_eye=None, cam_target=None, retract: bool = False,
 ) -> tuple[np.ndarray, list[str]]:
     """Render a full demo CLIP per goal_state and DINOv2-encode the WHOLE clip.
 
@@ -426,7 +497,8 @@ def _collect_features_clip(
     from babysteps.stage4.vision_features import extract_vision_features
 
     adapter = get_task_entry(task).adapter_cls()
-    env = _make_env(task)
+    env = _make_env(task, camera=camera, cam_eye=cam_eye, cam_target=cam_target,
+                    max_episode_steps=(320 if retract else None))
     Z: list[np.ndarray] = []
     y: list[str] = []
     try:
@@ -450,7 +522,8 @@ def _collect_features_clip(
                 )
                 intent = replace(adapter.oracle_correct_intent(scene), goal_state=token)
                 frames: list = []
-                _execute_stack(env, intent, scene, frames, seed=int(seed))
+                _execute_stack(env, intent, scene, frames, seed=int(seed),
+                               retract=retract)
                 if not frames:
                     raise RuntimeError(f"empty clip for seed {seed} ({key})")
                 z = extract_vision_features(
@@ -484,6 +557,7 @@ def _collect_clip_multipool(
     task: str, seeds: list[int], *, offset: float, encoder: str, device: str,
     resolution: int = 224,
     save_frames_dir: Path | None = None,
+    camera: str = "default", cam_eye=None, cam_target=None, retract: bool = False,
 ) -> tuple[dict[str, np.ndarray], list[str]]:
     """Render a demo CLIP per goal_state and DINOv2-encode it under SEVERAL
     temporal poolings (deployed spatial_mean vs final-state-aware poolings).
@@ -501,7 +575,8 @@ def _collect_clip_multipool(
     from babysteps.stage4.vision_features import extract_vision_features
 
     adapter = get_task_entry(task).adapter_cls()
-    env = _make_env(task)
+    env = _make_env(task, camera=camera, cam_eye=cam_eye, cam_target=cam_target,
+                    max_episode_steps=(320 if retract else None))
     Zs: dict[str, list[np.ndarray]] = {}
     y: list[str] = []
     try:
@@ -522,7 +597,8 @@ def _collect_clip_multipool(
                 )
                 intent = replace(adapter.oracle_correct_intent(scene), goal_state=token)
                 frames: list = []
-                _execute_stack(env, intent, scene, frames, seed=int(seed))
+                _execute_stack(env, intent, scene, frames, seed=int(seed),
+                               retract=retract)
                 if not frames:
                     raise RuntimeError(f"empty clip for seed {seed} ({key})")
                 idx_by_pool = clip_pool_frame_indices(len(frames))
@@ -660,6 +736,43 @@ def _write_multipool_report(
 
 
 # --------------------------------------------------------------------------- #
+# goal_state PACK training-set dump
+# --------------------------------------------------------------------------- #
+
+
+def _dump_goalstate_features(dump_dir, seeds, Z_by_pool, y_str, *,
+                             pool, suffix, task) -> None:
+    """Save per-(seed,class) pooled features + labels.json as the goal_state PACK
+    training set. Row order from `_collect_clip_multipool` is, per seed,
+    (place_near=_NEAR_TOKEN, stack_on=_STACK_TOKEN) — asserted so a future
+    reorder can't silently mislabel the pack.
+    """
+    if pool not in Z_by_pool:
+        raise ValueError(f"--dump-pool {pool!r} not collected (have {list(Z_by_pool)})")
+    Zd = Z_by_pool[pool]
+    dump_dir = Path(dump_dir)
+    dump_dir.mkdir(parents=True, exist_ok=True)
+    expected = (_NEAR_TOKEN, _STACK_TOKEN)
+    labels: dict[str, str] = {}
+    for si, seed in enumerate(seeds):
+        for j, ctag in enumerate(("near", "stack")):
+            row = 2 * si + j
+            tok = y_str[row]
+            if tok != expected[j]:
+                raise RuntimeError(
+                    f"dump order mismatch at row {row}: got {tok!r}, "
+                    f"expected {expected[j]!r}")
+            stem = f"seed_{seed:04d}_{ctag}"
+            np.save(dump_dir / f"{stem}_{suffix}.npy", Zd[row].astype(np.float32))
+            labels[stem] = tok
+    (dump_dir / "labels.json").write_text(json.dumps({
+        "task": task, "factor": "goal_state", "pool": pool,
+        "feature_suffix": suffix, "labels": labels,
+    }, indent=2) + "\n")
+    print(f"dumped {len(labels)} goal_state features -> {dump_dir} (pool={pool!r})")
+
+
+# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 
@@ -702,20 +815,81 @@ def main(argv=None) -> int:
                         "like V-JEPA; default off keeps DINO numbers identical).")
     p.add_argument("--save-frames", action="store_true",
                    help="Dump the first few rendered configs as PNGs for sanity.")
+    p.add_argument("--camera", default="default", choices=tuple(_CAMERA_PRESETS),
+                   help="render_camera viewpoint (Stage-5 dual-camera goal_state "
+                        "experiment). 'default' = ManiSkill render_camera (committed "
+                        "numbers reproduce); the oblique_* presets elevate the view "
+                        "to look OVER the descending gripper (NOT nadir).")
+    p.add_argument("--cam-eye", default=None,
+                   help="Override the camera eye as 'x,y,z' (world m) for a pose "
+                        "sweep; requires --cam-target. Takes precedence over --camera.")
+    p.add_argument("--cam-target", default=None,
+                   help="Override the camera target as 'x,y,z' (world m).")
+    p.add_argument("--retract", action="store_true",
+                   help="(clip / clip-pool modes) After the place, lift the open "
+                        "gripper clear of the placed cubes and dwell, so the final "
+                        "frames show the clean stack-vs-near relation without the "
+                        "occluding gripper. The decisive goal_state lever: the camera "
+                        "sweep is viewpoint-invariant (~0.82) but the armless config "
+                        "ceiling is 0.99, so clearing the gripper should let "
+                        "final-state pooling clear 0.90.")
+    p.add_argument("--dump-features", type=Path, default=None,
+                   help="(clip-pool mode) Save the per-(seed,class) pooled feature "
+                        "+ a labels.json to this dir, as the goal_state PACK training "
+                        "set. Use with --retract --dump-pool first_last. Files: "
+                        "seed_NNNN_{near,stack}_<feature-suffix>.npy; labels map "
+                        "stem -> goal_state token (cube_at_target / cubeA_on_cubeB).")
+    p.add_argument("--dump-pool", type=str, default="first_last",
+                   choices=("spatial_mean (all)", "final_frame", "first_last", "last5_mean"),
+                   help="Which pooling to dump (default first_last — the validated "
+                        "goal_state pooling, 0.920 CV at n=300).")
+    p.add_argument("--feature-suffix", type=str, default="dinov2_fl",
+                   help="Filename suffix for --dump-features (seed_NNNN_<class>_<suffix>.npy).")
     args = p.parse_args(argv)
+
+    def _xyz(s):
+        if s is None:
+            return None
+        parts = [float(v) for v in s.split(",")]
+        if len(parts) != 3:
+            raise ValueError(f"expected 'x,y,z', got {s!r}")
+        return tuple(parts)
+
+    cam_eye, cam_target = _xyz(args.cam_eye), _xyz(args.cam_target)
+    cam_kw = dict(camera=args.camera, cam_eye=cam_eye, cam_target=cam_target)
+    if args.retract and args.mode == "config":
+        print("--retract is a no-op for --mode config (static pose, no rollout); "
+              "ignoring.", file=sys.stderr)
+    # Custom pose tag, or the named preset; only non-default views get a subdir
+    # so the committed default report locations stay byte-identical. --retract
+    # always gets its own subdir.
+    cam_tag = "custom" if cam_eye is not None else args.camera
+    subdir = "_".join(
+        ([cam_tag] if cam_tag != "default" else [])
+        + (["retract"] if args.retract and args.mode != "config" else [])
+    )
 
     seeds = _parse_seeds(args.seeds)
     out_dir = args.out_dir / args.task
+    if subdir:
+        out_dir = out_dir / subdir
     frames_dir = (out_dir / "frames") if args.save_frames else None
     print(f"goal_state probe ({args.mode}): {args.task} seeds "
           f"{seeds[0]}-{seeds[-1]} (n={len(seeds)} x2), offset={args.offset}, "
-          f"encoder={args.encoder} res={args.resolution}")
+          f"encoder={args.encoder} res={args.resolution} camera={cam_tag} "
+          f"retract={args.retract}"
+          + (f" eye={cam_eye} target={cam_target}" if cam_eye is not None else ""))
 
     if args.mode == "clip-pool":
         Z_by_pool, y_str = _collect_clip_multipool(
             args.task, seeds, offset=args.offset, encoder=args.encoder,
             device=args.device, resolution=args.resolution, save_frames_dir=frames_dir,
+            **cam_kw, retract=args.retract,
         )
+        if args.dump_features is not None:
+            _dump_goalstate_features(
+                args.dump_features, seeds, Z_by_pool, y_str,
+                pool=args.dump_pool, suffix=args.feature_suffix, task=args.task)
         classes = sorted(set(y_str))
         y = np.asarray([classes.index(v) for v in y_str], dtype=np.int64)
         label_dist = {c: int((np.asarray(y_str) == c).sum()) for c in classes}
@@ -736,11 +910,18 @@ def main(argv=None) -> int:
         print(f"\nwrote {out_dir}/report.md\nwrote {out_dir}/results.json")
         return 0
 
-    collect = _collect_features_clip if args.mode == "clip" else _collect_features
-    Z, y_str = collect(
-        args.task, seeds, offset=args.offset, encoder=args.encoder,
-        device=args.device, resolution=args.resolution, save_frames_dir=frames_dir,
-    )
+    if args.mode == "clip":
+        Z, y_str = _collect_features_clip(
+            args.task, seeds, offset=args.offset, encoder=args.encoder,
+            device=args.device, resolution=args.resolution, save_frames_dir=frames_dir,
+            **cam_kw, retract=args.retract,
+        )
+    else:  # config: static pose-injected, no rollout -> no retract
+        Z, y_str = _collect_features(
+            args.task, seeds, offset=args.offset, encoder=args.encoder,
+            device=args.device, resolution=args.resolution, save_frames_dir=frames_dir,
+            **cam_kw,
+        )
 
     classes = sorted(set(y_str))
     y = np.asarray([classes.index(v) for v in y_str], dtype=np.int64)

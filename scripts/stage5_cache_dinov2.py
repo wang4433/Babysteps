@@ -29,6 +29,31 @@ if str(_ROOT) not in sys.path:
 from babysteps.stage4.vision_features import extract_vision_features  # noqa: E402
 
 
+def select_frames(frames: list, mode: str) -> list:
+    """Subset a clip's frames before encoding (final-state pooling).
+
+    `goal_state` is a FINAL-STATE factor: the whole-clip mean dilutes it (the
+    StackCube grounding result — spatial_mean over {first,last} clears 0.90 while
+    over-all-frames caps ~0.77). Mirrors
+    `scripts.stage5_goal_state_probe.clip_pool_frame_indices`:
+      all        -> every frame (deployed default; trajectory/contact factors)
+      final      -> the last frame only
+      first_last -> first + last (the validated goal_state pooling)
+      last5      -> the final 5 frames
+    """
+    if mode == "all" or not frames:
+        return frames
+    n = len(frames)
+    last = n - 1
+    if mode == "final":
+        return [frames[last]]
+    if mode == "first_last":
+        return [frames[0], frames[last]]
+    if mode == "last5":
+        return frames[max(0, n - 5):]
+    raise ValueError(f"unknown --frame-select {mode!r}")
+
+
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--frames-dir", type=Path, default=None,
@@ -37,6 +62,12 @@ def main(argv=None) -> int:
                    help="Output directory for seed_NNNN_dinov2.npy.")
     p.add_argument("--encoder", type=str, default="dinov2_vitb14")
     p.add_argument("--pool", type=str, default="cls_mean")
+    p.add_argument("--frame-select", type=str, default="all",
+                   choices=("all", "final", "first_last", "last5"),
+                   help="Subset frames before encoding (final-state pooling for "
+                        "goal_state; default 'all' = whole clip, byte-identical to "
+                        "prior caches). Pair with --pool spatial_mean + a distinct "
+                        "--feature-suffix for the goal_state pack.")
     p.add_argument("--resolution", type=int, default=224,
                    help="Square resize before encoding (224 default; 384/512 for "
                         "hi-res frame-encoder controls — must divide the patch size).")
@@ -69,6 +100,7 @@ def main(argv=None) -> int:
         if out.exists():                       # idempotent: standby-preempt safe
             continue
         frames = list(np.load(fp)["frames"])  # list[(H, W, 3) uint8]
+        frames = select_frames(frames, args.frame_select)
         z = extract_vision_features(
             frames,
             encoder=args.encoder, pool=args.pool, device=args.device,

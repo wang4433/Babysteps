@@ -148,3 +148,33 @@ def test_verdict_messaging():
     mod = _mod()
     assert mod._verdict(0.97, 0.5, 0.5).startswith("PASS")
     assert mod._verdict(0.55, 0.5, 0.5).startswith("FAIL")
+
+
+def test_camera_elevation_geometry():
+    """Elevation angle: 90deg straight-down, 0deg horizontal (pure geometry)."""
+    mod = _mod()
+    # Straight down (nadir): horiz=0 -> 90deg.
+    np.testing.assert_allclose(mod._camera_elevation_deg((0, 0, 1.0), (0, 0, 0)), 90.0)
+    # 45deg: equal horizontal and vertical offset.
+    np.testing.assert_allclose(
+        mod._camera_elevation_deg((1.0, 0.0, 1.0), (0.0, 0.0, 0.0)), 45.0)
+    # Horizontal-ish: large horiz, tiny dz -> near 0.
+    assert mod._camera_elevation_deg((1.0, 0.0, 0.01), (0.0, 0.0, 0.0)) < 1.0
+
+
+def test_camera_presets_are_high_oblique_not_nadir():
+    """Guard the dual-camera contract: every oblique preset must look OVER the
+    gripper (clearly elevated) WITHOUT being nadir (pure top-down destroys the
+    height cue that defines stacking — the reviewer tautology trap)."""
+    mod = _mod()
+    assert mod._CAMERA_PRESETS["default"] is None
+    # Default ManiSkill render_camera is a LOW oblique (~15deg) — the presets
+    # must be meaningfully higher than that but never straight down.
+    for name, preset in mod._CAMERA_PRESETS.items():
+        if preset is None:
+            continue
+        eye, target = preset
+        elev = mod._camera_elevation_deg(eye, target)
+        assert 40.0 < elev < 85.0, f"{name} elevation {elev:.1f} not high-oblique"
+        # Camera is above the table, looking down at the cube region.
+        assert eye[2] > target[2], f"{name} eye must be above target"
