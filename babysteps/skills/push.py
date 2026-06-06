@@ -58,6 +58,14 @@ class PushSkill:
     waypoints: np.ndarray
     cube_z: float
     contact_region: str
+    # Stage-5 4-way fix: target gripper YAW (deg, relative to the resting EE
+    # yaw) so the closed-gripper push face is perpendicular to the push
+    # direction. 0 for x-axis pushes (the gripper rests face-along-x); 90 for
+    # y-axis pushes. The runner P-controls action[5] toward this ONLY when
+    # constructed with orient_control=True — default-off keeps the committed
+    # +x data path byte-identical (a y-push without orient_control squirts the
+    # cube ~85deg sideways; see job 10966492 / reports/stage5/diag_pushcube_ypush).
+    push_yaw_deg: float = 0.0
 
 
 def build_push_waypoints(scene: SceneState, intent: Intent) -> np.ndarray:
@@ -101,8 +109,20 @@ def compile_intent_to_push_skill(intent: Intent, scene: SceneState) -> Optional[
     planner_failed=True downstream (failure_predicate "approach_blocked")."""
     if intent.approach_direction in scene.blocked_sides:
         return None
+    push_unit = face_to_push_unit(intent.contact_region)
+    # y-axis push needs the gripper yawed 90deg so its flat face is normal to
+    # travel; x-axis push uses the resting (0deg) face. The face is symmetric
+    # mod 180deg, so we are free to pick the rotation SIGN — and the Franka
+    # wrist can complete -90 for a +y push but stalls partway on +90 (job
+    # 10966514: +y reached only ~30deg of +90); -y completes +90. So rotate
+    # toward the reachable side: +y -> -90, -y -> +90.
+    if abs(push_unit[1]) > abs(push_unit[0]):
+        push_yaw_deg = -90.0 if push_unit[1] > 0 else 90.0
+    else:
+        push_yaw_deg = 0.0
     return PushSkill(
         waypoints=build_push_waypoints(scene, intent),
         cube_z=float(scene.cube_z),
         contact_region=intent.contact_region,
+        push_yaw_deg=push_yaw_deg,
     )

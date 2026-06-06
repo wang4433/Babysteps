@@ -40,3 +40,4 @@ reports/**/frames/
 
 # Local Claude Code harness state (scheduled-task lock etc.), not project code.
 .claude/
+reports/**/videos/

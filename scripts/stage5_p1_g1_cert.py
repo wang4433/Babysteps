@@ -41,8 +41,14 @@ def _seed_from_record(rec: dict) -> int:
     return int(rec["episode_id"].split("_")[-1])
 
 
-def _load_one_task(jsonl: Path, features_dir: Path) -> tuple[list[dict], np.ndarray]:
-    """Load records and stack their cached DINOv2 features in jsonl order."""
+def _load_one_task(
+    jsonl: Path, features_dir: Path, *, feature_suffix: str = "dinov2"
+) -> tuple[list[dict], np.ndarray]:
+    """Load records and stack their cached encoder features in jsonl order.
+
+    `feature_suffix` selects the cached file (`seed_NNNN_<suffix>.npy`) so the
+    same probe runs apples-to-apples across encoders (dinov2 / vjepa21 / ...).
+    """
     records: list[dict] = []
     with jsonl.open() as f:
         for line in f:
@@ -52,7 +58,7 @@ def _load_one_task(jsonl: Path, features_dir: Path) -> tuple[list[dict], np.ndar
     Z_rows: list[np.ndarray] = []
     for rec in records:
         seed = _seed_from_record(rec)
-        feat = features_dir / f"seed_{seed:04d}_dinov2.npy"
+        feat = features_dir / f"seed_{seed:04d}_{feature_suffix}.npy"
         Z_rows.append(np.load(feat))
     Z = np.stack(Z_rows).astype(np.float32)
     return records, Z
@@ -61,6 +67,7 @@ def _load_one_task(jsonl: Path, features_dir: Path) -> tuple[list[dict], np.ndar
 def _probe_rows(
     records: list[dict], Z: np.ndarray, *,
     n_factors: int, d_slot: int, hidden: int, n_epochs: int, lr: float, seed: int,
+    standardize: bool = False,
 ) -> list[dict]:
     """One trained-encoder probe per factor on the supplied Z."""
     rows: list[dict] = []
@@ -72,6 +79,7 @@ def _probe_rows(
             Z, y,
             factor_idx=factor_idx, n_factors=n_factors,
             d_slot=d_slot, n_epochs=n_epochs, lr=lr, seed=seed,
+            standardize_input=standardize,
         )
         out["task"] = task
         out["factor"] = factor
@@ -95,6 +103,20 @@ def main(argv=None) -> int:
     p.add_argument("--pool", type=str, default="spatial_mean",
                    help="Pool strategy used by stage5_cache_dinov2.py to produce "
                         "the cached features (informational for the report header).")
+    p.add_argument("--feature-suffix", type=str, default="dinov2",
+                   help="Cached-feature filename suffix (seed_NNNN_<suffix>.npy); "
+                        "e.g. 'vjepa21' for the V-JEPA 2.1 run.")
+    p.add_argument("--encoder-label", type=str, default="DINOv2 ViT-B/14",
+                   help="Encoder name for the report header.")
+    p.add_argument("--no-narrative", action="store_true",
+                   help="Omit the DINOv2-specific falsification-log/interpretation "
+                        "prose (use for non-DINOv2 encoders; hand-author the "
+                        "comparison/verdict separately).")
+    p.add_argument("--standardize", action="store_true",
+                   help="StandardScale the IntentHead input Z (train-fold fit) — "
+                        "fair across encoders with differing feature norms; the "
+                        "committed default (off) leaves prior numbers unchanged. "
+                        "See reports/stage5/vjepa_object_motion/FINDINGS.md.")
     args = p.parse_args(argv)
 
     if len(args.jsonl) != len(args.features_dir):
@@ -104,11 +126,12 @@ def main(argv=None) -> int:
 
     all_rows: list[dict] = []
     for jl, fd in zip(args.jsonl, args.features_dir):
-        records, Z = _load_one_task(jl, fd)
+        records, Z = _load_one_task(jl, fd, feature_suffix=args.feature_suffix)
         rows = _probe_rows(
             records, Z,
             n_factors=6, d_slot=args.d_slot, hidden=args.hidden,
             n_epochs=args.n_epochs, lr=args.lr, seed=args.seed,
+            standardize=args.standardize,
         )
         all_rows.extend(rows)
 
@@ -122,10 +145,10 @@ def main(argv=None) -> int:
     z_dim_used = (
         int(all_rows[0]["_z_dim"]) if all_rows and "_z_dim" in all_rows[0] else "?"
     )
-    md = "\n".join([
-        "# Stage-5 P1 — Vision-grounded G1 (DINOv2 ViT-B/14)",
+    md_parts = [
+        f"# Stage-5 P1 — Vision-grounded G1 ({args.encoder_label})",
         "",
-        f"Input Z: {z_dim_used}-dim DINOv2 ViT-B/14 features "
+        f"Input Z: {z_dim_used}-dim {args.encoder_label} features "
         f"({args.pool} pool over demo frames).",
         f"IntentHead: F=6, d_slot={args.d_slot}, hidden={args.hidden}, "
         f"n_epochs={args.n_epochs}, lr={args.lr}.",
@@ -144,6 +167,8 @@ def main(argv=None) -> int:
         f"{report['gate']['n_failing']} fail) | "
         f"{report['gate']['n_label_identity']} label-identity | "
         f"{report['gate']['n_trivial']} trivially constant.",
+    ]
+    narrative = [
         "",
         "## Falsification log",
         "",
@@ -199,7 +224,10 @@ def main(argv=None) -> int:
         "ablations spec §6 listed (R3M, encoder swap) are not pursued — "
         "they would not address the relational-representation bottleneck "
         "diagnosed here.",
-    ])
+    ]
+    if not args.no_narrative:
+        md_parts.extend(narrative)
+    md = "\n".join(md_parts)
     if not gate_pass:
         failing = ", ".join(f"{t}/{f}" for t, f in report["gate"]["failing_cells"])
         md += f"\n\n**Failing geometric cells:** {failing}\n"

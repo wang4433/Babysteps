@@ -37,6 +37,12 @@ def main(argv=None) -> int:
                    help="Output directory for seed_NNNN_dinov2.npy.")
     p.add_argument("--encoder", type=str, default="dinov2_vitb14")
     p.add_argument("--pool", type=str, default="cls_mean")
+    p.add_argument("--resolution", type=int, default=224,
+                   help="Square resize before encoding (224 default; 384/512 for "
+                        "hi-res frame-encoder controls — must divide the patch size).")
+    p.add_argument("--feature-suffix", type=str, default="dinov2",
+                   help="Output filename suffix seed_NNNN_<suffix>.npy (default "
+                        "'dinov2'; e.g. 'dinov3l384' for a resolution control).")
     p.add_argument("--device", type=str, default="cuda")
     p.add_argument("--check", action="store_true",
                    help="Load DINOv2 once and exit (smoke).")
@@ -59,12 +65,15 @@ def main(argv=None) -> int:
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
     for fp in frame_files:
+        out = args.out_dir / f"{fp.stem}_{args.feature_suffix}.npy"
+        if out.exists():                       # idempotent: standby-preempt safe
+            continue
         frames = list(np.load(fp)["frames"])  # list[(H, W, 3) uint8]
         z = extract_vision_features(
             frames,
             encoder=args.encoder, pool=args.pool, device=args.device,
+            resolution=args.resolution,
         )
-        out = args.out_dir / f"{fp.stem}_dinov2.npy"
         np.save(out, z)
         print(f"wrote {out} (shape={z.shape}, dtype={z.dtype})")
     return 0

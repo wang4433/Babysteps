@@ -70,6 +70,20 @@ def _displacement(a: AttemptResult) -> float:
     return float(np.linalg.norm(final - init))
 
 
+def _displacement_vec(a: AttemptResult) -> tuple[float, float]:
+    """The 2D object displacement VECTOR (final - initial), world frame.
+
+    Stage-5 natural-failure feedback: where the object ACTUALLY went. Unlike
+    the scalar magnitude or the cos alignment, the vector disambiguates which
+    way the push went wrong (+y vs -y), which is what a feedback-conditioned
+    reviser needs to pick the corrective factor value. Observable outcome only
+    — no goal_xy, no sim privilege."""
+    init = np.asarray(a.initial_obj_xy, dtype=np.float64)
+    final = np.asarray(a.final_obj_xy, dtype=np.float64)
+    d = final - init
+    return (float(d[0]), float(d[1]))
+
+
 def _direction_alignment(a: AttemptResult) -> Optional[float]:
     """cos(motion, goal − initial) ∈ [-1, 1]; None if either vector is zero."""
     init = np.asarray(a.initial_obj_xy, dtype=np.float64)
@@ -103,6 +117,7 @@ def build_failure_packet(
         "grasp_slip":      bool(attempt.grasp_slip),
     }
     disp = _displacement(attempt)
+    disp_vec = _displacement_vec(attempt)
     align = _direction_alignment(attempt)
 
     if attempt.success:
@@ -150,6 +165,7 @@ def build_failure_packet(
         failure_predicate=predicate,
         object_displacement=disp,
         direction_alignment=align,
+        object_displacement_vec=disp_vec,
     )
 
 

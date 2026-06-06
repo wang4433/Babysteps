@@ -171,12 +171,22 @@ def run_probe(
     d_slot: int = 32,
     n_epochs: int = 300,
     seed: int = 0,
+    standardize: bool = False,
 ) -> dict:
     """Score features on the SAME axis as the G1 cells: a direct
-    StandardScaler+LR column and the IntentHead-mediated nested CV."""
+    StandardScaler+LR column and the IntentHead-mediated nested CV.
+
+    `standardize` z-scores the IntentHead input per train fold (StandardScaler
+    fit inside CV). DINOv2/DINOv3 feature norms (~24) tolerate the raw-Z Adam
+    optimizer, but richer encoders (V-JEPA ~43) underfit without it — the bug
+    fixed in babysteps.stage4.intent_head (see vjepa_object_motion/FINDINGS.md).
+    Default False keeps committed DINO numbers byte-identical; the direct-LR
+    column already StandardScales internally, so it is unaffected either way.
+    """
     direct = _direct_lr_probe(Z, y, seed=seed)
     intent = nested_cv_probe_one_factor(
         Z, y, factor_idx=factor_idx, d_slot=d_slot, n_epochs=n_epochs, seed=seed,
+        standardize_input=standardize,
     )
     return {"dim": int(Z.shape[1]), "direct": direct, "intent": intent}
 
@@ -184,7 +194,7 @@ def run_probe(
 def _verdict(intent_mean: float, majority: float, shuffled: float) -> str:
     if _gate(intent_mean, majority, shuffled) == "PASS":
         return (
-            "PASS — goal_state IS pixel-groundable: frozen DINOv2 spatial_mean "
+            "PASS — goal_state IS pixel-groundable: the frozen encoder's spatial_mean "
             "separates the stacked vs place-near configs. Unlike object_motion "
             "(representation-blocked) this is a whole-image config difference. "
             "GREEN-LIGHT a faithful clip-based latent goal_state collection "
@@ -230,7 +240,7 @@ def _write_report(
     if mode == "clip":
         unit = "demo CLIPS"
         setup = (
-            f"- Demo CLIPS (real Stage-0 executor), DINOv2 spatial_mean pooled over "
+            f"- Demo CLIPS (real Stage-0 executor), the frozen encoder's spatial_mean pooled over "
             f"TIME+patches = the DEPLOYED representation: stack = cubeA_on_cubeB onto "
             f"cubeB; near = cube_at_target dropped at cubeB.xy + {offset} along a "
             "per-seed BALANCED cardinal. Tests whether clip-pooling dilutes the "
@@ -246,7 +256,7 @@ def _write_report(
     L = [
         f"# Stage-5 — StackCube `goal_state` pixel-separability probe ({mode}) — {task}",
         "",
-        "**Question:** can frozen DINOv2 (ViT-B/14, spatial_mean) separate the two",
+        "**Question:** can the frozen encoder (spatial_mean) separate the two",
         "`goal_state` cases — cubeA stacked ON cubeB (`cubeA_on_cubeB`) vs cubeA",
         "placed NEAR/beside cubeB (`cube_at_target`, the place-near reading)?",
         "This is the necessary-condition ceiling for latent-grounding `goal_state`.",
@@ -336,6 +346,7 @@ def _capture(env) -> np.ndarray:
 
 def _collect_features(
     task: str, seeds: list[int], *, offset: float, encoder: str, device: str,
+    resolution: int = 224,
     save_frames_dir: Path | None = None,
 ) -> tuple[np.ndarray, list[str]]:
     """Render the two goal configs per seed and DINOv2-encode each.
@@ -368,7 +379,7 @@ def _collect_features(
                 )
                 frame = _capture(env)
                 z = extract_vision_features(
-                    [frame], encoder=encoder, pool="spatial_mean", device=device,
+                    [frame], encoder=encoder, pool="spatial_mean", device=device, resolution=resolution,
                 )
                 Z.append(z)
                 y.append(token)
@@ -392,6 +403,7 @@ def _collect_features(
 
 def _collect_features_clip(
     task: str, seeds: list[int], *, offset: float, encoder: str, device: str,
+    resolution: int = 224,
     save_frames_dir: Path | None = None,
 ) -> tuple[np.ndarray, list[str]]:
     """Render a full demo CLIP per goal_state and DINOv2-encode the WHOLE clip.
@@ -442,7 +454,7 @@ def _collect_features_clip(
                 if not frames:
                     raise RuntimeError(f"empty clip for seed {seed} ({key})")
                 z = extract_vision_features(
-                    frames, encoder=encoder, pool="spatial_mean", device=device,
+                    frames, encoder=encoder, pool="spatial_mean", device=device, resolution=resolution,
                 )
                 Z.append(z)
                 y.append(token)
@@ -470,6 +482,7 @@ def _collect_features_clip(
 
 def _collect_clip_multipool(
     task: str, seeds: list[int], *, offset: float, encoder: str, device: str,
+    resolution: int = 224,
     save_frames_dir: Path | None = None,
 ) -> tuple[dict[str, np.ndarray], list[str]]:
     """Render a demo CLIP per goal_state and DINOv2-encode it under SEVERAL
@@ -516,7 +529,7 @@ def _collect_clip_multipool(
                 for pool_name, idxs in idx_by_pool.items():
                     z = extract_vision_features(
                         [frames[i] for i in idxs], encoder=encoder,
-                        pool="spatial_mean", device=device,
+                        pool="spatial_mean", device=device, resolution=resolution,
                     )
                     Zs.setdefault(pool_name, []).append(z)
                 y.append(token)
@@ -591,7 +604,7 @@ def _write_multipool_report(
         "(a final-state-aware pooling recovers it) or a representation block?",
         "",
         f"- Encoder: `{encoder}`; same clips, several temporal poolings (frame",
-        "  subsets pooled by DINOv2 spatial_mean).",
+        "  subsets pooled by the frozen encoder's spatial_mean).",
         f"- n={n} ({n_seeds} seeds x 2 demo CLIPS), label dist {label_dist} "
         f"(majority {majority:.3f}); place-near drop = cubeB.xy + {offset} (balanced).",
         f"- Probe: G1 protocol (IntentHead F=6, d_slot={d_slot}, n_epochs={n_epochs}, "
@@ -673,12 +686,20 @@ def main(argv=None) -> int:
     p.add_argument("--offset", type=float, default=_NEAR_OFFSET,
                    help="Center-to-center xy offset for the place-near config.")
     p.add_argument("--encoder", default="dinov2_vitb14")
+    p.add_argument("--resolution", type=int, default=224,
+                   help="Square encode resolution. Must be divisible by the "
+                        "encoder patch size (14 for DINOv2 -> 224/518; 16 for "
+                        "DINOv3 -> 224/512). DINOv3 hi-res lever: 512.")
     p.add_argument("--device", default="cuda")
     p.add_argument("--out-dir", type=Path,
                    default=Path("reports/stage5/goal_state_probe"))
     p.add_argument("--d-slot", type=int, default=32)
     p.add_argument("--n-epochs", type=int, default=300)
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--standardize", action="store_true",
+                   help="Z-score the IntentHead input per train fold (fixes the "
+                        "un-normalized-Z optimizer under-read for richer encoders "
+                        "like V-JEPA; default off keeps DINO numbers identical).")
     p.add_argument("--save-frames", action="store_true",
                    help="Dump the first few rendered configs as PNGs for sanity.")
     args = p.parse_args(argv)
@@ -687,12 +708,13 @@ def main(argv=None) -> int:
     out_dir = args.out_dir / args.task
     frames_dir = (out_dir / "frames") if args.save_frames else None
     print(f"goal_state probe ({args.mode}): {args.task} seeds "
-          f"{seeds[0]}-{seeds[-1]} (n={len(seeds)} x2), offset={args.offset}")
+          f"{seeds[0]}-{seeds[-1]} (n={len(seeds)} x2), offset={args.offset}, "
+          f"encoder={args.encoder} res={args.resolution}")
 
     if args.mode == "clip-pool":
         Z_by_pool, y_str = _collect_clip_multipool(
             args.task, seeds, offset=args.offset, encoder=args.encoder,
-            device=args.device, save_frames_dir=frames_dir,
+            device=args.device, resolution=args.resolution, save_frames_dir=frames_dir,
         )
         classes = sorted(set(y_str))
         y = np.asarray([classes.index(v) for v in y_str], dtype=np.int64)
@@ -701,7 +723,7 @@ def main(argv=None) -> int:
         for pool_name, Zp in Z_by_pool.items():
             results_by_pool[pool_name] = run_probe(
                 Zp, y, factor_idx=_GOAL_STATE_IDX, d_slot=args.d_slot,
-                n_epochs=args.n_epochs, seed=args.seed,
+                n_epochs=args.n_epochs, seed=args.seed, standardize=args.standardize,
             )
             print(f"  {pool_name:20s} direct={results_by_pool[pool_name]['direct']['probe_acc_mean']:.3f}"
                   f"  intentCV={results_by_pool[pool_name]['intent']['probe_acc_mean']:.3f}")
@@ -717,7 +739,7 @@ def main(argv=None) -> int:
     collect = _collect_features_clip if args.mode == "clip" else _collect_features
     Z, y_str = collect(
         args.task, seeds, offset=args.offset, encoder=args.encoder,
-        device=args.device, save_frames_dir=frames_dir,
+        device=args.device, resolution=args.resolution, save_frames_dir=frames_dir,
     )
 
     classes = sorted(set(y_str))
@@ -726,7 +748,8 @@ def main(argv=None) -> int:
     print(f"encoded n={len(y_str)}; labels {label_dist}; Z={Z.shape}")
 
     result = run_probe(Z, y, factor_idx=_GOAL_STATE_IDX, d_slot=args.d_slot,
-                       n_epochs=args.n_epochs, seed=args.seed)
+                       n_epochs=args.n_epochs, seed=args.seed,
+                       standardize=args.standardize)
     print(f"  direct LR  = {result['direct']['probe_acc_mean']:.3f}")
     print(f"  IntentCV   = {result['intent']['probe_acc_mean']:.3f} "
           f"(majority {result['intent']['majority_class_acc']:.3f}, "

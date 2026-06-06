@@ -1,0 +1,2628 @@
+{
+  "config": {
+    "task": "PushCube-v1",
+    "eval_seeds": "200-299",
+    "demo_seed_offset": 500,
+    "mismatch": "random",
+    "fake": false,
+    "revisers": [
+      "feedback_residual",
+      "oracle_value"
+    ]
+  },
+  "summary": {
+    "n": 100,
+    "n_mismatch": 76,
+    "initial_success_rate": 0.24,
+    "final_success_rate": {
+      "feedback_residual": 0.95,
+      "oracle_value": 0.99
+    },
+    "final_success_rate_on_mismatch": {
+      "feedback_residual": 0.9342105263157895,
+      "oracle_value": 0.9868421052631579
+    }
+  },
+  "rows": [
+    {
+      "demo_seed": 700,
+      "exec_seed": 200,
+      "demo_face": "minus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.18600615113973618,
+        0.012070664204657078
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 701,
+      "exec_seed": 201,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.001322321593761444,
+        -0.14678744971752167
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 702,
+      "exec_seed": 202,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.0010874643921852112,
+        -0.14821576327085495
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 703,
+      "exec_seed": 203,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        -0.15381215512752533,
+        -0.00014520063996315002
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 704,
+      "exec_seed": 204,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10667956620454788,
+        -0.0030952244997024536
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 705,
+      "exec_seed": 205,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.0580616295337677,
+        -0.08716116100549698
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 706,
+      "exec_seed": 206,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.11067965626716614,
+        0.0002570636570453644
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 707,
+      "exec_seed": 207,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.01753365248441696,
+        -0.15611692517995834
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 708,
+      "exec_seed": 208,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10815703123807907,
+        -0.0019918661564588547
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 709,
+      "exec_seed": 209,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.11166580393910408,
+        0.0017443536780774593
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 710,
+      "exec_seed": 210,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.0012969691306352615,
+        -0.1602352261543274
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 711,
+      "exec_seed": 211,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.0022099316120147705,
+        -0.12668552994728088
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 712,
+      "exec_seed": 212,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.013199321925640106,
+        -0.15929559618234634
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 713,
+      "exec_seed": 213,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.05693299323320389,
+        -0.0976392850279808
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 714,
+      "exec_seed": 214,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.010080689564347267,
+        -0.12934697419404984
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 715,
+      "exec_seed": 215,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.11991104483604431,
+        0.0007469379343092442
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 716,
+      "exec_seed": 216,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.00370045006275177,
+        0.14622338116168976
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 717,
+      "exec_seed": 217,
+      "demo_face": "plus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        -0.15143105387687683,
+        0.006892025470733643
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 718,
+      "exec_seed": 218,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10806312412023544,
+        -0.005000518634915352
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 719,
+      "exec_seed": 219,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.003637094981968403,
+        -0.14739841222763062
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 720,
+      "exec_seed": 220,
+      "demo_face": "minus_x_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.16712292656302452,
+        -0.0003383351140655577
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 721,
+      "exec_seed": 221,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.04829011112451553,
+        -0.1348620429635048
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 722,
+      "exec_seed": 222,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.0004990100860595703,
+        0.15020021796226501
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 723,
+      "exec_seed": 223,
+      "demo_face": "plus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.1439821720123291,
+        -0.00977199524641037
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 724,
+      "exec_seed": 224,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.16892391815781593,
+        -0.0002420167438685894
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 725,
+      "exec_seed": 225,
+      "demo_face": "minus_x_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.2255377247929573,
+        0.005193799734115601
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": false,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 726,
+      "exec_seed": 226,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.13082484155893326,
+        0.005149170756340027
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 727,
+      "exec_seed": 227,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.010048680007457733,
+        0.13224726170301437
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 728,
+      "exec_seed": 228,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.0038669875357300043,
+        0.15990885347127914
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 729,
+      "exec_seed": 229,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.01748763769865036,
+        0.15564658492803574
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 730,
+      "exec_seed": 230,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        -0.002621948719024658,
+        -0.14779040217399597
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 731,
+      "exec_seed": 231,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.0038426071405410767,
+        -0.12514673918485641
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 732,
+      "exec_seed": 232,
+      "demo_face": "minus_x_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.22235796600580215,
+        0.028445161879062653
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 733,
+      "exec_seed": 233,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.0023638680577278137,
+        -0.15102215111255646
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 734,
+      "exec_seed": 234,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.03352537751197815,
+        0.1441655457019806
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 735,
+      "exec_seed": 235,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.004127960652112961,
+        0.14581243693828583
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 736,
+      "exec_seed": 236,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.026121176779270172,
+        0.15218014270067215
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 737,
+      "exec_seed": 237,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.21939194947481155,
+        -0.006447985768318176
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": false,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 738,
+      "exec_seed": 238,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.000636812299489975,
+        -0.155952587723732
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 739,
+      "exec_seed": 239,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.000516161322593689,
+        -0.14780522137880325
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 740,
+      "exec_seed": 240,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        -0.002410970628261566,
+        -0.14551670104265213
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 741,
+      "exec_seed": 241,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.004084310494363308,
+        0.14714883267879486
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 742,
+      "exec_seed": 242,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.0017323046922683716,
+        0.1463078185915947
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 743,
+      "exec_seed": 243,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.002213798463344574,
+        0.15396063774824142
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 744,
+      "exec_seed": 244,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.111761175096035,
+        0.003224298357963562
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 745,
+      "exec_seed": 245,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.16057929396629333,
+        0.021595604717731476
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 746,
+      "exec_seed": 246,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.003047041594982147,
+        -0.13232292234897614
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 747,
+      "exec_seed": 247,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.13720232993364334,
+        -0.0030082985758781433
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 748,
+      "exec_seed": 248,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.003714360296726227,
+        -0.14754106104373932
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 749,
+      "exec_seed": 249,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        -0.0003943890333175659,
+        -0.1473264992237091
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 750,
+      "exec_seed": 250,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.016526639461517334,
+        0.1596318855881691
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 751,
+      "exec_seed": 251,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.009579092264175415,
+        -0.1473372019827366
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 752,
+      "exec_seed": 252,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        -0.14214056730270386,
+        -0.0019352547824382782
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 753,
+      "exec_seed": 253,
+      "demo_face": "minus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.16996226459741592,
+        0.005433500744402409
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 754,
+      "exec_seed": 254,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.15362051874399185,
+        0.00016602501273155212
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 755,
+      "exec_seed": 255,
+      "demo_face": "plus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "contact_failure",
+      "displacement_vec": [
+        -0.14920518547296524,
+        0.009685009717941284
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 756,
+      "exec_seed": 256,
+      "demo_face": "plus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.14973611384630203,
+        -0.006074176169931889
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 757,
+      "exec_seed": 257,
+      "demo_face": "minus_x_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.16181118786334991,
+        -0.0068903714418411255
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 758,
+      "exec_seed": 258,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.009073588997125626,
+        0.1577068492770195
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 759,
+      "exec_seed": 259,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.2199290618300438,
+        0.005483176559209824
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": false,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 760,
+      "exec_seed": 260,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10464651137590408,
+        -0.0021210485137999058
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 761,
+      "exec_seed": 261,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.14669444039463997,
+        0.019235804677009583
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 762,
+      "exec_seed": 262,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.17146296799182892,
+        -0.001696571707725525
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 763,
+      "exec_seed": 263,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.0015787705779075623,
+        0.15899953991174698
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 764,
+      "exec_seed": 264,
+      "demo_face": "plus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.1531449556350708,
+        -0.0066855475306510925
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 765,
+      "exec_seed": 265,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.00027731433510780334,
+        0.15970417112112045
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 766,
+      "exec_seed": 266,
+      "demo_face": "plus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.15320952981710434,
+        0.005588550120592117
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 767,
+      "exec_seed": 267,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        -0.003544505685567856,
+        -0.1464729681611061
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 768,
+      "exec_seed": 268,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.0036277323961257935,
+        0.14635981619358063
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 769,
+      "exec_seed": 269,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.004583835601806641,
+        0.14661266654729843
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 770,
+      "exec_seed": 270,
+      "demo_face": "minus_x_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.270757220685482,
+        0.026838526129722595
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": false,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 771,
+      "exec_seed": 271,
+      "demo_face": "minus_x_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.1767306625843048,
+        0.0012649260461330414
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 772,
+      "exec_seed": 272,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.0009555555880069733,
+        0.13066069036722183
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 773,
+      "exec_seed": 273,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.008637972176074982,
+        -0.10077395290136337
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 774,
+      "exec_seed": 274,
+      "demo_face": "minus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.17150625586509705,
+        -0.002477172762155533
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 775,
+      "exec_seed": 275,
+      "demo_face": "plus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "contact_failure",
+      "displacement_vec": [
+        -3.427267074584961e-07,
+        -7.152557373046875e-07
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": false,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": false,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 776,
+      "exec_seed": 276,
+      "demo_face": "plus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        -0.1510513871908188,
+        0.002243032678961754
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 777,
+      "exec_seed": 277,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.1552860513329506,
+        0.00577167421579361
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 778,
+      "exec_seed": 278,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.002106413245201111,
+        -0.14623136073350906
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 779,
+      "exec_seed": 279,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.045662157237529755,
+        -0.13344955816864967
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 780,
+      "exec_seed": 280,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        -0.004641808569431305,
+        0.1552853286266327
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 781,
+      "exec_seed": 281,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.001736760139465332,
+        -0.14741834998130798
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 782,
+      "exec_seed": 282,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.11722014844417572,
+        0.0071707069873809814
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 783,
+      "exec_seed": 283,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.04243943840265274,
+        0.13566383719444275
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 784,
+      "exec_seed": 284,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.0007860958576202393,
+        0.13081220537424088
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 785,
+      "exec_seed": 285,
+      "demo_face": "plus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.15182992815971375,
+        -0.0020023658871650696
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 786,
+      "exec_seed": 286,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.16596242785453796,
+        -0.009298928081989288
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 787,
+      "exec_seed": 287,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.05476609617471695,
+        -0.09925833344459534
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 788,
+      "exec_seed": 288,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.008197065442800522,
+        -0.15749850869178772
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 789,
+      "exec_seed": 289,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.0020361989736557007,
+        -0.1257673129439354
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 790,
+      "exec_seed": 290,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.049061842262744904,
+        -0.12570451572537422
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 791,
+      "exec_seed": 291,
+      "demo_face": "plus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.003487132489681244,
+        -0.14785684645175934
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 792,
+      "exec_seed": 292,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.11346672475337982,
+        0.00042313430458307266
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 793,
+      "exec_seed": 293,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.009016968309879303,
+        0.1581287533044815
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 794,
+      "exec_seed": 294,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.0004074275493621826,
+        0.13013390451669693
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 795,
+      "exec_seed": 295,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.000531468540430069,
+        0.1478380188345909
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 796,
+      "exec_seed": 296,
+      "demo_face": "minus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        0.02021416276693344,
+        0.15429570525884628
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 797,
+      "exec_seed": 297,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.008563809096813202,
+        0.14118286967277527
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 798,
+      "exec_seed": 298,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.00451602041721344,
+        -0.1251753494143486
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 799,
+      "exec_seed": 299,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": true,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": false,
+      "failure_predicate": "direction_error",
+      "displacement_vec": [
+        -0.15305878967046738,
+        0.002277687191963196
+      ],
+      "revisers": {
+        "feedback_residual": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_contact": "plus_y_face"
+        }
+      }
+    }
+  ]
+}

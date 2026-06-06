@@ -40,6 +40,7 @@ GPU/Vulkan node required (login-node Vulkan device init fails).
 from __future__ import annotations
 
 import argparse
+import json
 import sys
 from pathlib import Path
 from typing import Optional
@@ -76,6 +77,45 @@ _PUSHCUBE_DIRS = ("translate_+x", "translate_-x")
 _PUSHCUBE_INJECTION_BY_SEED: dict[int, str] = dict(
     stratified_seed_plan(_PUSHCUBE_DIRS, episodes_per_class=10, seed_start=0)
 )
+
+# Stage-5 B.2 — the four cardinal push directions for the 4-way latent pack
+# (--four-way-range mode). The 2-class _PUSHCUBE_DIRS above (the original
+# x-axis-only varied-intent cut) cannot ground a 4-way contact_region latent;
+# rendering all four directions (with orient_control) builds 4 vision-grounded
+# centroids. seed -> direction is stratified round-robin over (seed - lo) % 4.
+_FOUR_WAY_DIRS = (
+    "translate_+x", "translate_-x", "translate_+y", "translate_-y",
+)
+
+# --- Stage-5 4-way demo fix: gripper-yaw P-control. Mirror of
+# babysteps/envs/pushcube_runner._YAW_K_DEG / _wrap180 / _yaw_deg (the source of
+# truth; redefined here so this GPU-only script stays decoupled from the runner).
+# A y-axis push needs the closed-gripper blade yawed 90deg or the cube squirts
+# ~85deg sideways (job 10966492); sign is +y -> -90, -y -> +90 because the Franka
+# wrist completes -90 but stalls partway on +90 (job 10966523). Same drift-hazard
+# convention as the StackCube constants above: keep in sync with the runner.
+_YAW_K_DEG: float = 20.0
+
+
+def _wrap180(a: float) -> float:
+    return (a + 180.0) % 360.0 - 180.0
+
+
+def _yaw_deg(tcp_xyzw: np.ndarray) -> float:
+    """World-z yaw (deg) of the EE from a [x,y,z,qx,qy,qz,qw] pose (scipy 'xyz'
+    euler — the convention action[5] was calibrated against in the runner)."""
+    from scipy.spatial.transform import Rotation as _R
+    q = np.asarray(tcp_xyzw, dtype=np.float64)
+    return float(_R.from_quat([q[3], q[4], q[5], q[6]]).as_euler("xyz", degrees=True)[2])
+
+
+def _push_yaw_deg_for(push_unit: np.ndarray) -> float:
+    """Target yaw offset for a push direction (mirror of
+    babysteps.skills.push.compile_intent_to_push_skill): 0 for x-axis, and for a
+    y-axis push +y -> -90, -y -> +90 (the reachable wrist side)."""
+    if abs(push_unit[1]) > abs(push_unit[0]):
+        return -90.0 if push_unit[1] > 0 else 90.0
+    return 0.0
 
 
 # !!! Drift hazard: these mirror StackCubeEnvRunner constants by value
@@ -171,6 +211,7 @@ def _pushcube_inject_goal(env, seed: int, object_motion: str):
 
 def _capture_pushcube_demo(
     env, adapter, seed: int, object_motion: Optional[str],
+    *, orient_control: bool = False, out_meta: Optional[dict] = None,
 ) -> np.ndarray:
     """Re-run the PushCube oracle demo on `seed` and return a (T,H,W,3) uint8 stack.
 
@@ -183,7 +224,19 @@ def _capture_pushcube_demo(
     When ``object_motion`` is None, no goal injection is performed and the
     env is reset natively (`env.reset(seed)`). This matches M2a's held-out
     `generate_proxy_demo` flow on eval seeds (no stratified injection).
+
+    ``orient_control`` (Stage-5 B.2): P-control the gripper yaw (action[5])
+    toward the push direction so a y-axis demo pushes the cube cleanly instead
+    of squirting it ~85deg sideways — the render-path mirror of
+    ``PushCubeEnvRunner(orient_control=True)`` (job 10966523). Required to render
+    +y/-y demo clips for the 4-way latent pack; default False keeps the committed
+    +x/-x frame cache byte-identical.
+
+    ``out_meta`` (optional dict): when provided, filled with the oracle
+    ``correct_intent`` tokens and the achieved cube displacement so the 4-way
+    caller can label the clip and self-check the realized push direction.
     """
+    from babysteps.envs.scene import face_to_push_unit
     from babysteps.skills.push import build_push_waypoints
 
     if object_motion is None:
@@ -204,6 +257,13 @@ def _capture_pushcube_demo(
     waypoints = build_push_waypoints(scene, correct)
     targets = [np.asarray(wp[0:3], dtype=np.float64) for wp in waypoints]
 
+    # Stage-5 B.2 gripper-yaw target (resting yaw + push offset), computed once
+    # from the first-frame pose like the runner does.
+    target_yaw = None
+    if orient_control:
+        push_unit = face_to_push_unit(correct.contact_region)
+        target_yaw = _yaw_deg(tcp) + _push_yaw_deg_for(push_unit)
+
     frames: list[np.ndarray] = [render_frame(env)]
     phase_idx = 0
     for _ in range(PUSHCUBE_MAX_CONTROL_STEPS):
@@ -215,6 +275,10 @@ def _capture_pushcube_demo(
                 break
             target = targets[phase_idx]
         action = prop_action(tcp, target, gripper_cmd=-1.0)
+        if target_yaw is not None:
+            # P-control world-z yaw so the push face is normal to travel.
+            err = _wrap180(target_yaw - _yaw_deg(tcp))
+            action[5] = np.float32(np.clip(-err / _YAW_K_DEG, -1.0, 1.0))
         obs, _r, term, trunc, info = env.step(action)
         frames.append(render_frame(env))
         term_b = bool(to_np(term).item()) if hasattr(term, "cpu") else bool(term)
@@ -223,7 +287,40 @@ def _capture_pushcube_demo(
         succ_b = bool(to_np(succ).item()) if hasattr(succ, "cpu") else bool(succ)
         if succ_b or term_b or trunc_b:
             break
+    if out_meta is not None:
+        tcp_f, cube_f, _, _ = read_obs(obs)
+        out_meta["correct_intent"] = {
+            "object_motion": correct.object_motion,
+            "contact_region": correct.contact_region,
+            "approach_direction": correct.approach_direction,
+        }
+        out_meta["disp_xy"] = (
+            float(cube_f[0] - cube_xy0[0]), float(cube_f[1] - cube_xy0[1]),
+        )
+        out_meta["target_motion"] = object_motion
     return np.stack(frames, axis=0)
+
+
+def _pushcube_labels_only(env, adapter, seed: int, object_motion: str) -> dict:
+    """Recompute the oracle intent labels for a 4-way seed WITHOUT a rollout or
+    render (one reset + injection + oracle_correct_intent). Used by the
+    --four-way-range --skip-existing resume path to keep labels.json complete
+    even for clips whose frames already exist."""
+    obs = _pushcube_inject_goal(env, seed, object_motion)
+    tcp, cube_xy0, goal_xy, cube_z = read_obs(obs)
+    scene = SceneState(
+        cube_xy=(float(cube_xy0[0]), float(cube_xy0[1])),
+        cube_z=cube_z,
+        goal_xy=(float(goal_xy[0]), float(goal_xy[1])),
+        tcp_start_pose=tuple(float(v) for v in tcp),  # type: ignore[arg-type]
+        blocked_sides=(),
+    )
+    correct = adapter.oracle_correct_intent(scene)
+    return {
+        "object_motion": correct.object_motion,
+        "contact_region": correct.contact_region,
+        "approach_direction": correct.approach_direction,
+    }
 
 
 def _capture_stackcube_demo(env, adapter, seed: int) -> np.ndarray:
@@ -437,6 +534,12 @@ def main(argv=None) -> int:
                      help="Inclusive seed range A-B for native-reset rendering "
                           "(matches M2a's held-out generate_proxy_demo path; "
                           "no injection). Example: --seed-range 100-149.")
+    grp.add_argument("--four-way-range", type=str, default=None,
+                     help="Inclusive seed range A-B for the 4-way latent pack "
+                          "(PushCube only). Stratifies the 4 cardinal push "
+                          "directions round-robin over (seed-A)%%4, injects each "
+                          "goal direction, renders with orient_control, and "
+                          "writes labels.json. Example: --four-way-range 600-679.")
     p.add_argument("--out-dir", type=Path, required=True,
                    help="Output directory for seed_NNNN.npz files.")
     p.add_argument("--limit", type=int, default=None,
@@ -451,6 +554,12 @@ def main(argv=None) -> int:
                    help="Skip seeds whose seed_NNNN.npz already exists in "
                         "--out-dir (resume a preempted/standby render). Frames "
                         "are deterministic per seed, so this is safe.")
+    p.add_argument("--each-seed-all-dirs", action="store_true",
+                   help="With --four-way-range: render ALL 4 cardinal directions "
+                        "for EACH seed (filenames seed_NNNN_<tag>.npz), instead "
+                        "of one stratified direction per seed. Used to build the "
+                        "held-out eval demo clips for the full-vision loop, where "
+                        "the extractor looks up (demo_seed, demo_motion).")
     args = p.parse_args(argv)
 
     if args.jsonl is not None:
@@ -490,6 +599,100 @@ def main(argv=None) -> int:
             except Exception:
                 pass
             adapter.close()
+        return 0
+
+    # --four-way-range mode: PushCube 4-way latent pack. Stratify the four
+    # cardinal push directions across the seed range (round-robin on (seed-lo)%4),
+    # inject each goal direction, render with orient_control, and emit labels.json
+    # so the pack trainer can supervise object_motion / contact_region over all 4
+    # classes. (The original varied-intent cut is x-axis-only — see _FOUR_WAY_DIRS.)
+    if args.four_way_range is not None:
+        from babysteps.envs.scene import motion_to_unit
+        from babysteps.stage4.vision_intent import MOTION_TAG
+
+        if args.task != "PushCube-v1":
+            print("--four-way-range is PushCube-v1 only", file=sys.stderr)
+            return 2
+        lo_str, hi_str = args.four_way_range.split("-")
+        lo, hi = int(lo_str), int(hi_str)
+        seeds = list(range(lo, hi + 1))
+        if args.limit is not None:
+            seeds = seeds[: args.limit]
+        if not seeds:
+            print(f"empty --four-way-range {args.four_way_range}", file=sys.stderr)
+            return 1
+
+        # Build (seed, motion, stem, key) render jobs. Default: one stratified
+        # direction per seed -> seed_NNNN.npz. --each-seed-all-dirs: all 4 dirs
+        # per seed -> seed_NNNN_<tag>.npz (held-out eval demo clips).
+        jobs = []
+        for seed in seeds:
+            if args.each_seed_all_dirs:
+                for motion in _FOUR_WAY_DIRS:
+                    stem = f"seed_{seed:04d}_{MOTION_TAG[motion]}"
+                    jobs.append((seed, motion, stem, stem))
+            else:
+                motion = _FOUR_WAY_DIRS[(seed - lo) % len(_FOUR_WAY_DIRS)]
+                stem = f"seed_{seed:04d}"
+                jobs.append((seed, motion, stem, str(seed)))
+
+        entry = get_task_entry(args.task)
+        adapter = entry.adapter_cls()
+        args.out_dir.mkdir(parents=True, exist_ok=True)
+        env = _make_env(args.task, topdown=args.topdown)
+        labels: dict[str, dict] = {}
+        achieved: dict[str, list] = {}
+        n_clean = 0
+        try:
+            for seed, motion, stem, key in jobs:
+                out = args.out_dir / f"{stem}.npz"
+                if args.skip_existing and out.exists():
+                    labels[key] = _pushcube_labels_only(env, adapter, seed, motion)
+                    print(f"skip {stem} (exists); motion={motion}", flush=True)
+                    continue
+                meta: dict = {}
+                frames = _capture_pushcube_demo(
+                    env, adapter, seed, motion,
+                    orient_control=True, out_meta=meta)
+                if frames.shape[0] == 0:
+                    raise RuntimeError(f"demo produced 0 frames for {stem}")
+                np.savez_compressed(out, frames=frames)
+                labels[key] = meta["correct_intent"]
+                achieved[key] = list(meta["disp_xy"])
+                # Self-check: realized displacement vs the injected target.
+                disp = np.asarray(meta["disp_xy"], dtype=np.float64)
+                tgt = motion_to_unit(motion)
+                dn = float(np.linalg.norm(disp))
+                if dn > 1e-4:
+                    cos = float(np.clip(np.dot(disp / dn, tgt), -1.0, 1.0))
+                    ang = float(np.degrees(np.arccos(cos)))
+                    clean = ang < 30.0
+                    n_clean += int(clean)
+                else:
+                    ang, clean = float("nan"), False
+                print(
+                    f"wrote {out} (T={frames.shape[0]}) motion={motion} "
+                    f"contact={labels[key]['contact_region']} "
+                    f"disp=({disp[0]:+.3f},{disp[1]:+.3f}) ang_err={ang:5.1f} "
+                    f"{'OK' if clean else 'BAD'}",
+                    flush=True,
+                )
+        finally:
+            try:
+                env.close()
+            except Exception:
+                pass
+            adapter.close()
+        labels_path = args.out_dir / "labels.json"
+        labels_path.write_text(json.dumps({
+            "task": args.task,
+            "dirs": list(_FOUR_WAY_DIRS),
+            "seeds": labels,
+            "achieved": achieved,
+        }, indent=2) + "\n")
+        n_rendered = len(achieved)
+        print(f"\nwrote {labels_path} ({len(labels)} labelled, {n_rendered} "
+              f"rendered, {n_clean}/{n_rendered} clean push dir)", flush=True)
         return 0
 
     # --seed-range mode: NATIVE reset (no injection), matches M2a's

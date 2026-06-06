@@ -110,6 +110,33 @@ def _dummy_scene() -> SceneState:
     )
 
 
+def test_direction_grounding_is_non_probeable_constant_initial_label():
+    """Latent-groundability boundary guard (Stage-5 Path A).
+
+    The demo->intent path emits a CONSTANT ``direction_grounding`` (``actor_frame``,
+    "the egocentric bug") for every observer yaw and goal, and the factor is
+    outside ``INTENT_FIELDS`` — so the G1 latent probe sees a single-valued
+    label and structurally cannot test it. This pins
+    CrossViewPush.direction_grounding as an invisible/metadata boundary point
+    (the cross-view twin of PickCube.contact_region), NOT a clean 2nd latent
+    task. See reports/stage5/p1_vision_g1/CrossViewPush-v1/report.md.
+    """
+    from babysteps.envs.crossview_adapter import CrossViewPushAdapter
+
+    adapter = CrossViewPushAdapter()
+    seen = set()
+    for yaw in (0, 90, 180, 270):
+        for goal in ((0.1, 0.0), (0.0, 0.1), (-0.1, 0.0), (0.0, -0.1)):
+            scene = SceneState(
+                cube_xy=(0.0, 0.0), cube_z=0.02, goal_xy=goal,
+                tcp_start_pose=(0.0, 0.0, 0.25, 0.0, 1.0, 0.0, 0.0),
+                blocked_sides=(), extra={"observer_yaw_deg": yaw},
+            )
+            seen.add(adapter.oracle_correct_intent(scene).direction_grounding)
+    assert seen == {"actor_frame"}                     # single-valued -> trivially constant
+    assert "direction_grounding" not in INTENT_FIELDS  # G1 probe loop excludes it
+
+
 def test_grounding_substitution_flips_only_grounding():
     intent = _cv_initial_intent()
     attribution = Attribution(

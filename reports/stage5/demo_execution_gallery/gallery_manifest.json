@@ -1,0 +1,2670 @@
+{
+  "stats": {
+    "n_sections": 13,
+    "n_rows": 59,
+    "n_videos_framed": 106,
+    "summary": "106 videos \u00b7 59 rows \u00b7 13 sections \u00b7 key frames: first / mid / late(n-5) / final \u00b7 every success/failure label is read back from the clip's own burned-in caption (the rendered outcome), not assumed."
+  },
+  "sections": [
+    {
+      "title": "Stage-0 PushCube \u2014 blocked approach (standard-panda, third-person; trustworthy)",
+      "rows": [
+        {
+          "group": "stage0_pushcube_blocked",
+          "section": "Stage-0 PushCube \u2014 blocked approach (standard-panda, third-person; trustworthy)",
+          "task": "PushCube-v1",
+          "seed": 0,
+          "factor": "approach_direction",
+          "demo": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0000__1_demo.mp4",
+            "n_frames": 13,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0000_demo__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0000__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0000__2_attempt_blocked.mp4",
+            "n_frames": 40,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0000_attempt1__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0000__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0000__3_retry.mp4",
+            "n_frames": 13,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0000_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0000_retry__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0000__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": true,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: SUCCESS  (read from burned-in caption)",
+          "notes": "Corroborated by aggregate report: initial 0% success, retry 100% success over n=5.",
+          "caveat": "",
+          "kind": "triplet"
+        },
+        {
+          "group": "stage0_pushcube_blocked",
+          "section": "Stage-0 PushCube \u2014 blocked approach (standard-panda, third-person; trustworthy)",
+          "task": "PushCube-v1",
+          "seed": 1,
+          "factor": "approach_direction",
+          "demo": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0001__1_demo.mp4",
+            "n_frames": 13,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0001_demo__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0001__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0001__2_attempt_blocked.mp4",
+            "n_frames": 40,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0001_attempt1__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0001__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0001__3_retry.mp4",
+            "n_frames": 13,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0001_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0001_retry__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0001__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": true,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: SUCCESS  (read from burned-in caption)",
+          "notes": "Corroborated by aggregate report: initial 0% success, retry 100% success over n=5.",
+          "caveat": "",
+          "kind": "triplet"
+        },
+        {
+          "group": "stage0_pushcube_blocked",
+          "section": "Stage-0 PushCube \u2014 blocked approach (standard-panda, third-person; trustworthy)",
+          "task": "PushCube-v1",
+          "seed": 2,
+          "factor": "approach_direction",
+          "demo": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0002__1_demo.mp4",
+            "n_frames": 11,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0002_demo__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0002__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0002__2_attempt_blocked.mp4",
+            "n_frames": 40,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0002_attempt1__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0002__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0002__3_retry.mp4",
+            "n_frames": 11,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0002_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0002_retry__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0002__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": true,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: SUCCESS  (read from burned-in caption)",
+          "notes": "Corroborated by aggregate report: initial 0% success, retry 100% success over n=5.",
+          "caveat": "",
+          "kind": "triplet"
+        },
+        {
+          "group": "stage0_pushcube_blocked",
+          "section": "Stage-0 PushCube \u2014 blocked approach (standard-panda, third-person; trustworthy)",
+          "task": "PushCube-v1",
+          "seed": 3,
+          "factor": "approach_direction",
+          "demo": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0003__1_demo.mp4",
+            "n_frames": 26,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0003_demo__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0003__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0003__2_attempt_blocked.mp4",
+            "n_frames": 40,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0003_attempt1__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0003__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0003__3_retry.mp4",
+            "n_frames": 28,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0003_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0003_retry__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0003__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": true,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: SUCCESS  (read from burned-in caption)",
+          "notes": "Corroborated by aggregate report: initial 0% success, retry 100% success over n=5.",
+          "caveat": "",
+          "kind": "triplet"
+        },
+        {
+          "group": "stage0_pushcube_blocked",
+          "section": "Stage-0 PushCube \u2014 blocked approach (standard-panda, third-person; trustworthy)",
+          "task": "PushCube-v1",
+          "seed": 4,
+          "factor": "approach_direction",
+          "demo": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0004__1_demo.mp4",
+            "n_frames": 12,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0004_demo__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0004__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0004__2_attempt_blocked.mp4",
+            "n_frames": 40,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0004_attempt1__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0004__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0004__3_retry.mp4",
+            "n_frames": 12,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stage0_pushcube_blocked_0004_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stage0_pushcube_blocked_0004_retry__strip.jpg",
+            "video_link": "datasets/stage0_pushcube_blocked/videos_maniskill/pushcube_blocked_approach_seed_0004__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": true,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: SUCCESS  (read from burned-in caption)",
+          "notes": "Corroborated by aggregate report: initial 0% success, retry 100% success over n=5.",
+          "caveat": "",
+          "kind": "triplet"
+        }
+      ]
+    },
+    {
+      "title": "PushCube \u2014 curated three-phase clips (wristcam)",
+      "rows": [
+        {
+          "group": "pushcube_render",
+          "section": "PushCube \u2014 curated three-phase clips (wristcam)",
+          "task": "PushCube-v1",
+          "seed": 0,
+          "factor": "approach_direction",
+          "demo": {
+            "video": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0000__1_demo.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_render_0000_demo__strip.jpg",
+            "video_link": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0000__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0000__2_attempt_blocked.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_render_0000_attempt1__strip.jpg",
+            "video_link": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0000__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0000__3_retry.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0000_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_render_0000_retry__strip.jpg",
+            "video_link": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0000__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "triplet"
+        },
+        {
+          "group": "pushcube_render",
+          "section": "PushCube \u2014 curated three-phase clips (wristcam)",
+          "task": "PushCube-v1",
+          "seed": 1,
+          "factor": "approach_direction",
+          "demo": {
+            "video": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0001__1_demo.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_render_0001_demo__strip.jpg",
+            "video_link": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0001__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0001__2_attempt_blocked.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_render_0001_attempt1__strip.jpg",
+            "video_link": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0001__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0001__3_retry.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_render_0001_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_render_0001_retry__strip.jpg",
+            "video_link": "renders/pushcube/videos_maniskill/pushcube_blocked_approach_seed_0001__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "triplet"
+        }
+      ]
+    },
+    {
+      "title": "PushCube \u2014 clutter ablation clips (wristcam)",
+      "rows": [
+        {
+          "group": "pushcube_clutter",
+          "section": "PushCube \u2014 clutter ablation clips (wristcam)",
+          "task": "PushCube-v1",
+          "seed": 0,
+          "factor": "approach_direction",
+          "demo": {
+            "video": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0000__1_demo.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_clutter_0000_demo__strip.jpg",
+            "video_link": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0000__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0000__2_attempt_blocked.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_clutter_0000_attempt1__strip.jpg",
+            "video_link": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0000__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0000__3_retry.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0000_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_clutter_0000_retry__strip.jpg",
+            "video_link": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0000__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "triplet"
+        },
+        {
+          "group": "pushcube_clutter",
+          "section": "PushCube \u2014 clutter ablation clips (wristcam)",
+          "task": "PushCube-v1",
+          "seed": 1,
+          "factor": "approach_direction",
+          "demo": {
+            "video": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0001__1_demo.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_clutter_0001_demo__strip.jpg",
+            "video_link": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0001__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0001__2_attempt_blocked.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_clutter_0001_attempt1__strip.jpg",
+            "video_link": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0001__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0001__3_retry.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0001_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_clutter_0001_retry__strip.jpg",
+            "video_link": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0001__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "triplet"
+        },
+        {
+          "group": "pushcube_clutter",
+          "section": "PushCube \u2014 clutter ablation clips (wristcam)",
+          "task": "PushCube-v1",
+          "seed": 2,
+          "factor": "approach_direction",
+          "demo": {
+            "video": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0002__1_demo.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_clutter_0002_demo__strip.jpg",
+            "video_link": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0002__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0002__2_attempt_blocked.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_clutter_0002_attempt1__strip.jpg",
+            "video_link": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0002__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0002__3_retry.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_clutter_0002_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_clutter_0002_retry__strip.jpg",
+            "video_link": "renders/pushcube_clutter/videos_maniskill/pushcube_blocked_approach_seed_0002__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "triplet"
+        }
+      ]
+    },
+    {
+      "title": "PushCube \u2014 paper figure (contact_region, wrong-intent attempt, wristcam)",
+      "rows": [
+        {
+          "group": "pushcube_paper_figure",
+          "section": "PushCube \u2014 paper figure (contact_region, wrong-intent attempt, wristcam)",
+          "task": "PushCube-v1",
+          "seed": 0,
+          "factor": "contact_region",
+          "demo": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0000__1_demo.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0000_demo__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0000__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0000__2_attempt_wrong_intent.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0000_attempt1__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0000__2_attempt_wrong_intent.mp4"
+          },
+          "retry": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0000__3_retry.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0000_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0000_retry__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0000__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_wrong_intent",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "triplet"
+        },
+        {
+          "group": "pushcube_paper_figure",
+          "section": "PushCube \u2014 paper figure (contact_region, wrong-intent attempt, wristcam)",
+          "task": "PushCube-v1",
+          "seed": 1,
+          "factor": "contact_region",
+          "demo": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0001__1_demo.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0001_demo__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0001__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0001__2_attempt_wrong_intent.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0001_attempt1__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0001__2_attempt_wrong_intent.mp4"
+          },
+          "retry": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0001__3_retry.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0001_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0001_retry__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0001__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_wrong_intent",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "triplet"
+        },
+        {
+          "group": "pushcube_paper_figure",
+          "section": "PushCube \u2014 paper figure (contact_region, wrong-intent attempt, wristcam)",
+          "task": "PushCube-v1",
+          "seed": 2,
+          "factor": "contact_region",
+          "demo": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0002__1_demo.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0002_demo__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0002__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0002__2_attempt_wrong_intent.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0002_attempt1__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0002__2_attempt_wrong_intent.mp4"
+          },
+          "retry": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0002__3_retry.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0002_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0002_retry__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0002__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_wrong_intent",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "triplet"
+        },
+        {
+          "group": "pushcube_paper_figure",
+          "section": "PushCube \u2014 paper figure (contact_region, wrong-intent attempt, wristcam)",
+          "task": "PushCube-v1",
+          "seed": 3,
+          "factor": "contact_region",
+          "demo": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0003__1_demo.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0003_demo__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0003__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0003__2_attempt_wrong_intent.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0003_attempt1__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0003__2_attempt_wrong_intent.mp4"
+          },
+          "retry": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0003__3_retry.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0003_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0003_retry__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0003__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_wrong_intent",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "triplet"
+        },
+        {
+          "group": "pushcube_paper_figure",
+          "section": "PushCube \u2014 paper figure (contact_region, wrong-intent attempt, wristcam)",
+          "task": "PushCube-v1",
+          "seed": 4,
+          "factor": "contact_region",
+          "demo": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0004__1_demo.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0004_demo__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0004__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0004__2_attempt_wrong_intent.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0004_attempt1__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0004__2_attempt_wrong_intent.mp4"
+          },
+          "retry": {
+            "video": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0004__3_retry.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pushcube_paper_figure_0004_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pushcube_paper_figure_0004_retry__strip.jpg",
+            "video_link": "renders/pushcube/videos_paper_figure/2026-05-28_164447/pushcube_blocked_approach_seed_0004__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_wrong_intent",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "triplet"
+        }
+      ]
+    },
+    {
+      "title": "PickCube \u2014 grasp slip (contact_region)",
+      "rows": [
+        {
+          "group": "pickcube_render",
+          "section": "PickCube \u2014 grasp slip (contact_region)",
+          "task": "PickCube-v1",
+          "seed": 0,
+          "factor": "contact_region",
+          "demo": {
+            "video": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0000__1_demo.mp4",
+            "n_frames": 15,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pickcube_render_0000_demo__strip.jpg",
+            "video_link": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0000__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0000__2_attempt_blocked.mp4",
+            "n_frames": 35,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pickcube_render_0000_attempt1__strip.jpg",
+            "video_link": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0000__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0000__3_retry.mp4",
+            "n_frames": 15,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0000_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pickcube_render_0000_retry__strip.jpg",
+            "video_link": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0000__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "",
+          "kind": "triplet"
+        },
+        {
+          "group": "pickcube_render",
+          "section": "PickCube \u2014 grasp slip (contact_region)",
+          "task": "PickCube-v1",
+          "seed": 1,
+          "factor": "contact_region",
+          "demo": {
+            "video": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0001__1_demo.mp4",
+            "n_frames": 16,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pickcube_render_0001_demo__strip.jpg",
+            "video_link": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0001__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0001__2_attempt_blocked.mp4",
+            "n_frames": 36,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pickcube_render_0001_attempt1__strip.jpg",
+            "video_link": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0001__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0001__3_retry.mp4",
+            "n_frames": 16,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/pickcube_render_0001_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/pickcube_render_0001_retry__strip.jpg",
+            "video_link": "renders/pickcube/videos_maniskill/pickcube_grasp_slip_seed_0001__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "",
+          "kind": "triplet"
+        }
+      ]
+    },
+    {
+      "title": "StackCube \u2014 underspecified goal (goal_state)",
+      "rows": [
+        {
+          "group": "stackcube_render",
+          "section": "StackCube \u2014 underspecified goal (goal_state)",
+          "task": "StackCube-v1",
+          "seed": 0,
+          "factor": "goal_state",
+          "demo": {
+            "video": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0000__1_demo.mp4",
+            "n_frames": 30,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stackcube_render_0000_demo__strip.jpg",
+            "video_link": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0000__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0000__2_attempt_blocked.mp4",
+            "n_frames": 68,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stackcube_render_0000_attempt1__strip.jpg",
+            "video_link": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0000__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0000__3_retry.mp4",
+            "n_frames": 30,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0000_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stackcube_render_0000_retry__strip.jpg",
+            "video_link": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0000__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": true,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: SUCCESS  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "",
+          "kind": "triplet"
+        },
+        {
+          "group": "stackcube_render",
+          "section": "StackCube \u2014 underspecified goal (goal_state)",
+          "task": "StackCube-v1",
+          "seed": 1,
+          "factor": "goal_state",
+          "demo": {
+            "video": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0001__1_demo.mp4",
+            "n_frames": 24,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stackcube_render_0001_demo__strip.jpg",
+            "video_link": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0001__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0001__2_attempt_blocked.mp4",
+            "n_frames": 63,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stackcube_render_0001_attempt1__strip.jpg",
+            "video_link": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0001__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0001__3_retry.mp4",
+            "n_frames": 24,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/stackcube_render_0001_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/stackcube_render_0001_retry__strip.jpg",
+            "video_link": "renders/stackcube/videos_maniskill/stackcube_underspec_goal_seed_0001__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": true,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: SUCCESS  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "",
+          "kind": "triplet"
+        }
+      ]
+    },
+    {
+      "title": "TurnFaucet \u2014 wrong contact (grasp-turn lineage)",
+      "rows": [
+        {
+          "group": "turnfaucet_render",
+          "section": "TurnFaucet \u2014 wrong contact (grasp-turn lineage)",
+          "task": "TurnFaucet-v1",
+          "seed": 0,
+          "factor": "embodiment_mapping",
+          "demo": {
+            "video": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0000__1_demo.mp4",
+            "n_frames": 28,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_render_0000_demo__strip.jpg",
+            "video_link": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0000__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0000__2_attempt_blocked.mp4",
+            "n_frames": 139,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_render_0000_attempt1__strip.jpg",
+            "video_link": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0000__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0000__3_retry.mp4",
+            "n_frames": 28,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0000_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_render_0000_retry__strip.jpg",
+            "video_link": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0000__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "",
+          "kind": "triplet"
+        },
+        {
+          "group": "turnfaucet_render",
+          "section": "TurnFaucet \u2014 wrong contact (grasp-turn lineage)",
+          "task": "TurnFaucet-v1",
+          "seed": 1,
+          "factor": "embodiment_mapping",
+          "demo": {
+            "video": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0001__1_demo.mp4",
+            "n_frames": 61,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_render_0001_demo__strip.jpg",
+            "video_link": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0001__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0001__2_attempt_blocked.mp4",
+            "n_frames": 221,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_render_0001_attempt1__strip.jpg",
+            "video_link": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0001__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0001__3_retry.mp4",
+            "n_frames": 61,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_render_0001_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_render_0001_retry__strip.jpg",
+            "video_link": "renders/turnfaucet/videos_maniskill/turnfaucet_wrong_contact_seed_0001__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "",
+          "kind": "triplet"
+        }
+      ]
+    },
+    {
+      "title": "TurnFaucet \u2014 embodiment substitution",
+      "rows": [
+        {
+          "group": "turnfaucet_embodiment",
+          "section": "TurnFaucet \u2014 embodiment substitution",
+          "task": "TurnFaucet-v1",
+          "seed": 0,
+          "factor": "embodiment_mapping",
+          "demo": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0000__1_demo.mp4",
+            "n_frames": 40,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0000_demo__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0000__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0000__2_attempt_blocked.mp4",
+            "n_frames": 221,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0000_attempt1__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0000__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0000__3_retry.mp4",
+            "n_frames": 201,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0000_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0000_retry__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0000__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "",
+          "kind": "triplet"
+        },
+        {
+          "group": "turnfaucet_embodiment",
+          "section": "TurnFaucet \u2014 embodiment substitution",
+          "task": "TurnFaucet-v1",
+          "seed": 1,
+          "factor": "embodiment_mapping",
+          "demo": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0001__1_demo.mp4",
+            "n_frames": 40,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0001_demo__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0001__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0001__2_attempt_blocked.mp4",
+            "n_frames": 90,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0001_attempt1__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0001__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0001__3_retry.mp4",
+            "n_frames": 19,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0001_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0001_retry__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0001__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "",
+          "kind": "triplet"
+        },
+        {
+          "group": "turnfaucet_embodiment",
+          "section": "TurnFaucet \u2014 embodiment substitution",
+          "task": "TurnFaucet-v1",
+          "seed": 2,
+          "factor": "embodiment_mapping",
+          "demo": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0002__1_demo.mp4",
+            "n_frames": 40,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0002_demo__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0002__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0002__2_attempt_blocked.mp4",
+            "n_frames": 23,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0002_attempt1__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0002__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0002__3_retry.mp4",
+            "n_frames": 3,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0002_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0002_retry__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0002__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": true,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: SUCCESS  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "",
+          "kind": "triplet"
+        },
+        {
+          "group": "turnfaucet_embodiment",
+          "section": "TurnFaucet \u2014 embodiment substitution",
+          "task": "TurnFaucet-v1",
+          "seed": 3,
+          "factor": "embodiment_mapping",
+          "demo": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0003__1_demo.mp4",
+            "n_frames": 40,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0003_demo__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0003__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0003__2_attempt_blocked.mp4",
+            "n_frames": 221,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0003_attempt1__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0003__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0003__3_retry.mp4",
+            "n_frames": 25,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0003_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0003_retry__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0003__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "",
+          "kind": "triplet"
+        },
+        {
+          "group": "turnfaucet_embodiment",
+          "section": "TurnFaucet \u2014 embodiment substitution",
+          "task": "TurnFaucet-v1",
+          "seed": 4,
+          "factor": "embodiment_mapping",
+          "demo": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0004__1_demo.mp4",
+            "n_frames": 40,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_demo__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_demo__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_demo__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_demo__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0004_demo__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0004__1_demo.mp4"
+          },
+          "attempt1": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0004__2_attempt_blocked.mp4",
+            "n_frames": 221,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_attempt1__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_attempt1__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_attempt1__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_attempt1__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0004_attempt1__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0004__2_attempt_blocked.mp4"
+          },
+          "retry": {
+            "video": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0004__3_retry.mp4",
+            "n_frames": 201,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/turnfaucet_embodiment_0004_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/turnfaucet_embodiment_0004_retry__strip.jpg",
+            "video_link": "renders/turnfaucet_embodiment/videos_maniskill/turnfaucet_wrong_contact_seed_0004__3_retry.mp4"
+          },
+          "attempt1_tag": "2_attempt_blocked",
+          "retry_success": false,
+          "attempt_success": null,
+          "success_label": "attempt-1: blocked/failed (designed failure) \u00b7 revised retry: FAILURE  (read from burned-in caption)",
+          "notes": "",
+          "caveat": "",
+          "kind": "triplet"
+        }
+      ]
+    },
+    {
+      "title": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+      "rows": [
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 100,
+          "condition": "latent",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0100__latent_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0100_latent__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0100_latent__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0100_latent__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0100_latent__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0100_latent__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0100__latent_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Latent input + learned slot-local edit (BabySteps, the method)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 100,
+          "condition": "babysteps_selective",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0100__babysteps_selective_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0100_babysteps_selective__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0100_babysteps_selective__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0100_babysteps_selective__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0100_babysteps_selective__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0100_babysteps_selective__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0100__babysteps_selective_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Oracle input + learned selective edit"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 100,
+          "condition": "oracle_factor_revision",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0100__oracle_factor_revision_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0100_oracle_factor_revision__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0100_oracle_factor_revision__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0100_oracle_factor_revision__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0100_oracle_factor_revision__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0100_oracle_factor_revision__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0100__oracle_factor_revision_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Oracle single-factor revision (skyline)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 100,
+          "condition": "same_intent_retry",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0100__same_intent_retry_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0100_same_intent_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0100_same_intent_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0100_same_intent_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0100_same_intent_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0100_same_intent_retry__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0100__same_intent_retry_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Retry with unchanged intent (control \u2014 must fail)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 110,
+          "condition": "latent",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0110__latent_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0110_latent__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0110_latent__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0110_latent__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0110_latent__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0110_latent__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0110__latent_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Latent input + learned slot-local edit (BabySteps, the method)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 110,
+          "condition": "babysteps_selective",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0110__babysteps_selective_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0110_babysteps_selective__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0110_babysteps_selective__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0110_babysteps_selective__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0110_babysteps_selective__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0110_babysteps_selective__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0110__babysteps_selective_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Oracle input + learned selective edit"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 110,
+          "condition": "oracle_factor_revision",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0110__oracle_factor_revision_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0110_oracle_factor_revision__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0110_oracle_factor_revision__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0110_oracle_factor_revision__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0110_oracle_factor_revision__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0110_oracle_factor_revision__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0110__oracle_factor_revision_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Oracle single-factor revision (skyline)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 110,
+          "condition": "same_intent_retry",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0110__same_intent_retry_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0110_same_intent_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0110_same_intent_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0110_same_intent_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0110_same_intent_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0110_same_intent_retry__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0110__same_intent_retry_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Retry with unchanged intent (control \u2014 must fail)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 120,
+          "condition": "latent",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0120__latent_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0120_latent__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0120_latent__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0120_latent__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0120_latent__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0120_latent__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0120__latent_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Latent input + learned slot-local edit (BabySteps, the method)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 120,
+          "condition": "babysteps_selective",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0120__babysteps_selective_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0120_babysteps_selective__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0120_babysteps_selective__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0120_babysteps_selective__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0120_babysteps_selective__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0120_babysteps_selective__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0120__babysteps_selective_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Oracle input + learned selective edit"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 120,
+          "condition": "oracle_factor_revision",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0120__oracle_factor_revision_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0120_oracle_factor_revision__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0120_oracle_factor_revision__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0120_oracle_factor_revision__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0120_oracle_factor_revision__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0120_oracle_factor_revision__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0120__oracle_factor_revision_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Oracle single-factor revision (skyline)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 120,
+          "condition": "same_intent_retry",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0120__same_intent_retry_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0120_same_intent_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0120_same_intent_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0120_same_intent_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0120_same_intent_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0120_same_intent_retry__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0120__same_intent_retry_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Retry with unchanged intent (control \u2014 must fail)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 130,
+          "condition": "latent",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0130__latent_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0130_latent__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0130_latent__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0130_latent__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0130_latent__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0130_latent__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0130__latent_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Latent input + learned slot-local edit (BabySteps, the method)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 130,
+          "condition": "babysteps_selective",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0130__babysteps_selective_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0130_babysteps_selective__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0130_babysteps_selective__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0130_babysteps_selective__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0130_babysteps_selective__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0130_babysteps_selective__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0130__babysteps_selective_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Oracle input + learned selective edit"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 130,
+          "condition": "oracle_factor_revision",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0130__oracle_factor_revision_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0130_oracle_factor_revision__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0130_oracle_factor_revision__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0130_oracle_factor_revision__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0130_oracle_factor_revision__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0130_oracle_factor_revision__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0130__oracle_factor_revision_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Oracle single-factor revision (skyline)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 130,
+          "condition": "same_intent_retry",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0130__same_intent_retry_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0130_same_intent_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0130_same_intent_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0130_same_intent_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0130_same_intent_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0130_same_intent_retry__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0130__same_intent_retry_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Retry with unchanged intent (control \u2014 must fail)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 143,
+          "condition": "latent",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0143__latent_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0143_latent__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0143_latent__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0143_latent__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0143_latent__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0143_latent__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0143__latent_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Latent input + learned slot-local edit (BabySteps, the method)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 143,
+          "condition": "babysteps_selective",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0143__babysteps_selective_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0143_babysteps_selective__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0143_babysteps_selective__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0143_babysteps_selective__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0143_babysteps_selective__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0143_babysteps_selective__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0143__babysteps_selective_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Oracle input + learned selective edit"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 143,
+          "condition": "oracle_factor_revision",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0143__oracle_factor_revision_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0143_oracle_factor_revision__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0143_oracle_factor_revision__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0143_oracle_factor_revision__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0143_oracle_factor_revision__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0143_oracle_factor_revision__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0143__oracle_factor_revision_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Oracle single-factor revision (skyline)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        },
+        {
+          "group": "iconic_latent",
+          "section": "PushCube latent loop \u2014 iconic composites (wristcam; flags unreliable)",
+          "task": "PushCube-v1",
+          "seed": 143,
+          "condition": "same_intent_retry",
+          "factor": "approach_direction",
+          "fs": {
+            "video": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0143__same_intent_retry_full.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 512,
+            "height": 572,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/iconic_0143_same_intent_retry__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/iconic_0143_same_intent_retry__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/iconic_0143_same_intent_retry__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/iconic_0143_same_intent_retry__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/iconic_0143_same_intent_retry__strip.jpg",
+            "video_link": "renders/stage5_p1_iconic/pushcube/pushcube_seed_0143__same_intent_retry_full.mp4"
+          },
+          "success": false,
+          "meta": {
+            "condition_desc": "Retry with unchanged intent (control \u2014 must fail)"
+          },
+          "success_label": "FAILURE (read from burned-in caption; this is the May-24 iconic render)",
+          "caveat": "\u26a0 First-person panda_wristcam render: the burned-in retry success flag is UNRELIABLE on this variant (reads False even when the cube reaches the target \u2014 a documented controller\u00d7wristcam artifact, see renders/results/README.md). Trust the standard-panda Stage-0 PushCube section and the measured June-3 eval (latent retry success 0.96) for the real outcome, not these flags.",
+          "kind": "composite"
+        }
+      ]
+    },
+    {
+      "title": "Measured latent-intent decode \u2014 current P1/P2 run (June-3 eval; tabular, newer than the iconic videos above)",
+      "rows": [
+        {
+          "seed": 100,
+          "final_success": true,
+          "retry_success": true,
+          "vlm_factor": "approach_direction",
+          "factors_changed": [
+            "approach_direction"
+          ],
+          "attribution_correct": true,
+          "frozen_factor_preserved": true,
+          "latent_matches_stored": true,
+          "diff": [
+            [
+              "goal_state",
+              "cube_at_target",
+              "cube_at_target",
+              "cube_at_target",
+              "match"
+            ],
+            [
+              "object_motion",
+              "translate_+x",
+              "translate_+x",
+              "translate_+x",
+              "match"
+            ],
+            [
+              "contact_region",
+              "minus_x_face",
+              "minus_x_face",
+              "minus_x_face",
+              "match"
+            ],
+            [
+              "approach_direction",
+              "from_minus_x",
+              "from_minus_x",
+              "from_plus_x",
+              "match \u00b7 REVISED"
+            ],
+            [
+              "constraint_region",
+              "none",
+              "none",
+              "none",
+              "match"
+            ],
+            [
+              "embodiment_mapping",
+              "proxy_contact_to_franka_push",
+              "proxy_contact_to_franka_push",
+              "proxy_contact_to_franka_push",
+              "match"
+            ]
+          ],
+          "kind": "intent_table"
+        },
+        {
+          "seed": 110,
+          "final_success": true,
+          "retry_success": true,
+          "vlm_factor": "approach_direction",
+          "factors_changed": [
+            "approach_direction"
+          ],
+          "attribution_correct": true,
+          "frozen_factor_preserved": true,
+          "latent_matches_stored": true,
+          "diff": [
+            [
+              "goal_state",
+              "cube_at_target",
+              "cube_at_target",
+              "cube_at_target",
+              "match"
+            ],
+            [
+              "object_motion",
+              "translate_+x",
+              "translate_+x",
+              "translate_+x",
+              "match"
+            ],
+            [
+              "contact_region",
+              "minus_x_face",
+              "minus_x_face",
+              "minus_x_face",
+              "match"
+            ],
+            [
+              "approach_direction",
+              "from_minus_x",
+              "from_minus_x",
+              "from_plus_x",
+              "match \u00b7 REVISED"
+            ],
+            [
+              "constraint_region",
+              "none",
+              "none",
+              "none",
+              "match"
+            ],
+            [
+              "embodiment_mapping",
+              "proxy_contact_to_franka_push",
+              "proxy_contact_to_franka_push",
+              "proxy_contact_to_franka_push",
+              "match"
+            ]
+          ],
+          "kind": "intent_table"
+        },
+        {
+          "seed": 120,
+          "final_success": true,
+          "retry_success": true,
+          "vlm_factor": "approach_direction",
+          "factors_changed": [
+            "approach_direction"
+          ],
+          "attribution_correct": true,
+          "frozen_factor_preserved": true,
+          "latent_matches_stored": true,
+          "diff": [
+            [
+              "goal_state",
+              "cube_at_target",
+              "cube_at_target",
+              "cube_at_target",
+              "match"
+            ],
+            [
+              "object_motion",
+              "translate_+x",
+              "translate_+x",
+              "translate_+x",
+              "match"
+            ],
+            [
+              "contact_region",
+              "minus_x_face",
+              "minus_x_face",
+              "minus_x_face",
+              "match"
+            ],
+            [
+              "approach_direction",
+              "from_minus_x",
+              "from_minus_x",
+              "from_plus_x",
+              "match \u00b7 REVISED"
+            ],
+            [
+              "constraint_region",
+              "none",
+              "none",
+              "none",
+              "match"
+            ],
+            [
+              "embodiment_mapping",
+              "proxy_contact_to_franka_push",
+              "proxy_contact_to_franka_push",
+              "proxy_contact_to_franka_push",
+              "match"
+            ]
+          ],
+          "kind": "intent_table"
+        },
+        {
+          "seed": 130,
+          "final_success": true,
+          "retry_success": true,
+          "vlm_factor": "approach_direction",
+          "factors_changed": [
+            "approach_direction"
+          ],
+          "attribution_correct": true,
+          "frozen_factor_preserved": true,
+          "latent_matches_stored": true,
+          "diff": [
+            [
+              "goal_state",
+              "cube_at_target",
+              "cube_at_target",
+              "cube_at_target",
+              "match"
+            ],
+            [
+              "object_motion",
+              "translate_+x",
+              "translate_+x",
+              "translate_+x",
+              "match"
+            ],
+            [
+              "contact_region",
+              "minus_x_face",
+              "minus_x_face",
+              "minus_x_face",
+              "match"
+            ],
+            [
+              "approach_direction",
+              "from_minus_x",
+              "from_minus_x",
+              "from_plus_x",
+              "match \u00b7 REVISED"
+            ],
+            [
+              "constraint_region",
+              "none",
+              "none",
+              "none",
+              "match"
+            ],
+            [
+              "embodiment_mapping",
+              "proxy_contact_to_franka_push",
+              "proxy_contact_to_franka_push",
+              "proxy_contact_to_franka_push",
+              "match"
+            ]
+          ],
+          "kind": "intent_table"
+        },
+        {
+          "seed": 143,
+          "final_success": false,
+          "retry_success": false,
+          "vlm_factor": "approach_direction",
+          "factors_changed": [
+            "approach_direction"
+          ],
+          "attribution_correct": true,
+          "frozen_factor_preserved": true,
+          "latent_matches_stored": false,
+          "diff": [
+            [
+              "goal_state",
+              "cube_at_target",
+              "cube_at_target",
+              "cube_at_target",
+              "match"
+            ],
+            [
+              "object_motion",
+              "translate_+x",
+              "translate_-x",
+              "translate_-x",
+              "MISMATCH"
+            ],
+            [
+              "contact_region",
+              "minus_x_face",
+              "plus_x_face",
+              "plus_x_face",
+              "MISMATCH"
+            ],
+            [
+              "approach_direction",
+              "from_minus_x",
+              "from_plus_x",
+              "from_minus_x",
+              "MISMATCH \u00b7 REVISED"
+            ],
+            [
+              "constraint_region",
+              "none",
+              "none",
+              "none",
+              "match"
+            ],
+            [
+              "embodiment_mapping",
+              "proxy_contact_to_franka_push",
+              "proxy_contact_to_franka_push",
+              "proxy_contact_to_franka_push",
+              "match"
+            ]
+          ],
+          "kind": "intent_table"
+        }
+      ]
+    },
+    {
+      "title": "Official ManiSkill MP demo replays (third-person demo source)",
+      "rows": [
+        {
+          "group": "official_demo",
+          "section": "Official ManiSkill MP demo replays (third-person demo source)",
+          "label": "PushCube-v1 official demo replay",
+          "fs": {
+            "video": "renders/official_demo_smoke/PushCube-v1_seed_0000__official_replay.mp4",
+            "n_frames": 36,
+            "fps": 20.0,
+            "width": 512,
+            "height": 512,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/official_demo_pushcube_v1_official_demo_replay__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/official_demo_pushcube_v1_official_demo_replay__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/official_demo_pushcube_v1_official_demo_replay__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/official_demo_pushcube_v1_official_demo_replay__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/official_demo_pushcube_v1_official_demo_replay__strip.jpg",
+            "video_link": "renders/official_demo_smoke/PushCube-v1_seed_0000__official_replay.mp4"
+          },
+          "caption": "Official ManiSkill motion-planning demos replayed third-person \u2014 the demo source for Scope-A 1_demo clips.",
+          "kind": "single"
+        },
+        {
+          "group": "official_demo",
+          "section": "Official ManiSkill MP demo replays (third-person demo source)",
+          "label": "StackCube-v1 official demo replay",
+          "fs": {
+            "video": "renders/official_demo_smoke/StackCube-v1_seed_0000__official_replay.mp4",
+            "n_frames": 54,
+            "fps": 20.0,
+            "width": 512,
+            "height": 512,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/official_demo_stackcube_v1_official_demo_replay__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/official_demo_stackcube_v1_official_demo_replay__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/official_demo_stackcube_v1_official_demo_replay__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/official_demo_stackcube_v1_official_demo_replay__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/official_demo_stackcube_v1_official_demo_replay__strip.jpg",
+            "video_link": "renders/official_demo_smoke/StackCube-v1_seed_0000__official_replay.mp4"
+          },
+          "caption": "Official ManiSkill motion-planning demos replayed third-person \u2014 the demo source for Scope-A 1_demo clips.",
+          "kind": "single"
+        },
+        {
+          "group": "official_demo",
+          "section": "Official ManiSkill MP demo replays (third-person demo source)",
+          "label": "PickCube-v1 official demo replay",
+          "fs": {
+            "video": "renders/official_demo_smoke/PickCube-v1_seed_0000__official_replay.mp4",
+            "n_frames": 38,
+            "fps": 20.0,
+            "width": 512,
+            "height": 512,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/official_demo_pickcube_v1_official_demo_replay__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/official_demo_pickcube_v1_official_demo_replay__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/official_demo_pickcube_v1_official_demo_replay__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/official_demo_pickcube_v1_official_demo_replay__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/official_demo_pickcube_v1_official_demo_replay__strip.jpg",
+            "video_link": "renders/official_demo_smoke/PickCube-v1_seed_0000__official_replay.mp4"
+          },
+          "caption": "Official ManiSkill motion-planning demos replayed third-person \u2014 the demo source for Scope-A 1_demo clips.",
+          "kind": "single"
+        }
+      ]
+    },
+    {
+      "title": "Task comparison montages",
+      "rows": [
+        {
+          "group": "comparison",
+          "section": "Task comparison montages",
+          "label": "PushCube comparison",
+          "fs": {
+            "video": "renders/comparison/PushCube_comparison.mp4",
+            "n_frames": 51,
+            "fps": 20.0,
+            "width": 1536,
+            "height": 612,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/comparison_pushcube_comparison__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/comparison_pushcube_comparison__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/comparison_pushcube_comparison__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/comparison_pushcube_comparison__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/comparison_pushcube_comparison__strip.jpg",
+            "video_link": "renders/comparison/PushCube_comparison.mp4"
+          },
+          "caption": "Side-by-side montages (demo | attempt | retry composited into one frame).",
+          "kind": "single"
+        },
+        {
+          "group": "comparison",
+          "section": "Task comparison montages",
+          "label": "PickCube comparison",
+          "fs": {
+            "video": "renders/comparison/PickCube_comparison.mp4",
+            "n_frames": 35,
+            "fps": 20.0,
+            "width": 1536,
+            "height": 612,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/comparison_pickcube_comparison__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/comparison_pickcube_comparison__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/comparison_pickcube_comparison__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/comparison_pickcube_comparison__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/comparison_pickcube_comparison__strip.jpg",
+            "video_link": "renders/comparison/PickCube_comparison.mp4"
+          },
+          "caption": "Side-by-side montages (demo | attempt | retry composited into one frame).",
+          "kind": "single"
+        },
+        {
+          "group": "comparison",
+          "section": "Task comparison montages",
+          "label": "StackCube comparison",
+          "fs": {
+            "video": "renders/comparison/StackCube_comparison.mp4",
+            "n_frames": 68,
+            "fps": 20.0,
+            "width": 1536,
+            "height": 612,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/comparison_stackcube_comparison__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/comparison_stackcube_comparison__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/comparison_stackcube_comparison__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/comparison_stackcube_comparison__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/comparison_stackcube_comparison__strip.jpg",
+            "video_link": "renders/comparison/StackCube_comparison.mp4"
+          },
+          "caption": "Side-by-side montages (demo | attempt | retry composited into one frame).",
+          "kind": "single"
+        },
+        {
+          "group": "comparison",
+          "section": "Task comparison montages",
+          "label": "TurnFaucet comparison",
+          "fs": {
+            "video": "renders/comparison/TurnFaucet_comparison.mp4",
+            "n_frames": 139,
+            "fps": 20.0,
+            "width": 1536,
+            "height": 612,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/comparison_turnfaucet_comparison__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/comparison_turnfaucet_comparison__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/comparison_turnfaucet_comparison__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/comparison_turnfaucet_comparison__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/comparison_turnfaucet_comparison__strip.jpg",
+            "video_link": "renders/comparison/TurnFaucet_comparison.mp4"
+          },
+          "caption": "Side-by-side montages (demo | attempt | retry composited into one frame).",
+          "kind": "single"
+        }
+      ]
+    },
+    {
+      "title": "Annotated latent-intent result (paper deliverable)",
+      "rows": [
+        {
+          "group": "annotated_result",
+          "section": "Annotated latent-intent result (paper deliverable)",
+          "label": "Annotated demo\u2192blocked\u2192revised retry (seed 0000)",
+          "fs": {
+            "video": "renders/results/stage4_latent_intent_pushcube_seed_0000.mp4",
+            "n_frames": 153,
+            "fps": 20.0,
+            "width": 720,
+            "height": 802,
+            "frames": {
+              "first": "reports/stage5/demo_execution_gallery/frames/annotated_result_annotated_demo_blocked_revised_retry_seed_0000__first.jpg",
+              "mid": "reports/stage5/demo_execution_gallery/frames/annotated_result_annotated_demo_blocked_revised_retry_seed_0000__mid.jpg",
+              "late": "reports/stage5/demo_execution_gallery/frames/annotated_result_annotated_demo_blocked_revised_retry_seed_0000__late.jpg",
+              "final": "reports/stage5/demo_execution_gallery/frames/annotated_result_annotated_demo_blocked_revised_retry_seed_0000__final.jpg"
+            },
+            "strip": "reports/stage5/demo_execution_gallery/strips/annotated_result_annotated_demo_blocked_revised_retry_seed_0000__strip.jpg",
+            "video_link": "renders/results/stage4_latent_intent_pushcube_seed_0000.mp4"
+          },
+          "caption": "Burned-in captions: inferred 6-slot intent, failure predicate, learned attribution, single-factor edit.",
+          "kind": "single"
+        }
+      ]
+    }
+  ]
+}

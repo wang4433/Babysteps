@@ -27,6 +27,23 @@ from babysteps.schemas import AttemptResult, Intent, SceneState
 _POS_SCALE: float = 0.1
 _PHASE_TOL_M: float = 0.015
 _MAX_CONTROL_STEPS: int = 300
+# Stage-5 4-way fix: yaw P-control gain. action[5] is world-z yaw at
+# ~ -2.24 deg/(step*unit) (calibrated, job 10966502); action[5] = -err/_YAW_K_DEG
+# saturates beyond _YAW_K_DEG degrees of error and converges ~2.2 deg/step.
+_YAW_K_DEG: float = 20.0
+
+
+def _wrap180(a: float) -> float:
+    return (a + 180.0) % 360.0 - 180.0
+
+
+def _yaw_deg(tcp_xyzw: np.ndarray) -> float:
+    """World-z yaw (deg) of the EE from a [x,y,z,qx,qy,qz,qw] pose. Uses the
+    same scipy 'xyz' euler convention the calibration probe measured action[5]
+    against, so target = resting_yaw + push_yaw_deg is consistent."""
+    from scipy.spatial.transform import Rotation as _R
+    q = np.asarray(tcp_xyzw, dtype=np.float64)
+    return float(_R.from_quat([q[3], q[4], q[5], q[6]]).as_euler("xyz", degrees=True)[2])
 
 
 def _to_np(x):
@@ -73,11 +90,16 @@ class PushCubeEnvRunner:
         render_mode: Optional[str] = None,
         *,
         capture_wrist_rgb: bool = False,
+        orient_control: bool = False,
     ) -> None:
         import gymnasium as gym
         import mani_skill.envs  # noqa: F401 — registers PushCube-v1
 
         self._capture_wrist_rgb = bool(capture_wrist_rgb)
+        # Stage-5 4-way fix: when True, P-control the gripper yaw (action[5])
+        # toward skill.push_yaw_deg so y-axis pushes present a flat face. Default
+        # False keeps the committed +x data path byte-identical (action[5]=0).
+        self._orient_control = bool(orient_control)
         kwargs: dict = dict(
             obs_mode="state_dict",
             control_mode="pd_ee_delta_pose",
@@ -200,6 +222,12 @@ class PushCubeEnvRunner:
         obs, tcp, cube_xy0, goal_xy, cube_z = self._reset_with_injection(self._last_seed)
         initial_obj_xy = (float(cube_xy0[0]), float(cube_xy0[1]))
 
+        # Stage-5 4-way fix: target gripper yaw = resting yaw + skill.push_yaw_deg
+        # (0 for x-axis pushes, 90 for y-axis). Only used when orient_control is on.
+        target_yaw = None
+        if self._orient_control:
+            target_yaw = _yaw_deg(tcp) + float(getattr(skill, "push_yaw_deg", 0.0))
+
         # Three waypoint phase targets, each a 3-vec xyz.
         targets: list[np.ndarray] = []
         for wp in skill.waypoints:
@@ -236,6 +264,10 @@ class PushCubeEnvRunner:
                     tcp, cube_xy, skill.cube_z,
                 )
             action = _prop_action(tcp, target)
+            if target_yaw is not None:
+                # P-control world-z yaw so the push face is normal to travel.
+                err = _wrap180(target_yaw - _yaw_deg(tcp))
+                action[5] = np.float32(np.clip(-err / _YAW_K_DEG, -1.0, 1.0))
             obs, _r, terminated, truncated, info = self._env.step(action)
             term = bool(_to_np(terminated).item()) if hasattr(terminated, "cpu") else bool(terminated)
             trunc = bool(_to_np(truncated).item()) if hasattr(truncated, "cpu") else bool(truncated)

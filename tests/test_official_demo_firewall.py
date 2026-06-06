@@ -60,6 +60,8 @@ def test_vision_encoder_signature_rejects_privileged_params():
         "pool",
         "device",
         "resolution",
+        "vjepa_n_frames",  # V-JEPA clip length — an encoder knob, not a data channel
+        "vjepa_crop",      # V-JEPA crop size — an encoder knob, not a data channel
         "_encoder",
     }, f"encoder signature widened to accept extra params: {params}"
     privileged = {

@@ -39,6 +39,27 @@ _PREDICATE_INDEX: dict[str, int] = {p: i for i, p in enumerate(_PREDICATE_ORDER)
 # Total failure-packet vector dim: F (=6) factor one-hot + |FP| (=9) predicate one-hot
 FP_VECTOR_DIM: int = len(INTENT_FIELDS) + len(_PREDICATE_ORDER)
 
+# Stage-5 natural-loop (Step B): a residual-conditioned ReviseHead appends the
+# 2D execution-feedback RESIDUAL direction (where the object still needs to go =
+# goal - final_cube, observable at exec, non-privileged). The base one-hot
+# factor+predicate vector cannot pick among >2 corrective directions (proven:
+# disp-vec/reverse recovers only 22.5% on the 4-way loop vs residual 92.5%; see
+# reports/stage5/natural_loop). Additive: a residual head uses fp_dim=
+# FP_VECTOR_DIM_RESIDUAL; the committed fp_dim=FP_VECTOR_DIM head is unchanged.
+RESIDUAL_DIM: int = 2
+FP_VECTOR_DIM_RESIDUAL: int = FP_VECTOR_DIM + RESIDUAL_DIM
+
+
+def vectorize_failure_packet_residual(record: dict, residual_xy) -> np.ndarray:
+    """`vectorize_failure_packet` (factor+predicate one-hot) with the 2D
+    residual DIRECTION appended (unit-normalized, so magnitude/units don't
+    dominate; zero vector stays zero). Length FP_VECTOR_DIM_RESIDUAL."""
+    base = vectorize_failure_packet(record)
+    res = np.asarray(residual_xy, dtype=np.float32).reshape(RESIDUAL_DIM)
+    n = float(np.linalg.norm(res))
+    unit = (res / n) if n > 1e-9 else res
+    return np.concatenate([base, unit.astype(np.float32)])
+
 
 def vectorize_failure_packet(record: dict) -> np.ndarray:
     """Build the (F + |FAILURE_PREDICATES|) one-hot vector for ReviseHead.
@@ -134,6 +155,33 @@ def train_revise_head_l2(
         opt.zero_grad()
         loss.backward()
         opt.step()
+
+
+def save_revise_head(head: ReviseHead, path) -> None:
+    """Persist a ReviseHead (state_dict + init kwargs) to a single .pt file.
+
+    Mirrors the ReviseHead blob layout `latent_policy.save_latent_pack` writes,
+    so a standalone residual head (fp_dim=FP_VECTOR_DIM_RESIDUAL, Stage-5 B.2)
+    can be saved/loaded without a full LatentPack. Additive helper."""
+    from pathlib import Path as _Path
+    torch.save({
+        "state_dict": head.state_dict(),
+        "init": {
+            "d_slot": head.d_slot,
+            "fp_dim": head.fp_dim,
+            "hidden": head.net[0].out_features,
+        },
+    }, _Path(path))
+
+
+def load_revise_head(path) -> ReviseHead:
+    """Inverse of `save_revise_head`. Returns an eval-mode ReviseHead."""
+    from pathlib import Path as _Path
+    blob = torch.load(_Path(path), weights_only=False)
+    head = ReviseHead(**blob["init"], seed=0)
+    head.load_state_dict(blob["state_dict"])
+    head.eval()
+    return head
 
 
 def apply_revision(

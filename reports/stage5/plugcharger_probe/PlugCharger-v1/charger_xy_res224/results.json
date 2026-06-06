@@ -1,0 +1,37 @@
+{
+  "d_slot": 32,
+  "encoder": "dinov2_vitb14",
+  "factor": "charger_xy",
+  "gate": "FAIL",
+  "intent_factor": "approach_direction",
+  "label_dist": {
+    "left": 60,
+    "right": 60
+  },
+  "n": 120,
+  "n_epochs": 300,
+  "n_seeds": 120,
+  "resolution": 224,
+  "result": {
+    "dim": 768,
+    "direct": {
+      "majority_class_acc": 0.5,
+      "n_episodes": 120,
+      "n_unique_labels": 2,
+      "probe_acc_mean": 0.8833333333333334,
+      "probe_acc_std": 0.07168604389202189,
+      "shuffled_features_acc": 0.525
+    },
+    "intent": {
+      "majority_class_acc": 0.5,
+      "n_episodes": 120,
+      "n_unique_labels": 2,
+      "probe_acc_mean": 0.8583333333333334,
+      "probe_acc_std": 0.06770032003863301,
+      "shuffled_features_acc": 0.5583333333333333,
+      "trivially_constant": false
+    }
+  },
+  "role": "secondary",
+  "task": "PlugCharger-v1"
+}
