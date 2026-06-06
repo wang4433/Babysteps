@@ -566,8 +566,8 @@ existing task set, not arbitrary absolute targets.
 
 > **Status:** planned 2026-05-24. This is the paper-submission track.
 > Stage 5 replaces Stage 4's handcrafted-feature bottleneck with
-> vision-grounded slot intents, VLM-based attribution, and world-model
-> counterfactual verification. Stage 0's discrete schema remains as the
+> vision-grounded slot intents, VLM-based attribution, and simulator-based
+> counterfactual selectivity certification. Stage 0's discrete schema remains as the
 > supervision signal and certification scaffold — it is never discarded.
 
 ### Motivation
@@ -644,11 +644,11 @@ Demo video frames ──→ [Frozen Vision Encoder] ──→ z_demo
                                              g^i, fp → g̃^i
                                                      │
                                                      ▼
-                                           [World Model Verifier]
-                                         "does this revision help?"
-                                                     │
-                                                     ▼
                                              revised G → retry
+
+Evaluation only:
+  paired same_intent / BABYSTEPS / oracle_single_slot ManiSkill rollouts
+  → [Simulator Counterfactual Certification (G3)]
 ```
 
 ### Priority 1 — Vision Encoder Swap (critical first step)
@@ -726,26 +726,44 @@ It selects which slot to edit; it does NOT produce the revised intent.
 The ReviseHead (learned, slot-local) produces $\tilde{g}_t^i$. This
 is not "ask a VLM/LLM to replan the whole thing after failure."
 
-### Priority 3 — World Model Counterfactual Verification
+### Priority 3 — Simulator Counterfactual Selectivity Certification
 
-Train a latent dynamics model on ManiSkill rollouts:
+> **Decision (2026-06-06):** do not train a learned world model for the
+> current paper. ManiSkill is the available, exact forward process; rollout is
+> cheap; and the current loop has one diagnosed factor and one revision value,
+> so there is no revision-ranking decision for a learned model to make. A
+> learned approximation would add model error without helping the online loop.
 
-$$(z_t, a_t) \xrightarrow{f_\phi} z_{t+1}, \quad z_t \xrightarrow{r_\phi} \hat{r}_t$$
+P3 is an **evaluation-only certification**, outside the demo-to-intent path.
+For each held-out seed and diagnosed factor $i$, run three paired conditions
+from the same simulator state:
 
-This serves three purposes:
+1. `same_intent`: retry without editing;
+2. `babysteps`: edit only slot $i$;
+3. `oracle_single_slot`: apply the oracle value to slot $i$ only.
 
-1. **G3 selectivity certification.** Counterfactual rollout pairs
-   (same $Z_t$, edited slot $i$ vs. unedited) must show predicted
-   future-slot drift on $j \neq i$ indistinguishable from the
-   simulator noise floor. The world model provides the forward
-   predictions; G3 becomes a real test, not a mechanical bit-identity.
-2. **Revision ranking.** When multiple slots are plausible edit
-   targets, simulate both revisions in imagination and pick the one
-   with higher predicted success.
-3. **Paper narrative.** "We use a world model to verify that
-   single-factor revision is physically sufficient — the
-   counterfactual rollout confirms that editing one slot does not
-   require compensating edits to other slots."
+Record task success and factor-specific violation scores for every frozen
+factor $j \ne i$. The claim is not that all physical trajectories are
+identical after an intervention -- contact dynamics may legitimately change.
+The claim is that BABYSTEPS does not require compensating intent edits and does
+not violate the constraints represented by the frozen factors.
+
+**G3 gate:**
+
+* the edited factor's success/violation score improves over `same_intent`;
+* BABYSTEPS' frozen-factor violation rate is equivalent to
+  `oracle_single_slot` within a pre-registered margin (default 5 percentage
+  points for binary rates; a task-defined simulator-noise margin for continuous
+  scores);
+* report paired effect estimates and confidence intervals. Do **not** treat
+  `p > alpha` in a difference test as evidence of equivalence; use an
+  equivalence interval/TOST or a paired bootstrap confidence interval wholly
+  contained inside the margin.
+
+The existing by-construction single-slot write, zero frozen-slot latent drift,
+and P2 preservation/harmful-change metrics remain complementary evidence.
+A learned world model is future work for settings with expensive environment
+access or multiple candidate revisions that genuinely require ranking.
 
 ### Priority 4 — Learned Action Decoder (optional)
 
@@ -761,8 +779,9 @@ existing skill compilers.
 * Priority 2 gate: VLM attribution accuracy ≥ rule-table accuracy;
   VLM-diagnosis + slot-local revision ≥ VLM free-form replan on
   frozen-factor preservation with comparable recovery rate.
-* Priority 3 gate: G3 counterfactual selectivity passes with
-  world-model forward predictions (not mechanical bit-identity).
+* Priority 3 gate: G3 passes paired ManiSkill counterfactual certification:
+  the edited factor improves and frozen-factor violations are equivalent to
+  the oracle single-slot intervention within the pre-registered margin.
 * $\Delta pp$ of vision-grounded latent revision vs. same_intent_retry
   ≥ 10; vs. oracle discrete revision within 5 pp.
 

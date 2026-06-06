@@ -93,7 +93,7 @@ nodes.append(shared_node("n10", "⑩", "Record + acceptance gate",
 
 nodes.append(swap_node("n11", "⑪", "Selectivity certification  (G3)",
     "STAGE-0/4", "mechanical <B>bit-identity</B> of frozen factors",
-    "STAGE-5", "learned world model f(z,a)&#8594;z' counterfactual<BR/><B>[P3 — OPEN: not trained; probes falsified]</B>",
+    "STAGE-5", "paired true-simulator counterfactuals<BR/><B>[P3 — evaluation only; no learned world model]</B>",
     badge="P3"))
 
 edges = "\n".join(f"  n{i} -> n{i+1};" for i in range(1, 11))
@@ -229,10 +229,10 @@ with PdfPages(PDF_PATH) as pdf:
     status = [
         ("P1 vision swap — PARTIAL.", "PushCube end-to-end PASSES: held-out seeds 100-149 latent 48/50 (0.96) vs oracle 49/50 (0.98); G4 +96pp, G5 -2pp, object_motion probe 0.95. StackCube G1 FAILS: relational object_motion 0.42 (<0.90) across all pooling — scope narrowed to PushCube-only."),
         ("P2 VLM attribution — DONE.", "5-task main table passes all 3 gates (C1 attr >= rule-table; C1 pres >= C2; C1 succ within 5pp of C2). C1 attr: Push 1.0 · Pick 1.0 · Stack 0.86 · Turn 1.0 · CrossView 1.0; +92pp success on PickCube. StackCube 0.86 = residual open issue (7 misses on object_motion)."),
-        ("P3 world model — OPEN.", "no learned world model trained; G3 selectivity still mechanical bit-identity. Only de-risking probes run (VLM-reads-from-demo, top-down vision) — ALL falsified."),
+        ("P3 simulator certification — PLANNED.", "learned world model cancelled by design; use paired ManiSkill same-intent / BABYSTEPS / oracle-single-slot rollouts with equivalence margins."),
         ("P4 action decoder — DEFERRED.", "optional; paper stands on P1-P3 + skill compilers."),
         ("M2b pixel encoder — OPEN.", "not a named milestone; most likely the P1 vision_features.py pixel path, itself blocked on the StackCube relational bottleneck."),
-        ("Done supporting:", "M1 locked claim · M2 5-task Stage-0 · M3 7 procedural baselines (Push 0.98/Pick 0.92/Stack 0.70) · M6 related-work. M4 main table + M7 paper PENDING P3."),
+        ("Done supporting:", "M1 locked claim · M2 5-task Stage-0 · M3 7 procedural baselines (Push 0.98/Pick 0.92/Stack 0.70) · M6 related-work. M4 main table + M7 paper pending simulator G3 consolidation."),
     ]
     text_page(pdf, "Sub-projects (A–E) & Stage-5 status",
               [("h", "Five Stage-0 task families — each revises a different single factor"),
