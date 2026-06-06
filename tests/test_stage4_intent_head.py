@@ -170,3 +170,29 @@ def test_trivially_constant_factor_short_circuits():
     )
     assert out["trivially_constant"] is True
     assert out["probe_acc_mean"] == 1.0
+
+
+def test_standardize_input_is_affine_invariant_and_default_off():
+    """`standardize_input=True` must make the probe invariant to input feature
+    scale/offset (StandardScaler fit per train fold). This is the fix for the
+    gate silently under-reading encoders whose feature norms differ from
+    DINOv2's (e.g. V-JEPA-2.1: 0.54 raw -> ~0.86 standardized). The default
+    (False) is unchanged so committed numbers reproduce exactly.
+    See reports/stage5/vjepa_object_motion/FINDINGS.md."""
+    from babysteps.stage4.intent_head import nested_cv_probe_one_factor
+
+    rng = np.random.default_rng(0)
+    n = 40
+    y = np.array([0, 1] * (n // 2), dtype=np.int64)
+    Z = rng.normal(size=(n, 6)).astype(np.float32)
+    Z[:, 0] += y * 4.0  # class-separable signal
+    affine = (Z * 64.0 + 100.0).astype(np.float32)  # different norm + offset
+
+    kw = dict(factor_idx=0, n_factors=6, d_slot=8, n_epochs=120, lr=1e-2, seed=0)
+    a = nested_cv_probe_one_factor(Z, y, standardize_input=True, **kw)
+    b = nested_cv_probe_one_factor(affine, y, standardize_input=True, **kw)
+    # Standardization removes the affine transform -> identical probe accuracy.
+    assert abs(a["probe_acc_mean"] - b["probe_acc_mean"]) < 1e-4
+    # Default path (off) still runs and returns the standard schema.
+    c = nested_cv_probe_one_factor(Z, y, **kw)
+    assert c["trivially_constant"] is False and "probe_acc_mean" in c

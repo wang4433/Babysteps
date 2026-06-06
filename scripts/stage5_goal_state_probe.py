@@ -171,12 +171,22 @@ def run_probe(
     d_slot: int = 32,
     n_epochs: int = 300,
     seed: int = 0,
+    standardize: bool = False,
 ) -> dict:
     """Score features on the SAME axis as the G1 cells: a direct
-    StandardScaler+LR column and the IntentHead-mediated nested CV."""
+    StandardScaler+LR column and the IntentHead-mediated nested CV.
+
+    `standardize` z-scores the IntentHead input per train fold (StandardScaler
+    fit inside CV). DINOv2/DINOv3 feature norms (~24) tolerate the raw-Z Adam
+    optimizer, but richer encoders (V-JEPA ~43) underfit without it — the bug
+    fixed in babysteps.stage4.intent_head (see vjepa_object_motion/FINDINGS.md).
+    Default False keeps committed DINO numbers byte-identical; the direct-LR
+    column already StandardScales internally, so it is unaffected either way.
+    """
     direct = _direct_lr_probe(Z, y, seed=seed)
     intent = nested_cv_probe_one_factor(
         Z, y, factor_idx=factor_idx, d_slot=d_slot, n_epochs=n_epochs, seed=seed,
+        standardize_input=standardize,
     )
     return {"dim": int(Z.shape[1]), "direct": direct, "intent": intent}
 
@@ -686,6 +696,10 @@ def main(argv=None) -> int:
     p.add_argument("--d-slot", type=int, default=32)
     p.add_argument("--n-epochs", type=int, default=300)
     p.add_argument("--seed", type=int, default=0)
+    p.add_argument("--standardize", action="store_true",
+                   help="Z-score the IntentHead input per train fold (fixes the "
+                        "un-normalized-Z optimizer under-read for richer encoders "
+                        "like V-JEPA; default off keeps DINO numbers identical).")
     p.add_argument("--save-frames", action="store_true",
                    help="Dump the first few rendered configs as PNGs for sanity.")
     args = p.parse_args(argv)
@@ -709,7 +723,7 @@ def main(argv=None) -> int:
         for pool_name, Zp in Z_by_pool.items():
             results_by_pool[pool_name] = run_probe(
                 Zp, y, factor_idx=_GOAL_STATE_IDX, d_slot=args.d_slot,
-                n_epochs=args.n_epochs, seed=args.seed,
+                n_epochs=args.n_epochs, seed=args.seed, standardize=args.standardize,
             )
             print(f"  {pool_name:20s} direct={results_by_pool[pool_name]['direct']['probe_acc_mean']:.3f}"
                   f"  intentCV={results_by_pool[pool_name]['intent']['probe_acc_mean']:.3f}")
@@ -734,7 +748,8 @@ def main(argv=None) -> int:
     print(f"encoded n={len(y_str)}; labels {label_dist}; Z={Z.shape}")
 
     result = run_probe(Z, y, factor_idx=_GOAL_STATE_IDX, d_slot=args.d_slot,
-                       n_epochs=args.n_epochs, seed=args.seed)
+                       n_epochs=args.n_epochs, seed=args.seed,
+                       standardize=args.standardize)
     print(f"  direct LR  = {result['direct']['probe_acc_mean']:.3f}")
     print(f"  IntentCV   = {result['intent']['probe_acc_mean']:.3f} "
           f"(majority {result['intent']['majority_class_acc']:.3f}, "

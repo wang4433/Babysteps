@@ -353,3 +353,126 @@ def test_dinov3_chunking_is_equivalent_to_single_batch():
     z_small = _dinov3_features(model, x, pool="spatial_mean", chunk=4)
     z_big = _dinov3_features(model, x, pool="spatial_mean", chunk=1000)
     torch.testing.assert_close(z_small, z_big, rtol=1e-5, atol=1e-6)
+
+
+# --------------------------------------------------------------------------- #
+# V-JEPA 2.1 video-encoder path (Stage-5 temporal-grounding ablation)          #
+# --------------------------------------------------------------------------- #
+
+def test_vjepa_dispatch_helpers():
+    """`_is_vjepa` routes V-JEPA vs DINOv2/DINOv3; specs are well-formed."""
+    from babysteps.stage4.vision_features import _VJEPA_SPECS, _is_vjepa
+
+    assert _is_vjepa("vjepa2_1_vitl16") is True
+    assert _is_vjepa("vjepa2_1_vit_large_384") is True
+    assert _is_vjepa("dinov2_vitb14") is False
+    assert _is_vjepa("dinov3_vitl16") is False
+    # Each spec: (hub entrypoint, ckpt filename, ckpt key, crop, n_frames).
+    for alias, spec in _VJEPA_SPECS.items():
+        assert alias.startswith("vjepa2_1_")
+        entry, fname, key, crop, nf = spec
+        assert entry.startswith("vjepa2_1_vit")
+        assert fname.startswith("vjepa2_1_")
+        assert key in ("ema_encoder", "target_encoder")
+        assert crop % 16 == 0 and nf % 2 == 0  # patch 16, tubelet 2
+
+
+def test_sample_clip_frames_subsample_monotone():
+    """T >= n: uniform subsample, length n, monotone, spanning [0, T-1]."""
+    from babysteps.stage4.vision_features import _sample_clip_frames
+
+    frames = list(range(40))  # sentinels = source indices
+    out = _sample_clip_frames(frames, 16)
+    assert len(out) == 16
+    assert out == sorted(out)        # monotone non-decreasing
+    assert out[0] == 0 and out[-1] == 39
+    assert all(0 <= i <= 39 for i in out)
+
+
+def test_sample_clip_frames_upsample_short_clip():
+    """T < n: upsample with repeats to exactly n, still monotone in [0, T-1]."""
+    from babysteps.stage4.vision_features import _sample_clip_frames
+
+    out = _sample_clip_frames(list(range(5)), 16)
+    assert len(out) == 16
+    assert out == sorted(out)
+    assert out[0] == 0 and out[-1] == 4
+
+
+def test_sample_clip_frames_edge_cases():
+    from babysteps.stage4.vision_features import _sample_clip_frames
+
+    assert _sample_clip_frames([7], 16) == [7] * 16  # T=1 → repeat
+    with pytest.raises(ValueError, match="at least one frame"):
+        _sample_clip_frames([], 16)
+    with pytest.raises(ValueError, match="n_frames must be positive"):
+        _sample_clip_frames([1, 2, 3], 0)
+
+
+def test_preprocess_clip_vjepa_shape_and_norm():
+    """List[(H,W,3) uint8] -> (T, 3, crop, crop) float32, ImageNet-normalized."""
+    from babysteps.stage4.vision_features import _preprocess_clip_vjepa
+
+    frames = [(128 * np.ones((512, 512, 3), dtype=np.uint8)) for _ in range(4)]
+    x = _preprocess_clip_vjepa(frames, crop_size=384)
+    assert x.shape == (4, 3, 384, 384)
+    assert x.dtype == torch.float32
+    assert -3.0 < float(x.mean()) < 3.0
+    # uint8 contract enforced (same guard as _preprocess_frames).
+    with pytest.raises(ValueError, match="must be uint8"):
+        _preprocess_clip_vjepa([np.ones((8, 8, 3), dtype=np.float32)], crop_size=16)
+
+
+class _FakeVJEPA(torch.nn.Module):
+    """Mock V-JEPA clip encoder.
+
+    Asserts it is fed a 5-D (B, C, T, H, W) tensor (i.e. the clip path, never
+    the per-frame `_pool_cls` path), and returns (B, N, d) patch tokens (no
+    CLS) whose token-mean is a known function of the input — checkable.
+    """
+
+    def __init__(self, d: int = 8, n_tokens: int = 6):
+        super().__init__()
+        self.d = d
+        self.n_tokens = n_tokens
+        self.embed_dim = d
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        assert x.ndim == 5, f"V-JEPA expects (B,C,T,H,W), got {tuple(x.shape)}"
+        b = x.shape[0]
+        base = torch.arange(self.d, dtype=torch.float32) / self.d
+        scalar = x.mean()
+        return base.view(1, 1, self.d).expand(b, self.n_tokens, self.d) * scalar
+
+
+def test_extract_vision_features_vjepa_branch_shape_and_identity():
+    """Full V-JEPA path: frames -> clip preprocess -> 5-D forward -> token-mean.
+
+    With constant frames and the deterministic _FakeVJEPA, the output equals
+    (arange(d)/d) * clip.mean() — a numerical identity that pins the branch
+    (5-D layout, token-mean pooling, numpy cast) without real weights.
+    """
+    from babysteps.stage4.vision_features import (
+        _preprocess_clip_vjepa,
+        _sample_clip_frames,
+        extract_vision_features,
+    )
+
+    frames = [(128 * np.ones((512, 512, 3), dtype=np.uint8)) for _ in range(9)]
+    z = extract_vision_features(
+        frames,
+        encoder="vjepa2_1_vitl16",
+        device="cpu",
+        vjepa_n_frames=4,
+        vjepa_crop=32,
+        _encoder=_FakeVJEPA(d=8, n_tokens=6),
+    )
+    assert isinstance(z, np.ndarray)
+    assert z.shape == (8,)
+    assert z.dtype == np.float32
+
+    sel = _sample_clip_frames(frames, 4)
+    clip = _preprocess_clip_vjepa(sel, crop_size=32)
+    scalar = float(clip.mean())
+    expected = (np.arange(8, dtype=np.float32) / 8.0) * scalar
+    np.testing.assert_allclose(z, expected, rtol=1e-5, atol=1e-6)

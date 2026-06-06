@@ -35,6 +35,7 @@ privileged SceneState field.
 """
 from __future__ import annotations
 
+import os
 from typing import Callable, Optional
 
 import numpy as np
@@ -218,6 +219,157 @@ def _dinov3_features(
     return _pool_cls(stacked, pool=pool)
 
 
+# ---------------------------------------------------------------------------
+# V-JEPA 2.1 video-encoder path (Stage-5 temporal-grounding ablation).
+#
+# Unlike DINOv2/DINOv3 (per-frame image encoders, time-pooled afterwards),
+# V-JEPA 2.1 is a *clip* encoder: it consumes one (B, C, T, H, W) video tensor
+# and emits patch tokens — so it can, in principle, read the two-object
+# RELATIONAL motion direction that frame-mean-pooled DINO destroys. This path
+# is fully additive: the DINOv2/DINOv3 branches above are untouched.
+#
+# Verified against the facebookresearch/vjepa2 source (V-JEPA 2.1 release):
+#   - torch.hub entrypoint returns (encoder, predictor); we keep only encoder.
+#   - encoder.forward(x) wants x = (B, C, T, 384, 384), T = num_frames (64,
+#     tubelet 2); returns ALL patch tokens (B, N, d), no CLS token. We mean
+#     over the token axis -> (d,), the temporal analog of DINOv2 spatial_mean.
+#   - normalization = ImageNet (same constants as above); eval recipe =
+#     resize short-side to round(crop*256/224) + center-crop `crop`.
+#   - the repo's hub weight URL is stubbed to http://localhost:8300 ("for
+#     testing"), so pretrained=True fails; we build pretrained=False and load
+#     the real checkpoint from dl.fbaipublicfiles.com, taking state_dict[key]
+#     with the repo's module./backbone. prefix-strip.
+# ---------------------------------------------------------------------------
+
+_VJEPA_BASE_URL = "https://dl.fbaipublicfiles.com/vjepa2"
+
+# alias -> (hub entrypoint, checkpoint filename, checkpoint_key, crop, n_frames)
+_VJEPA_SPECS: dict[str, tuple[str, str, str, int, int]] = {
+    "vjepa2_1_vitl16": (
+        "vjepa2_1_vit_large_384", "vjepa2_1_vitl_dist_vitG_384",
+        "ema_encoder", 384, 64,
+    ),
+    # ViT-g uses the xformers arch (needs the xformers package) — optional.
+    "vjepa2_1_vitg16": (
+        "vjepa2_1_vit_giant_384", "vjepa2_1_vitg_384",
+        "target_encoder", 384, 64,
+    ),
+}
+
+
+def _is_vjepa(encoder: str) -> bool:
+    """True if `encoder` names a V-JEPA model (alias or raw entrypoint)."""
+    return "vjepa" in encoder.lower()
+
+
+def _sample_clip_frames(
+    frames: list[np.ndarray], n_frames: int
+) -> list[np.ndarray]:
+    """Uniformly sample `n_frames` frames from a T-frame clip.
+
+    Indices are `linspace(0, T-1, n_frames)` rounded — a subsample when
+    T >= n_frames, an upsample (with repeats) when T < n_frames (most demos
+    are 36-69 frames vs the model's 64). Always returns exactly `n_frames`
+    frames, monotone non-decreasing in source index.
+    """
+    t = len(frames)
+    if t == 0:
+        raise ValueError("_sample_clip_frames needs at least one frame")
+    if n_frames <= 0:
+        raise ValueError(f"n_frames must be positive, got {n_frames}")
+    idx = np.rint(np.linspace(0, t - 1, num=n_frames)).astype(int)
+    idx = np.clip(idx, 0, t - 1)
+    return [frames[i] for i in idx]
+
+
+def _preprocess_clip_vjepa(
+    frames: list[np.ndarray], *, crop_size: int = 384
+) -> torch.Tensor:
+    """List[(H, W, 3) uint8] -> (T, 3, crop, crop) float32, V-JEPA eval recipe.
+
+    Mirrors the model's own transform (Resize short-side, CenterCrop, ImageNet
+    Normalize) in tensor space, so a frozen V-JEPA encoder sees its native
+    preprocessing rather than a foreign square-resize (same fairness argument
+    as the DINOv3 path in the module docstring). For the square 512x512 demo
+    renders this is a resize to ~438 then a center crop to 384.
+    """
+    arr = np.stack(frames, axis=0)
+    if arr.dtype != np.uint8:
+        raise ValueError(f"frames must be uint8, got {arr.dtype}")
+    if arr.ndim != 4 or arr.shape[-1] != 3:
+        raise ValueError(f"frames must have shape (T, H, W, 3), got {arr.shape}")
+    t = torch.from_numpy(arr).permute(0, 3, 1, 2).float().div_(255.0)
+    short = int(round(crop_size * 256 / 224))
+    _, _, h, w = t.shape
+    if h <= w:
+        new_h, new_w = short, max(crop_size, int(round(w * short / h)))
+    else:
+        new_h, new_w = max(crop_size, int(round(h * short / w))), short
+    t = F.interpolate(t, size=(new_h, new_w), mode="bilinear",
+                      align_corners=False, antialias=True)
+    top = (new_h - crop_size) // 2
+    left = (new_w - crop_size) // 2
+    t = t[:, :, top:top + crop_size, left:left + crop_size]
+    mean = torch.tensor(_IMAGENET_MEAN).view(1, 3, 1, 1)
+    std = torch.tensor(_IMAGENET_STD).view(1, 3, 1, 1)
+    return (t - mean) / std
+
+
+def _load_vjepa(encoder: str, device: str) -> torch.nn.Module:
+    """Load and freeze a V-JEPA 2.1 encoder. Cached per (encoder, device).
+
+    Builds the architecture via torch.hub (pretrained=False, since the repo's
+    hub weight URL is a localhost stub), downloads the real checkpoint once
+    into the torch hub cache, and loads `state_dict[checkpoint_key]` with the
+    repo's prefix-strip. Returns the encoder only (the entrypoint returns an
+    (encoder, predictor) tuple; the predictor is unused here).
+    """
+    key = (encoder, device)
+    if key in _MODEL_CACHE:
+        return _MODEL_CACHE[key]
+    if encoder not in _VJEPA_SPECS:
+        raise ValueError(
+            f"unknown V-JEPA encoder {encoder!r}; known: {list(_VJEPA_SPECS)}"
+        )
+    entry, fname, ckpt_key, _crop, _nf = _VJEPA_SPECS[encoder]
+    built = torch.hub.load(
+        "facebookresearch/vjepa2", entry, pretrained=False, trust_repo=True
+    )
+    enc = built[0] if isinstance(built, (tuple, list)) else built
+    ckpt_dir = os.path.join(torch.hub.get_dir(), "checkpoints")
+    os.makedirs(ckpt_dir, exist_ok=True)
+    local = os.path.join(ckpt_dir, f"{fname}.pt")
+    if not os.path.exists(local):
+        torch.hub.download_url_to_file(f"{_VJEPA_BASE_URL}/{fname}.pt", local)
+    sd = torch.load(local, map_location="cpu", weights_only=False)
+    raw = sd[ckpt_key]
+    esd = {
+        k.replace("module.", "").replace("backbone.", ""): v
+        for k, v in raw.items()
+    }
+    enc.load_state_dict(esd, strict=True)
+    enc.eval()
+    enc.to(device)
+    for p in enc.parameters():
+        p.requires_grad_(False)
+    _MODEL_CACHE[key] = enc
+    return enc
+
+
+def _vjepa_features(model: torch.nn.Module, clip: torch.Tensor) -> torch.Tensor:
+    """V-JEPA clip forward -> (d,) pooled embedding.
+
+    `clip` is (T, 3, H, W); the encoder wants (B, C, T, H, W). Output is all
+    patch tokens (1, N, d) — mean over the token axis is the spatial_mean
+    analog (V-JEPA has no CLS token).
+    """
+    x = clip.permute(1, 0, 2, 3).unsqueeze(0)  # (1, 3, T, H, W)
+    out = model(x)
+    if isinstance(out, (list, tuple)):
+        out = out[-1]
+    return out.mean(dim=1).squeeze(0)
+
+
 def extract_vision_features(
     demo_frames: list[np.ndarray],
     *,
@@ -225,6 +377,8 @@ def extract_vision_features(
     pool: str = "cls_mean",
     device: str = "cuda",
     resolution: int = 224,
+    vjepa_n_frames: Optional[int] = None,  # V-JEPA clip length (default: spec, 64)
+    vjepa_crop: Optional[int] = None,      # V-JEPA crop size (default: spec, 384)
     _encoder: Optional[torch.nn.Module] = None,  # test/inject hook
 ) -> np.ndarray:
     """Frozen-encoder feature extraction from demo RGB frames.
@@ -250,6 +404,20 @@ def extract_vision_features(
     """
     if len(demo_frames) == 0:
         raise ValueError("extract_vision_features needs at least one frame")
+
+    if _is_vjepa(encoder):
+        # Clip-encoder path: sample a fixed-length clip, preprocess with the
+        # V-JEPA eval recipe, single forward, token-mean pool. `pool` is
+        # ignored (V-JEPA has no CLS; token-mean is the only sensible analog).
+        spec = _VJEPA_SPECS.get(encoder)
+        n_frames = vjepa_n_frames or (spec[4] if spec else 64)
+        crop = vjepa_crop or (spec[3] if spec else 384)
+        sel = _sample_clip_frames(demo_frames, n_frames)
+        clip = _preprocess_clip_vjepa(sel, crop_size=crop).to(device)
+        with torch.no_grad():
+            model = _encoder if _encoder is not None else _load_vjepa(encoder, device)
+            z = _vjepa_features(model, clip)
+        return z.detach().cpu().numpy().astype(np.float32)
 
     is_v3 = _is_dinov3(encoder)
     # Each encoder gets its native resize recipe (see module docstring):

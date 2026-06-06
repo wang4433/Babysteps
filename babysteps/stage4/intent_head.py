@@ -21,6 +21,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import LeaveOneOut, StratifiedKFold
+from sklearn.preprocessing import StandardScaler
 
 
 class IntentHead(nn.Module):
@@ -160,6 +161,7 @@ def nested_cv_probe_one_factor(
     n_epochs: int = 200,
     lr: float = 1e-2,
     seed: int = 0,
+    standardize_input: bool = False,
 ) -> dict:
     """Outer-CV trains IntentHead per fold; inner frozen LR probes `G` on test.
 
@@ -173,6 +175,15 @@ def nested_cv_probe_one_factor(
     Returns the same keys as `babysteps.stage4.probe.train_probe` so the
     report aggregator (`babysteps.stage4.report.build_report`) ingests
     feature and G-probe outputs identically.
+
+    ``standardize_input`` (default False — committed numbers unchanged): fit a
+    StandardScaler on the TRAIN fold's Z and apply it to train+test before the
+    IntentHead. The IntentHead trains Adam at a fixed lr; on encoders whose
+    feature norms differ from the handcrafted/DINOv2 scale this lr underfits and
+    the probe spuriously collapses (e.g. V-JEPA-2.1 features: 0.54±0.24 raw vs
+    ~0.86 standardized, while DINOv2 is ~unchanged). Standardizing makes the
+    probe fair across encoders. Leak-free: the scaler is fit on the train fold
+    only. See reports/stage5/vjepa_object_motion/FINDINGS.md.
     """
     n_unique = int(np.unique(y).size)
     if n_unique <= 1:
@@ -193,19 +204,24 @@ def nested_cv_probe_one_factor(
     fold_shuf: list[float] = []
 
     for fold_i, (tr, te) in enumerate(splitter.split(Z, y)):
+        Z_tr, Z_te = Z[tr], Z[te]
+        if standardize_input:
+            scaler = StandardScaler().fit(Z_tr)  # leak-free: train fold only
+            Z_tr = scaler.transform(Z_tr).astype(np.float32, copy=False)
+            Z_te = scaler.transform(Z_te).astype(np.float32, copy=False)
         head = IntentHead(
             z_dim=Z.shape[1], n_factors=n_factors,
             d_slot=d_slot, seed=seed + fold_i,
         )
         _train_one_slot(
-            head, Z[tr], y[tr],
+            head, Z_tr, y[tr],
             factor_idx=factor_idx, n_classes=n_unique,
             n_epochs=n_epochs, lr=lr, seed=seed + fold_i,
         )
         head.eval()
         with torch.no_grad():
-            z_tr_t = torch.from_numpy(Z[tr])
-            z_te_t = torch.from_numpy(Z[te])
+            z_tr_t = torch.from_numpy(Z_tr)
+            z_te_t = torch.from_numpy(Z_te)
             G_tr = head(z_tr_t).numpy().reshape(len(tr), -1)
             G_te = head(z_te_t).numpy().reshape(len(te), -1)
 
