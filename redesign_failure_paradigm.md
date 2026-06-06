@@ -80,9 +80,33 @@ single-factor errors that simulate vision-encoder inference mistakes."
 DINOv2/R3M → IntentHead naturally produces wrong intents from demo video
 frames. The same revision loop (VLM attribution → ReviseHead) corrects them.
 
+**The Stage-5 failure mechanism is seed variation, NOT `blocked_sides`.**
+The `blocked_sides` injection (Layer 1) is gone from the Stage-5 loops. Failures
+arise from the natural mismatch between an imperfectly-grounded demo intent and
+the execution scene:
+
+- **PushCube — seed-decoupled** (`scripts/stage5_natural_loop_eval.py`): the
+  demo clip and the execution scene use *different* seeds, so the goal geometry
+  the demo grounds need not match the scene the robot faces. On mismatched
+  episodes the open-loop retry recovers 0%; displacement-vector feedback +
+  slot-local revision recovers it. No block is applied.
+- **StackCube — demo under-specification** (`scripts/stage5_goalstate_loop_eval.py`):
+  the natural failure is demo *ambiguity*, not an instance mismatch (a
+  whole-clip demo grounds `goal_state` only ~0.63). The under-specified
+  `cube_at_target` executes, `goal_not_satisfied` fires, and the
+  `goal_refinement` operator lifts it to `cubeA_on_cubeB`. A disambiguating
+  (retract) demo grounds it ~0.92, so grounding carries it and revision barely
+  fires — the same loop spans a grounding↔revision spectrum.
+
+(Historical note: an earlier Stage-5 latent loop still re-applied
+`default_blocked_factory` under `--latent-initial`; that artificial block was
+removed in favor of the seed-decoupled / ambiguity-driven failures above.)
+
 **Paper framing**: "We then show the same loop works end-to-end when the
 intent is inferred from raw demo video by a frozen vision encoder, without
-injecting controlled errors."
+injecting controlled errors — the failure arises naturally from the
+demo↔execution seed mismatch (PushCube) or demo goal under-specification
+(StackCube)."
 
 The two layers together make the paper complete:
 - Layer 1 proves the mechanism works (controlled, measurable)
@@ -94,9 +118,18 @@ The two layers together make the paper complete:
 
 | Panel | Camera | What it shows |
 | --- | --- | --- |
-| Phase 1: Demo | Third-person (desk-front) | Oracle Franka performs the task correctly — this is the input to the vision encoder |
+| Phase 1: Demo | Third-person external view(s) — **dual-stream**: a global high-oblique view + a closer contact view (`babysteps/render/camera_presets.py`) | Oracle Franka performs the task correctly — this is the input to the vision encoder. Each factor is decoded from the view that sees it (`DualViewIntentExtractor` routing). |
 | Phase 2: Attempt | First-person (wrist cam) | Robot executes with the inferred (wrong) intent → natural failure |
 | Phase 3: Retry | First-person (wrist cam) | Robot executes with the revised intent → success |
+
+**Camera roles.** Two external cameras feed the *demo* (intent grounding);
+the wrist camera is *execution-only* and never enters the demo→intent path.
+The dual-stream demo is built and sim-free-tested (`camera_presets.py`,
+`DualViewIntentExtractor`); its payoff is the per-factor-observability story
+(e.g. PickCube `contact_region`). Note: a high-oblique camera was *falsified*
+as the lever for StackCube `goal_state` — that factor is grounded by a
+retract-gripper demo render, not by where the camera points (the camera move
+is the control that rebuts "your boundary is just the camera placement").
 
 **No obstacles, walls, or clutter needed.** The failure is visible in the
 execution itself:
@@ -124,8 +157,10 @@ execution itself:
 
 The Stage 0 codebase mechanics are unchanged:
 
-- `babysteps/envs/*_runner.py` — runners use `blocked_sides` to create
-  controlled errors. This is the Layer 1 mechanism.
+- `babysteps/envs/*_runner.py` — runners still *support* `blocked_sides` for
+  the Layer-1 controlled ablation, but the **Stage-5 loops do not use it**:
+  they create natural failures by seed variation (demo↔execution decoupling)
+  or demo under-specification (see Layer 2 above).
 - `babysteps/failure.py` — failure predicates and `FAILURE_TO_FACTOR` mapping.
 - `babysteps/revision.py` — single-factor revision operators.
 - `babysteps/envs/*_adapter.py` — task adapters, attribution logic.
