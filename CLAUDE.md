@@ -38,6 +38,16 @@ The active development track is **Stage 5** (`goal.md` §"Stage 5"):
 Stage 0–4 are complete; their discrete schema and episode data serve as
 supervision and certification scaffold for Stage 5.
 
+**Camera setup (Stage 5).** The demo is read from **two external camera
+views** — a global high-oblique view for final-state/relational factors and a
+closer view for contact factors — with each factor decoded from the view that
+sees it (`DualViewIntentExtractor`; presets in `babysteps/render/camera_presets.py`).
+The **wrist camera is execution-only** and never feeds the demo→intent path.
+(The dual-stream reader is built and sim-free-tested; its payoff is per-factor
+observability such as PickCube `contact_region`. A high-oblique camera was
+*falsified* as the lever for StackCube `goal_state` — that factor is grounded
+by a retract-gripper demo render, not by camera placement.)
+
 ## What this project is NOT
 
 - not cross-embodiment imitation, end-to-end VLA, RL, or diffusion-policy control
@@ -77,8 +87,12 @@ single-factor invariant is the headline reviewer-facing property — guard it.
 All five are implemented and pass the acceptance gate (`delta_pp >= 10`
 between revised-retry and initial-attempt success rates). In Stage 0,
 failures are simulated via the `blocked_sides` mechanism for controlled
-ablation; in Stage 5, they arise naturally from the vision encoder's
-imperfect intent inference (see `redesign_failure_paradigm.md`).
+ablation. **In Stage 5 the loops drop `blocked_sides` entirely**: failures
+arise naturally from the vision encoder's imperfect intent inference, driven
+by **seed variation** — demo↔execution seed decoupling (PushCube: the demo
+grounds one goal geometry, the execution scene is a different seed) or demo
+goal under-specification (StackCube: a whole-clip demo is ambiguous between
+place-near and stack-on). See `redesign_failure_paradigm.md`.
 
 ## Working invariants (do not violate)
 

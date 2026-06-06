@@ -12,7 +12,7 @@ babysteps/        the Python package — all importable, tested logic
   skills/         intent → executable skill compilers (push/pick/stack/turn)
   stage4/         sim-free Stage-4 M1 schema-recoverability probe (analysis)
 scripts/          CLI entry points (collect / summarize / render) + diag scratch
-tests/            sim-free pytest suite (343 tests) + JSON snapshots
+tests/            sim-free pytest suite (631 tests) + JSON snapshots
 docs/             design specs, TDD plans, locked claim, archived handover
 slurm/            sbatch scripts + logs + the canonical GPU run commands
 datasets/         collected Stage-0 episode data (JSONL + videos)
@@ -56,6 +56,21 @@ Pure, sim-free modules orchestrating the loop:
 `common.py` + one module per task. Each `render_episode` produces the three
 Stage-0 phases: `1_demo`, `2_attempt_blocked`, `3_retry`.
 
+- `camera_presets.py` — shared high-oblique external-camera presets +
+  `look_at_pose_list` / `oblique_camera_configs` / `camera_elevation_deg`.
+  Sim-free (lazy `mani_skill` import). Backs the Stage-5 **dual-stream camera**
+  setup: two external demo views (a global view for final-state/relational
+  factors, a closer/oblique view for contact factors), routed per factor;
+  the wrist camera is execution-only and never feeds the demo→intent path.
+  Presets keep world-z as image-up (deliberately NOT nadir — a top-down view
+  collapses stack height and would make `goal_state` a tautology).
+- `stackcube.py` carries an optional post-place **retract+dwell** in
+  `_execute_stack(..., retract=True)` (lift the open gripper up-and-back so the
+  final frames show the placement unoccluded). Default off = byte-identical
+  render. This — not a camera move — is what grounds StackCube `goal_state`
+  (the high-oblique camera was falsified for that factor; see
+  `reports/stage5/goal_state_camera/FINDINGS.md`).
+
 ### `babysteps/skills/` — skill compilers
 
 `push.py`, `pick.py`, `stack.py`, `turn.py`. Each turns an `Intent` into an
@@ -73,9 +88,19 @@ cut), `intent_head.py` (IntentHead MLP), `revise_head.py` (slot-local
 ReviseHead), `attribution_head.py` (M2.5 learned attribution),
 `latent_policy.py` (LatentPack + RetryPolicy wrapper).
 
-Stage 5 adds: `vision_features.py` (frozen DINOv2/R3M feature extraction
-from demo RGB frames — P1). Reads only DemoEvidence-shaped fields, never
-`execution.initial_intent` (the label). See `goal.md` §"Stage 5" and
+Stage 5 adds:
+- `vision_features.py` (frozen DINOv2/DINOv3/V-JEPA-2.1 feature extraction
+  from demo RGB frames — P1). Reads only DemoEvidence-shaped fields, never
+  `execution.initial_intent` (the label).
+- `vision_intent.py` — decodes the *initial* slot intent from a demo clip:
+  frozen encoder → `StandardScaler` → `IntentHead` → nearest-centroid.
+  `VisionIntentExtractor` (single view) and `DualViewIntentExtractor` (the
+  dual-stream reader — a routing table maps each factor to the external view
+  that sees it, so per-factor observability stays legible; concat was rejected
+  because it entangles which view grounds which factor). This is what removes
+  the JSON intent from the method input.
+
+See `goal.md` §"Stage 5" and
 `docs/superpowers/specs/2026-05-24-stage5-vision-encoder-swap-design.md`.
 
 ## `scripts/`
@@ -90,13 +115,36 @@ from demo RGB frames — P1). Reads only DemoEvidence-shaped fields, never
 - `render_stage0_maniskill.py` — render three-phase MP4s per task (GPU).
 - `render_stage0_topdown.py` — sim-free 2D top-down render.
 - `smoke_pushcube.py` — PushCube loadability check.
+
+Stage-5 CLIs (GPU for the encoder forward / sim render; sim-free for
+train/eval on cached `.npy`):
+
+- `stage5_render_demo_frames.py` — render per-seed demo clips to `.npz`
+  (`--camera` renders each external view to its own out-dir for the
+  dual-stream cut).
+- `stage5_cache_dinov2.py` / `stage5_cache_vjepa.py` — cache frozen features
+  per seed; `--frame-select {all,final,first_last,last5}` picks the pooling
+  frames (final-state pooling for `goal_state`).
+- `stage5_p1_g1_cert.py`, `stage5_p1_train_pack.py`, `stage5_p1_run_eval.py`
+  — P1 grounding cert + LatentPack train + held-out eval.
+- `stage5_goal_state_probe.py` — StackCube `goal_state` probe; `--camera`
+  (high-oblique presets), `--retract`, `--dump-features` (writes both-class
+  retract features + `labels.json` as a pack train set).
+- `stage5_train_4way_pack.py` (`--factors` subset → per-view packs),
+  `stage5_train_goalstate_pack.py` (grounds the 2-class `goal_state` factor).
+- `stage5_natural_loop_eval.py` — the PushCube **seed-decoupled** natural-failure
+  loop (demo seed ≠ execution seed → natural geometry mismatch, NO injected
+  block); vision-decode → execute → displacement-vector feedback → revise.
+- `stage5_goalstate_loop_eval.py` — the StackCube `goal_state` loop driver
+  (vision-decode → `goal_not_satisfied` → `goal_refinement` operator → retry).
+- `stage5_p2_vlm_eval.py` + `stage5_p2_*` — P2 VLM-attribution eval/reports.
 - `_diag_*.py` — **scratch** diagnostics (mostly TurnFaucet poke-turn探索).
   Not part of the tested codebase; `_diag_tf_poke5.py` is the empirical
   reference cited by the TurnFaucet runner.
 
 ## `tests/`
 
-343 sim-free unit tests. Per-module (`test_schemas`, `test_failure`,
+631 sim-free unit tests. Per-module (`test_schemas`, `test_failure`,
 `test_revision`, `test_episode`, `test_eval`), per-task adapter/skill, CLI
 (`test_stage0_collect_cli`), render modules, the Stage-4 probe tests
 (`test_stage4_smoke/features/probe/report`), plus a single-factor-revision
