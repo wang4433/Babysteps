@@ -31,8 +31,9 @@ The active development track is **Stage 5** (`goal.md` §"Stage 5"):
 2. **P2 — VLM attribution**: a VLM (InternVL3.5-8B; the step is
    VLM-agnostic) for failure diagnosis (constrained to one factor name,
    never free-form replanning).
-3. **P3 — World model counterfactual**: learned dynamics for G3
-   selectivity certification.
+3. **P3 — Simulator counterfactual certification**: paired ManiSkill
+   rollouts for G3 selectivity; evaluation-only, with no learned world model
+   in the online loop.
 4. **P4 — Learned action decoder** (optional): replace skill compiler.
 
 Stage 0–4 are complete; their discrete schema and episode data serve as

@@ -69,11 +69,12 @@ across PushCube, PickCube, StackCube. Job 10826466.
 
 Full data: `reports/stage5/m3_baselines/main_table.{md,json}`.
 
-For Diffusion Policy / VLA baselines, I’d include them as either:
-- real baselines if we can run them fairly, or
-- related-work positioning if we cannot.
-
-Do not put Diffusion Policy in the main table unless we can actually evaluate it or clearly label it as “action-level baseline.”
+**Submission baseline decision (2026-06-06):** do not put Diffusion Policy,
+ACT, or a generalist VLA in the main recovery table. They learn low-level
+actions from action-labeled demonstrations, while BABYSTEPS holds the
+controller fixed and studies post-failure intent revision. The fair primary
+competitor is the live `vlm_free_replan` condition; oracle remains a separated
+upper bound. See `docs/related_work_and_baselines.md`.
 
 ## Milestone 4: Metrics And Main Table
 
@@ -106,8 +107,8 @@ learned-repair split**:
 
 > A VLM diagnoses which latent intent factor caused a manipulation
 > failure; a learned slot-local editor repairs only that factor in
-> continuous visual-intent space, verified by counterfactual
-> world-model rollouts.
+> continuous visual-intent space, certified with paired counterfactual
+> simulator rollouts.
 
 ### M5a: Vision Encoder Swap (P1 — critical first step)
 
@@ -214,24 +215,25 @@ Deliverable:
 - Comparison row: `vlm_diagnosis_slot_edit` vs. `vlm_free_replan` on
   recovery rate AND selectivity (frozen-factor preservation).
 
-### M5c: World Model Counterfactual (P3)
+### M5c: Simulator Counterfactual Certification (P3)
 
-> **Status (2026-06-03): NOT STARTED — de-risking falsified.** No world-model
-> code/data/eval exists yet. The P3 de-risking probes were all falsified: VLM
-> demo-read (PushCube 0.0, StackCube 0.25) and top-down / oblique viewpoint do
-> not recover `object_motion` above the gate. Separately, the TurnFaucet
-> (Sub-project D) re-grasp oracle is feasible (28–32% vs 4% poke baseline;
-> vertical-axis subset clears the 30% gate) but productionization is pending a
-> Stage-4 feature-dim decision. Go/no-go for P3 before the ICLR deadline is
-> open — fallback is mechanical G2 bit-identity certification.
+> **Status (2026-06-06): WORLD MODEL CANCELLED BY DESIGN; simulator eval
+> pending.** ManiSkill already provides the exact, cheap forward process, and
+> the current loop has no multiple-candidate revision-ranking branch. Training
+> an approximate latent dynamics model would add error without helping the
+> method. P3 is now an evaluation-only paired counterfactual certification.
 
-**Goal:** Train a latent dynamics model on ManiSkill rollouts. Use it
-for G3 selectivity certification (counterfactual slot-drift test).
+**Goal:** On matched held-out seeds, compare `same_intent`, BABYSTEPS'
+single-slot edit, and `oracle_single_slot`. Verify that the edited factor
+improves while frozen-factor violation rates remain equivalent to the oracle
+single-slot intervention within a pre-registered margin.
 
 Deliverable:
-- Forward model on rollout data.
-- G3 counterfactual selectivity report.
-- Revision-ranking ablation (world-model-guided edit selection).
+- Factor-to-observable violation metric registry for the two latent tasks.
+- Paired true-simulator counterfactual evaluation script.
+- G3 report with effect sizes and equivalence confidence intervals.
+- No revision-ranking ablation unless a future task introduces multiple real
+  candidate edits.
 
 ### M5d: Learned Action Decoder (P4 — optional)
 
@@ -242,23 +244,28 @@ Deferrable; the paper is strong with M5a–M5c and existing compilers.
 
 ## Milestone 6: Related Work Positioning
 
-Need a clean related-work story:
+> **Positioning locked 2026-06-06.** Full rationale and citations:
+> `docs/related_work_and_baselines.md`.
 
-- **Diffusion Policy / VLA:** maps observation/instruction to action.
-- **Third-person imitation:** transfers behavior across viewpoint/embodiment.
-- **Affordance / correspondence methods:** infer contact or action possibilities.
-- **Inner Monologue / ReAct / SayCan:** replan after feedback.
-- **BABYSTEPS:** VLM diagnoses which latent intent factor was wrong; a
-  learned slot-local editor revises only that factor in visual-intent
-  space.
-
-This distinction needs to appear in the intro, method, and experiments.
+- **Direct competitors:** Inner Monologue and REFLECT-style feedback-driven
+  broad replanning. Empirical main baseline: live `vlm_free_replan`.
+- **Failure reasoning neighbors:** AHA and SAFE detect/reason about failures;
+  BABYSTEPS additionally maps the diagnosis to one typed latent slot and
+  constrains the repair.
+- **Action-level recovery neighbor:** FailSafe improves VLA recovery using
+  generated failure-action data; BABYSTEPS edits structured intent and audits
+  preservation.
+- **Adjacent, not main baselines:** Diffusion Policy, ACT, and generalist VLAs
+  solve action generation under different supervision and controller
+  assumptions.
+- **BABYSTEPS:** diagnose one failed intent factor, repair only that slot, and
+  measure what remains unchanged.
 
 ## Milestone 7: Paper Draft
 
 ICLR deadlines are usually around September/October.
 
-**Revised schedule (as of 2026-06-03):**
+**Revised schedule (as of 2026-06-06):**
 
 **Done (ahead of schedule):**
 - M5b (P2 VLM attribution) — complete and validated: all 5 tasks, C1 > C2
@@ -268,16 +275,17 @@ ICLR deadlines are usually around September/October.
   locked to PushCube.
 
 **June (now):**
-- **P3 go/no-go decision** (the critical open call): train a latent dynamics
-  model for G3 counterfactual selectivity, or fall back to mechanical G2
-  bit-identity certification as the paper version.
+- Integrate StackCube into the unified latent/VLM evaluation and refresh the
+  stale PushCube-only honesty boundary.
+- Implement the small paired-simulator G3 certification; do not train a world
+  model.
 - Resolve TurnFaucet (Sub-project D) productionization (Stage-4 feature-dim
   decision) — or move it to the appendix as attribution-only.
 - Commit the outstanding object-relation diagnostics + n=200 reports.
 
 **July:**
-- If P3 greenlit: forward model + G3 counterfactual report. Otherwise
-  consolidate the 5-task P2 main table + PushCube end-to-end latent story.
+- Consolidate the 5-task P2 main table + two-task end-to-end latent story and
+  the paired-simulator G3 report.
 - Run the final 5-task × 50-seed evaluation; ablations (slot dim, multi-retry).
 
 **August:**
@@ -287,13 +295,10 @@ CrossViewPush in the main table (5 tasks total).
 **Early September:**
 Polish, rerun final experiments, write rebuttal-ready limitations.
 
-## Priorities (updated 2026-06-03)
+## Priorities (updated 2026-06-06)
 
-M5a (P1) and M5b (P2) are done. The immediate next step is the **P3
-go/no-go decision**:
-
-> Either train a latent dynamics model for G3 counterfactual selectivity,
-> or accept mechanical G2 bit-identity certification as the paper version
-> and consolidate the P2 main table + PushCube end-to-end latent story.
-> In parallel: resolve TurnFaucet productionization (or appendix it) and
-> commit the outstanding object-relation diagnostics.
+M5a (P1) and M5b (P2) are done. The learned-world-model go/no-go is resolved:
+**do not build it.** The immediate work is to integrate the StackCube latent
+result, implement paired ManiSkill G3 certification, and consolidate the
+two-task latent story. TurnFaucet remains appendix-level unless its execution
+path is productionized without destabilizing the Stage-5 critical path.

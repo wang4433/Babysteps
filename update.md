@@ -37,7 +37,7 @@ See `goal.md` §"Stage 5" for the full spec. Summary:
 | --- | --- | --- | --- |
 | **P1** | Vision encoder swap | 20-dim handcrafted → frozen DINOv2 (768-dim) on demo frames | G1 probe ≥ 90% on vision features |
 | **P2** | VLM attribution | Rule table / learned MLP → VLM, InternVL3.5-8B (constrained to one factor name) | VLM attr acc ≥ rule; VLM-diag + slot-edit beats VLM free-replan on selectivity |
-| **P3** | World model counterfactual | Mechanical G2 (bit-identity) → learned dynamics model for G3 | G3 counterfactual selectivity passes |
+| **P3** | Simulator counterfactual certification | Mechanical G2 (bit-identity) → paired true-simulator interventions | G3 edited-factor improvement + frozen-factor equivalence passes |
 | **P4** | Learned action decoder | Fixed skill compiler → small policy conditioned on G | Optional; deferrable |
 
 **P1 is the critical first step.** Without vision-grounded features,
@@ -58,8 +58,8 @@ the "latent" claim doesn't land regardless of what else is added.
 >
 > **One-line:** A VLM diagnoses which latent intent factor caused a
 > manipulation failure; a learned slot-local editor repairs only that
-> factor in continuous visual-intent space, verified by counterfactual
-> world-model rollouts.
+> factor in continuous visual-intent space, certified with paired
+> counterfactual simulator rollouts.
 >
 > **Punchline:** VLMs are good at diagnosing failures but wasteful at
 > fixing them. Give the VLM the diagnosis job; give a learned
@@ -274,6 +274,13 @@ Locked baselines (`docs/milestone1_locked_claim.md` §4):
 | `text_feedback_replan`     | Inner-Monologue-style feedback replan           |
 | `full_replan_analogue`     | full intent regeneration                        |
 | `oracle_factor_revision`   | upper bound (revise the GT wrong factor only)   |
+
+For the Stage-5 paper table, the live `vlm_free_replan` condition is the
+primary broad-replanning baseline. The two rows above are procedural controls,
+not claimed implementations of Inner Monologue or REFLECT. Diffusion Policy,
+ACT, and generalist VLAs are related action-generation work rather than
+main-table recovery baselines because they replace the controller and require
+different supervision. See `docs/related_work_and_baselines.md`.
 
 Headline metrics: final / retry success, factor-attribution accuracy,
 **frozen-factor preservation**, **unnecessary-factor-change rate**, harmful

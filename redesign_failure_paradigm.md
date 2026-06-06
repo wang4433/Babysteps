@@ -261,3 +261,31 @@ stays the same. The priority ordering:
 
 The clutter render (job 10848944) and Phase 3 diagnostic (job 10848995) are
 done and remain valid as supplementary material.
+
+## Submission Baseline Boundary
+
+The paper's main comparison is **failure recovery under a shared execution
+layer**, not low-level action-policy learning. All recovery methods must share
+the first attempt, failure evidence, controller/skill library, held-out seeds,
+and retry budget.
+
+Main comparison:
+
+- `same_intent_retry`;
+- `random_factor_revision`;
+- live VLM full-intent regeneration (`vlm_free_replan`);
+- BABYSTEPS VLM diagnosis + slot-local edit;
+- oracle single-slot revision, labeled only as an upper bound.
+
+The procedural `text_feedback_replan` and `full_replan_analogue` controls remain
+valid mechanism ablations, but they are not implementations of Inner Monologue
+or REFLECT. The live VLM free-replan condition is the paper-facing broad
+replanning baseline.
+
+Diffusion Policy and ACT are related action-generation methods, not main-table
+baselines: they require action-labeled demonstrations and replace the
+controller, while BABYSTEPS studies what intent to revise after a shared
+controller fails. Comparing raw success or inference speed would conflate
+control quality, supervision, and recovery. See
+`docs/related_work_and_baselines.md` for the complete positioning and
+references, including Inner Monologue, REFLECT, AHA, SAFE, and FailSafe.

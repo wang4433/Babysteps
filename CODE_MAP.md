@@ -27,6 +27,11 @@ milestones.md     ICLR milestone roadmap (M1–M7)
 goal.md / update.md  Stage-0 goal / cross-view pivot rationale
 ```
 
+Paper-facing comparison policy:
+`docs/related_work_and_baselines.md` distinguishes direct failure-recovery
+baselines from adjacent action-policy work and records why Diffusion Policy /
+ACT are not in the main table.
+
 ## `babysteps/` — the package
 
 Pure, sim-free modules orchestrating the loop:

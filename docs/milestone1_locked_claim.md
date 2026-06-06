@@ -36,9 +36,9 @@ replanning — is the contribution.
   about the task** by editing a typed latent factor.
 - *Diffusion Policy / VLA* map observation/instruction to **actions**.
   BABYSTEPS does not generate actions from the failure; it diagnoses which
-  structured factor to edit. (Diffusion is reserved as an optional
-  counterfactual *scorer* for edit ranking — not a controller — in a later
-  stage.)
+  structured factor to edit. These methods use different action supervision
+  and replace the controller, so they are related work rather than main-table
+  recovery baselines.
 - *Full replanning* can recover success but changes correct factors too. The
   central empirical comparison is **BABYSTEPS-selective vs. full
   replanning**: same-or-better recovery, far higher preservation of correct
@@ -256,8 +256,8 @@ learned-repair split**, not just the discrete framework:
 
 > A VLM diagnoses which latent intent factor caused a manipulation
 > failure; a learned slot-local editor repairs only that factor in
-> continuous visual-intent space, verified by counterfactual
-> world-model rollouts.
+> continuous visual-intent space, certified with paired counterfactual
+> ManiSkill rollouts.
 
 This requires that the slot intents are grounded in raw visual
 observations (not handcrafted features). The Stage-0 discrete schema
@@ -279,13 +279,20 @@ The M3 procedural baselines (7 rows × 3 tasks) remain as the
 7. **`vlm_free_replan`** (VLM regenerates entire intent JSON) — the baseline to beat on selectivity.
 8. `oracle_factor_revision` — upper bound.
 
+`vlm_free_replan` is the primary broad-replanning competitor. The oracle row
+must be visually separated and labeled as an upper bound. Diffusion Policy,
+ACT, and generalist VLAs are excluded from this table because they replace the
+action controller and require action-labeled demonstrations; a raw
+success/latency comparison would not isolate failure-guided intent revision.
+See `docs/related_work_and_baselines.md`.
+
 **Key new columns:**
 
 | Metric | What it shows |
 | --- | --- |
 | VLM attribution accuracy | Does VLM diagnosis match oracle wrong factor? |
 | Vision G1 probe accuracy | Do vision-grounded slots recover discrete factors? |
-| G3 counterfactual selectivity | Does the world model confirm single-slot sufficiency? |
+| G3 counterfactual selectivity | Do paired true-simulator interventions confirm edited-factor improvement without frozen-factor violations? |
 
 **Headline result target:**
 
@@ -306,7 +313,8 @@ an appendix. Increase seeds to **50 per task** with error bars.
 
 1. P1 — Vision encoder swap (DINOv2 on demo frames). Gate: G1 ≥ 90%.
 2. P2 — VLM attribution baseline (InternVL3.5-8B). Gate: attr acc ≥ rule.
-3. P3 — World model counterfactual. Gate: G3 passes.
+3. P3 — paired ManiSkill counterfactual certification. Gate: edited-factor
+   improvement + frozen-factor equivalence to oracle single-slot intervention.
 4. P4 — Learned action decoder. Optional / deferrable.
 
 ### Groundability scope — the latent claim, written narrow-but-hard
