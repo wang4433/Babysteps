@@ -1,0 +1,1945 @@
+{
+  "config": {
+    "task": "PushCube-v1",
+    "eval_seeds": "100-149",
+    "demo_seed_offset": 900,
+    "mismatch": "never",
+    "fake": false,
+    "revisers": [
+      "same_intent",
+      "feedback_residual",
+      "latent_learned",
+      "oracle_value"
+    ],
+    "vision_intent": true,
+    "vision_encoder": "vjepa21",
+    "axes": "xy"
+  },
+  "summary": {
+    "n": 50,
+    "n_mismatch": 0,
+    "n_initial_fail": 3,
+    "initial_success_rate": 0.94,
+    "final_success_rate": {
+      "same_intent": 1.0,
+      "feedback_residual": 0.96,
+      "latent_learned": 0.94,
+      "oracle_value": 0.94
+    },
+    "final_success_rate_on_mismatch": {
+      "same_intent": 0.0,
+      "feedback_residual": 0.0,
+      "latent_learned": 0.0,
+      "oracle_value": 0.0
+    },
+    "final_success_rate_on_initial_fail": {
+      "same_intent": 1.0,
+      "feedback_residual": 0.3333333333333333,
+      "latent_learned": 0.0,
+      "oracle_value": 0.0
+    },
+    "vision_decode_acc": 1.0
+  },
+  "rows": [
+    {
+      "demo_seed": 1000,
+      "exec_seed": 100,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.004850327968597412,
+        -0.10118372365832329
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1001,
+      "exec_seed": 101,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.12476370856165886,
+        0.008525314391590655
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1002,
+      "exec_seed": 102,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.013922132551670074,
+        -0.12412547320127487
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1003,
+      "exec_seed": 103,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.12820082157850266,
+        -0.000813804566860199
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1004,
+      "exec_seed": 104,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.11972682923078537,
+        0.009642310440540314
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1005,
+      "exec_seed": 105,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.002572355791926384,
+        0.13059499114751816
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1006,
+      "exec_seed": 106,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.004290107637643814,
+        0.1276528313755989
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1007,
+      "exec_seed": 107,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.1320445016026497,
+        0.0006586834788322449
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1008,
+      "exec_seed": 108,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10545789450407028,
+        0.001990538090467453
+      ],
+      "vision_decoded_contact": "plus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1009,
+      "exec_seed": 109,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10889740288257599,
+        -0.0004979092627763748
+      ],
+      "vision_decoded_contact": "plus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1010,
+      "exec_seed": 110,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10991210490465164,
+        0.002561047673225403
+      ],
+      "vision_decoded_contact": "plus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1011,
+      "exec_seed": 111,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.013961203396320343,
+        -0.1323433816432953
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1012,
+      "exec_seed": 112,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.11548524722456932,
+        -0.0034214556217193604
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1013,
+      "exec_seed": 113,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10881809145212173,
+        -0.00032646162435412407
+      ],
+      "vision_decoded_contact": "plus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1014,
+      "exec_seed": 114,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.05527418106794357,
+        -0.10003148019313812
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": false,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": false,
+          "revised": true,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": false,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1015,
+      "exec_seed": 115,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.11435343697667122,
+        0.01081220805644989
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1016,
+      "exec_seed": 116,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.0017006322741508484,
+        0.12767616659402847
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1017,
+      "exec_seed": 117,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10721578449010849,
+        0.0027274154126644135
+      ],
+      "vision_decoded_contact": "plus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1018,
+      "exec_seed": 118,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.0014067627489566803,
+        0.12920576706528664
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1019,
+      "exec_seed": 119,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.005160212516784668,
+        0.1269148364663124
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1020,
+      "exec_seed": 120,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.010177155956625938,
+        -0.13365300744771957
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1021,
+      "exec_seed": 121,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.11643683910369873,
+        -0.0018154522404074669
+      ],
+      "vision_decoded_contact": "plus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1022,
+      "exec_seed": 122,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.1201188713312149,
+        0.01638052612543106
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1023,
+      "exec_seed": 123,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.1169925220310688,
+        0.007152344100177288
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1024,
+      "exec_seed": 124,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.11906087398529053,
+        0.0041334908455610275
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1025,
+      "exec_seed": 125,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.05150417238473892,
+        -0.10852737724781036
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": false,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": false,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": false,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1026,
+      "exec_seed": 126,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "displacement_vec": [
+        0.054803334176540375,
+        0.10236469656229019
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": false,
+          "revised": true,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": false,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1027,
+      "exec_seed": 127,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.11342141777276993,
+        -0.004062317311763763
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1028,
+      "exec_seed": 128,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.11871933192014694,
+        0.00556795671582222
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1029,
+      "exec_seed": 129,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.1112217977643013,
+        -0.0010528825223445892
+      ],
+      "vision_decoded_contact": "plus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1030,
+      "exec_seed": 130,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.11812889575958252,
+        -0.00042857322841882706
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1031,
+      "exec_seed": 131,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.0006852541118860245,
+        -0.12899260967969894
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1032,
+      "exec_seed": 132,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.003572613000869751,
+        0.1311248131096363
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1033,
+      "exec_seed": 133,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.00030630454421043396,
+        -0.10053065419197083
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1034,
+      "exec_seed": 134,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.021948345005512238,
+        -0.12978465110063553
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1035,
+      "exec_seed": 135,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.00026376545429229736,
+        -0.10088805854320526
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1036,
+      "exec_seed": 136,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.0004256144165992737,
+        0.12702246755361557
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1037,
+      "exec_seed": 137,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.009102191776037216,
+        0.13203828781843185
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1038,
+      "exec_seed": 138,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10705574601888657,
+        -0.008651040494441986
+      ],
+      "vision_decoded_contact": "plus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1039,
+      "exec_seed": 139,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.006284430623054504,
+        -0.1319853812456131
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1040,
+      "exec_seed": 140,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.00077012088149786,
+        0.13060805946588516
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1041,
+      "exec_seed": 141,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10998300462961197,
+        0.00025072693824768066
+      ],
+      "vision_decoded_contact": "plus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1042,
+      "exec_seed": 142,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.1384172961115837,
+        0.0009179860353469849
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1043,
+      "exec_seed": 143,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.014330923557281494,
+        0.1301964335143566
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1044,
+      "exec_seed": 144,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.031730666756629944,
+        -0.12248104810714722
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1045,
+      "exec_seed": 145,
+      "demo_face": "plus_y_face",
+      "exec_face": "plus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.0011482741683721542,
+        -0.137979868799448
+      ],
+      "vision_decoded_contact": "plus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1046,
+      "exec_seed": 146,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.11839593201875687,
+        0.010915622115135193
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1047,
+      "exec_seed": 147,
+      "demo_face": "minus_y_face",
+      "exec_face": "minus_y_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_y_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.010248661041259766,
+        0.13081489503383636
+      ],
+      "vision_decoded_contact": "minus_y_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_y_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1048,
+      "exec_seed": 148,
+      "demo_face": "minus_x_face",
+      "exec_face": "minus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "minus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        0.11823143437504768,
+        -0.005866684019565582
+      ],
+      "vision_decoded_contact": "minus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "minus_x_face"
+        }
+      }
+    },
+    {
+      "demo_seed": 1049,
+      "exec_seed": 149,
+      "demo_face": "plus_x_face",
+      "exec_face": "plus_x_face",
+      "direction_mismatch": false,
+      "initial_intent_contact": "plus_x_face",
+      "initial_success": true,
+      "failure_predicate": "none",
+      "displacement_vec": [
+        -0.10693084448575974,
+        -0.00041208416223526
+      ],
+      "vision_decoded_contact": "plus_x_face",
+      "vision_decode_correct": true,
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "feedback_residual": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "latent_learned": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_contact": "plus_x_face"
+        }
+      }
+    }
+  ]
+}

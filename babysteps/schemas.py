@@ -330,6 +330,13 @@ class FailurePacket:
     failure_predicate: str
     object_displacement: Optional[float]
     direction_alignment: Optional[float]
+    # Stage-5 natural-failure loop: the 2D object displacement VECTOR
+    # (final_obj_xy - initial_obj_xy) in world frame. `object_displacement`
+    # above is just its magnitude; the vector is the execution-feedback signal
+    # that breaks the +y/-y sign ambiguity the scalar cannot (see
+    # redesign_failure_paradigm.md / the natural-loop rework). Additive +
+    # default None → existing records/snapshots unchanged.
+    object_displacement_vec: Optional[tuple[float, float]] = None
 
     def __post_init__(self) -> None:
         _validate(self.failure_predicate, FAILURE_PREDICATES, "failure_predicate")
@@ -341,16 +348,22 @@ class FailurePacket:
             "failure_predicate": self.failure_predicate,
             "object_displacement": self.object_displacement,
             "direction_alignment": self.direction_alignment,
+            "object_displacement_vec": (
+                list(self.object_displacement_vec)
+                if self.object_displacement_vec is not None else None
+            ),
         }
 
     @classmethod
     def from_dict(cls, d: dict) -> "FailurePacket":
+        vec = d.get("object_displacement_vec")
         return cls(
             chosen_intent=Intent.from_dict(d["chosen_intent"]),
             execution_trace=dict(d["execution_trace"]),
             failure_predicate=d["failure_predicate"],
             object_displacement=d.get("object_displacement"),
             direction_alignment=d.get("direction_alignment"),
+            object_displacement_vec=(tuple(vec) if vec is not None else None),
         )
 
 

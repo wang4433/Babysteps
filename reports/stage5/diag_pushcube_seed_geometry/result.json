@@ -1,0 +1,390 @@
+{
+  "section_a": {
+    "n_seeds": 100,
+    "cube_x": {
+      "min": -0.09927510470151901,
+      "max": 0.09745868295431137,
+      "range": 0.19673378765583038,
+      "std": 0.05508966725677121
+    },
+    "cube_y": {
+      "min": -0.09992273151874542,
+      "max": 0.09799855202436447,
+      "range": 0.1979212835431099,
+      "std": 0.05394224174547046
+    },
+    "goal_x": {
+      "min": 0.10072489827871323,
+      "max": 0.297458678483963,
+      "range": 0.1967337802052498,
+      "std": 0.05508966887225118
+    },
+    "goal_y": {
+      "min": -0.09992273151874542,
+      "max": 0.09799855202436447,
+      "range": 0.1979212835431099,
+      "std": 0.05394224174547046
+    },
+    "goal_rel_cube_angle_deg": {
+      "min": 0.0,
+      "max": 0.0,
+      "range": 0.0,
+      "std": 0.0
+    },
+    "goal_rel_cube_dist_m": {
+      "min": 0.19999999552965164,
+      "max": 0.20000001043081284,
+      "range": 1.4901161193847656e-08,
+      "std": 5.4780770673310155e-09
+    },
+    "native_correct_face_dist": {
+      "minus_x_face": 100
+    }
+  },
+  "section_b": {
+    "translate_+x": {
+      "n": 10,
+      "success_rate": 1.0,
+      "per_seed": [
+        {
+          "seed": 0,
+          "success": true,
+          "contact": "minus_x_face",
+          "align": null
+        },
+        {
+          "seed": 1,
+          "success": true,
+          "contact": "minus_x_face",
+          "align": null
+        },
+        {
+          "seed": 2,
+          "success": true,
+          "contact": "minus_x_face",
+          "align": null
+        },
+        {
+          "seed": 3,
+          "success": true,
+          "contact": "minus_x_face",
+          "align": null
+        },
+        {
+          "seed": 4,
+          "success": true,
+          "contact": "minus_x_face",
+          "align": null
+        },
+        {
+          "seed": 5,
+          "success": true,
+          "contact": "minus_x_face",
+          "align": null
+        },
+        {
+          "seed": 6,
+          "success": true,
+          "contact": "minus_x_face",
+          "align": null
+        },
+        {
+          "seed": 7,
+          "success": true,
+          "contact": "minus_x_face",
+          "align": null
+        },
+        {
+          "seed": 8,
+          "success": true,
+          "contact": "minus_x_face",
+          "align": null
+        },
+        {
+          "seed": 9,
+          "success": true,
+          "contact": "minus_x_face",
+          "align": null
+        }
+      ]
+    },
+    "translate_-x": {
+      "n": 10,
+      "success_rate": 1.0,
+      "per_seed": [
+        {
+          "seed": 0,
+          "success": true,
+          "contact": "plus_x_face",
+          "align": null
+        },
+        {
+          "seed": 1,
+          "success": true,
+          "contact": "plus_x_face",
+          "align": null
+        },
+        {
+          "seed": 2,
+          "success": true,
+          "contact": "plus_x_face",
+          "align": null
+        },
+        {
+          "seed": 3,
+          "success": true,
+          "contact": "plus_x_face",
+          "align": null
+        },
+        {
+          "seed": 4,
+          "success": true,
+          "contact": "plus_x_face",
+          "align": null
+        },
+        {
+          "seed": 5,
+          "success": true,
+          "contact": "plus_x_face",
+          "align": null
+        },
+        {
+          "seed": 6,
+          "success": true,
+          "contact": "plus_x_face",
+          "align": null
+        },
+        {
+          "seed": 7,
+          "success": true,
+          "contact": "plus_x_face",
+          "align": null
+        },
+        {
+          "seed": 8,
+          "success": true,
+          "contact": "plus_x_face",
+          "align": null
+        },
+        {
+          "seed": 9,
+          "success": true,
+          "contact": "plus_x_face",
+          "align": null
+        }
+      ]
+    },
+    "translate_+y": {
+      "n": 10,
+      "success_rate": 0.0,
+      "per_seed": [
+        {
+          "seed": 0,
+          "success": false,
+          "contact": "minus_y_face",
+          "align": null
+        },
+        {
+          "seed": 1,
+          "success": false,
+          "contact": "minus_y_face",
+          "align": null
+        },
+        {
+          "seed": 2,
+          "success": false,
+          "contact": "minus_y_face",
+          "align": null
+        },
+        {
+          "seed": 3,
+          "success": false,
+          "contact": "minus_y_face",
+          "align": null
+        },
+        {
+          "seed": 4,
+          "success": false,
+          "contact": "minus_y_face",
+          "align": null
+        },
+        {
+          "seed": 5,
+          "success": false,
+          "contact": "minus_y_face",
+          "align": null
+        },
+        {
+          "seed": 6,
+          "success": false,
+          "contact": "minus_y_face",
+          "align": null
+        },
+        {
+          "seed": 7,
+          "success": false,
+          "contact": "minus_y_face",
+          "align": null
+        },
+        {
+          "seed": 8,
+          "success": false,
+          "contact": "minus_y_face",
+          "align": null
+        },
+        {
+          "seed": 9,
+          "success": false,
+          "contact": "minus_y_face",
+          "align": null
+        }
+      ]
+    },
+    "translate_-y": {
+      "n": 10,
+      "success_rate": 0.2,
+      "per_seed": [
+        {
+          "seed": 0,
+          "success": false,
+          "contact": "plus_y_face",
+          "align": null
+        },
+        {
+          "seed": 1,
+          "success": false,
+          "contact": "plus_y_face",
+          "align": null
+        },
+        {
+          "seed": 2,
+          "success": false,
+          "contact": "plus_y_face",
+          "align": null
+        },
+        {
+          "seed": 3,
+          "success": true,
+          "contact": "plus_y_face",
+          "align": null
+        },
+        {
+          "seed": 4,
+          "success": false,
+          "contact": "plus_y_face",
+          "align": null
+        },
+        {
+          "seed": 5,
+          "success": false,
+          "contact": "plus_y_face",
+          "align": null
+        },
+        {
+          "seed": 6,
+          "success": false,
+          "contact": "plus_y_face",
+          "align": null
+        },
+        {
+          "seed": 7,
+          "success": true,
+          "contact": "plus_y_face",
+          "align": null
+        },
+        {
+          "seed": 8,
+          "success": false,
+          "contact": "plus_y_face",
+          "align": null
+        },
+        {
+          "seed": 9,
+          "success": false,
+          "contact": "plus_y_face",
+          "align": null
+        }
+      ]
+    }
+  },
+  "section_c": {
+    "demo_seed": 0,
+    "demo_face": "minus_x_face",
+    "n_exec": 10,
+    "transplant_success_rate": 1.0,
+    "n_face_mismatch": 0,
+    "rows": [
+      {
+        "exec_seed": 0,
+        "demo_face": "minus_x_face",
+        "exec_correct_face": "minus_x_face",
+        "face_matches": true,
+        "success": true
+      },
+      {
+        "exec_seed": 1,
+        "demo_face": "minus_x_face",
+        "exec_correct_face": "minus_x_face",
+        "face_matches": true,
+        "success": true
+      },
+      {
+        "exec_seed": 2,
+        "demo_face": "minus_x_face",
+        "exec_correct_face": "minus_x_face",
+        "face_matches": true,
+        "success": true
+      },
+      {
+        "exec_seed": 3,
+        "demo_face": "minus_x_face",
+        "exec_correct_face": "minus_x_face",
+        "face_matches": true,
+        "success": true
+      },
+      {
+        "exec_seed": 4,
+        "demo_face": "minus_x_face",
+        "exec_correct_face": "minus_x_face",
+        "face_matches": true,
+        "success": true
+      },
+      {
+        "exec_seed": 5,
+        "demo_face": "minus_x_face",
+        "exec_correct_face": "minus_x_face",
+        "face_matches": true,
+        "success": true
+      },
+      {
+        "exec_seed": 6,
+        "demo_face": "minus_x_face",
+        "exec_correct_face": "minus_x_face",
+        "face_matches": true,
+        "success": true
+      },
+      {
+        "exec_seed": 7,
+        "demo_face": "minus_x_face",
+        "exec_correct_face": "minus_x_face",
+        "face_matches": true,
+        "success": true
+      },
+      {
+        "exec_seed": 8,
+        "demo_face": "minus_x_face",
+        "exec_correct_face": "minus_x_face",
+        "face_matches": true,
+        "success": true
+      },
+      {
+        "exec_seed": 9,
+        "demo_face": "minus_x_face",
+        "exec_correct_face": "minus_x_face",
+        "face_matches": true,
+        "success": true
+      }
+    ]
+  },
+  "verdict": "RAW-SEED-NARROW: native goal direction barely varies (angle range 0 deg, 1 distinct correct faces) -> must vary the goal direction via the injection mechanism to create natural failures on a fresh exec scene."
+}
