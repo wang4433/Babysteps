@@ -29,3 +29,22 @@ def test_main_returns_nonzero_on_missing_frames_dir(tmp_path: Path):
     rc = main(["--frames-dir", str(tmp_path / "missing"),
                "--out-dir", str(tmp_path / "out")])
     assert rc != 0
+
+
+def test_select_frames_final_state_pooling():
+    """Frame subsetting for the goal_state final-state pooling (whole-clip mean
+    dilutes a final-state factor). Mirrors clip_pool_frame_indices semantics."""
+    from scripts.stage5_cache_dinov2 import select_frames
+
+    frames = list(range(10))  # stand-ins; select_frames is index-only
+    assert select_frames(frames, "all") == frames
+    assert select_frames(frames, "final") == [9]
+    assert select_frames(frames, "first_last") == [0, 9]
+    assert select_frames(frames, "last5") == [5, 6, 7, 8, 9]
+    # short clip: last5 clamps; first_last on a 1-frame clip collapses to [x,x]
+    assert select_frames([7], "first_last") == [7, 7]
+    assert select_frames([1, 2, 3], "last5") == [1, 2, 3]
+    assert select_frames([], "first_last") == []
+    import pytest
+    with pytest.raises(ValueError):
+        select_frames(frames, "nope")

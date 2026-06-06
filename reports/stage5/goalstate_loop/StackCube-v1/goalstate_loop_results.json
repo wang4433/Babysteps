@@ -1,0 +1,1282 @@
+{
+  "config": {
+    "task": "StackCube-v1",
+    "pack_dir": "models/stage5/goalstate/StackCube-v1",
+    "demo_features_dir": "datasets/stage5/goalstate/StackCube-v1/eval_feats",
+    "feature_suffix": "dinov2_fl",
+    "eval_seeds": "200-249",
+    "revisers": [
+      "same_intent",
+      "operator",
+      "oracle_value"
+    ]
+  },
+  "summary": {
+    "n": 50,
+    "n_initial_fail": 5,
+    "vision_decode_acc": 0.98,
+    "initial_success_rate": 0.9,
+    "final_success_rate": {
+      "same_intent": 0.9,
+      "operator": 0.92,
+      "oracle_value": 0.92
+    },
+    "final_success_rate_on_initial_fail": {
+      "same_intent": 0.0,
+      "operator": 0.2,
+      "oracle_value": 0.2
+    }
+  },
+  "rows": [
+    {
+      "seed": 200,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 201,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 202,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "revisers": {
+        "same_intent": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 203,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 204,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 205,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 206,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 207,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 208,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 209,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 210,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 211,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 212,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "revisers": {
+        "same_intent": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 213,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 214,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 215,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 216,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 217,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 218,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 219,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 220,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 221,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 222,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 223,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 224,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 225,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 226,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 227,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 228,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 229,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 230,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 231,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 232,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 233,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 234,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 235,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "revisers": {
+        "same_intent": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 236,
+      "decoded_goal_state": "cube_at_target",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": false,
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "revisers": {
+        "same_intent": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cube_at_target"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": true,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": true,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 237,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 238,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 239,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 240,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 241,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 242,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 243,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": false,
+      "failure_predicate": "goal_not_satisfied",
+      "revisers": {
+        "same_intent": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": false,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 244,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 245,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 246,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 247,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 248,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    },
+    {
+      "seed": 249,
+      "decoded_goal_state": "cubeA_on_cubeB",
+      "true_goal_state": "cubeA_on_cubeB",
+      "vision_decode_correct": true,
+      "initial_success": true,
+      "failure_predicate": "none",
+      "revisers": {
+        "same_intent": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "operator": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        },
+        "oracle_value": {
+          "final_success": true,
+          "revised": false,
+          "new_goal_state": "cubeA_on_cubeB"
+        }
+      }
+    }
+  ]
+}

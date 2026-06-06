@@ -58,12 +58,32 @@ def _read_stack_obs(obs):
     return tcp, cubeA_xy, cubeA_z, cubeB_xy, cubeB_z
 
 
+# Stage-5 dual-camera / goal_state — post-place gripper retract. After the
+# stack/place completes, the gripper is co-located with the just-placed cubes
+# and occludes the stack-vs-near relation from EVERY exterior viewpoint (the
+# camera sweep, job 10969709, falsified the high-oblique fix). Lifting the arm
+# up-and-back clears it so the final frames show the clean placement — matching
+# the 0.99 armless config ceiling. Default OFF keeps the Stage-0 MP4 render
+# byte-identical.
+_RETRACT_DXYZ = (-0.08, 0.0, 0.30)   # world-frame TCP delta: up 30cm, back 8cm
+_RETRACT_STEPS = 45                  # P-control steps toward the cleared pose
+_RETRACT_DWELL = 12                  # hold frames so the last frames are clean/stable
+
+
 def _execute_stack(
     env, intent: Intent, scene: SceneState, frames: list, *, seed: int,
+    retract: bool = False,
 ) -> dict:
     """Step the env through StackSkill's waypoints + per-phase gripper
     schedule. Mirrors PickCube's _execute_pick but with cubeA/cubeB obs
-    and goal_state-dispatched waypoint count."""
+    and goal_state-dispatched waypoint count.
+
+    ``retract`` (Stage-5 goal_state experiment): after the place completes,
+    lift the open gripper up-and-back and dwell, so the appended final frames
+    show the placed cubes WITHOUT the occluding gripper. The env must have
+    enough TimeLimit headroom (see the probe's --retract path, which bumps
+    max_episode_steps). Default False -> byte-identical to the committed render.
+    """
     skill = compile_intent_to_stack_skill(intent, scene)
     obs, _ = env.reset(seed=int(seed))
     targets = [np.asarray(wp[0:3], dtype=np.float64) for wp in skill.waypoints]
@@ -104,6 +124,26 @@ def _execute_stack(
         success = bool(to_np(succ).item()) if hasattr(succ, "cpu") else bool(succ)
         if success or term_b or trunc_b:
             break
+
+    if retract:
+        # Lift the open gripper clear of the placed cubes and hold, so the
+        # appended final frames show the clean stack-vs-near relation. Stepping
+        # continues the sim (placed cubes stay put); the caller provides the
+        # TimeLimit headroom.
+        tcp, *_ = _read_stack_obs(obs)
+        clear_target = tcp[0:3] + np.asarray(_RETRACT_DXYZ, dtype=np.float64)
+        for _ in range(_RETRACT_STEPS):
+            tcp, *_ = _read_stack_obs(obs)
+            if np.linalg.norm(clear_target - tcp[0:3]) < PHASE_TOL_M:
+                break
+            action = prop_action(tcp, clear_target, gripper_cmd=_GRIPPER_OPEN)
+            obs, _r, _term, _trunc, _info = env.step(action)
+            frames.append(render_frame(env))
+        for _ in range(_RETRACT_DWELL):  # hold the cleared pose: stable clean tail
+            tcp, *_ = _read_stack_obs(obs)
+            action = prop_action(tcp, clear_target, gripper_cmd=_GRIPPER_OPEN)
+            obs, _r, _term, _trunc, _info = env.step(action)
+            frames.append(render_frame(env))
 
     return {"success": bool(success)}
 

@@ -430,15 +430,18 @@ def _topdown_camera_configs():
     return {"render_camera": {"pose": pose_list}}
 
 
-def _make_env(task: str, *, topdown: bool = False):
+def _make_env(task: str, *, topdown: bool = False, camera: str = "default"):
     """Build a ManiSkill env in render mode for `task`.
 
     Matches scripts/render_stage0_maniskill.py's setup: state_dict obs,
     pd_ee_delta_pose control, cpu backend, rgb_array render. No
     panda_wristcam — the demo phase only needs the third-person view.
 
-    `topdown=True` overrides the human render camera with an overhead view
-    (Stage-5 viewpoint experiment) while leaving physics/labels untouched.
+    `camera` selects a high-oblique render_camera preset (Stage-5 dual-camera
+    demo; shared babysteps.render.camera_presets) for rendering a GLOBAL or
+    CONTACT external view. `topdown=True` is the legacy pure-nadir override
+    (kept for the earlier viewpoint experiment); `camera` takes precedence.
+    Physics / labels are untouched either way.
     """
     import gymnasium as gym
     import mani_skill.envs  # noqa: F401 — registers tasks
@@ -451,7 +454,10 @@ def _make_env(task: str, *, topdown: bool = False):
     )
     if task == "StackCube-v1":
         kwargs["max_episode_steps"] = _STACKCUBE_MAX_EPISODE_STEPS
-    if topdown:
+    if camera != "default":
+        from babysteps.render.camera_presets import oblique_camera_configs
+        kwargs["human_render_camera_configs"] = oblique_camera_configs(camera)
+    elif topdown:
         kwargs["human_render_camera_configs"] = _topdown_camera_configs()
     return gym.make(task, **kwargs)
 
@@ -550,6 +556,16 @@ def main(argv=None) -> int:
     p.add_argument("--topdown", action="store_true",
                    help="Render from an overhead top-down camera instead of "
                         "the default third-person view (Stage-5 viewpoint test).")
+    p.add_argument("--camera", default="default",
+                   choices=("default", "oblique_high", "oblique_higher",
+                            "oblique_corner"),
+                   help="High-oblique render_camera preset for the Stage-5 "
+                        "dual-camera demo (shared babysteps.render.camera_presets). "
+                        "'default' = ManiSkill render_camera; oblique_* elevate "
+                        "the view to look OVER the gripper (NOT nadir; use "
+                        "--topdown for the legacy nadir view). Render each dual-"
+                        "stream view to its own --out-dir with a different --camera. "
+                        "Takes precedence over --topdown.")
     p.add_argument("--skip-existing", action="store_true",
                    help="Skip seeds whose seed_NNNN.npz already exists in "
                         "--out-dir (resume a preempted/standby render). Frames "
@@ -577,7 +593,7 @@ def main(argv=None) -> int:
         adapter = entry.adapter_cls()
         args.out_dir.mkdir(parents=True, exist_ok=True)
 
-        env = _make_env(task, topdown=args.topdown)
+        env = _make_env(task, topdown=args.topdown, camera=args.camera)
         try:
             for rec in records:
                 seed = _seed_from_record(rec)
@@ -639,7 +655,7 @@ def main(argv=None) -> int:
         entry = get_task_entry(args.task)
         adapter = entry.adapter_cls()
         args.out_dir.mkdir(parents=True, exist_ok=True)
-        env = _make_env(args.task, topdown=args.topdown)
+        env = _make_env(args.task, topdown=args.topdown, camera=args.camera)
         labels: dict[str, dict] = {}
         achieved: dict[str, list] = {}
         n_clean = 0
@@ -710,7 +726,7 @@ def main(argv=None) -> int:
     adapter = entry.adapter_cls()
     args.out_dir.mkdir(parents=True, exist_ok=True)
 
-    env = _make_env(task, topdown=args.topdown)
+    env = _make_env(task, topdown=args.topdown, camera=args.camera)
     try:
         for seed in seeds:
             if args.skip_existing and _already_rendered(args.out_dir, seed):

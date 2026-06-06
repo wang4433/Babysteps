@@ -86,7 +86,25 @@ def main(argv=None) -> int:
     p.add_argument("--cv", action="store_true",
                    help="Also report held-out IntentHead-CV probe accuracy per "
                         "factor (separability sanity before downstream eval).")
+    p.add_argument("--factors", type=str, default=None,
+                   help="Comma-separated subset of grounded factors (default: all "
+                        f"of {_FOUR_WAY_FACTORS}). Train a per-VIEW pack that "
+                        "grounds only the factors that view sees (dual-camera "
+                        "setup): --factors contact_region for the contact view, "
+                        "--factors object_motion,approach_direction for the global "
+                        "view.")
     args = p.parse_args(argv)
+
+    if args.factors is None:
+        grounded = set(_FOUR_WAY_FACTORS)
+    else:
+        grounded = {f.strip() for f in args.factors.split(",") if f.strip()}
+        bad = grounded - set(_FOUR_WAY_FACTORS)
+        if bad:
+            print(f"--factors {sorted(bad)} not in groundable set "
+                  f"{_FOUR_WAY_FACTORS}", file=sys.stderr)
+            return 2
+    print(f"grounding factors: {sorted(grounded)}")
 
     labels = _load_labels(args.labels)
     seeds = sorted(labels.keys())
@@ -119,7 +137,7 @@ def main(argv=None) -> int:
     encoders: dict[int, LabelEncoder] = {}
     labels_per_factor: dict[int, tuple[np.ndarray, int]] = {}
     for fi, factor in enumerate(INTENT_FIELDS):
-        if factor not in _FOUR_WAY_FACTORS:
+        if factor not in grounded:
             continue
         vals = [labels[s][factor] for s in seeds]
         present = sorted(set(vals))
