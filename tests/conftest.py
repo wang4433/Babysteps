@@ -121,6 +121,18 @@ class FakeEnvRunner:
         pass
 
 
+class FakePokeEnvRunner(FakeEnvRunner):
+    """Deterministic, sim-free env_runner for PokeCube (step 3).
+
+    PokeCube's poke physics are, at the abstraction the loop cares about,
+    identical to PushCube's push: contacting face F drives the cube along
+    ``face_to_push_unit(F)``, success iff the cube reaches the goal. The
+    poke-vs-push distinction is a real-runner (GPU) concern; sim-free it is the
+    same contact_region->motion mapping, which is exactly the shared rule the
+    leave-one-task-family-out test exercises. Kept as a distinct class so the
+    registry / evaluator can route PokeCube explicitly."""
+
+
 @pytest.fixture
 def fake_env_runner() -> FakeEnvRunner:
     return FakeEnvRunner()

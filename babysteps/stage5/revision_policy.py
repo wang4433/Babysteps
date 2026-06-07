@@ -69,6 +69,13 @@ _TASK_FACTOR_CANDIDATES: dict[str, dict[str, tuple[str, ...]]] = {
         "contact_region": (
             "minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face"),
     },
+    # PokeCube (step 3) shares PushCube's contact_region candidate vocab
+    # BYTE-FOR-BYTE — same 4 faces, same meaning, same residual->face rule — so
+    # the two are a valid leave-one-task-family-out pair for that shared rule.
+    "PokeCube-v1": {
+        "contact_region": (
+            "minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face"),
+    },
     "StackCube-v1": {
         "goal_state": ("cube_at_target", "cubeA_on_cubeB"),
     },

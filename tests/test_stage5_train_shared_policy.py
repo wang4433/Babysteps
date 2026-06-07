@@ -18,7 +18,9 @@ _SCRIPTS = _ROOT / "scripts"
 if str(_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(_SCRIPTS))
 
-from babysteps.stage5.revision_policy import FailureEvidence, RevisionRequest
+from babysteps.stage5.revision_policy import (
+    FailureEvidence, RevisionRequest, candidates_for,
+)
 from babysteps.stage5.shared_revision_policy import (
     GI_DIM_DEFAULT, SharedScorerPolicy, build_value_vocab,
 )
@@ -26,6 +28,8 @@ from babysteps.stage5.shared_revision_policy import (
 trainmod = importlib.import_module("stage5_train_shared_policy")
 
 FACES = ("minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face")
+_DIRS = {"plus_x_face": (1.0, 0.0), "minus_x_face": (-1.0, 0.0),
+         "plus_y_face": (0.0, 1.0), "minus_y_face": (0.0, -1.0)}
 
 
 def test_normalize_pushcube_and_stackcube_tuples():
@@ -110,3 +114,64 @@ def test_pooled_training_drives_both_tasks():
         candidates=("cube_at_target", "cubeA_on_cubeB"),
         e_fail=FailureEvidence("goal_not_satisfied", None), g_i=None))
     assert dec.new_value == "cubeA_on_cubeB"
+
+
+def _fixed_wrong(correct: str) -> str:
+    """A wrong current face that is NOT simply OPP[correct] (so the label can't
+    be read off `current` alone — the residual must carry the rule)."""
+    return "minus_x_face" if correct != "minus_x_face" else "plus_x_face"
+
+
+def _loto_pokecube_trial(seed: int) -> float:
+    """Train ONE shared scorer (via the real trainer) on pooled PushCube
+    contact_region (residual->face) + StackCube goal_state coverage, freeze it,
+    and evaluate a HELD-OUT PokeCube contact_region family — same residual->face
+    rule, different g_i family offset (poke unseen in training). Returns held-out
+    accuracy. The rule lives in the residual; g_i is a pure distractor (offset
+    0.5 + noise, no scaler), mirroring the proven _loto_trial so transfer is
+    robust. This is the sim-free proxy of the real step-5 LOTO cell."""
+    rng = np.random.default_rng(seed)
+    push_off = rng.normal(0, 0.5, size=32).astype(np.float32)
+    poke_off = rng.normal(0, 0.5, size=32).astype(np.float32)
+
+    rows = []  # train_shared_scorer rows: factor/current/correct/candidates/...
+    for correct, d in _DIRS.items():
+        for _ in range(8):
+            res = [d[0] + rng.normal(0, 0.05), d[1] + rng.normal(0, 0.05)]
+            gi = push_off + rng.normal(0, 0.3, size=32).astype(np.float32)
+            rows.append({"task": "PushCube-v1", "factor": "contact_region",
+                         "current": _fixed_wrong(correct), "correct": correct,
+                         "candidates": list(FACES), "predicate": "direction_error",
+                         "residual_xy": res, "gi": gi})
+    rows.append({"task": "StackCube-v1", "factor": "goal_state",
+                 "current": "cube_at_target", "correct": "cubeA_on_cubeB",
+                 "candidates": ["cube_at_target", "cubeA_on_cubeB"],
+                 "predicate": "goal_not_satisfied", "residual_xy": None,
+                 "gi": None})
+
+    vocab = build_value_vocab()
+    scorer = trainmod.train_shared_scorer(
+        rows, vocab, d_gi=GI_DIM_DEFAULT, epochs=300, lr=1e-2, wd=1e-3,
+        seed=seed, scaler=None)
+    pol = SharedScorerPolicy(scorer, vocab, scaler=None)
+
+    ok = tot = 0
+    for correct, d in _DIRS.items():
+        for _ in range(8):
+            res = [d[0] + rng.normal(0, 0.05), d[1] + rng.normal(0, 0.05)]
+            gi = poke_off + rng.normal(0, 0.3, size=32).astype(np.float32)
+            dec = pol.decide(RevisionRequest(
+                factor="contact_region", current_value=_fixed_wrong(correct),
+                candidates=candidates_for("PokeCube-v1", "contact_region"),
+                e_fail=FailureEvidence("direction_error", res), g_i=gi))
+            ok += (dec.new_value == correct)
+            tot += 1
+    return ok / tot
+
+
+def test_loto_pooled_train_holds_out_pokecube_family():
+    accs = [_loto_pokecube_trial(s) for s in (0, 1, 2)]
+    mean_acc = sum(accs) / len(accs)
+    assert mean_acc > 0.55, (
+        f"held-out PokeCube mean acc {mean_acc:.2f} (per-seed {accs}) not "
+        f"clearly above chance 0.25 — residual->face rule did not transfer")

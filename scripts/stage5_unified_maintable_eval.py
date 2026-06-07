@@ -198,7 +198,15 @@ def _paired_actors(cond: str, spec: TaskSpec, ep: EpisodeData, vlm, seed: int):
 # Per-task specs
 # --------------------------------------------------------------------------- #
 
-def _build_pushcube_spec(args, runner, adapter) -> TaskSpec:
+def _build_contact_region_spec(task_id, args, runner, adapter) -> TaskSpec:
+    """contact_region natural-loop spec, shared by PushCube and PokeCube (step 3).
+
+    Both families revise contact_region with the SAME 4-face candidate vocab and
+    the SAME 2D-residual->face rule (consumed by ResidualSlotEditor /
+    SharedScorerPolicy). The poke-vs-push difference lives only in the GPU runner;
+    sim-free, the two are structurally identical (deterministic opposite-face
+    failure), which is exactly what makes them a valid leave-one-FAMILY-out pair
+    for the shared contact_region rule."""
     from babysteps.stage5.residual_reviser import ResidualSlotEditor
 
     menu = INTENT_FIELDS
@@ -241,7 +249,7 @@ def _build_pushcube_spec(args, runner, adapter) -> TaskSpec:
             frame_path=None, wrist_frame_path=None)
 
     return TaskSpec(
-        task="PushCube-v1", implicated_factor="contact_region",
+        task=task_id, implicated_factor="contact_region",
         factor_menu=menu, source_episode=source_episode,
         editor_producers={
             "contact_region": lambda req: editor(
@@ -349,6 +357,17 @@ def _make_runner_adapter(task: str, fake: bool):
             return adapter, FakeEnvRunner()
         from babysteps.envs.pushcube_runner import PushCubeEnvRunner
         return adapter, PushCubeEnvRunner(orient_control=True)
+    if task == "PokeCube-v1":
+        # Second contact_region family (step 3). Sim-free fake reuses the
+        # PushCube push physics; the real grasp+poke runner is GPU (build-order
+        # step-3 GPU, behind the poke-feasibility kill-gate).
+        from babysteps.envs.pokecube_adapter import PokeCubeAdapter
+        adapter = PokeCubeAdapter()
+        if fake:
+            from tests.conftest import FakePokeEnvRunner
+            return adapter, FakePokeEnvRunner()
+        from babysteps.envs.pokecube_runner import PokeCubeEnvRunner
+        return adapter, PokeCubeEnvRunner(orient_control=True)
     if task == "StackCube-v1":
         from babysteps.envs.stackcube_adapter import StackCubeAdapter
         adapter = StackCubeAdapter()
@@ -386,7 +405,7 @@ def run_eval(spec: TaskSpec, runner, vlm, seeds: list[int],
 def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--task", required=True,
-                   choices=["PushCube-v1", "StackCube-v1"])
+                   choices=["PushCube-v1", "PokeCube-v1", "StackCube-v1"])
     p.add_argument("--eval-seeds", default="200-209",
                    help="Held-out exec seed range.")
     p.add_argument("--conditions", default=",".join(available_conditions()),
@@ -422,8 +441,8 @@ def main(argv=None) -> int:
         seeds = seeds[: args.max_episodes]
 
     adapter, runner = _make_runner_adapter(args.task, args.fake)
-    if args.task == "PushCube-v1":
-        spec = _build_pushcube_spec(args, runner, adapter)
+    if args.task in ("PushCube-v1", "PokeCube-v1"):
+        spec = _build_contact_region_spec(args.task, args, runner, adapter)
     else:
         spec = _build_stackcube_spec(args, runner, adapter)
 

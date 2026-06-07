@@ -29,6 +29,7 @@ def umt():
 @pytest.mark.parametrize("task,seeds", [
     ("StackCube-v1", "200-205"),
     ("PushCube-v1", "100-105"),
+    ("PokeCube-v1", "100-105"),  # step 3: second contact_region family
 ])
 def test_cli_fake_mock_runs_both_tasks(umt, tmp_path, task, seeds):
     out = tmp_path / task

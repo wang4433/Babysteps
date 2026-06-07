@@ -81,6 +81,15 @@ TASK_PROMPT_INFO: dict[str, dict[str, object]] = {
         "expected_tokens": {"goal_state": ("cube_at_target",)},
         "factor_menu": _FACTOR_MENU_6,
     },
+    "PokeCube-v1": {
+        "name": "PokeCube",
+        "success_description": (
+            "the robot grasps a peg and uses it to poke the cube sideways "
+            "across the table to a marked target position"
+        ),
+        "expected_tokens": {"goal_state": ("cube_at_target",)},
+        "factor_menu": _FACTOR_MENU_6,
+    },
     "PickCube-v1": {
         "name": "PickCube",
         "success_description": (
