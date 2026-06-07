@@ -60,6 +60,11 @@ def selectivity_metrics(
       * ``preservation`` (float in [0, 1])
       * ``unnecessary_changes_count`` / ``unnecessary_changes_rate``
       * ``harmful_changes_count`` / ``harmful_changes_rate``
+      * ``edit_cardinality`` — total number of factors in ``factor_menu`` whose
+        value the revision changed (0 when ``revised is None``). This is the
+        single source of truth for edit cardinality across the P2 eval, the
+        unified main table, and the G3 certification, so the same definition
+        is used everywhere.
     """
     non_implicated = tuple(f for f in factor_menu if f != implicated_factor)
 
@@ -75,6 +80,7 @@ def selectivity_metrics(
             "unnecessary_changes_rate": 0.0,
             "harmful_changes_count": 0,
             "harmful_changes_rate": 0.0,
+            "edit_cardinality": 0,
         }
 
     # preservation = mean over non-implicated factors of (initial == revised).
@@ -117,4 +123,5 @@ def selectivity_metrics(
         "unnecessary_changes_rate": unnecessary_rate,
         "harmful_changes_count": harmful_count,
         "harmful_changes_rate": harmful_rate,
+        "edit_cardinality": len(changed),
     }

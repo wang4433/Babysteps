@@ -145,6 +145,7 @@ def test_selectivity_keys_present_for_both_branches():
         "preservation",
         "unnecessary_changes_count", "unnecessary_changes_rate",
         "harmful_changes_count", "harmful_changes_rate",
+        "edit_cardinality",
     }
     a = selectivity_metrics(INITIAL, None, GT, IMPLICATED, MENU_6)
     b = selectivity_metrics(INITIAL, GT, GT, IMPLICATED, MENU_6)
@@ -258,3 +259,25 @@ def test_diagnose_free_form_first_try_parses_no_repair_needed():
 
 def test_default_factor_menu_is_six():
     assert tuple(INTENT_FIELDS) == MENU_6
+
+
+# ---------- edit_cardinality (Stage-5 unified main table) ---------------- #
+
+
+def test_edit_cardinality_counts_changed_factors():
+    # Slot-local single edit → cardinality 1.
+    one = selectivity_metrics(
+        INITIAL, replace(INITIAL, contact_region="plus_x_face"),
+        GT, IMPLICATED, MENU_6)
+    assert one["edit_cardinality"] == 1
+    # Two-factor rewrite → cardinality 2.
+    two = selectivity_metrics(
+        INITIAL, replace(INITIAL, contact_region="plus_x_face",
+                         approach_direction="from_minus_x"),
+        GT, IMPLICATED, MENU_6)
+    assert two["edit_cardinality"] == 2
+    # No-op and parse-fail → cardinality 0.
+    assert selectivity_metrics(
+        INITIAL, INITIAL, GT, IMPLICATED, MENU_6)["edit_cardinality"] == 0
+    assert selectivity_metrics(
+        INITIAL, None, GT, IMPLICATED, MENU_6)["edit_cardinality"] == 0

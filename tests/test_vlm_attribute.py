@@ -325,3 +325,44 @@ def test_parse_free_form_crossview_seven_field_json():
     )
     assert out is not None
     assert out.direction_grounding == "observer_frame"
+
+
+# ---------- opt-in cost meter (Stage-5 unified main table) --------------- #
+
+
+def test_mock_cost_meter_default_zero_and_accumulates():
+    mock = MockVLMClient()
+    assert mock.cost_snapshot() == {
+        "n_calls": 0, "latency_s": 0.0, "gen_tokens": 0, "input_tokens": 0}
+    # A diagnosis call with synthetic cost accumulates.
+    m2 = MockVLMClient(constrained_response="contact_region",
+                       synthetic_latency_s=0.02, synthetic_gen_tokens=4,
+                       synthetic_input_tokens=50)
+    m2.diagnose_constrained(task="PushCube-v1", image_path="x.png",
+                            initial_intent=SAMPLE_INTENT,
+                            failure_predicate="direction_error")
+    snap = m2.cost_snapshot()
+    assert snap["n_calls"] == 1 and snap["latency_s"] == 0.02
+    assert snap["gen_tokens"] == 4 and snap["input_tokens"] == 50
+    m2.reset_cost()
+    assert m2.cost_snapshot()["n_calls"] == 0
+
+
+def test_internvl_cost_meter_accounts_without_model_load():
+    """InternVLClient._account increments the meter without loading the model
+    (token counts skipped when the tokenizer is absent; counted when present)."""
+    from types import SimpleNamespace
+
+    from babysteps.stage5.vlm_attribute import InternVLClient
+    client = InternVLClient()
+    assert client.cost_snapshot()["n_calls"] == 0
+    client._account("a question", "a response", 0.5)
+    snap = client.cost_snapshot()
+    assert snap["n_calls"] == 1 and snap["latency_s"] == 0.5
+    assert snap["gen_tokens"] == 0  # no tokenizer → token counts skipped
+    # With a stub tokenizer, gen/input tokens are counted.
+    client.reset_cost()
+    client._tokenizer = lambda text: SimpleNamespace(input_ids=list(text))
+    client._account("qq", "rrrr", 0.1)
+    snap2 = client.cost_snapshot()
+    assert snap2["gen_tokens"] == 4 and snap2["input_tokens"] == 2
