@@ -86,6 +86,11 @@ class TaskSpec:
     factor_menu: tuple[str, ...]
     source_episode: Callable[[int], EpisodeData]
     editor_producers: dict  # {factor: (req) -> token}
+    # Optional {factor: candidate tuple} override for the model-visible request,
+    # used when a task exposes a restricted candidate set (e.g. held-out PokeCube
+    # exposes only the 3 REACHABLE faces, not the full 4-face vocab). Defaults to
+    # the schema/task vocab via candidates_for (backward compatible).
+    candidates_override: Optional[dict] = None
 
 
 # --------------------------------------------------------------------------- #
@@ -93,8 +98,15 @@ class TaskSpec:
 # --------------------------------------------------------------------------- #
 
 def _run_condition(cond: str, ep: EpisodeData, spec: TaskSpec, runner,
-                   vlm, seed: int) -> dict:
-    """Run one condition on one episode → a per-condition metrics row."""
+                   vlm, seed: int, shared_policy=None,
+                   attributor_override=None) -> dict:
+    """Run one condition on one episode → a per-condition metrics row.
+
+    ``attributor_override`` (``None`` | ``"oracle"``) forces the attributor for
+    the paired conditions (shared_revision_policy / vlm_diagnosis_local_edit):
+    ``"oracle"`` substitutes the privileged OracleAttributor so the row isolates
+    the VALUE policy (held-out value transfer) from attribution quality. The
+    default (``None``) uses each condition's native attributor (VLM)."""
     cspec = CONDITION_REGISTRY[cond]
     menu = spec.factor_menu
     implicated = spec.implicated_factor
@@ -135,7 +147,9 @@ def _run_condition(cond: str, ep: EpisodeData, spec: TaskSpec, runner,
         revised = full if full is not None else None  # parse-fail → no change
 
     elif cspec.kind == "paired":
-        attributor, policy = _paired_actors(cond, spec, ep, vlm, seed)
+        attributor, policy = _paired_actors(
+            cond, spec, ep, vlm, seed, shared_policy=shared_policy,
+            attributor_override=attributor_override)
         attr = attributor.attribute(_obs(spec, ep, seed))
         diag = float(attr.latency_s)
         vlm_cost = dict(attr.cost) if attr.cost else None
@@ -180,17 +194,37 @@ def _obs(spec: TaskSpec, ep: EpisodeData, seed: int) -> AttributionObs:
 
 def _request(spec: TaskSpec, ep: EpisodeData, factor: str) -> RevisionRequest:
     """Build the MODEL-VISIBLE request: no task id / scene / gt / full intent."""
+    override = (spec.candidates_override or {}).get(factor)
+    candidates = (override if override is not None
+                  else candidates_for(spec.task, factor))
     return RevisionRequest(
         factor=factor, current_value=getattr(ep.initial, factor),
-        candidates=candidates_for(spec.task, factor), e_fail=ep.e_fail,
-        g_i=None, z=None)
+        candidates=candidates, e_fail=ep.e_fail, g_i=None, z=None)
 
 
-def _paired_actors(cond: str, spec: TaskSpec, ep: EpisodeData, vlm, seed: int):
+def _paired_actors(cond: str, spec: TaskSpec, ep: EpisodeData, vlm, seed: int,
+                   shared_policy=None, attributor_override=None):
     if cond == "random_factor_local_edit":
         return RandomAttributor(seed=0), RandomCandidatePolicy(seed=0)
+
+    def _attributor():
+        # "oracle" → privileged OracleAttributor (isolates the value policy);
+        # default → the VLM teacher/baseline (the deployed-with-VLM path).
+        if attributor_override == "oracle":
+            return OracleAttributor(spec.implicated_factor)
+        return VLMAttributor(vlm)
+
     if cond == "vlm_diagnosis_local_edit":
-        return VLMAttributor(vlm), PerTaskEditorAdapter(spec.editor_producers)
+        return _attributor(), PerTaskEditorAdapter(spec.editor_producers)
+    if cond == "shared_revision_policy":
+        # The proposed method: shared attributor with vlm_diagnosis_local_edit
+        # (so the comparison isolates the VALUE policy — one shared scorer vs the
+        # hand-built per-task editors), the ONE frozen shared scorer for the
+        # value. Loaded once and threaded through (no per-episode load).
+        if shared_policy is None:
+            raise ValueError(
+                "shared_revision_policy requires a loaded --scorer checkpoint")
+        return _attributor(), shared_policy
     raise ValueError(f"no paired actors for condition {cond!r}")
 
 
@@ -367,7 +401,7 @@ def _make_runner_adapter(task: str, fake: bool):
             from tests.conftest import FakePokeEnvRunner
             return adapter, FakePokeEnvRunner()
         from babysteps.envs.pokecube_runner import PokeCubeEnvRunner
-        return adapter, PokeCubeEnvRunner(orient_control=True)
+        return adapter, PokeCubeEnvRunner()
     if task == "StackCube-v1":
         from babysteps.envs.stackcube_adapter import StackCubeAdapter
         adapter = StackCubeAdapter()
@@ -380,7 +414,7 @@ def _make_runner_adapter(task: str, fake: bool):
 
 
 def run_eval(spec: TaskSpec, runner, vlm, seeds: list[int],
-             conditions: list[str]) -> dict:
+             conditions: list[str], shared_policy=None) -> dict:
     """Run the available conditions over all seeds; return the results dict."""
     rows_by_condition: dict[str, list[dict]] = {c: [] for c in conditions}
     per_seed: list[dict] = []
@@ -391,13 +425,17 @@ def run_eval(spec: TaskSpec, runner, vlm, seeds: list[int],
                     "initial_intent": ep.initial.to_dict(),
                     "conditions": {}}
         for cond in conditions:
-            row = _run_condition(cond, ep, spec, runner, vlm, seed)
+            row = _run_condition(cond, ep, spec, runner, vlm, seed,
+                                 shared_policy=shared_policy)
             rows_by_condition[cond].append(row)
             seed_row["conditions"][cond] = row
         per_seed.append(seed_row)
+    # Registry-deferred conditions that were NOT explicitly enabled this run
+    # (e.g. shared_revision_policy when no --scorer was supplied).
+    deferred = [c for c in deferred_conditions() if c not in conditions]
     return {
         "summary": aggregate(rows_by_condition),
-        "deferred_conditions": list(deferred_conditions()),
+        "deferred_conditions": deferred,
         "per_seed": per_seed,
     }
 
@@ -414,6 +452,11 @@ def main(argv=None) -> int:
                    help="Sim-free FakeEnvRunner (login-node smoke).")
     p.add_argument("--mock", action="store_true",
                    help="MockVLMClient (no GPU / no transformers).")
+    p.add_argument("--scorer", type=Path, default=None,
+                   help="Frozen shared-scorer checkpoint. Supplying it ENABLES "
+                        "the shared_revision_policy condition (registry default "
+                        "is not-runnable = no committed checkpoint). The .pt is "
+                        "gitignored, so sim-free tests pass a synthetic one.")
     p.add_argument("--max-episodes", type=int, default=None)
     # Real-run (step 5) inputs:
     p.add_argument("--pack-dir", type=Path, default=None)
@@ -433,8 +476,13 @@ def main(argv=None) -> int:
         p.error(f"unknown condition(s): {unknown}")
     not_runnable = [c for c in conditions
                     if not CONDITION_REGISTRY[c].runnable]
+    # shared_revision_policy is registry-deferred (no committed checkpoint) but
+    # becomes runnable the moment a --scorer is supplied (the explicit opt-in).
+    if "shared_revision_policy" in not_runnable and args.scorer is not None:
+        not_runnable.remove("shared_revision_policy")
     if not_runnable:
-        p.error(f"condition(s) not runnable yet (deferred): {not_runnable}")
+        p.error(f"condition(s) not runnable yet (deferred): {not_runnable}. "
+                f"shared_revision_policy needs --scorer <checkpoint>.")
 
     seeds = _parse_seed_range(args.eval_seeds)
     if args.max_episodes:
@@ -455,7 +503,14 @@ def main(argv=None) -> int:
         print("loading InternVL3.5-8B ...")
         vlm.load()
 
-    result = run_eval(spec, runner, vlm, seeds, conditions)
+    shared_policy = None
+    if "shared_revision_policy" in conditions:
+        from babysteps.stage5.shared_revision_policy import SharedScorerPolicy
+        shared_policy = SharedScorerPolicy.from_pack(args.scorer)
+        print(f"loaded shared scorer: {args.scorer}")
+
+    result = run_eval(spec, runner, vlm, seeds, conditions,
+                      shared_policy=shared_policy)
     result["config"] = {
         "task": args.task, "eval_seeds": args.eval_seeds, "fake": args.fake,
         "mock": args.mock, "conditions": conditions}
