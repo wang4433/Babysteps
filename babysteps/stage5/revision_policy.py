@@ -164,7 +164,14 @@ class AttributionResult:
 class AttributionObs:
     """Inputs to an attributor. The VLM baseline/teacher is task-aware (it reads
     ``task``/``initial_intent`` for its prompt); the honest random attributor
-    uses only ``factor_menu`` + ``key``; the oracle ignores all of it."""
+    uses only ``factor_menu`` + ``key``; the oracle ignores all of it.
+
+    The ``residual_xy`` / ``trajectory_xy`` / ``obs_feat`` fields are ADDITIVE
+    (defaults preserve every existing construction; the VLM/oracle/random
+    attributors ignore them). They make the attributor interface genuinely
+    MULTIMODAL so the distilled head (``attribution_head.DistilledAttributor``)
+    can read expected-vs-actual residual + trajectory + (GPU) frame features +
+    symbolic context, instead of a residual-only positional shortcut."""
     task: str
     factor_menu: tuple[str, ...]
     failure_predicate: Optional[str]
@@ -172,6 +179,10 @@ class AttributionObs:
     frame_path: Optional[str] = None
     wrist_frame_path: Optional[str] = None
     key: object = 0
+    # --- additive multimodal evidence (consumed only by DistilledAttributor) ---
+    residual_xy: Optional[tuple[float, float]] = None
+    trajectory_xy: tuple[tuple[float, float], ...] = ()
+    obs_feat: Optional[tuple[float, ...]] = None
 
 
 @runtime_checkable
