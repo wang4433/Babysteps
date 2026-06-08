@@ -59,10 +59,7 @@ REACHABLE_FACES: tuple[str, ...] = tuple(_DIR_TO_FACE.values())
 _FACE_ORDER: tuple[str, ...] = (
     "minus_x_face", "plus_x_face", "minus_y_face", "plus_y_face")
 
-# Default PokeCube failure predicate (the cube ended off the goal direction).
-# CONSTANT across clean and hard-negative examples on purpose: if the predicate
-# differed it would leak the factor through the e_fail one-hot, defeating the
-# point of the hard negatives.
+# Default PokeCube failure predicate (fallback for direct Example construction).
 DEFAULT_PREDICATE: str = "direction_error"
 
 PUSH_DISTANCE: float = 0.10   # nominal poke displacement (m), matches the env.
@@ -114,6 +111,21 @@ def _trajectory(cube0: np.ndarray, final: np.ndarray, k: int = 5
     return tuple((float(p[0]), float(p[1])) for p in pts)
 
 
+def _predicate_for(direction: str, wrong_face: str) -> str:
+    """The failure predicate the real loop emits for a wrong-face poke (matches
+    ``babysteps.failure.build_failure_packet`` direction-alignment branch): a
+    cube pushed OPPOSITE the goal axis -> ``direction_error``; a cube pushed
+    PERPENDICULAR (alignment ~0) -> ``goal_not_satisfied``. Keying the predicate
+    on (direction, wrong_face) keeps it IDENTICAL within a matched clean/hardneg
+    pair (no factor leak) while matching the deployed predicate MIX (4
+    perpendicular + 2 opposite over the LOTO grid), so the distilled head's
+    residual block is domain-faithful for the recovery gate."""
+    goal = motion_to_unit(_DIR_TO_MOTION[direction])
+    push = face_to_push_unit(wrong_face)
+    return "direction_error" if float(np.dot(push, goal)) < -1e-6 \
+        else "goal_not_satisfied"
+
+
 def _noise_vec(direction: str, wrong_face: str, replicate: int,
                base_seed: int, noise: float) -> np.ndarray:
     """Deterministic observation noise keyed by (direction, wrong_face,
@@ -160,7 +172,7 @@ def _example(*, direction: str, wrong_face: str, object_motion: str,
                                     contact_region=wrong_face),
         true_factor=true_factor,
         correct_value=correct_value,
-        predicate=DEFAULT_PREDICATE,
+        predicate=_predicate_for(direction, wrong_face),
         meta={"kind": kind, "direction": direction, "wrong_face": wrong_face},
     )
 

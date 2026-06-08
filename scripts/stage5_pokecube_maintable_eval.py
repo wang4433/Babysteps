@@ -97,6 +97,12 @@ _DIFF_PAIRS = [
     ("shared_revision_policy@oracle_attr", "oracle_single_slot"),
     ("shared_revision_policy@oracle_attr", "vlm_diagnosis_local_edit@oracle_attr"),
     ("shared_revision_policy", "vlm_free_replan"),
+    # Recovery gate (opt-in --distilled-head): does VLM->distilled restore the
+    # shared policy toward oracle on the deployed clean distribution? (Guarded by
+    # `a in labels` in _ci_table, so inert when the distilled rows are absent.)
+    ("shared_revision_policy@distilled_attr", "shared_revision_policy@oracle_attr"),
+    ("shared_revision_policy@distilled_attr", "oracle_single_slot"),
+    ("shared_revision_policy@distilled_attr", "shared_revision_policy"),
     ("shared_revision_policy", "same_intent_retry"),
 ]
 
@@ -190,7 +196,7 @@ def _source_episode(runner, adapter, seed, direction, wrong_face, *,
 
 def run_maintable(runner, adapter, vlm, spec, *, seeds, directions,
                   condition_matrix, shared_policy, max_approach_dist, target_n,
-                  capture_frames, frames_dir):
+                  capture_frames, frames_dir, distilled_attributor=None):
     """Per (reachable seed x direction x wrong-face): one shared first failure,
     then every (label, base_condition, attributor_override) variant's retry.
     Returns (rows_by_label, flat_rows, n_reachable)."""
@@ -215,7 +221,8 @@ def run_maintable(runner, adapter, vlm, spec, *, seeds, directions,
                     row = _run_condition(
                         base_cond, ep, spec, runner, vlm, f"{s}:{d}:{w}",
                         shared_policy=shared_policy,
-                        attributor_override=attr_override)
+                        attributor_override=attr_override,
+                        distilled_attributor=distilled_attributor)
                     rows_by_label[label].append(row)
                     flat[f"{label}_success"] = bool(row["final_success"])
                 flat_rows.append(flat)
@@ -259,6 +266,9 @@ def main(argv=None) -> int:
     p.add_argument("--pack-dir", type=Path, default=None,
                    help="PushCube 4-way latent pack (per-task residual editor).")
     p.add_argument("--residual-head", type=Path, default=None)
+    p.add_argument("--distilled-head", type=Path, default=None,
+                   help="DistilledAttributor checkpoint; adds the "
+                        "@distilled_attr recovery-gate rows (VLM-free diagnosis).")
     p.add_argument("--seeds", default="0-299")
     p.add_argument("--directions", default="+x,+y,-y")
     p.add_argument("--max-approach-dist", type=float, default=0.785)
@@ -270,7 +280,16 @@ def main(argv=None) -> int:
                    default=Path("reports/stage5/pokecube_maintable/results.json"))
     args = p.parse_args(argv)
 
-    matrix = _CONDITION_MATRIX
+    matrix = list(_CONDITION_MATRIX)
+    if args.distilled_head is not None:
+        # Recovery gate: same paired conditions, VLM swapped for the distilled
+        # head, value policy held fixed -> isolates ATTRIBUTION quality.
+        matrix += [
+            ("vlm_diagnosis_local_edit@distilled_attr",
+             "vlm_diagnosis_local_edit", "distilled"),
+            ("shared_revision_policy@distilled_attr",
+             "shared_revision_policy", "distilled"),
+        ]
     labels = [lab for (lab, _b, _a) in matrix]
     needs_scorer = any(b == "shared_revision_policy" for (_l, b, _a) in matrix)
     if needs_scorer and args.scorer is None:
@@ -310,6 +329,12 @@ def main(argv=None) -> int:
         shared_policy = SharedScorerPolicy.from_pack(args.scorer)
         print(f"loaded shared scorer: {args.scorer}")
 
+    distilled_attributor = None
+    if args.distilled_head is not None:
+        from babysteps.stage5.attribution_head import DistilledAttributor
+        distilled_attributor = DistilledAttributor.from_pack(args.distilled_head)
+        print(f"loaded distilled attributor: {args.distilled_head}")
+
     spec = _build_poke_spec(args, runner, adapter)
 
     print(f"=== PokeCube fair-recovery main table (fake={args.fake}, "
@@ -319,7 +344,8 @@ def main(argv=None) -> int:
             runner, adapter, vlm, spec, seeds=seeds, directions=directions,
             condition_matrix=matrix, shared_policy=shared_policy,
             max_approach_dist=args.max_approach_dist, target_n=args.target_n,
-            capture_frames=capture_frames, frames_dir=frames_dir)
+            capture_frames=capture_frames, frames_dir=frames_dir,
+            distilled_attributor=distilled_attributor)
     finally:
         if hasattr(runner, "close"):
             try:

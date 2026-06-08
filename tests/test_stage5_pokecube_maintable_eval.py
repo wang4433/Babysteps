@@ -177,3 +177,65 @@ def test_run_maintable_end_to_end_fake(tmp_path):
     # value-transfer paired diff present (shared@oracle vs oracle)
     assert ("shared_revision_policy@oracle_attr__minus__oracle_single_slot"
             in ci["paired_diffs"])
+
+
+def _distilled(default_mask="multimodal", seed=0):
+    from babysteps.stage5.attribution_dataset import make_dataset
+    from babysteps.stage5.attribution_head import (
+        DistilledAttributor, train_attribution_head)
+    head = train_attribution_head(
+        make_dataset(n_per_case=32, noise=0.01, seed=seed),
+        modality_dropout=0.5, epochs=400, seed=seed)
+    return DistilledAttributor(head, default_mask=default_mask)
+
+
+def test_distilled_attributor_recovery_wiring(tmp_path):
+    """Recovery gate plumbing: with --distilled-head, the @distilled_attr rows
+    run; the distilled head attributes contact_region (VLM-free) so the shared
+    policy recovers like the oracle-attribution path."""
+    runner = _FakePoke()
+    adapter = PokeCubeAdapter()
+    vlm = MockVLMClient(constrained_response="contact_region")
+    spec = _spec(runner)
+    policy = _trained_scorer(tmp_path)
+    distilled = _distilled()
+    matrix = M._CONDITION_MATRIX + [
+        ("vlm_diagnosis_local_edit@distilled_attr",
+         "vlm_diagnosis_local_edit", "distilled"),
+        ("shared_revision_policy@distilled_attr",
+         "shared_revision_policy", "distilled"),
+    ]
+    rows_by_label, flat_rows, _ = M.run_maintable(
+        runner, adapter, vlm, spec, seeds=list(range(5)),
+        directions=["+x", "+y", "-y"], condition_matrix=matrix,
+        shared_policy=policy, max_approach_dist=None, target_n=5,
+        capture_frames=False, frames_dir=None, distilled_attributor=distilled)
+    from babysteps.stage5.maintable import aggregate
+    summ = aggregate(rows_by_label)
+    # distilled diagnosis == contact_region -> recovers like the oracle path
+    assert summ["shared_revision_policy@distilled_attr"]["attribution_accuracy"] >= 0.9
+    assert summ["shared_revision_policy@distilled_attr"]["recovery_on_initial_fail"] >= 0.9
+    assert summ["shared_revision_policy@oracle_attr"]["recovery_on_initial_fail"] >= 0.9
+    # single-slot invariant preserved for the distilled local-edit rows
+    for lab in ("vlm_diagnosis_local_edit@distilled_attr",
+                "shared_revision_policy@distilled_attr"):
+        assert summ[lab]["edit_cardinality_mean"] <= 1.0
+    # the recovery-gate paired diff is emitted
+    ci = M._ci_table(flat_rows, [l for (l, _b, _a) in matrix], n_boot=100, seed=0)
+    assert ("shared_revision_policy@distilled_attr__minus__"
+            "shared_revision_policy@oracle_attr") in ci["paired_diffs"]
+
+
+def test_distilled_override_requires_head():
+    """attributor_override='distilled' with no loaded head -> clear error."""
+    import pytest
+    from stage5_unified_maintable_eval import _paired_actors
+    runner = _FakePoke()
+    adapter = PokeCubeAdapter()
+    vlm = MockVLMClient(constrained_response="contact_region")
+    spec = _spec(runner)
+    ep = M._source_episode(runner, adapter, 0, "+x", "minus_y_face",
+                           capture_frames=False, frames_dir=None)
+    with pytest.raises(ValueError):
+        _paired_actors("vlm_diagnosis_local_edit", spec, ep, vlm, 0,
+                       attributor_override="distilled", distilled_attributor=None)

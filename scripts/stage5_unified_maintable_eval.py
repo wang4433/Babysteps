@@ -99,14 +99,16 @@ class TaskSpec:
 
 def _run_condition(cond: str, ep: EpisodeData, spec: TaskSpec, runner,
                    vlm, seed: int, shared_policy=None,
-                   attributor_override=None) -> dict:
+                   attributor_override=None, distilled_attributor=None) -> dict:
     """Run one condition on one episode → a per-condition metrics row.
 
-    ``attributor_override`` (``None`` | ``"oracle"``) forces the attributor for
-    the paired conditions (shared_revision_policy / vlm_diagnosis_local_edit):
-    ``"oracle"`` substitutes the privileged OracleAttributor so the row isolates
-    the VALUE policy (held-out value transfer) from attribution quality. The
-    default (``None``) uses each condition's native attributor (VLM)."""
+    ``attributor_override`` (``None`` | ``"oracle"`` | ``"distilled"``) forces
+    the attributor for the paired conditions (shared_revision_policy /
+    vlm_diagnosis_local_edit): ``"oracle"`` substitutes the privileged
+    OracleAttributor so the row isolates the VALUE policy (held-out value
+    transfer) from attribution quality; ``"distilled"`` substitutes the loaded
+    DistilledAttributor (the proposed VLM-free diagnosis — the recovery gate).
+    The default (``None``) uses each condition's native attributor (VLM)."""
     cspec = CONDITION_REGISTRY[cond]
     menu = spec.factor_menu
     implicated = spec.implicated_factor
@@ -149,7 +151,8 @@ def _run_condition(cond: str, ep: EpisodeData, spec: TaskSpec, runner,
     elif cspec.kind == "paired":
         attributor, policy = _paired_actors(
             cond, spec, ep, vlm, seed, shared_policy=shared_policy,
-            attributor_override=attributor_override)
+            attributor_override=attributor_override,
+            distilled_attributor=distilled_attributor)
         attr = attributor.attribute(_obs(spec, ep, seed))
         diag = float(attr.latency_s)
         vlm_cost = dict(attr.cost) if attr.cost else None
@@ -189,7 +192,11 @@ def _obs(spec: TaskSpec, ep: EpisodeData, seed: int) -> AttributionObs:
         task=spec.task, factor_menu=spec.factor_menu,
         failure_predicate=ep.e_fail.predicate, initial_intent=ep.initial,
         frame_path=ep.frame_path, wrist_frame_path=ep.wrist_frame_path,
-        key=seed)
+        key=seed,
+        # Additive multimodal evidence (consumed only by DistilledAttributor;
+        # VLM/oracle/random ignore it). The residual is the observable
+        # goal-relative displacement already on the failure packet.
+        residual_xy=(ep.e_fail.residual_xy if ep.e_fail else None))
 
 
 def _request(spec: TaskSpec, ep: EpisodeData, factor: str) -> RevisionRequest:
@@ -203,15 +210,23 @@ def _request(spec: TaskSpec, ep: EpisodeData, factor: str) -> RevisionRequest:
 
 
 def _paired_actors(cond: str, spec: TaskSpec, ep: EpisodeData, vlm, seed: int,
-                   shared_policy=None, attributor_override=None):
+                   shared_policy=None, attributor_override=None,
+                   distilled_attributor=None):
     if cond == "random_factor_local_edit":
         return RandomAttributor(seed=0), RandomCandidatePolicy(seed=0)
 
     def _attributor():
         # "oracle" → privileged OracleAttributor (isolates the value policy);
+        # "distilled" → the loaded VLM-free DistilledAttributor (recovery gate);
         # default → the VLM teacher/baseline (the deployed-with-VLM path).
         if attributor_override == "oracle":
             return OracleAttributor(spec.implicated_factor)
+        if attributor_override == "distilled":
+            if distilled_attributor is None:
+                raise ValueError(
+                    "attributor_override='distilled' needs a loaded "
+                    "--distilled-head (DistilledAttributor)")
+            return distilled_attributor
         return VLMAttributor(vlm)
 
     if cond == "vlm_diagnosis_local_edit":
