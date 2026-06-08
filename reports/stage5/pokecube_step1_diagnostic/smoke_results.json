@@ -1,0 +1,170 @@
+{
+  "summary": {
+    "n": 12,
+    "attribution_accuracy": 0.0,
+    "predicted_factor_histogram": {
+      "embodiment_mapping": 10,
+      "object_motion": 2
+    },
+    "by_direction_histogram": {
+      "+x": {
+        "embodiment_mapping": 4
+      },
+      "+y": {
+        "embodiment_mapping": 3,
+        "object_motion": 1
+      },
+      "-y": {
+        "embodiment_mapping": 3,
+        "object_motion": 1
+      }
+    },
+    "mean_latency_s": 0.35813685013757396,
+    "mean_gen_tokens": 3.6666666666666665
+  },
+  "n_reachable_seeds": 2,
+  "config": {
+    "directions": [
+      "+x",
+      "+y",
+      "-y"
+    ],
+    "mock": false,
+    "max_approach_dist": 0.785,
+    "target_n": 2
+  },
+  "rows": [
+    {
+      "seed": 3,
+      "direction": "+x",
+      "wrong_face": "minus_y_face",
+      "correct_face": "minus_x_face",
+      "initial_success": false,
+      "predicted_factor": "embodiment_mapping",
+      "attribution_correct": false,
+      "latency_s": 1.6681021880358458,
+      "gen_tokens": 4
+    },
+    {
+      "seed": 3,
+      "direction": "+x",
+      "wrong_face": "plus_y_face",
+      "correct_face": "minus_x_face",
+      "initial_success": false,
+      "predicted_factor": "embodiment_mapping",
+      "attribution_correct": false,
+      "latency_s": 0.26552692987024784,
+      "gen_tokens": 4
+    },
+    {
+      "seed": 3,
+      "direction": "+y",
+      "wrong_face": "minus_x_face",
+      "correct_face": "minus_y_face",
+      "initial_success": false,
+      "predicted_factor": "object_motion",
+      "attribution_correct": false,
+      "latency_s": 0.16400678176432848,
+      "gen_tokens": 2
+    },
+    {
+      "seed": 3,
+      "direction": "+y",
+      "wrong_face": "plus_y_face",
+      "correct_face": "minus_y_face",
+      "initial_success": false,
+      "predicted_factor": "embodiment_mapping",
+      "attribution_correct": false,
+      "latency_s": 0.2446701331064105,
+      "gen_tokens": 4
+    },
+    {
+      "seed": 3,
+      "direction": "-y",
+      "wrong_face": "minus_x_face",
+      "correct_face": "plus_y_face",
+      "initial_success": false,
+      "predicted_factor": "embodiment_mapping",
+      "attribution_correct": false,
+      "latency_s": 0.2420219019986689,
+      "gen_tokens": 4
+    },
+    {
+      "seed": 3,
+      "direction": "-y",
+      "wrong_face": "minus_y_face",
+      "correct_face": "plus_y_face",
+      "initial_success": false,
+      "predicted_factor": "object_motion",
+      "attribution_correct": false,
+      "latency_s": 0.16274295467883348,
+      "gen_tokens": 2
+    },
+    {
+      "seed": 11,
+      "direction": "+x",
+      "wrong_face": "minus_y_face",
+      "correct_face": "minus_x_face",
+      "initial_success": false,
+      "predicted_factor": "embodiment_mapping",
+      "attribution_correct": false,
+      "latency_s": 0.27240945398807526,
+      "gen_tokens": 4
+    },
+    {
+      "seed": 11,
+      "direction": "+x",
+      "wrong_face": "plus_y_face",
+      "correct_face": "minus_x_face",
+      "initial_success": false,
+      "predicted_factor": "embodiment_mapping",
+      "attribution_correct": false,
+      "latency_s": 0.2654193490743637,
+      "gen_tokens": 4
+    },
+    {
+      "seed": 11,
+      "direction": "+y",
+      "wrong_face": "minus_x_face",
+      "correct_face": "minus_y_face",
+      "initial_success": false,
+      "predicted_factor": "embodiment_mapping",
+      "attribution_correct": false,
+      "latency_s": 0.24429499031975865,
+      "gen_tokens": 4
+    },
+    {
+      "seed": 11,
+      "direction": "+y",
+      "wrong_face": "plus_y_face",
+      "correct_face": "minus_y_face",
+      "initial_success": false,
+      "predicted_factor": "embodiment_mapping",
+      "attribution_correct": false,
+      "latency_s": 0.26588196586817503,
+      "gen_tokens": 4
+    },
+    {
+      "seed": 11,
+      "direction": "-y",
+      "wrong_face": "minus_x_face",
+      "correct_face": "plus_y_face",
+      "initial_success": false,
+      "predicted_factor": "embodiment_mapping",
+      "attribution_correct": false,
+      "latency_s": 0.24358617095276713,
+      "gen_tokens": 4
+    },
+    {
+      "seed": 11,
+      "direction": "-y",
+      "wrong_face": "minus_y_face",
+      "correct_face": "plus_y_face",
+      "initial_success": false,
+      "predicted_factor": "embodiment_mapping",
+      "attribution_correct": false,
+      "latency_s": 0.25897938199341297,
+      "gen_tokens": 4
+    }
+  ]
+}
