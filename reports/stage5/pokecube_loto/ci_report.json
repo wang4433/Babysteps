@@ -1,0 +1,92 @@
+{
+  "analyses": {
+    "results_pooled_gi_none.json": {
+      "scorer": "models/stage5/shared_policy/pooled_gi_none.pt",
+      "n_episodes": 120,
+      "candidates": [
+        "minus_x_face",
+        "minus_y_face",
+        "plus_y_face"
+      ],
+      "recovery_ci": {
+        "same_intent / open_loop": {
+          "mean": 0.0,
+          "lo": 0.0,
+          "hi": 0.0,
+          "n_clusters": 20,
+          "n_rows": 120
+        },
+        "random_face": {
+          "mean": 0.3333333333333333,
+          "lo": 0.25,
+          "hi": 0.4166666666666667,
+          "n_clusters": 20,
+          "n_rows": 120
+        },
+        "shared_scorer (frozen)": {
+          "mean": 0.9666666666666667,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n_clusters": 20,
+          "n_rows": 120
+        },
+        "oracle (ceiling)": {
+          "mean": 0.9666666666666667,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n_clusters": 20,
+          "n_rows": 120
+        }
+      },
+      "paired_diffs": {
+        "scorer_minus_oracle": {
+          "diff": 0.0,
+          "lo": 0.0,
+          "hi": 0.0,
+          "n_clusters": 20
+        },
+        "scorer_minus_random": {
+          "diff": 0.6333333333333333,
+          "lo": 0.55,
+          "hi": 0.7166666666666667,
+          "n_clusters": 20
+        },
+        "scorer_minus_open_loop": {
+          "diff": 0.9666666666666667,
+          "lo": 0.9,
+          "hi": 1.0,
+          "n_clusters": 20
+        }
+      },
+      "face_acc_ci": {
+        "mean": 1.0,
+        "lo": 1.0,
+        "hi": 1.0,
+        "n_clusters": 20,
+        "n_rows": 120
+      },
+      "failure_attribution": {
+        "124": {
+          "n_fail": 4,
+          "n_fail_oracle_also_fails": 4,
+          "all_oracle_coincident": true
+        }
+      },
+      "selectivity": {
+        "direction_to_face": {
+          "+x": [
+            "minus_x_face"
+          ],
+          "+y": [
+            "minus_y_face"
+          ],
+          "-y": [
+            "plus_y_face"
+          ]
+        },
+        "direction_to_face_is_deterministic": true,
+        "wrong_face_changes_choice": false
+      }
+    }
+  }
+}

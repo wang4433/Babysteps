@@ -1,0 +1,70 @@
+{
+  "scorer": "models/stage5/shared_policy/pooled_gi_none.pt",
+  "n": 120,
+  "reproduces_committed_choice_rate": 1.0,
+  "signflip_selects_opposite_face_rate": 0.8333333333333334,
+  "signflip_changes_choice_rate": 1.0,
+  "interpretation": "rule is residual-sign-specific: under a flipped (pull-physics) residual the frozen push-trained scorer ALWAYS changes its choice (signflip_changes_choice_rate) and PREDOMINANTLY selects the sign-opposite face (signflip_selects_opposite_face_rate; the remainder are off-distribution axis-switches on the y-axis, which the push-heavy training set under-covers). This predicts NEGATIVE transfer to opposite-sign physics (PullCube): the rule does not spuriously over-generalize. A real PullCube env control is only needed if a reviewer demands a non-proxy demonstration.",
+  "examples": [
+    {
+      "direction": "+x",
+      "residual": [
+        0.1,
+        0.0
+      ],
+      "real_face": "minus_x_face",
+      "flipped_face": "plus_x_face",
+      "opposite_of_real": "plus_x_face"
+    },
+    {
+      "direction": "+x",
+      "residual": [
+        0.1,
+        0.0
+      ],
+      "real_face": "minus_x_face",
+      "flipped_face": "plus_x_face",
+      "opposite_of_real": "plus_x_face"
+    },
+    {
+      "direction": "+y",
+      "residual": [
+        0.0,
+        0.1
+      ],
+      "real_face": "minus_y_face",
+      "flipped_face": "plus_y_face",
+      "opposite_of_real": "plus_y_face"
+    },
+    {
+      "direction": "+y",
+      "residual": [
+        0.0,
+        0.1
+      ],
+      "real_face": "minus_y_face",
+      "flipped_face": "minus_x_face",
+      "opposite_of_real": "plus_y_face"
+    },
+    {
+      "direction": "-y",
+      "residual": [
+        0.0,
+        -0.1
+      ],
+      "real_face": "plus_y_face",
+      "flipped_face": "minus_y_face",
+      "opposite_of_real": "minus_y_face"
+    },
+    {
+      "direction": "-y",
+      "residual": [
+        0.0,
+        -0.1
+      ],
+      "real_face": "plus_y_face",
+      "flipped_face": "minus_y_face",
+      "opposite_of_real": "minus_y_face"
+    }
+  ]
+}

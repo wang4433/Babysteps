@@ -1,0 +1,2057 @@
+{
+  "n_episodes": 120,
+  "open_loop_success": 0.0,
+  "random_face_success": 0.3333333333333333,
+  "shared_scorer_face_acc": 1.0,
+  "shared_scorer_recovery": 0.9666666666666667,
+  "oracle_success": 0.9666666666666667,
+  "n_reachable_seeds": 20,
+  "candidates": [
+    "minus_x_face",
+    "minus_y_face",
+    "plus_y_face"
+  ],
+  "scorer": "models/stage5/shared_policy/pooled_gi_none.pt",
+  "rows": [
+    {
+      "seed": 3,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 3,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 3,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 3,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 3,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 3,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0002,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 39,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 39,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 39,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 39,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        -0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 39,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0035,
+        -0.0984
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 39,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 47,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 47,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 47,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 47,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        -0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 47,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0015,
+        -0.0993
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 47,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        -0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 49,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 49,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        -0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 49,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0021,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 49,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 49,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.004,
+        -0.0989
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 49,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 60,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 60,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 60,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 60,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        -0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 60,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0014,
+        -0.0993
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 60,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        -0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 61,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 61,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 61,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0032,
+        0.0991
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 61,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        -0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 61,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0029,
+        -0.0986
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 61,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        -0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 64,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        -0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 64,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        -0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 64,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0039,
+        0.0996
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 64,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 64,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0022,
+        -0.0995
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 64,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 87,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 87,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 87,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0001,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 87,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 87,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 87,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 99,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 99,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 99,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0019,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 99,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 99,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 99,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 100,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 100,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 100,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 100,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        -0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 100,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0013,
+        -0.0992
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 100,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        -0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 102,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 102,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 102,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 102,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        -0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 102,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0013,
+        -0.0993
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 102,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        -0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 112,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 112,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 112,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0018,
+        0.0999
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 112,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 112,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 112,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 116,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 116,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 116,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0007,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 116,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 116,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 116,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 119,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 119,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 119,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 119,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 119,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 119,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 124,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 124,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 124,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": false,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": false
+    },
+    {
+      "seed": 124,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": false,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": false
+    },
+    {
+      "seed": 124,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": false,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": false
+    },
+    {
+      "seed": 124,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": false,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": false
+    },
+    {
+      "seed": 127,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 127,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0998,
+        -0.0009
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 127,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 127,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        -0.0002,
+        0.099
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 127,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0003,
+        -0.0998
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 127,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 151,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 151,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 151,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0002,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 151,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 151,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        -0.0028,
+        -0.0985
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 151,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        -0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 157,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 157,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 157,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 157,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 157,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 157,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 168,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 168,
+      "direction": "+x",
+      "correct_face": "minus_x_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.1,
+        0.0
+      ],
+      "scorer_face": "minus_x_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 168,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_y_face",
+      "random_success": true,
+      "oracle_success": true
+    },
+    {
+      "seed": 168,
+      "direction": "+y",
+      "correct_face": "minus_y_face",
+      "wrong_face": "plus_y_face",
+      "residual_xy": [
+        0.0,
+        0.1
+      ],
+      "scorer_face": "minus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "plus_y_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 168,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_x_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    },
+    {
+      "seed": 168,
+      "direction": "-y",
+      "correct_face": "plus_y_face",
+      "wrong_face": "minus_y_face",
+      "residual_xy": [
+        0.0,
+        -0.1
+      ],
+      "scorer_face": "plus_y_face",
+      "scorer_face_correct": true,
+      "open_loop_success": false,
+      "scorer_success": true,
+      "random_face": "minus_x_face",
+      "random_success": false,
+      "oracle_success": true
+    }
+  ]
+}

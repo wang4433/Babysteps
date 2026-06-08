@@ -1,0 +1,589 @@
+{
+  "summary": {
+    "same_intent_retry": {
+      "n": 12,
+      "n_initial_fail": 12,
+      "recovery_overall": 0.0,
+      "recovery_on_initial_fail": 0.0,
+      "preservation_mean": 1.0,
+      "unnecessary_changes_rate_mean": 0.0,
+      "harmful_changes_rate_mean": 0.0,
+      "edit_cardinality_mean": 0.0,
+      "diagnosis_latency_s_mean": 0.0,
+      "revision_latency_s_mean": 0.0,
+      "joint_reasoning_latency_s_mean": 0.0,
+      "total_decision_latency_s_mean": 0.0,
+      "rollout_latency_s_mean": 1.2560794515302405,
+      "vlm_calls_mean": 0.0,
+      "vlm_gen_tokens_mean": 0.0,
+      "vlm_input_tokens_mean": 0.0,
+      "attribution_accuracy": null
+    },
+    "random_factor_local_edit": {
+      "n": 12,
+      "n_initial_fail": 12,
+      "recovery_overall": 0.0,
+      "recovery_on_initial_fail": 0.0,
+      "preservation_mean": 0.7999999999999999,
+      "unnecessary_changes_rate_mean": 0.19999999999999998,
+      "harmful_changes_rate_mean": 0.1388888888888889,
+      "edit_cardinality_mean": 1.0,
+      "diagnosis_latency_s_mean": 0.0,
+      "revision_latency_s_mean": 3.0377103636662166e-05,
+      "joint_reasoning_latency_s_mean": 0.0,
+      "total_decision_latency_s_mean": 3.0377103636662166e-05,
+      "rollout_latency_s_mean": 1.2549635726415242,
+      "vlm_calls_mean": 0.0,
+      "vlm_gen_tokens_mean": 0.0,
+      "vlm_input_tokens_mean": 0.0,
+      "attribution_accuracy": 0.0
+    },
+    "vlm_free_replan": {
+      "n": 12,
+      "n_initial_fail": 12,
+      "recovery_overall": 0.16666666666666666,
+      "recovery_on_initial_fail": 0.16666666666666666,
+      "preservation_mean": 0.8333333333333335,
+      "unnecessary_changes_rate_mean": 0.16666666666666666,
+      "harmful_changes_rate_mean": 0.08333333333333333,
+      "edit_cardinality_mean": 1.1666666666666667,
+      "diagnosis_latency_s_mean": 0.0,
+      "revision_latency_s_mean": 0.0,
+      "joint_reasoning_latency_s_mean": 3.200693126573848,
+      "total_decision_latency_s_mean": 3.200693126573848,
+      "rollout_latency_s_mean": 0.7898858537276586,
+      "vlm_calls_mean": 1.0,
+      "vlm_gen_tokens_mean": 72.0,
+      "vlm_input_tokens_mean": 407.6666666666667,
+      "attribution_accuracy": null
+    },
+    "vlm_diagnosis_local_edit": {
+      "n": 12,
+      "n_initial_fail": 12,
+      "recovery_overall": 0.0,
+      "recovery_on_initial_fail": 0.0,
+      "preservation_mean": 0.7999999999999999,
+      "unnecessary_changes_rate_mean": 0.19999999999999998,
+      "harmful_changes_rate_mean": 0.16666666666666666,
+      "edit_cardinality_mean": 1.0,
+      "diagnosis_latency_s_mean": 0.2474718023246775,
+      "revision_latency_s_mean": 2.6741957602401573e-05,
+      "joint_reasoning_latency_s_mean": 0.0,
+      "total_decision_latency_s_mean": 0.2474985442822799,
+      "rollout_latency_s_mean": 1.256402769125998,
+      "vlm_calls_mean": 1.0,
+      "vlm_gen_tokens_mean": 3.8333333333333335,
+      "vlm_input_tokens_mean": 171.66666666666666,
+      "attribution_accuracy": 0.0
+    },
+    "shared_revision_policy": {
+      "n": 12,
+      "n_initial_fail": 12,
+      "recovery_overall": 0.0,
+      "recovery_on_initial_fail": 0.0,
+      "preservation_mean": 0.7999999999999999,
+      "unnecessary_changes_rate_mean": 0.19999999999999998,
+      "harmful_changes_rate_mean": 0.16666666666666666,
+      "edit_cardinality_mean": 1.0,
+      "diagnosis_latency_s_mean": 0.2514904740964994,
+      "revision_latency_s_mean": 0.0011906071255604427,
+      "joint_reasoning_latency_s_mean": 0.0,
+      "total_decision_latency_s_mean": 0.25268108122205984,
+      "rollout_latency_s_mean": 1.2562609026984621,
+      "vlm_calls_mean": 1.0,
+      "vlm_gen_tokens_mean": 3.8333333333333335,
+      "vlm_input_tokens_mean": 171.66666666666666,
+      "attribution_accuracy": 0.0
+    },
+    "vlm_diagnosis_local_edit@oracle_attr": {
+      "n": 12,
+      "n_initial_fail": 12,
+      "recovery_overall": 0.6666666666666666,
+      "recovery_on_initial_fail": 0.6666666666666666,
+      "preservation_mean": 1.0,
+      "unnecessary_changes_rate_mean": 0.0,
+      "harmful_changes_rate_mean": 0.0,
+      "edit_cardinality_mean": 0.6666666666666666,
+      "diagnosis_latency_s_mean": 0.0,
+      "revision_latency_s_mean": 0.00033477503651132184,
+      "joint_reasoning_latency_s_mean": 0.0,
+      "total_decision_latency_s_mean": 0.00033477503651132184,
+      "rollout_latency_s_mean": 1.0060592136966686,
+      "vlm_calls_mean": 0.0,
+      "vlm_gen_tokens_mean": 0.0,
+      "vlm_input_tokens_mean": 0.0,
+      "attribution_accuracy": 1.0
+    },
+    "shared_revision_policy@oracle_attr": {
+      "n": 12,
+      "n_initial_fail": 12,
+      "recovery_overall": 1.0,
+      "recovery_on_initial_fail": 1.0,
+      "preservation_mean": 1.0,
+      "unnecessary_changes_rate_mean": 0.0,
+      "harmful_changes_rate_mean": 0.0,
+      "edit_cardinality_mean": 1.0,
+      "diagnosis_latency_s_mean": 0.0,
+      "revision_latency_s_mean": 0.0004138203803449869,
+      "joint_reasoning_latency_s_mean": 0.0,
+      "total_decision_latency_s_mean": 0.0004138203803449869,
+      "rollout_latency_s_mean": 0.395136252976954,
+      "vlm_calls_mean": 0.0,
+      "vlm_gen_tokens_mean": 0.0,
+      "vlm_input_tokens_mean": 0.0,
+      "attribution_accuracy": 1.0
+    },
+    "oracle_single_slot": {
+      "n": 12,
+      "n_initial_fail": 12,
+      "recovery_overall": 1.0,
+      "recovery_on_initial_fail": 1.0,
+      "preservation_mean": 1.0,
+      "unnecessary_changes_rate_mean": 0.0,
+      "harmful_changes_rate_mean": 0.0,
+      "edit_cardinality_mean": 1.0,
+      "diagnosis_latency_s_mean": 0.0,
+      "revision_latency_s_mean": 0.0,
+      "joint_reasoning_latency_s_mean": 0.0,
+      "total_decision_latency_s_mean": 0.0,
+      "rollout_latency_s_mean": 0.39460669869246584,
+      "vlm_calls_mean": 0.0,
+      "vlm_gen_tokens_mean": 0.0,
+      "vlm_input_tokens_mean": 0.0,
+      "attribution_accuracy": 1.0
+    },
+    "vlm_diagnosis_local_edit@distilled_attr": {
+      "n": 12,
+      "n_initial_fail": 12,
+      "recovery_overall": 0.6666666666666666,
+      "recovery_on_initial_fail": 0.6666666666666666,
+      "preservation_mean": 1.0,
+      "unnecessary_changes_rate_mean": 0.0,
+      "harmful_changes_rate_mean": 0.0,
+      "edit_cardinality_mean": 0.6666666666666666,
+      "diagnosis_latency_s_mean": 0.00030418594057361287,
+      "revision_latency_s_mean": 0.00020086873943607012,
+      "joint_reasoning_latency_s_mean": 0.0,
+      "total_decision_latency_s_mean": 0.000505054680009683,
+      "rollout_latency_s_mean": 1.005435560635912,
+      "vlm_calls_mean": 0.0,
+      "vlm_gen_tokens_mean": 0.0,
+      "vlm_input_tokens_mean": 0.0,
+      "attribution_accuracy": 1.0
+    },
+    "shared_revision_policy@distilled_attr": {
+      "n": 12,
+      "n_initial_fail": 12,
+      "recovery_overall": 1.0,
+      "recovery_on_initial_fail": 1.0,
+      "preservation_mean": 1.0,
+      "unnecessary_changes_rate_mean": 0.0,
+      "harmful_changes_rate_mean": 0.0,
+      "edit_cardinality_mean": 1.0,
+      "diagnosis_latency_s_mean": 0.0002729893506815036,
+      "revision_latency_s_mean": 0.0002971328018854062,
+      "joint_reasoning_latency_s_mean": 0.0,
+      "total_decision_latency_s_mean": 0.0005701221525669098,
+      "rollout_latency_s_mean": 0.39496937630853307,
+      "vlm_calls_mean": 0.0,
+      "vlm_gen_tokens_mean": 0.0,
+      "vlm_input_tokens_mean": 0.0,
+      "attribution_accuracy": 1.0
+    }
+  },
+  "ci": {
+    "recovery_ci": {
+      "same_intent_retry": {
+        "mean": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n_clusters": 2,
+        "n_rows": 12
+      },
+      "random_factor_local_edit": {
+        "mean": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n_clusters": 2,
+        "n_rows": 12
+      },
+      "vlm_free_replan": {
+        "mean": 0.16666666666666666,
+        "lo": 0.16666666666666666,
+        "hi": 0.16666666666666666,
+        "n_clusters": 2,
+        "n_rows": 12
+      },
+      "vlm_diagnosis_local_edit": {
+        "mean": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n_clusters": 2,
+        "n_rows": 12
+      },
+      "shared_revision_policy": {
+        "mean": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n_clusters": 2,
+        "n_rows": 12
+      },
+      "vlm_diagnosis_local_edit@oracle_attr": {
+        "mean": 0.6666666666666666,
+        "lo": 0.6666666666666666,
+        "hi": 0.6666666666666666,
+        "n_clusters": 2,
+        "n_rows": 12
+      },
+      "shared_revision_policy@oracle_attr": {
+        "mean": 1.0,
+        "lo": 1.0,
+        "hi": 1.0,
+        "n_clusters": 2,
+        "n_rows": 12
+      },
+      "oracle_single_slot": {
+        "mean": 1.0,
+        "lo": 1.0,
+        "hi": 1.0,
+        "n_clusters": 2,
+        "n_rows": 12
+      },
+      "vlm_diagnosis_local_edit@distilled_attr": {
+        "mean": 0.6666666666666666,
+        "lo": 0.6666666666666666,
+        "hi": 0.6666666666666666,
+        "n_clusters": 2,
+        "n_rows": 12
+      },
+      "shared_revision_policy@distilled_attr": {
+        "mean": 1.0,
+        "lo": 1.0,
+        "hi": 1.0,
+        "n_clusters": 2,
+        "n_rows": 12
+      }
+    },
+    "paired_diffs": {
+      "shared_revision_policy@oracle_attr__minus__oracle_single_slot": {
+        "diff": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n_clusters": 2
+      },
+      "shared_revision_policy@oracle_attr__minus__vlm_diagnosis_local_edit@oracle_attr": {
+        "diff": 0.33333333333333337,
+        "lo": 0.33333333333333337,
+        "hi": 0.33333333333333337,
+        "n_clusters": 2
+      },
+      "shared_revision_policy__minus__vlm_free_replan": {
+        "diff": -0.16666666666666666,
+        "lo": -0.16666666666666666,
+        "hi": -0.16666666666666666,
+        "n_clusters": 2
+      },
+      "shared_revision_policy@distilled_attr__minus__shared_revision_policy@oracle_attr": {
+        "diff": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n_clusters": 2
+      },
+      "shared_revision_policy@distilled_attr__minus__oracle_single_slot": {
+        "diff": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n_clusters": 2
+      },
+      "shared_revision_policy@distilled_attr__minus__shared_revision_policy": {
+        "diff": 1.0,
+        "lo": 1.0,
+        "hi": 1.0,
+        "n_clusters": 2
+      },
+      "shared_revision_policy__minus__same_intent_retry": {
+        "diff": 0.0,
+        "lo": 0.0,
+        "hi": 0.0,
+        "n_clusters": 2
+      }
+    },
+    "n_initial_fail": 12,
+    "value_transfer_failure_attribution": {}
+  },
+  "n_reachable_seeds": 2,
+  "n_episodes": 12,
+  "candidates": [
+    "minus_x_face",
+    "minus_y_face",
+    "plus_y_face"
+  ],
+  "config": {
+    "scorer": "models/stage5/shared_policy/pooled_gi_none.pt",
+    "directions": [
+      "+x",
+      "+y",
+      "-y"
+    ],
+    "fake": false,
+    "mock": false,
+    "condition_matrix": [
+      [
+        "same_intent_retry",
+        "same_intent_retry",
+        null
+      ],
+      [
+        "random_factor_local_edit",
+        "random_factor_local_edit",
+        null
+      ],
+      [
+        "vlm_free_replan",
+        "vlm_free_replan",
+        null
+      ],
+      [
+        "vlm_diagnosis_local_edit",
+        "vlm_diagnosis_local_edit",
+        "vlm"
+      ],
+      [
+        "shared_revision_policy",
+        "shared_revision_policy",
+        "vlm"
+      ],
+      [
+        "vlm_diagnosis_local_edit@oracle_attr",
+        "vlm_diagnosis_local_edit",
+        "oracle"
+      ],
+      [
+        "shared_revision_policy@oracle_attr",
+        "shared_revision_policy",
+        "oracle"
+      ],
+      [
+        "oracle_single_slot",
+        "oracle_single_slot",
+        null
+      ],
+      [
+        "vlm_diagnosis_local_edit@distilled_attr",
+        "vlm_diagnosis_local_edit",
+        "distilled"
+      ],
+      [
+        "shared_revision_policy@distilled_attr",
+        "shared_revision_policy",
+        "distilled"
+      ]
+    ]
+  },
+  "flat_rows": [
+    {
+      "seed": 3,
+      "direction": "+x",
+      "wrong_face": "minus_y_face",
+      "correct_face": "minus_x_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": false,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": false,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": false,
+      "shared_revision_policy@distilled_attr_success": true
+    },
+    {
+      "seed": 3,
+      "direction": "+x",
+      "wrong_face": "plus_y_face",
+      "correct_face": "minus_x_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": true,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": false,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": false,
+      "shared_revision_policy@distilled_attr_success": true
+    },
+    {
+      "seed": 3,
+      "direction": "+y",
+      "wrong_face": "minus_x_face",
+      "correct_face": "minus_y_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": false,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": true,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": true,
+      "shared_revision_policy@distilled_attr_success": true
+    },
+    {
+      "seed": 3,
+      "direction": "+y",
+      "wrong_face": "plus_y_face",
+      "correct_face": "minus_y_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": false,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": true,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": true,
+      "shared_revision_policy@distilled_attr_success": true
+    },
+    {
+      "seed": 3,
+      "direction": "-y",
+      "wrong_face": "minus_x_face",
+      "correct_face": "plus_y_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": false,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": true,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": true,
+      "shared_revision_policy@distilled_attr_success": true
+    },
+    {
+      "seed": 3,
+      "direction": "-y",
+      "wrong_face": "minus_y_face",
+      "correct_face": "plus_y_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": false,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": true,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": true,
+      "shared_revision_policy@distilled_attr_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "+x",
+      "wrong_face": "minus_y_face",
+      "correct_face": "minus_x_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": false,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": false,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": false,
+      "shared_revision_policy@distilled_attr_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "+x",
+      "wrong_face": "plus_y_face",
+      "correct_face": "minus_x_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": true,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": false,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": false,
+      "shared_revision_policy@distilled_attr_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "+y",
+      "wrong_face": "minus_x_face",
+      "correct_face": "minus_y_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": false,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": true,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": true,
+      "shared_revision_policy@distilled_attr_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "+y",
+      "wrong_face": "plus_y_face",
+      "correct_face": "minus_y_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": false,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": true,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": true,
+      "shared_revision_policy@distilled_attr_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "-y",
+      "wrong_face": "minus_x_face",
+      "correct_face": "plus_y_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": false,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": true,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": true,
+      "shared_revision_policy@distilled_attr_success": true
+    },
+    {
+      "seed": 11,
+      "direction": "-y",
+      "wrong_face": "minus_y_face",
+      "correct_face": "plus_y_face",
+      "initial_success": false,
+      "same_intent_retry_success": false,
+      "random_factor_local_edit_success": false,
+      "vlm_free_replan_success": false,
+      "vlm_diagnosis_local_edit_success": false,
+      "shared_revision_policy_success": false,
+      "vlm_diagnosis_local_edit@oracle_attr_success": true,
+      "shared_revision_policy@oracle_attr_success": true,
+      "oracle_single_slot_success": true,
+      "vlm_diagnosis_local_edit@distilled_attr_success": true,
+      "shared_revision_policy@distilled_attr_success": true
+    }
+  ]
+}

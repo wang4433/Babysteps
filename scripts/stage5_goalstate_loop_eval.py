@@ -93,7 +93,8 @@ REVISERS = {
 def run_goalstate_episode(adapter, runner, extractor, *, seed: int,
                           demo_features_dir, suffix: str,
                           revisers: list[str], reviser_fns: dict | None = None,
-                          demo_class: str = "stack") -> dict:
+                          demo_class: str = "stack",
+                          tuple_sink: list | None = None) -> dict:
     """One demo -> vision-decode goal_state -> exec -> fail -> revise -> retry.
 
     The demo is the TRUE task (a stack); its goal_state is vision-decoded from
@@ -125,6 +126,23 @@ def run_goalstate_episode(adapter, runner, extractor, *, seed: int,
         "failure_predicate": fp.failure_predicate,
         "revisers": {},
     }
+
+    # Pooled shared-policy training tuple (one per failed episode). goal_state has
+    # NO continuous feedback (residual_xy=null) — coverage for the shared scorer,
+    # but EXCLUDED from any learned-choice metric (its single valid transition is
+    # the deterministic goal_refinement operator). Mirrors the PushCube
+    # natural-loop --dump-tuples. correct_value is a sim-derived TRAINING label
+    # (allowed off the demo->intent path, CLAUDE.md inv #4).
+    if tuple_sink is not None and not attempt_1.success:
+        tuple_sink.append({
+            "task": "StackCube-v1", "factor": "goal_state",
+            "seed": seed,
+            "current_value": decoded_gs, "correct_value": true_gs,
+            "failure_predicate": fp.failure_predicate,
+            "residual_xy": None,
+            "candidates": ["cube_at_target", "cubeA_on_cubeB"],
+        })
+
     for name in revisers:
         if attempt_1.success:
             out["revisers"][name] = {"final_success": True, "revised": False,
@@ -178,6 +196,10 @@ def main(argv=None) -> int:
     p.add_argument("--eval-seeds", default="200-249",
                    help="Held-out EXEC/demo seed range (disjoint from pack-train).")
     p.add_argument("--revisers", default="same_intent,operator,oracle_value")
+    p.add_argument("--dump-tuples", type=Path, default=None,
+                   help="Write pooled shared-policy training tuples (one per "
+                        "failed episode) to this jsonl. Coverage for the shared "
+                        "RevisionPolicy; goal_state has no residual feedback.")
     p.add_argument("--out-dir", type=Path,
                    default=Path("reports/stage5/goalstate_loop/StackCube-v1"))
     args = p.parse_args(argv)
@@ -199,12 +221,14 @@ def main(argv=None) -> int:
     print(f"goal_state loop: pack={args.pack_dir} feats={args.demo_features_dir} "
           f"suffix={args.feature_suffix} seeds={args.eval_seeds}")
 
+    tuple_sink: list | None = [] if args.dump_tuples is not None else None
     rows = []
     for s in seeds:
         rows.append(run_goalstate_episode(
             adapter, runner, extractor, seed=s,
             demo_features_dir=args.demo_features_dir, suffix=args.feature_suffix,
-            revisers=revisers, demo_class=args.demo_class))
+            revisers=revisers, demo_class=args.demo_class,
+            tuple_sink=tuple_sink))
 
     summ = summarize(rows, revisers)
     print(f"=== StackCube goal_state loop (n={summ['n']}, "
@@ -223,6 +247,13 @@ def main(argv=None) -> int:
                    "eval_seeds": args.eval_seeds, "revisers": revisers},
         "summary": summ, "rows": rows}, indent=2) + "\n")
     print(f"\nwrote {args.out_dir}/goalstate_loop_results.json")
+
+    if tuple_sink is not None:
+        args.dump_tuples.parent.mkdir(parents=True, exist_ok=True)
+        with args.dump_tuples.open("w") as f:
+            for t in tuple_sink:
+                f.write(json.dumps(t) + "\n")
+        print(f"wrote {len(tuple_sink)} goal_state tuples to {args.dump_tuples}")
 
     if hasattr(adapter, "close"):
         adapter.close()

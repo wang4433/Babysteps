@@ -20,7 +20,7 @@ from __future__ import annotations
 
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
 
@@ -77,6 +77,15 @@ TASK_PROMPT_INFO: dict[str, dict[str, object]] = {
         "success_description": (
             "the cube is pushed sideways across the table to a marked "
             "target position"
+        ),
+        "expected_tokens": {"goal_state": ("cube_at_target",)},
+        "factor_menu": _FACTOR_MENU_6,
+    },
+    "PokeCube-v1": {
+        "name": "PokeCube",
+        "success_description": (
+            "the robot grasps a peg and uses it to poke the cube sideways "
+            "across the table to a marked target position"
         ),
         "expected_tokens": {"goal_state": ("cube_at_target",)},
         "factor_menu": _FACTOR_MENU_6,
@@ -545,6 +554,36 @@ class MockVLMClient:
     free_form_repair_response: Optional[str] = None
     object_motion_response: str = "translate_+x"
     motion_direction_response: str = "left"
+    # Synthetic per-call cost so sim-free tests can assert latency/token routing
+    # (diagnosis vs revision/joint-reasoning) without a GPU. Defaults to 0 so
+    # existing tests see a zero-cost mock. Each diagnose_* call adds these.
+    synthetic_latency_s: float = 0.0
+    synthetic_gen_tokens: int = 0
+    synthetic_input_tokens: int = 0
+    _n_calls: int = field(default=0, compare=False, repr=False)
+    _latency_s: float = field(default=0.0, compare=False, repr=False)
+    _gen_tokens: int = field(default=0, compare=False, repr=False)
+    _input_tokens: int = field(default=0, compare=False, repr=False)
+
+    def _account_mock(self) -> None:
+        self._n_calls += 1
+        self._latency_s += self.synthetic_latency_s
+        self._gen_tokens += self.synthetic_gen_tokens
+        self._input_tokens += self.synthetic_input_tokens
+
+    def cost_snapshot(self) -> dict:
+        return {
+            "n_calls": self._n_calls,
+            "latency_s": self._latency_s,
+            "gen_tokens": self._gen_tokens,
+            "input_tokens": self._input_tokens,
+        }
+
+    def reset_cost(self) -> None:
+        self._n_calls = 0
+        self._latency_s = 0.0
+        self._gen_tokens = 0
+        self._input_tokens = 0
 
     def read_object_motion(
         self, *, task: str, image_path: str | Path,
@@ -570,6 +609,7 @@ class MockVLMClient:
             failure_predicate=failure_predicate,
             wrist_view=wrist_image_path is not None,
         )
+        self._account_mock()
         return parse_constrained_output(
             self.constrained_response, factor_menu=get_factor_menu(task),
         )
@@ -601,6 +641,7 @@ class MockVLMClient:
             wrist_view=wrist_image_path is not None,
         )
         raw = self.free_form_response
+        self._account_mock()
         intent = parse_free_form_output(raw, factor_menu=menu)
         if intent is not None:
             return intent, raw
@@ -615,6 +656,7 @@ class MockVLMClient:
             failure_predicate=failure_predicate, prior_output=raw,
             wrist_view=wrist_image_path is not None,
         )
+        self._account_mock()
         intent = parse_free_form_output(repair_raw, factor_menu=menu)
         return intent, repair_raw
 
@@ -639,6 +681,47 @@ class InternVLClient:
         self._model = None
         self._tokenizer = None
         self._load_image = None  # populated from the model card helper
+        # --- opt-in cost meter (Stage-5 unified main table) ---
+        # Accumulates across calls; the caller brackets a condition with
+        # reset_cost()/cost_snapshot() to attribute wall-time + token cost to a
+        # specific decision phase (diagnosis vs revision/joint-reasoning). Purely
+        # additive: generation behaviour is unchanged and nothing here runs
+        # unless cost_snapshot()/reset_cost() are called.
+        self._n_calls = 0
+        self._latency_s = 0.0
+        self._gen_tokens = 0
+        self._input_tokens = 0
+
+    def _account(self, question: str, response: str, dt: float) -> None:
+        """Record one generation call's wall-time + (approx) token counts.
+
+        Token counts re-encode the prompt/response strings with the tokenizer
+        (``model.chat`` returns no ids); input tokens therefore exclude image
+        tokens and are an approximation, documented as such.
+        """
+        self._n_calls += 1
+        self._latency_s += float(dt)
+        if self._tokenizer is not None:
+            try:
+                self._gen_tokens += len(self._tokenizer(response).input_ids)
+                self._input_tokens += len(self._tokenizer(question).input_ids)
+            except Exception:
+                pass  # never let token bookkeeping break a real generation
+
+    def cost_snapshot(self) -> dict:
+        """Cumulative cost since construction / last reset_cost()."""
+        return {
+            "n_calls": self._n_calls,
+            "latency_s": self._latency_s,
+            "gen_tokens": self._gen_tokens,
+            "input_tokens": self._input_tokens,
+        }
+
+    def reset_cost(self) -> None:
+        self._n_calls = 0
+        self._latency_s = 0.0
+        self._gen_tokens = 0
+        self._input_tokens = 0
 
     def load(self) -> None:
         """Materialize the model on cuda:0 in BF16. Idempotent."""
@@ -665,6 +748,7 @@ class InternVLClient:
 
     def _chat(self, *, image_path: str | Path, question: str,
               max_new_tokens: int) -> str:
+        import time
         import torch
         if self._model is None:
             self.load()
@@ -672,9 +756,11 @@ class InternVLClient:
             str(image_path), max_num=self.max_num_tiles,
         ).to(torch.bfloat16).cuda()
         gen_kwargs = dict(max_new_tokens=max_new_tokens, do_sample=False)
+        t0 = time.perf_counter()
         response = self._model.chat(
             self._tokenizer, pixel_values, question, gen_kwargs,
         )
+        self._account(question, response, time.perf_counter() - t0)
         return response
 
     def diagnose_constrained(
@@ -784,10 +870,14 @@ class InternVLClient:
         num_patches_list = [pv.size(0) for pv in pvs]
         pixel_values = torch.cat(pvs, dim=0)
         gen_kwargs = dict(max_new_tokens=max_new_tokens, do_sample=False)
-        return self._model.chat(
+        import time
+        t0 = time.perf_counter()
+        response = self._model.chat(
             self._tokenizer, pixel_values, question, gen_kwargs,
             num_patches_list=num_patches_list,
         )
+        self._account(question, response, time.perf_counter() - t0)
+        return response
 
     def read_motion_direction(
         self, *, task: str, start_path: str | Path, end_path: str | Path,

@@ -1,0 +1,1154 @@
+{
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,
+    80,
+    81,
+    82,
+    83,
+    84,
+    85,
+    86,
+    87,
+    88,
+    89,
+    90,
+    91,
+    92,
+    93,
+    94,
+    95,
+    96,
+    97,
+    98,
+    99,
+    100,
+    101,
+    102,
+    103,
+    104,
+    105,
+    106,
+    107,
+    108,
+    109,
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121,
+    122,
+    123,
+    124,
+    125,
+    126,
+    127,
+    128,
+    129,
+    130,
+    131,
+    132,
+    133,
+    134,
+    135,
+    136,
+    137,
+    138,
+    139,
+    140,
+    141,
+    142,
+    143,
+    144,
+    145,
+    146,
+    147,
+    148,
+    149
+  ],
+  "gate": 0.8,
+  "max_cube_x": 0.16,
+  "target_n": 15,
+  "per_direction": {
+    "+x": {
+      "motion": "native_+x",
+      "oracle_faces": [
+        "minus_x_face"
+      ],
+      "n": 15,
+      "n_skipped_unreachable": 79,
+      "success_rate": 1.0,
+      "grasp_rate": 1.0,
+      "contact_rate": 1.0,
+      "mean_cube_displacement": 0.09074,
+      "passes_gate": true,
+      "rows": [
+        {
+          "seed": 3,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1209,
+            -0.0057
+          ],
+          "goal_xy": [
+            0.2209,
+            -0.0057
+          ],
+          "final_obj_xy": [
+            0.2099,
+            -0.007
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0546,
+          "cube_displacement": 0.0891
+        },
+        {
+          "seed": 11,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1498,
+            0.0168
+          ],
+          "goal_xy": [
+            0.2498,
+            0.0168
+          ],
+          "final_obj_xy": [
+            0.2424,
+            0.0177
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0568,
+          "cube_displacement": 0.0926
+        },
+        {
+          "seed": 13,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1384,
+            -0.0969
+          ],
+          "goal_xy": [
+            0.2384,
+            -0.0969
+          ],
+          "final_obj_xy": [
+            0.2306,
+            -0.1173
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0606,
+          "cube_displacement": 0.0945
+        },
+        {
+          "seed": 16,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1525,
+            0.0959
+          ],
+          "goal_xy": [
+            0.2525,
+            0.0959
+          ],
+          "final_obj_xy": [
+            0.2451,
+            0.1029
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0574,
+          "cube_displacement": 0.0929
+        },
+        {
+          "seed": 29,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1445,
+            0.0507
+          ],
+          "goal_xy": [
+            0.2445,
+            0.0507
+          ],
+          "final_obj_xy": [
+            0.2356,
+            0.038
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0568,
+          "cube_displacement": 0.092
+        },
+        {
+          "seed": 39,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1207,
+            -0.0954
+          ],
+          "goal_xy": [
+            0.2207,
+            -0.0954
+          ],
+          "final_obj_xy": [
+            0.2074,
+            -0.0778
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0564,
+          "cube_displacement": 0.0885
+        },
+        {
+          "seed": 45,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1574,
+            -0.0899
+          ],
+          "goal_xy": [
+            0.2574,
+            -0.0899
+          ],
+          "final_obj_xy": [
+            0.2548,
+            -0.1043
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0609,
+          "cube_displacement": 0.0984
+        },
+        {
+          "seed": 47,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1306,
+            0.0112
+          ],
+          "goal_xy": [
+            0.2306,
+            0.0112
+          ],
+          "final_obj_xy": [
+            0.2158,
+            0.028
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0538,
+          "cube_displacement": 0.0868
+        },
+        {
+          "seed": 49,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1294,
+            -0.0716
+          ],
+          "goal_xy": [
+            0.2294,
+            -0.0716
+          ],
+          "final_obj_xy": [
+            0.2151,
+            -0.0913
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0549,
+          "cube_displacement": 0.0879
+        },
+        {
+          "seed": 60,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1247,
+            0.047
+          ],
+          "goal_xy": [
+            0.2247,
+            0.047
+          ],
+          "final_obj_xy": [
+            0.2084,
+            0.0685
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.054,
+          "cube_displacement": 0.0864
+        },
+        {
+          "seed": 61,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1328,
+            0.0191
+          ],
+          "goal_xy": [
+            0.2328,
+            0.0191
+          ],
+          "final_obj_xy": [
+            0.2187,
+            0.0381
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0552,
+          "cube_displacement": 0.088
+        },
+        {
+          "seed": 64,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1298,
+            -0.0057
+          ],
+          "goal_xy": [
+            0.2298,
+            -0.0057
+          ],
+          "final_obj_xy": [
+            0.2146,
+            -0.0202
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0525,
+          "cube_displacement": 0.086
+        },
+        {
+          "seed": 79,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1542,
+            -0.0599
+          ],
+          "goal_xy": [
+            0.2542,
+            -0.0599
+          ],
+          "final_obj_xy": [
+            0.2486,
+            -0.0801
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.062,
+          "cube_displacement": 0.0965
+        },
+        {
+          "seed": 87,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1207,
+            0.0089
+          ],
+          "goal_xy": [
+            0.2207,
+            0.0089
+          ],
+          "final_obj_xy": [
+            0.2083,
+            -0.0033
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0548,
+          "cube_displacement": 0.0884
+        },
+        {
+          "seed": 90,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1564,
+            -0.0429
+          ],
+          "goal_xy": [
+            0.2564,
+            -0.0429
+          ],
+          "final_obj_xy": [
+            0.249,
+            -0.0522
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.0572,
+          "cube_displacement": 0.0931
+        }
+      ]
+    },
+    "+y": {
+      "motion": "translate_+y",
+      "oracle_faces": [
+        "minus_y_face"
+      ],
+      "n": 15,
+      "n_skipped_unreachable": 79,
+      "success_rate": 0.7333333333333333,
+      "grasp_rate": 1.0,
+      "contact_rate": 0.7333333333333333,
+      "mean_cube_displacement": 0.06413333333333333,
+      "passes_gate": false,
+      "rows": [
+        {
+          "seed": 3,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1209,
+            -0.0057
+          ],
+          "goal_xy": [
+            0.1209,
+            0.0943
+          ],
+          "final_obj_xy": [
+            0.131,
+            0.0811
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1856,
+          "cube_displacement": 0.0874
+        },
+        {
+          "seed": 11,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1498,
+            0.0168
+          ],
+          "goal_xy": [
+            0.1498,
+            0.1168
+          ],
+          "final_obj_xy": [
+            0.1562,
+            0.1012
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1874,
+          "cube_displacement": 0.0846
+        },
+        {
+          "seed": 13,
+          "success": false,
+          "reached_contact": false,
+          "cube_xy": [
+            0.1384,
+            -0.0969
+          ],
+          "goal_xy": [
+            0.1384,
+            0.0031
+          ],
+          "final_obj_xy": [
+            0.1382,
+            -0.0965
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": false,
+          "head_to_cube_dist": 0.142,
+          "cube_displacement": 0.0004
+        },
+        {
+          "seed": 16,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1525,
+            0.0959
+          ],
+          "goal_xy": [
+            0.1525,
+            0.1959
+          ],
+          "final_obj_xy": [
+            0.1547,
+            0.1796
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.19,
+          "cube_displacement": 0.0838
+        },
+        {
+          "seed": 29,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1445,
+            0.0507
+          ],
+          "goal_xy": [
+            0.1445,
+            0.1507
+          ],
+          "final_obj_xy": [
+            0.1641,
+            0.1327
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1795,
+          "cube_displacement": 0.0843
+        },
+        {
+          "seed": 39,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1207,
+            -0.0954
+          ],
+          "goal_xy": [
+            0.1207,
+            0.0046
+          ],
+          "final_obj_xy": [
+            0.1163,
+            -0.011
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1955,
+          "cube_displacement": 0.0846
+        },
+        {
+          "seed": 45,
+          "success": false,
+          "reached_contact": false,
+          "cube_xy": [
+            0.1574,
+            -0.0899
+          ],
+          "goal_xy": [
+            0.1574,
+            0.0101
+          ],
+          "final_obj_xy": [
+            0.1824,
+            -0.0909
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": false,
+          "head_to_cube_dist": 0.0505,
+          "cube_displacement": 0.025
+        },
+        {
+          "seed": 47,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1306,
+            0.0112
+          ],
+          "goal_xy": [
+            0.1306,
+            0.1112
+          ],
+          "final_obj_xy": [
+            0.133,
+            0.0977
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1899,
+          "cube_displacement": 0.0866
+        },
+        {
+          "seed": 49,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1294,
+            -0.0716
+          ],
+          "goal_xy": [
+            0.1294,
+            0.0284
+          ],
+          "final_obj_xy": [
+            0.1411,
+            0.0118
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1848,
+          "cube_displacement": 0.0843
+        },
+        {
+          "seed": 60,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1247,
+            0.047
+          ],
+          "goal_xy": [
+            0.1247,
+            0.147
+          ],
+          "final_obj_xy": [
+            0.1159,
+            0.1318
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1971,
+          "cube_displacement": 0.0853
+        },
+        {
+          "seed": 61,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1328,
+            0.0191
+          ],
+          "goal_xy": [
+            0.1328,
+            0.1191
+          ],
+          "final_obj_xy": [
+            0.1248,
+            0.1024
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1968,
+          "cube_displacement": 0.0837
+        },
+        {
+          "seed": 64,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1298,
+            -0.0057
+          ],
+          "goal_xy": [
+            0.1298,
+            0.0943
+          ],
+          "final_obj_xy": [
+            0.1496,
+            0.0794
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1811,
+          "cube_displacement": 0.0873
+        },
+        {
+          "seed": 79,
+          "success": false,
+          "reached_contact": false,
+          "cube_xy": [
+            0.1542,
+            -0.0599
+          ],
+          "goal_xy": [
+            0.1542,
+            0.0401
+          ],
+          "final_obj_xy": [
+            0.1542,
+            -0.0599
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": false,
+          "head_to_cube_dist": 0.1007,
+          "cube_displacement": 0.0
+        },
+        {
+          "seed": 87,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1207,
+            0.0089
+          ],
+          "goal_xy": [
+            0.1207,
+            0.1089
+          ],
+          "final_obj_xy": [
+            0.1357,
+            0.0922
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1821,
+          "cube_displacement": 0.0847
+        },
+        {
+          "seed": 90,
+          "success": false,
+          "reached_contact": false,
+          "cube_xy": [
+            0.1564,
+            -0.0429
+          ],
+          "goal_xy": [
+            0.1564,
+            0.0571
+          ],
+          "final_obj_xy": [
+            0.1564,
+            -0.0429
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": false,
+          "head_to_cube_dist": 0.0822,
+          "cube_displacement": 0.0
+        }
+      ]
+    },
+    "-y": {
+      "motion": "translate_-y",
+      "oracle_faces": [
+        "plus_y_face"
+      ],
+      "n": 15,
+      "n_skipped_unreachable": 79,
+      "success_rate": 0.8666666666666667,
+      "grasp_rate": 1.0,
+      "contact_rate": 0.9333333333333333,
+      "mean_cube_displacement": 0.08278666666666666,
+      "passes_gate": true,
+      "rows": [
+        {
+          "seed": 3,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1209,
+            -0.0057
+          ],
+          "goal_xy": [
+            0.1209,
+            -0.1057
+          ],
+          "final_obj_xy": [
+            0.1324,
+            -0.0897
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.184,
+          "cube_displacement": 0.0848
+        },
+        {
+          "seed": 11,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1498,
+            0.0168
+          ],
+          "goal_xy": [
+            0.1498,
+            -0.0832
+          ],
+          "final_obj_xy": [
+            0.1602,
+            -0.0697
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1849,
+          "cube_displacement": 0.0871
+        },
+        {
+          "seed": 13,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1384,
+            -0.0969
+          ],
+          "goal_xy": [
+            0.1384,
+            -0.1969
+          ],
+          "final_obj_xy": [
+            0.136,
+            -0.1831
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1924,
+          "cube_displacement": 0.0862
+        },
+        {
+          "seed": 16,
+          "success": false,
+          "reached_contact": false,
+          "cube_xy": [
+            0.1525,
+            0.0959
+          ],
+          "goal_xy": [
+            0.1525,
+            -0.0041
+          ],
+          "final_obj_xy": [
+            0.1525,
+            0.0959
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": false,
+          "head_to_cube_dist": 0.0321,
+          "cube_displacement": 0.0
+        },
+        {
+          "seed": 29,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1445,
+            0.0507
+          ],
+          "goal_xy": [
+            0.1445,
+            -0.0493
+          ],
+          "final_obj_xy": [
+            0.1345,
+            -0.0384
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1988,
+          "cube_displacement": 0.0897
+        },
+        {
+          "seed": 39,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1207,
+            -0.0954
+          ],
+          "goal_xy": [
+            0.1207,
+            -0.1954
+          ],
+          "final_obj_xy": [
+            0.1438,
+            -0.1808
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1762,
+          "cube_displacement": 0.0884
+        },
+        {
+          "seed": 45,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1574,
+            -0.0899
+          ],
+          "goal_xy": [
+            0.1574,
+            -0.1899
+          ],
+          "final_obj_xy": [
+            0.1576,
+            -0.1791
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1914,
+          "cube_displacement": 0.0892
+        },
+        {
+          "seed": 47,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1306,
+            0.0112
+          ],
+          "goal_xy": [
+            0.1306,
+            -0.0888
+          ],
+          "final_obj_xy": [
+            0.1509,
+            -0.0716
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1787,
+          "cube_displacement": 0.0852
+        },
+        {
+          "seed": 49,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1294,
+            -0.0716
+          ],
+          "goal_xy": [
+            0.1294,
+            -0.1716
+          ],
+          "final_obj_xy": [
+            0.134,
+            -0.158
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.188,
+          "cube_displacement": 0.0864
+        },
+        {
+          "seed": 60,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1247,
+            0.047
+          ],
+          "goal_xy": [
+            0.1247,
+            -0.053
+          ],
+          "final_obj_xy": [
+            0.1443,
+            -0.0378
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1798,
+          "cube_displacement": 0.087
+        },
+        {
+          "seed": 61,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1328,
+            0.0191
+          ],
+          "goal_xy": [
+            0.1328,
+            -0.0809
+          ],
+          "final_obj_xy": [
+            0.1546,
+            -0.0661
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1768,
+          "cube_displacement": 0.0879
+        },
+        {
+          "seed": 64,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1298,
+            -0.0057
+          ],
+          "goal_xy": [
+            0.1298,
+            -0.1057
+          ],
+          "final_obj_xy": [
+            0.1241,
+            -0.0935
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1955,
+          "cube_displacement": 0.088
+        },
+        {
+          "seed": 79,
+          "success": false,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1542,
+            -0.0599
+          ],
+          "goal_xy": [
+            0.1542,
+            -0.1599
+          ],
+          "final_obj_xy": [
+            0.2084,
+            -0.1518
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": false,
+          "head_to_cube_dist": 0.1457,
+          "cube_displacement": 0.1067
+        },
+        {
+          "seed": 87,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1207,
+            0.0089
+          ],
+          "goal_xy": [
+            0.1207,
+            -0.0911
+          ],
+          "final_obj_xy": [
+            0.1258,
+            -0.0777
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1881,
+          "cube_displacement": 0.0867
+        },
+        {
+          "seed": 90,
+          "success": true,
+          "reached_contact": true,
+          "cube_xy": [
+            0.1564,
+            -0.0429
+          ],
+          "goal_xy": [
+            0.1564,
+            -0.1429
+          ],
+          "final_obj_xy": [
+            0.16,
+            -0.1313
+          ],
+          "is_peg_grasped": true,
+          "is_cube_placed": true,
+          "head_to_cube_dist": 0.1889,
+          "cube_displacement": 0.0885
+        }
+      ]
+    }
+  },
+  "plus_x_success": 1.0,
+  "plus_x_passes_gate": true,
+  "n_directions_passing": 2,
+  "family_core_confirmed": true,
+  "multi_candidate_confirmed": true
+}

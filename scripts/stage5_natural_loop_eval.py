@@ -144,14 +144,10 @@ REVISERS = {
 }
 
 
-def _observed_residual(fp, scene) -> np.ndarray:
-    """The goal-relative residual = goal - final_cube, both observable in the
-    robot's exec view (final = cube0 + observed displacement). Shared by the
-    feedback_residual hand rule and the latent_learned head so they consume the
-    identical non-privileged signal."""
-    vec = fp.object_displacement_vec or (0.0, 0.0)
-    final = np.asarray(scene.cube_xy, dtype=np.float64) + np.asarray(vec, dtype=np.float64)
-    return np.asarray(scene.goal_xy, dtype=np.float64) - final
+# _observed_residual now lives in babysteps.stage5.residual_reviser so the
+# natural-loop script, the unified main-table evaluator, and the G3
+# certification consume the identical non-privileged exec-feedback signal.
+from babysteps.stage5.residual_reviser import _observed_residual  # noqa: E402,F401
 
 
 def make_latent_learned_reviser(pack_dir, residual_head_path,
